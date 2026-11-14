@@ -103,12 +103,23 @@ window.MarsGlobe = (function () {
       infoBox: false,
       selectionIndicator: false,
       terrain: undefined,
+      contextOptions: {
+        webgl: {
+          alpha: true,
+        },
+      },
     });
 
+    viewer.scene.backgroundColor = Cesium.Color.TRANSPARENT;
     viewer.scene.globe.ellipsoid = Cesium.Ellipsoid.MARS;
     viewer.scene.globe.baseColor = Cesium.Color.fromCssColorString("#1a0804");
     viewer.scene.globe.enableLighting = false;
     viewer.scene.globe.depthTestAgainstTerrain = true;
+
+    // Start real-time cosmic galaxy backdrop
+    if (window.MarsCosmicGalaxy) {
+      window.MarsCosmicGalaxy.init("cosmic-canvas");
+    }
     if (viewer.scene.skyAtmosphere) {
       viewer.scene.skyAtmosphere.show = true;
       viewer.scene.skyAtmosphere.hueShift = -0.55;
@@ -154,15 +165,54 @@ window.MarsGlobe = (function () {
           if (locSelect) locSelect.value = lm.siteKey;
         }
         flyTo(lm.lat, lm.lon, lm.alt, 1.5);
+        showSiteEntryBanner(lm);
       }
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
 
-    // Initial camera position (Jezero Crater)
+    // Wire HUD Site Banner action buttons
+    const enterBtn = document.getElementById("btn-enter-tactical");
+    if (enterBtn) {
+      enterBtn.addEventListener("click", function () {
+        if (window.MarsAudio) window.MarsAudio.playClick();
+        const site = enterBtn.dataset.site || "jezero";
+        if (window.MarsData) {
+          window.MarsData.setActiveSite(site).catch(console.warn);
+        }
+        const locSelect = document.getElementById("location");
+        if (locSelect) locSelect.value = site;
+        if (window.MarsHybrid) {
+          window.MarsHybrid.setViewMode("split");
+        }
+        hideSiteEntryBanner();
+      });
+    }
+
+    const orbitBtn = document.getElementById("btn-globe-orbit");
+    if (orbitBtn) {
+      orbitBtn.addEventListener("click", function () {
+        if (window.MarsAudio) window.MarsAudio.playClick();
+        const locSelect = document.getElementById("location");
+        if (locSelect) locSelect.value = "global";
+        flyTo(10, 35, 11500000, 2.0);
+        hideSiteEntryBanner();
+      });
+    }
+
+    // Automatically hide site entry banner when zooming back out to space
+    viewer.camera.changed.addEventListener(function () {
+      if (viewer && viewer.camera && viewer.camera.positionCartographic) {
+        if (viewer.camera.positionCartographic.height > 5000000) {
+          hideSiteEntryBanner();
+        }
+      }
+    });
+
+    // Initial camera position: Planetary Orbit floating in Deep Space Cosmic Galaxy
     viewer.camera.setView({
-      destination: Cesium.Cartesian3.fromDegrees(77.4509, 18.4447, 85000),
+      destination: Cesium.Cartesian3.fromDegrees(35.0, 10.0, 11500000),
       orientation: {
         heading: Cesium.Math.toRadians(0),
-        pitch: Cesium.Math.toRadians(-55),
+        pitch: Cesium.Math.toRadians(-90),
         roll: 0,
       },
     });
@@ -392,6 +442,34 @@ window.MarsGlobe = (function () {
     }
   }
 
+  function showSiteEntryBanner(lm) {
+    const banner = document.getElementById("globe-site-banner");
+    if (!banner) return;
+    const nameEl = document.getElementById("globe-site-name");
+    const coordsEl = document.getElementById("globe-site-coords");
+    const enterBtn = document.getElementById("btn-enter-tactical");
+
+    if (nameEl) nameEl.textContent = (lm.name || "MARTIAN SITE").toUpperCase();
+    if (coordsEl) {
+      const latStr = Math.abs(lm.lat).toFixed(2) + (lm.lat >= 0 ? "°N" : "°S");
+      const lonStr = Math.abs(lm.lon).toFixed(2) + (lm.lon >= 0 ? "°E" : "°W");
+      const sub = lm.siteKey
+        ? latStr + ", " + lonStr + " · High-Res Surface Tactical Radar Ready"
+        : latStr + ", " + lonStr + " · Planetary Orbital Observation";
+      coordsEl.textContent = sub;
+    }
+    if (enterBtn) {
+      enterBtn.style.display = lm.siteKey ? "inline-flex" : "none";
+      enterBtn.dataset.site = lm.siteKey || "";
+    }
+    banner.hidden = false;
+  }
+
+  function hideSiteEntryBanner() {
+    const banner = document.getElementById("globe-site-banner");
+    if (banner) banner.hidden = true;
+  }
+
   // React to site changes across the application
   window.addEventListener("mars:site-changed", function (e) {
     const meta = e.detail ? e.detail.siteMeta : null;
@@ -415,5 +493,7 @@ window.MarsGlobe = (function () {
     updateAoiFootprint,
     setGraticuleVisible,
     setLightingEnabled,
+    showSiteEntryBanner,
+    hideSiteEntryBanner,
   };
 })();

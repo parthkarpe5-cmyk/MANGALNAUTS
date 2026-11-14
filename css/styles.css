@@ -797,6 +797,16 @@ body {
   overflow: hidden;
 }
 
+.cosmic-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
 .cesium-container,
 #globe {
   width: 100%;
@@ -806,6 +816,112 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 1;
+}
+
+/* Globe Site Exploration HUD Banner */
+.globe-site-banner {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  background: rgba(10, 14, 23, 0.90);
+  border: 1px solid var(--accent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 0.8rem 1.35rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.75), 0 0 20px var(--accent-glow);
+  animation: bannerFadeUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  max-width: 90vw;
+}
+
+@keyframes bannerFadeUp {
+  from { opacity: 0; transform: translate(-50%, 15px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+.globe-site-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.globe-site-pulse {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+  animation: radar-pulse 1.8s infinite ease-in-out;
+  flex-shrink: 0;
+}
+
+.globe-site-title {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--text-bright);
+  letter-spacing: 0.04em;
+}
+
+.globe-site-sub {
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.globe-site-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-enter-tactical {
+  background: var(--accent);
+  color: #07090d;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 0.78rem;
+  padding: 0.55rem 1.15rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.03em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+  box-shadow: 0 0 16px var(--accent-glow);
+}
+
+.btn-enter-tactical:hover {
+  filter: brightness(1.15);
+  transform: translateY(-1px);
+}
+
+.btn-globe-orbit {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-bright);
+  border: 1px solid var(--border-light);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.5rem 0.85rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+
+.btn-globe-orbit:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: var(--text-bright);
 }
 
 .cesium-viewer,
@@ -1432,6 +1548,38 @@ body {
   font-size: 0.74rem;
   font-weight: 700;
   color: var(--text-bright);
+}
+
+.c-sub {
+  font-size: 0.55rem;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  margin-top: 1px;
+}
+
+.stat-sub {
+  font-size: 0.58rem;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+
+.metric-explainer-box {
+  margin-top: 0.65rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(56, 189, 248, 0.06);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  border-radius: 6px;
+  font-size: 0.65rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.metric-explainer-box strong {
+  color: var(--accent-sub);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.03em;
 }
 
 /* Science Stop Card */

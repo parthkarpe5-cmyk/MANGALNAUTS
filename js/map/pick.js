@@ -10,6 +10,7 @@ window.MarsSegmentPick = (function () {
   let request = 0;
   let solving = false;
   let scrubberMarker = null;
+  let scrubberTimeout = null;
   let lastSolvedSegment = null;
   let map = null;
   let clickHandler = null;
@@ -174,6 +175,11 @@ window.MarsSegmentPick = (function () {
     const nodes = lastSolvedSegment.path_nodes;
     if (nodes.length < 2) return;
 
+    if (scrubberTimeout) {
+      clearTimeout(scrubberTimeout);
+      scrubberTimeout = null;
+    }
+
     let seg = 1;
     while (seg < nodes.length - 1 && nodes[seg].dist_m < distM) seg++;
     const a = nodes[seg - 1];
@@ -188,11 +194,11 @@ window.MarsSegmentPick = (function () {
 
     if (!scrubberMarker) {
       scrubberMarker = L.circleMarker([curLat, curLon], {
-        radius: 8,
+        radius: 6,
         color: "#ffffff",
-        fillColor: "#38bdf8",
-        fillOpacity: 0.95,
-        weight: 3,
+        fillColor: "#c9f31d",
+        fillOpacity: 1,
+        weight: 2,
         className: "route-scrubber-cursor",
       }).addTo(map);
     } else {
@@ -203,7 +209,7 @@ window.MarsSegmentPick = (function () {
       .bindTooltip(
         '<div class="hud-tooltip font-mono text-xs"><strong>' +
           (distM / 1000).toFixed(2) +
-          " km</strong><br/>Elev: " +
+          " km</strong> · Elev: " +
           elev.toFixed(1) +
           "m · Risk: " +
           risk.toFixed(2) +
@@ -211,9 +217,16 @@ window.MarsSegmentPick = (function () {
         { permanent: true, direction: "top", className: "hud-tooltip" }
       )
       .openTooltip();
+
+    // Auto-hide when mouse stops interacting
+    scrubberTimeout = setTimeout(hideScrubber, 1200);
   }
 
   function hideScrubber() {
+    if (scrubberTimeout) {
+      clearTimeout(scrubberTimeout);
+      scrubberTimeout = null;
+    }
     if (scrubberMarker && map) {
       map.removeLayer(scrubberMarker);
       scrubberMarker = null;

@@ -35,8 +35,8 @@ window.MarsHybrid = (function () {
       });
     });
 
-    // Default startup in Dual Split mode (or 2D on mobile)
-    const initialMode = window.innerWidth < 768 ? "2d" : "split";
+    // Default startup in 3D Planetary Globe Orbit with Cosmic Galaxy
+    const initialMode = "3d";
     setViewMode(initialMode);
   }
 

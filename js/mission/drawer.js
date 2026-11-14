@@ -158,6 +158,7 @@ window.MarsSegmentDrawer = (function () {
         '        <span class="c-val font-mono">' +
         (c.durationMin < 60 ? c.durationMin + " min" : c.durationHours + " hrs") +
         "</span>" +
+        '        <span class="c-sub">Tobler slope speed</span>' +
         "      </div>" +
         "    </div>" +
         '    <div class="consumable-item">' +
@@ -169,6 +170,7 @@ window.MarsSegmentDrawer = (function () {
         '        <span class="c-val font-mono">' +
         c.o2Liters +
         " L</span>" +
+        '        <span class="c-sub">PLSS 40 L/hr rate</span>' +
         "      </div>" +
         "    </div>" +
         '    <div class="consumable-item">' +
@@ -180,9 +182,13 @@ window.MarsSegmentDrawer = (function () {
         '        <span class="c-val font-mono">' +
         c.batteryWh +
         " Wh</span>" +
+        '        <span class="c-sub">Thermal &amp; avionics 220W</span>' +
         "      </div>" +
         "    </div>" +
         "  </div>" +
+        '  <div class="metric-explainer-box">' +
+        '    <strong>ℹ WHY THESE METRICS:</strong> Astronaut EVA missions on Mars require verified oxygen, battery power, and slope limits prior to departure. O₂ calculated at 40 L/h human metabolic consumption; power at 220 W suit heating.' +
+        '  </div>' +
         "</div>";
     }
 
@@ -211,19 +217,23 @@ window.MarsSegmentDrawer = (function () {
       '  <div class="stat-card">' +
       '    <span class="stat-label">Straight (Geodesic)</span>' +
       '    <span class="stat-val font-mono">' + geo + '</span>' +
+      '    <span class="stat-sub">Line-of-sight distance</span>' +
       '  </div>' +
       '  <div class="stat-card">' +
       '    <span class="stat-label">Path Trajectory</span>' +
       '    <span class="stat-val font-mono highlight">' + path + '</span>' +
+      '    <span class="stat-sub">Ground safe traverse</span>' +
       '  </div>' +
       '  <div class="stat-card">' +
       '    <span class="stat-label">Max Path Slope</span>' +
       '    <span class="stat-val font-mono ' + (slopeVal > maxAllowedSlope ? 'val-danger' : '') + '">' + slopeVal.toFixed(1) + '°</span>' +
+      '    <span class="stat-sub">Limit: ≤' + maxAllowedSlope + '°</span>' +
       '    <div class="meter-bar"><div class="meter-fill slope-fill" style="width:' + slopePercent + '%"></div></div>' +
       '  </div>' +
       '  <div class="stat-card">' +
       '    <span class="stat-label">GNN Mean Risk</span>' +
       '    <span class="stat-val font-mono ' + (riskPercent > 50 ? 'val-danger' : '') + '">' + riskPercent + '%</span>' +
+      '    <span class="stat-sub">Terrain slip hazard</span>' +
       '    <div class="meter-bar"><div class="meter-fill risk-fill" style="width:' + riskPercent + '%"></div></div>' +
       '  </div>' +
       '</div>' +
@@ -256,11 +266,14 @@ window.MarsSegmentDrawer = (function () {
         }
       });
 
-      svgEl.addEventListener("mouseleave", function () {
+      const onLeave = function () {
         if (window.MarsSegmentPick && window.MarsSegmentPick.hideScrubber) {
           window.MarsSegmentPick.hideScrubber();
         }
-      });
+      };
+      svgEl.addEventListener("mouseleave", onLeave);
+      svgEl.addEventListener("pointerleave", onLeave);
+      svgEl.addEventListener("touchend", onLeave);
     }
 
     if (segment.path_found) window.MarsContingency?.attach(panel, segment);

@@ -91,13 +91,30 @@
     const place = MarsPlaces[key];
     if (!place) return;
 
+    if (key === "global") {
+      MarsGlobe.flyTo(place.lat, place.lon, place.globeHeight, 2.0);
+      if (window.MarsGlobe && window.MarsGlobe.hideSiteEntryBanner) {
+        window.MarsGlobe.hideSiteEntryBanner();
+      }
+      return;
+    }
+
     // Switch active site in MarsData
     if (place.siteKey && window.MarsData) {
       window.MarsData.setActiveSite(place.siteKey).catch(console.warn);
     }
 
     MarsGlobe.flyTo(place.lat, place.lon, place.globeHeight, 1.5);
-    if (MarsDetailMap.isReady()) {
+    if (window.MarsGlobe && window.MarsGlobe.showSiteEntryBanner) {
+      window.MarsGlobe.showSiteEntryBanner({
+        name: place.name,
+        lat: place.lat,
+        lon: place.lon,
+        siteKey: place.siteKey,
+      });
+    }
+
+    if (MarsDetailMap.isReady() && place.siteKey) {
       MarsDetailMap.setSite(key);
       if (MarsHybrid.isInDetailMode()) {
         MarsDetailMap.flyTo(place.lat, place.lon, place.detailZoom);

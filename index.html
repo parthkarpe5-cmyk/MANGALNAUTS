@@ -34,9 +34,9 @@
 
       <!-- Center: Prominent Aerospace View Mode Segmented Switch -->
       <div class="view-mode-group" role="group" aria-label="Cockpit View Mode">
-        <button type="button" class="view-mode-btn" data-mode="3d" title="Full Screen 3D Planetary Mars Globe">🌐 3D GLOBE</button>
+        <button type="button" class="view-mode-btn active" data-mode="3d" title="Full Screen 3D Planetary Mars Globe">🌐 3D GLOBE</button>
         <button type="button" class="view-mode-btn" data-mode="2d" title="Full Screen 2D Tactical Surface Exploration">🗺️ 2D TACTICAL</button>
-        <button type="button" class="view-mode-btn active" data-mode="split" title="Synchronized Side-by-Side Dual Cockpit">◫ DUAL SPLIT</button>
+        <button type="button" class="view-mode-btn" data-mode="split" title="Synchronized Side-by-Side Dual Cockpit">◫ DUAL SPLIT</button>
       </div>
 
       <!-- Right: Sector, Travel Limits, and Tactical Instrument Panels -->
@@ -45,10 +45,10 @@
         <div class="select-badge" title="Select Martian Exploration Sector">
           <span class="select-badge-lbl">SECTOR</span>
           <select id="location" aria-label="Preset location">
+            <option value="global" selected>Global Mars Orbit</option>
             <option value="jezero">Jezero Crater (Delta)</option>
             <option value="gale">Gale Crater (Mt Sharp)</option>
             <option value="olympus">Olympus Mons (Caldera)</option>
-            <option value="global">Global Mars</option>
           </select>
         </div>
 
@@ -165,10 +165,31 @@
     </div>
 
     <!-- Dual Viewport Engine: Supports 3D Globe, 2D Tactical, or Side-by-Side Dual Split -->
-    <main id="viewport-split" class="viewport-split mode-split">
+    <main id="viewport-split" class="viewport-split mode-3d">
       <!-- 3D Planetary Globe View (CesiumJS Mars Ellipsoid) -->
       <section id="globe-pane" class="pane globe-pane" aria-label="3D Martian globe view">
+        <canvas id="cosmic-canvas" class="cosmic-canvas"></canvas>
         <div id="globe" class="cesium-container"></div>
+
+        <!-- 3D Globe Exploration Site Banner -->
+        <div id="globe-site-banner" class="globe-site-banner" hidden>
+          <div class="globe-site-info">
+            <span class="globe-site-pulse"></span>
+            <div>
+              <div class="globe-site-title" id="globe-site-name">JEZERO CRATER // PERSEVERANCE</div>
+              <div class="globe-site-sub" id="globe-site-coords">18.44°N, 77.35°E · High-Res Tactical Surface Ready</div>
+            </div>
+          </div>
+          <div class="globe-site-actions">
+            <button type="button" class="btn-enter-tactical" id="btn-enter-tactical">
+              🗺️ EXPLORE SURFACE TACTICAL RADAR ➔
+            </button>
+            <button type="button" class="btn-globe-orbit" id="btn-globe-orbit" title="Return to Planetary Space Orbit">
+              🌐 Orbit View
+            </button>
+          </div>
+        </div>
+
         <div class="hud hud-left">
           <div class="hud-item">
             <span class="hud-label">COORDS</span>
@@ -278,6 +299,7 @@
     <script src="js/layers/trek-layers.js"></script>
     <script src="js/layers/grs-overlays.js"></script>
     <script src="js/map/historical-traverses.js"></script>
+    <script src="js/visual/cosmic-galaxy.js"></script>
     <script src="js/globe.js"></script>
     <script src="js/detail-map.js"></script>
     <script src="js/hybrid.js"></script>
