@@ -56,13 +56,18 @@ window.MarsHybrid = (function () {
       MarsDetailMap.init();
     }
     MarsDetailMap.invalidateSize();
+    if (window.MarsSegmentPick && window.MarsSegmentPick.isActive()) {
+      window.MarsSegmentPick.reset();
+    }
     MarsDetailMap.flyTo(
       state.lat,
       state.lon,
       state.heightM < 80000 ? 11 : 10
     );
 
-    if (modeEl) {
+    if (modeEl && window.MarsTravelMode) {
+      modeEl.textContent = MarsTravelMode.get().label + " · Surface";
+    } else if (modeEl) {
       modeEl.textContent = "Surface detail";
     }
     if (onDetailChange) {
@@ -75,7 +80,9 @@ window.MarsHybrid = (function () {
     detailPane.classList.remove("open");
     MarsGlobe.setGlobeOpacity(1);
 
-    if (modeEl) {
+    if (modeEl && window.MarsTravelMode) {
+      modeEl.textContent = MarsTravelMode.get().label + " · Planet";
+    } else if (modeEl) {
       modeEl.textContent = "Planet";
     }
     if (onDetailChange) {

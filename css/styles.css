@@ -155,9 +155,98 @@ h1 {
   border-bottom: 1px solid var(--border);
 }
 
-.detail-map-inner {
+.detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+
+.detail-check {
+  padding-bottom: 0;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.detail-body {
+  display: flex;
   flex: 1;
+  min-height: 0;
+}
+
+.detail-map-inner {
+  flex: 1.4;
   min-height: 200px;
+  min-width: 0;
+}
+
+.segment-drawer {
+  flex: 0.6;
+  min-width: 200px;
+  max-width: 280px;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.78rem;
+  border-left: 1px solid var(--border);
+  overflow-y: auto;
+  background: var(--bg);
+}
+
+.drawer-title {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  color: var(--accent);
+}
+
+.drawer-stats {
+  margin: 0;
+}
+
+.drawer-stats dt {
+  color: var(--muted);
+  margin-top: 0.35rem;
+}
+
+.drawer-stats dd {
+  margin: 0.1rem 0 0;
+  font-weight: 600;
+}
+
+.drawer-hint {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.drawer-error {
+  margin: 0;
+  color: #f87171;
+}
+
+.drawer-feasible {
+  margin: 0.75rem 0 0;
+  font-weight: 600;
+}
+
+.drawer-feasible.ok {
+  color: var(--accent);
+}
+
+.drawer-feasible.bad {
+  color: #f87171;
+}
+
+.seg-marker span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: #111;
+  font-weight: 700;
+  font-size: 0.75rem;
+  border: 2px solid #111;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 .hud {

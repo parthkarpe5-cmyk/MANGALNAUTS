@@ -22,7 +22,7 @@ Educational [NASA Mars glTF model](https://science.nasa.gov/resource/planet-mars
 ## Run locally
 
 ```bash
-cd "D:\NASA Space challenge"
+cd "D:\NASA Space challenge\MANGALNAUTS"
 python -m http.server 8080
 ```
 
@@ -40,8 +40,18 @@ For Jezero/Gale centimeter–meter 3D Tiles, add a free [Cesium ion](https://ces
 - `js/hybrid.js` — camera threshold → detail pane  
 - `js/app.js` — UI wiring  
 
+## Plan segment (A→B)
+
+In **surface detail** mode (zoom the globe below ~400 km):
+
+1. Enable **Plan segment (A→B)** on the detail pane toolbar.
+2. Click **point A**, then **point B** on the CTX map.
+3. The drawer shows **geodesic** vs **graph path** distance, slope, and feasibility for **Marswalk (15°)** or **Rover (20°)**.
+
+Mock graph data lives in `data/jezero/v1/` (replace with P3 pipeline output).
+
 ## Next steps
 
-- Route drawing and EVA checklist on the detail map  
+- Replace mock `terrain_graph.json` with real MOLA/THEMIS/CRISM pipeline  
 - Point query for NASA Ames Mars climate reference (MCS)  
 - HiRISE / CRISM footprints from PDS ODE

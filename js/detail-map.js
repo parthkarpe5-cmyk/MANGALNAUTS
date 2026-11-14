@@ -67,5 +67,9 @@ window.MarsDetailMap = (function () {
     return initialized;
   }
 
-  return { init, flyTo, getCenter, invalidateSize, isReady };
+  function getMap() {
+    return map;
+  }
+
+  return { init, flyTo, getCenter, invalidateSize, isReady, getMap };
 })();

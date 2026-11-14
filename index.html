@@ -54,6 +54,13 @@
             <option value="global">Full globe</option>
           </select>
         </label>
+        <label class="control">
+          <span>Travel mode</span>
+          <select id="travel-mode" aria-label="Rover or Marswalk slope limits">
+            <option value="walk">Marswalk (≤15°)</option>
+            <option value="rover">Rover (≤20°)</option>
+          </select>
+        </label>
         <button type="button" class="btn-ghost" id="about-toggle">
           About Mars model
         </button>
@@ -83,11 +90,23 @@
       <section id="detail-pane" class="detail-pane" aria-label="High-resolution surface map">
         <header class="detail-head">
           <span>Surface detail (CTX 5 m)</span>
-          <button type="button" class="btn-ghost" id="sync-globe-btn">
-            Sync globe view
-          </button>
+          <div class="detail-actions">
+            <label class="control checkbox detail-check">
+              <input type="checkbox" id="plan-segment" />
+              <span>Plan segment (A→B)</span>
+            </label>
+            <button type="button" class="btn-ghost" id="clear-segment">
+              Clear
+            </button>
+            <button type="button" class="btn-ghost" id="sync-globe-btn">
+              Sync globe
+            </button>
+          </div>
         </header>
-        <div id="detail-map-inner" class="detail-map-inner"></div>
+        <div class="detail-body">
+          <div id="detail-map-inner" class="detail-map-inner"></div>
+          <aside id="segment-drawer" class="segment-drawer" aria-label="Segment metrics"></aside>
+        </div>
       </section>
     </main>
     <footer class="footer">
@@ -108,6 +127,13 @@
     <script src="js/globe.js"></script>
     <script src="js/detail-map.js"></script>
     <script src="js/hybrid.js"></script>
+    <script src="js/map/geodesic.js"></script>
+    <script src="js/api/manifest.js"></script>
+    <script src="js/routing/astar.js"></script>
+    <script src="js/mission/modes.js"></script>
+    <script src="js/routing/routeBetween.js"></script>
+    <script src="js/mission/drawer.js"></script>
+    <script src="js/map/pick.js"></script>
     <script src="js/app.js"></script>
   </body>
 </html>

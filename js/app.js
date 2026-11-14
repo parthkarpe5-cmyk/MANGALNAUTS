@@ -1,4 +1,4 @@
-/* global MarsGlobe, MarsHybrid, MarsDetailMap, MarsPlaces, TrekLayers */
+/* global MarsGlobe, MarsHybrid, MarsDetailMap, MarsPlaces, TrekLayers, MarsTravelMode, MarsSegmentDrawer, MarsSegmentPick, MarsData */
 (function () {
   function formatCoord(lat, lon) {
     const ns = lat >= 0 ? "N" : "S";
@@ -25,6 +25,9 @@
   const syncDetailBtn = document.getElementById("sync-globe-btn");
   const aboutToggle = document.getElementById("about-toggle");
   const aboutPanel = document.getElementById("about-panel");
+  const travelMode = document.getElementById("travel-mode");
+  const planSegment = document.getElementById("plan-segment");
+  const clearSegment = document.getElementById("clear-segment");
 
   function populateFilters() {
     TrekLayers.keys().forEach(function (key) {
@@ -68,6 +71,9 @@
   }
 
   async function bootstrap() {
+    MarsSegmentDrawer.init("segment-drawer");
+    MarsData.loadGraph().catch(console.warn);
+
     populateFilters();
     await MarsGlobe.init("globe");
     onFilterChange();
@@ -112,8 +118,41 @@
       });
     }
 
+    if (travelMode) {
+      travelMode.addEventListener("change", function () {
+        MarsTravelMode.set(travelMode.value);
+        if (modeEl) {
+          modeEl.textContent =
+            MarsTravelMode.get().label + " · " + (MarsHybrid.isInDetailMode() ? "Surface" : "Planet");
+        }
+      });
+      MarsTravelMode.set(travelMode.value);
+    }
+
+    if (planSegment) {
+      planSegment.addEventListener("change", function () {
+        if (planSegment.checked && !MarsHybrid.isInDetailMode()) {
+          const key = locationSelect ? locationSelect.value : "jezero";
+          flyToPlace(key || "jezero");
+        }
+        MarsSegmentPick.setActive(planSegment.checked);
+      });
+    }
+    if (clearSegment) {
+      clearSegment.addEventListener("click", function () {
+        MarsSegmentPick.reset();
+      });
+    }
+
+    MarsTravelMode.onChange(function (m) {
+      if (modeEl && !MarsHybrid.isInDetailMode()) {
+        modeEl.textContent = m.label + " · Planet";
+      }
+    });
+
     if (modeEl) {
-      modeEl.textContent = "Planet";
+      modeEl.textContent =
+        MarsTravelMode.get().label + " · Planet";
     }
     if (filterLabel) {
       filterLabel.textContent = TrekLayers.labelFor("viking");

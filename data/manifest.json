@@ -1,0 +1,15 @@
+{
+  "version": "1",
+  "aoi": "jezero",
+  "title": "Jezero Crater pilot patch (mock graph for demo)",
+  "center": { "lat": 18.44, "lon": 77.58 },
+  "bbox": { "west": 77.53, "east": 77.63, "south": 18.39, "north": 18.49 },
+  "citations": [
+    "NASA Mars Trek / OnMars CTX & MOLA",
+    "Mock terrain_graph for hackathon integration — replace with P3 pipeline output"
+  ],
+  "files": {
+    "terrain_graph": "data/jezero/v1/terrain_graph.json",
+    "gnn_scores": "data/jezero/v1/gnn_scores.json"
+  }
+}
