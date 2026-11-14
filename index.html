@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Martian Map — 3D Globe</title>
+    <link
+      href="https://cesium.com/downloads/cesiumjs/releases/1.123/Build/Cesium/Widgets/widgets.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div>
+        <h1>Martian Map</h1>
+        <p class="subtitle">
+          3D Mars globe ·
+          <a href="https://trek.nasa.gov/mars/">NASA Trek</a> ·
+          <a href="https://astro.arcgis.com/arcgis/rest/services/OnMars">OnMars</a>
+        </p>
+      </div>
+      <div class="controls">
+        <label class="control">
+          <span>Imagery filter</span>
+          <select id="globe-filter" aria-label="Globe imagery filter"></select>
+        </label>
+        <label class="control checkbox">
+          <input type="checkbox" id="overlay-mola" checked />
+          <span>MOLA underlay</span>
+        </label>
+        <label class="control">
+          <span>Underlay opacity</span>
+          <input
+            type="range"
+            id="overlay-opacity"
+            min="0.1"
+            max="1"
+            step="0.05"
+            value="0.45"
+            aria-label="Overlay opacity"
+          />
+        </label>
+        <label class="control">
+          <span>Jump to</span>
+          <select id="location" aria-label="Preset location">
+            <option value="jezero">Jezero Crater (Perseverance)</option>
+            <option value="gale">Gale Crater (Curiosity)</option>
+            <option value="olympus">Olympus Mons</option>
+            <option value="global">Full globe</option>
+          </select>
+        </label>
+        <button type="button" class="btn-ghost" id="about-toggle">
+          About Mars model
+        </button>
+      </div>
+    </header>
+    <div id="about-panel" class="about-panel" hidden>
+      <p>
+        NASA offers an interactive
+        <a
+          href="https://science.nasa.gov/resource/planet-mars-3d-model/"
+          target="_blank"
+          rel="noopener"
+          >Mars glTF preview</a
+        >
+        for outreach. This app uses mission tile data (Trek WMTS, OnMars) for a
+        Google Earth–style explorer.
+      </p>
+    </div>
+    <main class="stage">
+      <div id="globe" class="globe-wrap" role="application" aria-label="Mars 3D globe"></div>
+      <aside class="hud" aria-live="polite">
+        <div><strong>Mode</strong> <span id="mode-label">—</span></div>
+        <div><strong>Filter</strong> <span id="filter-label">—</span></div>
+        <div><strong>Camera</strong> <span id="camera-height">—</span></div>
+        <div><strong>Cursor</strong> <span id="coords">—</span></div>
+      </aside>
+      <section id="detail-pane" class="detail-pane" aria-label="High-resolution surface map">
+        <header class="detail-head">
+          <span>Surface detail (CTX 5 m)</span>
+          <button type="button" class="btn-ghost" id="sync-globe-btn">
+            Sync globe view
+          </button>
+        </header>
+        <div id="detail-map-inner" class="detail-map-inner"></div>
+      </section>
+    </main>
+    <footer class="footer">
+      Imagery: NASA Trek (Viking, MOLA, THEMIS, TES). Terrain: OnMars MDEM200M.
+      Detail: Esri OnMars CTX &amp; MColorDEM. Not affiliated with NASA.
+    </footer>
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.123/Build/Cesium/Cesium.js"></script>
+    <script>
+      window.CESIUM_BASE_URL =
+        "https://cesium.com/downloads/cesiumjs/releases/1.123/Build/Cesium/";
+    </script>
+    <script src="js/config/ion.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/esri-leaflet@3.0.14/dist/esri-leaflet.js"></script>
+    <script src="js/config/mars-ellipsoid.js"></script>
+    <script src="js/config/places.js"></script>
+    <script src="js/layers/trek-layers.js"></script>
+    <script src="js/globe.js"></script>
+    <script src="js/detail-map.js"></script>
+    <script src="js/hybrid.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>

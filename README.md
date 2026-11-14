@@ -1,18 +1,47 @@
-# MANGALNAUTS
-NASA space app challenge 
+# Martian Map — 3D hybrid globe
 
-## NASA Data & Resources
+Google Earth–style **Mars globe** for the NASA Space Apps *Interplanetary Survival Guide: Martian Map* challenge.
 
-Challenge brief and suggested sources: [Interplanetary Survival Guide: Martian Map](https://www.spaceappschallenge.org/2026/challenges/interplanetary-survival-guide-martian-map/?tab=resources).
+## Features
 
-| Resource | How it can help MANGALNAUTS |
-| --- | --- |
-| [NASA JPL Mars Trek](https://trek.nasa.gov/mars/) | Explore Mars imagery, elevation, and science layers. Use product metadata to check coverage and credit sources. |
-| [USGS–NASA Planetary Geologic Mapping Program](https://www.usgs.gov/special-topics/planetary-geologic-mapping) and [USGS Mars interactive maps](https://astrogeology-usgs.hub.arcgis.com/pages/interactive-maps-mars) | Find geologic maps for interpreting surface units and choosing science stops. |
-| [Curiosity’s Proposed Path up Mount Sharp](https://www.jpl.nasa.gov/images/pia23179-curiositys-proposed-path-up-mount-sharp/) | Reference for presenting a route with annotated science stops. The example is at Gale Crater. |
-| [NASA Worldview](https://worldview.earthdata.nasa.gov/) | Earth imagery viewer and an interface reference for toggling layers. |
-| [Mars Perseverance Raw Images](https://mars.nasa.gov/mars2020/multimedia/raw-images/) | Browse rover photos for Jezero surface context. Verify the camera, sol, and location before attaching a photo to a science stop. |
+- **3D globe** (Cesium): rotate, tilt, zoom on Mars with **MDEM200M** terrain (OnMars).
+- **NASA Trek imagery filters**: Viking color, MOLA hillshade, THEMIS day/night IR, TES albedo.
+- **Hybrid detail mode**: zoom below ~400 km camera height → **2D CTX (5 m)** map slides up (lazy-loaded Leaflet).
+- **Jump to** Jezero, Gale, Olympus Mons, or global view.
 
-### Candidate terrain dataset
+## Data sources
 
-[USGS Jezero Crater CTX elevation mosaic](https://astrogeology.usgs.gov/search/map/mars_2020_science_investigation_ctx_dem_mosaic) is a 20 m/pixel elevation product derived from NASA Mars Reconnaissance Orbiter imagery. A cropped elevation grid could support slope analysis and route comparisons. These links document candidate sources and references for the hackathon.
+| Layer | Source |
+|-------|--------|
+| Globe imagery | [Mars Trek WMTS](https://trek.nasa.gov/tiles/apidoc/trekAPI.html?body=mars) |
+| 3D terrain | [OnMars MDEM200M](https://astro.arcgis.com/arcgis/rest/services/OnMars/MDEM200M/ImageServer) |
+| Surface detail | [OnMars CTX](https://astro.arcgis.com/arcgis/rest/services/OnMars/CTX/MapServer), [MColorDEM](https://astro.arcgis.com/arcgis/rest/services/OnMars/MColorDEM/MapServer) |
+
+Educational [NASA Mars glTF model](https://science.nasa.gov/resource/planet-mars-3d-model/) — linked in the app header (not used as the scientific basemap).
+
+## Run locally
+
+```bash
+cd "D:\NASA Space challenge"
+python -m http.server 8080
+```
+
+Open [http://localhost:8080](http://localhost:8080). Requires network access for NASA/Esri tiles and the Cesium CDN.
+
+## Optional: Cesium Ion Mars 3D Tiles
+
+For Jezero/Gale centimeter–meter 3D Tiles, add a free [Cesium ion](https://cesium.com/ion/) token and load asset `3644333` in `js/globe.js` (not required for this build).
+
+## Project layout
+
+- `js/globe.js` — Cesium viewer, terrain, filter switching  
+- `js/layers/trek-layers.js` — lazy Trek WMTS providers  
+- `js/detail-map.js` — 2D CTX map (init once)  
+- `js/hybrid.js` — camera threshold → detail pane  
+- `js/app.js` — UI wiring  
+
+## Next steps
+
+- Route drawing and EVA checklist on the detail map  
+- Point query for NASA Ames Mars climate reference (MCS)  
+- HiRISE / CRISM footprints from PDS ODE
