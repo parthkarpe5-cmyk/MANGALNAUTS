@@ -25,94 +25,52 @@
   </head>
   <body class="theme-perseverance">
     <header class="top-nav">
+      <!-- Left: Mission Identity & Live Telemetry Ping -->
       <div class="nav-brand">
-        <span class="badge">ARES-NAV</span>
+        <span class="badge">ARES-OS</span>
         <h1>MANGALNAUTS <span class="sub">// NASA SPACE APPS 2026</span></h1>
+        <span class="status-indicator"><span class="dot"></span>LIVE TELEMETRY</span>
       </div>
 
-      <div class="nav-controls">
-        <div class="control-group">
-          <label class="control">
-            <span>Filter</span>
-            <select id="globe-filter" aria-label="Globe imagery filter"></select>
-          </label>
+      <!-- Center: Prominent Aerospace View Mode Segmented Switch -->
+      <div class="view-mode-group" role="group" aria-label="Cockpit View Mode">
+        <button type="button" class="view-mode-btn" data-mode="3d" title="Full Screen 3D Planetary Mars Globe">🌐 3D GLOBE</button>
+        <button type="button" class="view-mode-btn" data-mode="2d" title="Full Screen 2D Tactical Surface Exploration">🗺️ 2D TACTICAL</button>
+        <button type="button" class="view-mode-btn active" data-mode="split" title="Synchronized Side-by-Side Dual Cockpit">◫ DUAL SPLIT</button>
+      </div>
 
-          <label class="control switch">
-            <span>MOLA Blend</span>
-            <input
-              type="checkbox"
-              id="overlay-mola"
-              aria-label="Toggle MOLA relief blend"
-            />
-            <span class="switch-ui" aria-hidden="true">
-              <span class="switch-slider"></span>
-            </span>
-          </label>
-
-          <label class="control">
-            <span>Blend</span>
-            <input
-              type="range"
-              id="overlay-opacity"
-              min="0.1"
-              max="1"
-              step="0.05"
-              value="0.45"
-              aria-label="Overlay opacity"
-            />
-          </label>
+      <!-- Right: Sector, Travel Limits, and Tactical Instrument Panels -->
+      <div class="nav-actions">
+        <!-- Hero Exploration Sector -->
+        <div class="select-badge" title="Select Martian Exploration Sector">
+          <span class="select-badge-lbl">SECTOR</span>
+          <select id="location" aria-label="Preset location">
+            <option value="jezero">Jezero Crater (Perseverance / Western Delta)</option>
+            <option value="gale">Gale Crater (Curiosity / Mount Sharp)</option>
+            <option value="olympus">Olympus Mons (Summit Caldera)</option>
+            <option value="global">Full Planetary Mars</option>
+          </select>
         </div>
 
-        <div class="control-group">
-          <label class="control">
-            <span>Mission Sector</span>
-            <select id="location" aria-label="Preset location">
-              <option value="jezero">Jezero Crater (Perseverance / Western Delta)</option>
-              <option value="gale">Gale Crater (Curiosity / Mount Sharp)</option>
-              <option value="olympus">Olympus Mons (Summit Caldera)</option>
-              <option value="global">Full Planetary Globe</option>
-            </select>
-          </label>
-
-          <label class="control">
-            <span>Travel Mode</span>
-            <select id="travel-mode" aria-label="Rover or Marswalk slope limits">
-              <option value="walk">Marswalk (≤15°)</option>
-              <option value="rover">Rover (≤20°)</option>
-            </select>
-          </label>
+        <!-- Travel Mode (Slope Limits) -->
+        <div class="select-badge" title="Rover or Marswalk slope limits">
+          <span class="select-badge-lbl">MODE</span>
+          <select id="travel-mode" aria-label="Travel mode">
+            <option value="walk">Marswalk (≤15°)</option>
+            <option value="rover">Rover (≤20°)</option>
+          </select>
         </div>
 
-        <div class="control-group">
-          <!-- Mission Theme Selector -->
-          <label class="control">
-            <span>Theme</span>
-            <select id="theme-selector" aria-label="Mission UI theme">
-              <option value="perseverance">Perseverance Lime</option>
-              <option value="ares">Ares Mars Rust</option>
-              <option value="deepspace">Deep Space Cyan</option>
-            </select>
-          </label>
-
-          <!-- Audio Feedback Toggle -->
-          <button type="button" class="btn-ghost btn-audio" id="audio-toggle" title="Toggle Tactical Audio Cues">
-            <span id="audio-label">AUDIO: ON</span>
-          </button>
-          <button type="button" class="btn-ghost" id="ambient-wind-toggle" title="Toggle Real Martian Ambient Wind (NASA Perseverance Mic)">
-            <span id="wind-label">WIND: OFF</span>
-          </button>
-        </div>
-
-        <!-- Optional Globe Layers Dropdown -->
+        <!-- Consolidated Planetary Overlays Dropdown -->
         <div class="dropdown-wrapper">
           <button type="button" class="btn-ghost dropdown-trigger" id="globe-layers-toggle">
-            Planetary Overlays ▾
+            🛰️ Layers ▾
           </button>
           <div class="dropdown-menu" id="globe-layers-menu" hidden>
-            <div class="dropdown-title">3D GLOBE OVERLAYS</div>
+            <div class="dropdown-title">PLANETARY &amp; SCIENCE OVERLAYS</div>
             <label class="dropdown-item">
               <input type="checkbox" id="toggle-landmarks" checked />
-              <span>Landing Sites &amp; Landmarks</span>
+              <span>Landing Sites &amp; Hero Landmarks</span>
             </label>
             <label class="dropdown-item">
               <input type="checkbox" id="toggle-traverses" checked />
@@ -124,15 +82,16 @@
             </label>
             <label class="dropdown-item">
               <input type="checkbox" id="toggle-graticule" />
-              <span>Coordinate Graticule</span>
+              <span>Coordinate Graticule (Lat/Lon)</span>
             </label>
             <label class="dropdown-item">
               <input type="checkbox" id="toggle-lighting" />
-              <span>Sun Lighting &amp; Terminator</span>
+              <span>Sun Lighting &amp; Real Terminator</span>
             </label>
-            <div class="dropdown-item" style="display:flex; flex-direction:column; gap:4px; padding-top:6px; border-top:1px solid rgba(255,255,255,0.1);">
-              <span style="font-size:10px; color:#94a3b8; font-weight:700;">ODYSSEY GRS ISRU OVERLAY</span>
-              <select id="grs-element-select" class="control" style="background:#0f172a; color:#e2e8f0; font-size:11px; padding:4px 6px; border:1px solid rgba(255,255,255,0.2); border-radius:4px; cursor:pointer;">
+
+            <div class="dropdown-section">
+              <span class="dropdown-section-title">ODYSSEY GRS ISRU RESOURCES</span>
+              <select id="grs-element-select" class="dropdown-select">
                 <option value="none">GRS Minerals: Off</option>
                 <option value="h2o">Subsurface Water Ice (H₂O wt%)</option>
                 <option value="fe">Elemental Iron (Fe wt%)</option>
@@ -142,11 +101,40 @@
                 <option value="cl">Chlorine &amp; Perchlorates (Cl wt%)</option>
               </select>
             </div>
+
+            <div class="dropdown-section">
+              <span class="dropdown-section-title">GLOBE IMAGERY FILTER</span>
+              <select id="globe-filter" class="dropdown-select"></select>
+              <div class="filter-blend-row">
+                <label class="filter-sub-label">
+                  <input type="checkbox" id="overlay-mola" />
+                  <span>MOLA Blend</span>
+                </label>
+                <input type="range" id="overlay-opacity" min="0.1" max="1" step="0.05" value="0.45" />
+              </div>
+            </div>
+
+            <div class="dropdown-section">
+              <span class="dropdown-section-title">MISSION COCKPIT THEME</span>
+              <select id="theme-selector" class="dropdown-select">
+                <option value="perseverance">Perseverance Lime</option>
+                <option value="ares">Ares Mars Rust</option>
+                <option value="deepspace">Deep Space Cyan</option>
+              </select>
+            </div>
           </div>
         </div>
 
-        <button type="button" class="btn-ghost" id="about-toggle">
-          About
+        <!-- Tactical Audio Feedback -->
+        <button type="button" class="btn-ghost" id="audio-toggle" title="Toggle Tactical Audio Feedback">
+          <span id="audio-label">🔊 AUDIO: ON</span>
+        </button>
+        <button type="button" class="btn-ghost" id="ambient-wind-toggle" title="Toggle Real Martian Ambient Wind (NASA Perseverance Mic)">
+          <span id="wind-label">💨 WIND: OFF</span>
+        </button>
+
+        <button type="button" class="btn-ghost" id="about-toggle" title="Scientific Data Citations">
+          ℹ About
         </button>
       </div>
     </header>
@@ -176,9 +164,10 @@
       </div>
     </div>
 
-    <main class="viewport-split">
+    <!-- Dual Viewport Engine: Supports 3D Globe, 2D Tactical, or Side-by-Side Dual Split -->
+    <main id="viewport-split" class="viewport-split mode-split">
       <!-- 3D Planetary Globe View (CesiumJS Mars Ellipsoid) -->
-      <section class="pane globe-pane" aria-label="3D Martian globe view">
+      <section id="globe-pane" class="pane globe-pane" aria-label="3D Martian globe view">
         <div id="globe" class="cesium-container"></div>
         <div class="hud hud-left">
           <div class="hud-item">
@@ -195,69 +184,67 @@
           </div>
           <div class="hud-item">
             <span class="hud-label">MODE</span>
-            <span class="hud-value" id="mode-label">PLANETARY ORBIT</span>
+            <span class="hud-value" id="mode-label">DUAL COCKPIT</span>
           </div>
         </div>
       </section>
 
-      <!-- 2D High-Resolution Detail Map View (Leaflet CTX / MOLA Mosaic) -->
+      <!-- 2D High-Resolution Tactical Surface Map View (Leaflet NASA Trek & HiRISE) -->
       <section
         id="detail-pane"
         class="pane detail-pane"
         aria-label="High-resolution surface exploration view"
       >
-        <header class="detail-header">
-          <div class="detail-title">
-            <span class="detail-dot"></span>
-            <span class="detail-name">HYPERLOCALIZED MARSWALK &amp; ROVER SECTOR</span>
+        <!-- Sleek Floating Glass Tactical Dock -->
+        <div class="tactical-dock">
+          <div class="dock-badge">
+            <span class="dock-pulse"></span>
+            <span>TACTICAL RADAR</span>
           </div>
 
-          <div class="detail-actions">
-            <!-- Heatmap Layer Selector -->
-            <label class="control control-sm">
-              <span>Heatmap</span>
-              <select id="heatmap-mode" aria-label="Surface heatmap layer">
-                <option value="off">Heatmap Off</option>
-                <option value="risk">GNN Traversability Risk</option>
-                <option value="science">CRISM Biosignature Potential</option>
-              </select>
-            </label>
+          <!-- Segment Routing Trigger -->
+          <label class="dock-btn-plan" title="Click two points on the map to compute an optimal GNN route">
+            <input type="checkbox" id="plan-segment" />
+            <span class="btn-inner">
+              <span class="pulse-indicator"></span>
+              <span>🎯 Plan Segment (A→B)</span>
+            </span>
+          </label>
 
-            <!-- Preset Routes Toggle -->
-            <label class="control switch control-sm">
-              <span>Primary Corridor</span>
-              <input type="checkbox" id="toggle-preset-routes" />
-              <span class="switch-ui" aria-hidden="true">
-                <span class="switch-slider"></span>
-              </span>
-            </label>
+          <button type="button" class="dock-btn" id="clear-segment" title="Clear active route">
+            ✕ Clear
+          </button>
 
-            <!-- Science Stops Toggle -->
-            <label class="control switch control-sm">
-              <span>Science Targets</span>
-              <input type="checkbox" id="toggle-science-stops" checked />
-              <span class="switch-ui" aria-hidden="true">
-                <span class="switch-slider"></span>
-              </span>
-            </label>
+          <div class="dock-divider"></div>
 
-            <!-- Segment Mode Button -->
-            <label class="control-segment-btn" title="Click two points on the map to compute an optimal GNN route">
-              <input type="checkbox" id="plan-segment" />
-              <span class="btn-inner">
-                <span class="pulse-indicator"></span>
-                <span>Plan Segment (A→B)</span>
-              </span>
-            </label>
-
-            <button type="button" class="btn-ghost btn-sm" id="clear-segment" title="Clear current route">
-              Clear
-            </button>
-            <button type="button" class="btn-ghost btn-sm" id="sync-globe-btn" title="Sync globe view to surface map center">
-              Sync Globe
-            </button>
+          <!-- Heatmap Layer Selector -->
+          <div class="dock-select-group">
+            <span class="dock-lbl">HEATMAP:</span>
+            <select id="heatmap-mode" aria-label="Surface heatmap layer">
+              <option value="off">Off</option>
+              <option value="risk">GNN Traversability Risk</option>
+              <option value="science">CRISM Biosignatures</option>
+            </select>
           </div>
-        </header>
+
+          <!-- Preset Corridors Toggle -->
+          <label class="dock-toggle" title="Toggle historical NASA landing route corridor">
+            <input type="checkbox" id="toggle-preset-routes" />
+            <span>Corridors</span>
+          </label>
+
+          <!-- Science Stops Toggle -->
+          <label class="dock-toggle" title="Toggle verified NASA science targets &amp; sample return depots">
+            <input type="checkbox" id="toggle-science-stops" checked />
+            <span>Targets</span>
+          </label>
+
+          <div class="dock-divider"></div>
+
+          <button type="button" class="dock-btn" id="sync-globe-btn" title="Sync 3D Globe camera to surface map center">
+            ⟲ Sync Globe
+          </button>
+        </div>
 
         <div class="detail-body">
           <div id="detail-map-inner" class="detail-map-inner"></div>

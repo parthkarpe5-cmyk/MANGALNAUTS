@@ -1,10 +1,17 @@
 /* global L, window, MarsPlaces */
 window.MarsDetailMap = (function () {
   let map = null;
-  let molaLayer = null;
-  let ctxLayer = null;
-  let activeBase = null;
+  let vikingLayer = null;
+  let reliefLayer = null;
+  let hiriseLayer = null;
   let initialized = false;
+  let currentSite = "jezero";
+
+  const TREK_BASE = "https://trek.nasa.gov/tiles/Mars/EQ";
+  const VIKING_URL = `${TREK_BASE}/Mars_Viking_MDIM21_ClrMosaic_global_232m/1.0.0/default/default028mm/{z}/{y}/{x}.jpg`;
+  const RELIEF_URL = `${TREK_BASE}/Mars_MOLA_blend200ppx_HRSC_Shade_clon0dd_200mpp_lzw/1.0.0/default/default028mm/{z}/{y}/{x}.png`;
+  const JEZERO_HIRISE_URL = `${TREK_BASE}/NES_JEZ_MID_Visible_Mosaic_HiRISE_CTX_HRSC_GCS_MARS_07-10-2018/1.0.0/default/default028mm/{z}/{y}/{x}.png`;
+  const GALE_HIRISE_URL = `${TREK_BASE}/curiosity_hirise_mosaic/1.0.0/default/default028mm/{z}/{y}/{x}.png`;
 
   function init() {
     if (initialized) {
@@ -17,33 +24,77 @@ window.MarsDetailMap = (function () {
     map = L.map("detail-map-inner", {
       center: [18.4447, 77.4509],
       zoom: 10,
-      minZoom: 1,
-      maxZoom: 11,
+      minZoom: 2,
+      maxZoom: 17,
       maxBounds: MARS_BOUNDS,
       maxBoundsViscosity: 1,
       worldCopyJump: false,
+      zoomControl: false, // will position cleanly
     });
 
-    molaLayer = L.esri.tiledMapLayer({
-      url: "https://astro.arcgis.com/arcgis/rest/services/OnMars/MColorDEM/MapServer",
-      maxZoom: 11,
-      attribution:
-        "NASA MGS MOLA · USGS Astrogeology · Esri / astro.arcgis.com",
-    });
+    // Custom sleek zoom control in bottom-right
+    L.control.zoom({ position: "bottomright" }).addTo(map);
 
-    ctxLayer = L.esri.tiledMapLayer({
-      url: "https://astro.arcgis.com/arcgis/rest/services/OnMars/CTX/MapServer",
-      maxZoom: 11,
-      attribution:
-        "NASA/JPL/MSSS/The Murray Lab · CTX beta mosaic · Esri / astro.arcgis.com",
-    });
+    // 1. Base Layer: Global NASA Viking MDIM 2.1 Color Mosaic (232m/px)
+    vikingLayer = L.tileLayer(VIKING_URL, {
+      maxZoom: 17,
+      maxNativeZoom: 9,
+      noWrap: true,
+      bounds: [[-90, -180], [90, 180]],
+      attribution: "NASA Mars Trek / Viking MDIM 2.1 Mosaic",
+    }).addTo(map);
 
-    molaLayer.setOpacity(0.55);
-    molaLayer.addTo(map);
-    ctxLayer.addTo(map);
-    activeBase = ctxLayer;
+    // 2. Relief Overlay: HRSC-MOLA 200m Shaded Relief (multiplies hillshade for 3D depth)
+    reliefLayer = L.tileLayer(RELIEF_URL, {
+      maxZoom: 17,
+      maxNativeZoom: 8,
+      opacity: 0.5,
+      noWrap: true,
+      bounds: [[-90, -180], [90, 180]],
+      attribution: "USGS / NASA HRSC-MOLA 200m Relief",
+    }).addTo(map);
+
+    // 3. Localized Sub-Meter HiRISE Orthomosaic for Active Hero Sector
+    updateHiRiseLayer();
+
+    // Listen for site changes to update sector tiles
+    window.addEventListener("mars:site-changed", function (e) {
+      if (e.detail && e.detail.siteKey) {
+        setSite(e.detail.siteKey);
+      }
+    });
 
     return map;
+  }
+
+  function updateHiRiseLayer() {
+    if (!map) return;
+    if (hiriseLayer) {
+      map.removeLayer(hiriseLayer);
+      hiriseLayer = null;
+    }
+
+    if (currentSite === "jezero") {
+      hiriseLayer = L.tileLayer(JEZERO_HIRISE_URL, {
+        minZoom: 8,
+        maxZoom: 17,
+        maxNativeZoom: 16,
+        noWrap: true,
+        bounds: [[17.5, 76.5], [19.3, 78.5]],
+        attribution: "NASA/JPL/UofA Mars 2020 HiRISE (0.25 m/px)",
+        opacity: 0.95,
+      }).addTo(map);
+    } else if (currentSite === "gale") {
+      hiriseLayer = L.tileLayer(GALE_HIRISE_URL, {
+        minZoom: 8,
+        maxZoom: 17,
+        maxNativeZoom: 16,
+        noWrap: true,
+        bounds: [[-5.2, 137.0], [-4.2, 137.8]],
+        attribution: "NASA/JPL/UofA MSL HiRISE (0.25 m/px)",
+        opacity: 0.95,
+      }).addTo(map);
+    }
   }
 
   function flyTo(lat, lon, zoom) {
@@ -53,17 +104,19 @@ window.MarsDetailMap = (function () {
 
   function fitBounds(bounds, options) {
     if (!map || !bounds) return;
-    map.fitBounds(bounds, options || { padding: [20, 20], maxZoom: 11 });
+    map.fitBounds(bounds, options || { padding: [24, 24], maxZoom: 12 });
   }
 
   function setSite(siteKey) {
+    currentSite = siteKey || "jezero";
+    updateHiRiseLayer();
     if (!map) return;
     const place = window.MarsPlaces ? window.MarsPlaces[siteKey] : null;
     if (place) {
       if (place.bounds) {
         fitBounds(place.bounds);
       } else {
-        flyTo(place.lat, place.lon, place.detailZoom);
+        flyTo(place.lat, place.lon, place.detailZoom || 10);
       }
     }
   }
@@ -77,6 +130,9 @@ window.MarsDetailMap = (function () {
   function invalidateSize() {
     if (map) {
       map.invalidateSize();
+      setTimeout(function () {
+        if (map) map.invalidateSize();
+      }, 100);
     }
   }
 
