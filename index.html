@@ -73,7 +73,7 @@
               <span>Landing Sites &amp; Hero Landmarks</span>
             </label>
             <label class="dropdown-item">
-              <input type="checkbox" id="toggle-traverses" checked />
+              <input type="checkbox" id="toggle-traverses" />
               <span>NASA Rover Traverses (128.98 km)</span>
             </label>
             <label class="dropdown-item">
@@ -222,8 +222,7 @@
             <span class="dock-lbl">HEATMAP:</span>
             <select id="heatmap-mode" aria-label="Surface heatmap layer">
               <option value="off">Off</option>
-              <option value="risk">GNN Traversability Risk</option>
-              <option value="science">CRISM Biosignatures</option>
+              <option value="slope">Terrain slope (8° amber · 15° orange · 20° coral)</option>
             </select>
           </div>
 
@@ -293,6 +292,7 @@
     <script src="js/mission/telemetry.js"></script>
     <script src="js/mission/elevation-profile.js"></script>
     <script src="js/mission/drawer.js"></script>
+    <script src="js/mission/contingency.js"></script>
     <script src="js/map/heatmap.js"></script>
     <script src="js/map/route-renderer.js"></script>
     <script src="js/map/preset-routes.js"></script>

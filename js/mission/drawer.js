@@ -20,6 +20,7 @@ window.MarsSegmentDrawer = (function () {
   }
 
   async function render(segment, statusText) {
+    if (!segment?.path_found) window.MarsContingency?.clear();
     if (!panel) return;
     if (statusText) {
       panel.innerHTML =
@@ -261,6 +262,8 @@ window.MarsSegmentDrawer = (function () {
         }
       });
     }
+
+    if (segment.path_found) window.MarsContingency?.attach(panel, segment);
 
     // Action buttons
     const clearBtn = document.getElementById("btn-clear-active-route");

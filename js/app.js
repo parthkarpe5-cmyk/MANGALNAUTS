@@ -370,6 +370,13 @@
           const key = locationSelect ? locationSelect.value : "jezero";
           flyToPlace(key || "jezero");
         }
+        if (planSegment.checked) {
+          const map = MarsDetailMap.getMap();
+          togglePresetRoutes.checked = false;
+          toggleTraverses.checked = false;
+          if (map) MarsPresetRoutes.setVisible(map, false);
+          MarsHistoricalTraverses.setVisible(false, map, MarsGlobe.getViewer());
+        }
         MarsSegmentPick.setActive(planSegment.checked);
       });
     }

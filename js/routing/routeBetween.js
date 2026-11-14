@@ -78,6 +78,12 @@ window.MarsRouteBetween = (function () {
       return { error: "No graph nodes in area" };
     }
 
+    if (graph.max_snap_m != null &&
+        (MarsGeodesic.haversineMeters(latA, lonA, nodeA.lat, nodeA.lon) > graph.max_snap_m ||
+         MarsGeodesic.haversineMeters(latB, lonB, nodeB.lat, nodeB.lon) > graph.max_snap_m)) {
+      return { status: "out_of_coverage", error: "Choose both points near valid elevation samples." };
+    }
+
     const geodesic_m = MarsGeodesic.haversineMeters(latA, lonA, latB, lonB);
 
     const scoreNodes = scores?.nodes || {};

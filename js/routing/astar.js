@@ -5,8 +5,8 @@ window.MarsAstar = (function () {
     edges.forEach(function (e) {
       if (!adj[e.from]) adj[e.from] = [];
       if (!adj[e.to]) adj[e.to] = [];
-      adj[e.from].push({ to: e.to, length_m: e.length_m });
-      adj[e.to].push({ to: e.from, length_m: e.length_m });
+      adj[e.from].push({ to: e.to, length_m: e.length_m, crossingGrade: e.crossing_grade_deg });
+      adj[e.to].push({ to: e.from, length_m: e.length_m, crossingGrade: e.crossing_grade_deg });
     });
     return adj;
   }
@@ -69,7 +69,7 @@ window.MarsAstar = (function () {
 
       const neighbors = adj[current] || [];
       neighbors.forEach(function (edge) {
-        if (!slopeOk(current, edge.to, edge.length_m)) return;
+        if (edge.crossingGrade > maxSlope || !slopeOk(current, edge.to, edge.length_m)) return;
         const tentative =
           (gScore[current] || 0) + edgeCost(current, edge.to, edge.length_m);
         if (gScore[edge.to] == null || tentative < gScore[edge.to]) {
