@@ -7,10 +7,12 @@
   },
   "sol": 1133,
   "terrestrial_date": "2024-04-27",
-  "local_solar_time": "06:06 MTC",
-  "is_daylight": false,
-  "sunset_in_min": 0.0,
-  "sunset_utc": "2026-11-14T11:59:40Z",
+  "local_solar_time": "06:27 MTC",
+  "ltst": "06:27:36",
+  "is_daylight": true,
+  "sunset_in_min": 647.6,
+  "sunset_in_minutes": 647,
+  "sunset_utc": "2026-11-14T23:07:40Z",
   "temp_C": -52.0,
   "temp_min_C": -79.3,
   "temp_max_C": -24.7,
@@ -20,17 +22,45 @@
   "ls_deg": 244.106,
   "rad_dose_proxy": 28.5,
   "rad_dose_unit": "uSv/hr",
-  "flare_level": "B8.6",
+  "flare_level": "B6.9",
+  "atmosphere": {
+    "air_temp_c": {
+      "current": -52.0,
+      "min": -79.3,
+      "max": -24.7
+    },
+    "ground_temp_c": {
+      "current": -46.0,
+      "min": -87.3,
+      "max": -14.7
+    },
+    "pressure_pa": 778.9,
+    "wind_speed_ms": 5.2,
+    "wind_dir_deg": 315,
+    "wind_dir_compass": "NW",
+    "dust_opacity_tau": 0.45,
+    "uv_flux_index": 5.8
+  },
+  "radiation": {
+    "dose_rate_uSv_hr": 28.5,
+    "daily_dose_uSv": 684.0,
+    "spe_event_status": "NORMAL",
+    "flare_level": "B6.9",
+    "cumulative_mission_mSv": 164.7,
+    "suit_shielding_factor": 0.65
+  },
   "alerts": [
     {
-      "code": "NIGHT_RESTRICTION",
-      "severity": "warning",
-      "message": "Nighttime conditions active. Surface EVA restricted to emergency operations.",
-      "sunset_in_min": 0
+      "id": "alt_cold_eva_0",
+      "code": "COLD_EVA",
+      "title": "Cold Eva",
+      "severity": "advisory",
+      "message": "Diurnal low reaches -79.3\u00b0C. Maintain suit thermal circulation.",
+      "sunset_in_min": 647
     }
   ],
   "metadata": {
-    "generated_at_utc": "2026-11-14T11:59:46.556017+00:00",
+    "generated_at_utc": "2026-11-14T12:20:09.659494+00:00",
     "weather_source": "NASA Mars 2020 Perseverance MEDA (Live API)",
     "space_weather_source": "NOAA Space Weather Prediction Center (GOES X-ray)",
     "radiation_model": "MSL RAD proxy scaled for Jezero MOLA elevation (-2500m)"

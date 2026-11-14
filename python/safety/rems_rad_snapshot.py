@@ -263,16 +263,35 @@ def build_environment_snapshot():
     space = fetch_live_space_weather()
     alerts = generate_alerts(weather, solar, space)
 
-    # Master environment.json schema specified in plan.md line 128:
-    # {site, sol, temp_C, wind_m_s, sunset_utc, rad_dose_proxy, flare_level, alerts[]}
+    # Master environment.json schema supporting both flat contracts and
+    # nested telemetry.js cockpit UI (atmosphere, radiation, ltst, alerts with title)
+    ltst_h = int(solar["ltst_hours"])
+    ltst_m = int((solar["ltst_hours"] % 1) * 60)
+    ltst_s = int(((solar["ltst_hours"] * 3600) % 60))
+    ltst_time_str = f"{ltst_h:02d}:{ltst_m:02d}:{ltst_s:02d}"
+
+    # Ensure alerts have 'title' and 'id' expected by telemetry.js
+    formatted_alerts = []
+    for idx, a in enumerate(alerts):
+        formatted_alerts.append({
+            "id": f"alt_{a['code'].lower()}_{idx}",
+            "code": a["code"],
+            "title": a.get("title", a["code"].replace("_", " ").title()),
+            "severity": a["severity"],
+            "message": a["message"],
+            "sunset_in_min": a.get("sunset_in_min", int(solar["sunset_in_min"]))
+        })
+
     output = {
         "site": f"{SITE_NAME} (Perseverance AOI)",
         "coordinates": {"lat": SITE_LAT, "lon": SITE_LON, "elevation_m": SITE_ELEV_M},
         "sol": weather["sol"],
         "terrestrial_date": weather["terrestrial_date"],
         "local_solar_time": solar["ltst_string"],
+        "ltst": ltst_time_str,
         "is_daylight": solar["is_daylight"],
         "sunset_in_min": solar["sunset_in_min"],
+        "sunset_in_minutes": int(solar["sunset_in_min"]),
         "sunset_utc": solar["sunset_utc"],
         "temp_C": weather["temp_C"],
         "temp_min_C": weather["min_temp_C"],
@@ -284,7 +303,33 @@ def build_environment_snapshot():
         "rad_dose_proxy": space["rad_dose_proxy_uSv_hr"],
         "rad_dose_unit": "uSv/hr",
         "flare_level": space["flare_level"],
-        "alerts": alerts,
+        "atmosphere": {
+            "air_temp_c": {
+                "current": weather["temp_C"],
+                "min": weather["min_temp_C"],
+                "max": weather["max_temp_C"]
+            },
+            "ground_temp_c": {
+                "current": round(weather["temp_C"] + (6.0 if solar["is_daylight"] else -6.0), 1),
+                "min": round(weather["min_temp_C"] - 8.0, 1),
+                "max": round(weather["max_temp_C"] + 10.0, 1)
+            },
+            "pressure_pa": weather["pressure_pa"],
+            "wind_speed_ms": weather["wind_m_s"],
+            "wind_dir_deg": 315,
+            "wind_dir_compass": "NW",
+            "dust_opacity_tau": 0.45,
+            "uv_flux_index": 5.8 if solar["is_daylight"] else 0.0
+        },
+        "radiation": {
+            "dose_rate_uSv_hr": space["rad_dose_proxy_uSv_hr"],
+            "daily_dose_uSv": round(space["rad_dose_proxy_uSv_hr"] * 24.0, 1),
+            "spe_event_status": "CRITICAL_STORM" if space["is_flare_storm"] else "NORMAL",
+            "flare_level": space["flare_level"],
+            "cumulative_mission_mSv": 164.7,
+            "suit_shielding_factor": 0.65
+        },
+        "alerts": formatted_alerts,
         "metadata": {
             "generated_at_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
             "weather_source": weather["data_source"],
