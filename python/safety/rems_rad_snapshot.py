@@ -21,10 +21,10 @@ import urllib.request
 import urllib.error
 
 # Target Site: Jezero Crater (Perseverance landing & exploration site)
-SITE_NAME = "Jezero Crater"
-SITE_LAT = 18.44
-SITE_LON = 77.58
-SITE_ELEV_M = -2500.0  # MOLA datum elevation in meters
+SITE_NAME = "Jezero Crater (Western Delta)"
+SITE_LAT = 18.445
+SITE_LON = 77.420
+SITE_ELEV_M = -2530.0  # MOLA datum elevation in meters
 
 # NASA Perseverance MEDA live weather API endpoint
 NASA_MEDA_URL = "https://mars.nasa.gov/rss/api/?feed=weather&category=mars2020&feedtype=json"

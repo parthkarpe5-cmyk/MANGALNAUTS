@@ -1,33 +1,87 @@
 {
   "type": "FeatureCollection",
   "name": "Jezero_Mission_Routes",
-  "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
   "features": [
     {
       "type": "Feature",
       "properties": {
         "id": "highway_rover",
-        "name": "ROVER Main Highway (Delta Traverse)",
+        "name": "ROVER Main Highway (Delta & Neretva Traverse)",
         "mode": "rover",
-        "length_m": 7240,
-        "max_slope_deg": 8.4,
-        "elev_delta_m": 48.0,
+        "length_m": 6566.2,
+        "max_slope_deg": 5.4,
+        "elev_delta_m": 199.9,
         "color": "#38bdf8",
         "dashArray": "6, 6",
-        "description": "Graded, low-roughness arterial route engineered for autonomous rover speed (up to 0.14 m/s) with safe clearance from boulder ripples.",
-        "risk_rating": "Low (0.16)",
+        "description": "Engineered rover arterial connecting Octavia E. Butler Landing across the delta floor to Three Forks scarp and Neretva Vallis.",
+        "risk_rating": "Low (0.18)",
         "science_stops_count": 3
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [77.53, 18.44],
-          [77.55, 18.44],
-          [77.57, 18.43],
-          [77.58, 18.42],
-          [77.60, 18.42],
-          [77.62, 18.43],
-          [77.63, 18.45]
+          [
+            77.45441,
+            18.44676
+          ],
+          [
+            77.44676,
+            18.45324
+          ],
+          [
+            77.43912,
+            18.45324
+          ],
+          [
+            77.43147,
+            18.45324
+          ],
+          [
+            77.42382,
+            18.45324
+          ],
+          [
+            77.41618,
+            18.45324
+          ],
+          [
+            77.40853,
+            18.45324
+          ],
+          [
+            77.40088,
+            18.45971
+          ],
+          [
+            77.39324,
+            18.46618
+          ],
+          [
+            77.38559,
+            18.47265
+          ],
+          [
+            77.37794,
+            18.47912
+          ],
+          [
+            77.37029,
+            18.48559
+          ],
+          [
+            77.37029,
+            18.49206
+          ],
+          [
+            77.36265,
+            18.49853
+          ]
         ]
       }
     },
@@ -35,52 +89,125 @@
       "type": "Feature",
       "properties": {
         "id": "loop_walk",
-        "name": "MARSWALK Science Loop (Geology EVA)",
+        "name": "MARSWALK Science Loop (Kodiak & Carbonate EVA)",
         "mode": "walk",
-        "length_m": 5860,
-        "max_slope_deg": 13.8,
-        "elev_delta_m": 72.5,
+        "length_m": 5943.4,
+        "max_slope_deg": 5.4,
+        "elev_delta_m": 0.0,
         "color": "#eab308",
         "dashArray": null,
-        "description": "Astronaut pedestrian loop circling high-yield delta outcrops and sedimentary benches. Designed for spacesuit mobility within 15° slope limit.",
-        "risk_rating": "Moderate (0.28)",
-        "science_stops_count": 4
+        "description": "Spacesuit EVA pedestrian loop circling Kodiak mesa and the ancient lacustrine carbonate margin with safe slope gradient.",
+        "risk_rating": "Moderate (0.24)",
+        "science_stops_count": 3
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [77.56, 18.43],
-          [77.58, 18.45],
-          [77.60, 18.46],
-          [77.61, 18.44],
-          [77.59, 18.42],
-          [77.57, 18.41],
-          [77.56, 18.43]
+          [
+            77.45441,
+            18.44676
+          ],
+          [
+            77.44676,
+            18.44029
+          ],
+          [
+            77.44676,
+            18.43382
+          ],
+          [
+            77.43912,
+            18.42735
+          ],
+          [
+            77.43912,
+            18.42088
+          ],
+          [
+            77.43147,
+            18.42735
+          ],
+          [
+            77.42382,
+            18.43382
+          ],
+          [
+            77.41618,
+            18.43382
+          ],
+          [
+            77.42382,
+            18.43382
+          ],
+          [
+            77.43147,
+            18.44029
+          ],
+          [
+            77.43912,
+            18.44676
+          ],
+          [
+            77.44676,
+            18.44676
+          ],
+          [
+            77.45441,
+            18.44676
+          ]
         ]
       }
     },
     {
       "type": "Feature",
       "properties": {
-        "id": "abort_emergency",
-        "name": "EMERGENCY Abort Vector (Fast Evacuation)",
-        "mode": "abort",
-        "length_m": 3950,
-        "max_slope_deg": 7.1,
-        "elev_delta_m": 22.0,
-        "color": "#ef4444",
-        "dashArray": "3, 6",
-        "description": "Direct, hazard-cleared retreat corridor directly back to the Habitat/Lander base in the event of suit puncture, dust storm, or medical emergency.",
-        "risk_rating": "Minimal (0.11)",
-        "science_stops_count": 1
+        "id": "belva_traverse",
+        "name": "BELVA CRATER Deep Impact Expedition",
+        "mode": "rover",
+        "length_m": 3262.5,
+        "max_slope_deg": 3.7,
+        "elev_delta_m": 46.4,
+        "color": "#a855f7",
+        "dashArray": "4, 4",
+        "description": "Scientific traverse from Butler Landing to Belva Impact Crater rim to sample deep hydrothermal megabreccia.",
+        "risk_rating": "Moderate (0.29)",
+        "science_stops_count": 2
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [77.61, 18.46],
-          [77.59, 18.45],
-          [77.57, 18.44],
-          [77.54, 18.44]
+          [
+            77.45441,
+            18.44676
+          ],
+          [
+            77.45441,
+            18.44029
+          ],
+          [
+            77.46206,
+            18.43382
+          ],
+          [
+            77.46206,
+            18.42735
+          ],
+          [
+            77.46971,
+            18.42088
+          ],
+          [
+            77.46971,
+            18.41441
+          ],
+          [
+            77.47735,
+            18.40794
+          ],
+          [
+            77.47735,
+            18.40147
+          ]
         ]
       }
     }

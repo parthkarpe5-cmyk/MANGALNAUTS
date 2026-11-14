@@ -1,9 +1,9 @@
 {
-  "site": "Jezero Crater (Perseverance AOI)",
+  "site": "Jezero Crater (Western Delta)",
   "coordinates": {
-    "lat": 18.44,
-    "lon": 77.58,
-    "elevation_m": -2500.0
+    "lat": 18.445,
+    "lon": 77.420,
+    "elevation_m": -2530.0
   },
   "sol": 1324,
   "terrestrial_date": "2024-04-27",
