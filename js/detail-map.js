@@ -1,4 +1,4 @@
-/* global L, window */
+/* global L, window, MarsPlaces */
 window.MarsDetailMap = (function () {
   let map = null;
   let molaLayer = null;
@@ -15,8 +15,8 @@ window.MarsDetailMap = (function () {
     const MARS_BOUNDS = L.latLngBounds([-90, -180], [90, 180]);
 
     map = L.map("detail-map-inner", {
-      center: [18.44, 77.58],
-      zoom: 9,
+      center: [18.4447, 77.4509],
+      zoom: 10,
       minZoom: 1,
       maxZoom: 11,
       maxBounds: MARS_BOUNDS,
@@ -51,6 +51,23 @@ window.MarsDetailMap = (function () {
     map.flyTo([lat, lon], zoom != null ? zoom : 10, { duration: 0.6 });
   }
 
+  function fitBounds(bounds, options) {
+    if (!map || !bounds) return;
+    map.fitBounds(bounds, options || { padding: [20, 20], maxZoom: 11 });
+  }
+
+  function setSite(siteKey) {
+    if (!map) return;
+    const place = window.MarsPlaces ? window.MarsPlaces[siteKey] : null;
+    if (place) {
+      if (place.bounds) {
+        fitBounds(place.bounds);
+      } else {
+        flyTo(place.lat, place.lon, place.detailZoom);
+      }
+    }
+  }
+
   function getCenter() {
     if (!map) return null;
     const c = map.getCenter();
@@ -71,5 +88,5 @@ window.MarsDetailMap = (function () {
     return map;
   }
 
-  return { init, flyTo, getCenter, invalidateSize, isReady, getMap };
+  return { init, flyTo, fitBounds, setSite, getCenter, invalidateSize, isReady, getMap };
 })();

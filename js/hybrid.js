@@ -24,6 +24,8 @@ window.MarsHybrid = (function () {
     viewer.camera.changed.addEventListener(function () {
       updateMode();
     });
+    // Check initial mode on startup
+    setTimeout(updateMode, 50);
   }
 
   function updateMode() {

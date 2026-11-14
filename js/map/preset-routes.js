@@ -1,15 +1,18 @@
 /* global L, MarsData, MarsRouteRenderer, window */
 window.MarsPresetRoutes = (function () {
   let layerGroup = null;
+  let currentMap = null;
   let visible = false;
 
   async function init(map) {
+    currentMap = map;
     if (!layerGroup) {
       layerGroup = L.layerGroup();
     }
     layerGroup.clearLayers();
 
     const routesGeoJson = await MarsData.loadRoutes();
+    if (!routesGeoJson || !routesGeoJson.features) return;
 
     routesGeoJson.features.forEach(function (feature) {
       const p = feature.properties;
@@ -17,6 +20,10 @@ window.MarsPresetRoutes = (function () {
       const latlngs = coords.map(function (c) {
         return [c[1], c[0]];
       });
+
+      const distStr = p.distance_km != null
+        ? p.distance_km + " km"
+        : (p.length_m / 1000).toFixed(2) + " km";
 
       const popupHtml =
         '<div class="route-popup">' +
@@ -28,17 +35,11 @@ window.MarsPresetRoutes = (function () {
         "</p>" +
         "<ul>" +
         "<li><strong>Length:</strong> " +
-        (p.length_m / 1000).toFixed(2) +
-        " km</li>" +
-        "<li><strong>Max Slope:</strong> " +
-        p.max_slope_deg +
-        "°</li>" +
-        "<li><strong>Elev Delta:</strong> " +
-        p.elev_delta_m +
-        " m</li>" +
-        "<li><strong>Risk Index:</strong> " +
-        p.risk_rating +
+        distStr +
         "</li>" +
+        (p.max_slope_deg ? "<li><strong>Max Slope:</strong> " + p.max_slope_deg + "°</li>" : "") +
+        (p.elevation_gain_m ? "<li><strong>Elev Gain:</strong> " + p.elevation_gain_m + " m</li>" : "") +
+        (p.sol_span ? "<li><strong>Sol Span:</strong> " + p.sol_span + "</li>" : "") +
         "</ul>" +
         "</div>";
 
@@ -53,27 +54,35 @@ window.MarsPresetRoutes = (function () {
       layerGroup.addLayer(corridor);
     });
 
-    if (visible) {
+    if (visible && !map.hasLayer(layerGroup)) {
       layerGroup.addTo(map);
     }
   }
 
   function setVisible(map, isVisible) {
     visible = isVisible;
+    currentMap = map;
     if (!layerGroup) {
       init(map);
       return;
     }
     if (visible) {
-      layerGroup.addTo(map);
+      if (!map.hasLayer(layerGroup)) {
+        layerGroup.addTo(map);
+      }
     } else {
-      map.removeLayer(layerGroup);
+      if (map.hasLayer(layerGroup)) {
+        map.removeLayer(layerGroup);
+      }
     }
   }
 
-  function isVisible() {
-    return visible;
-  }
+  // React to site changes across the application
+  window.addEventListener("mars:site-changed", function () {
+    if (currentMap) {
+      init(currentMap);
+    }
+  });
 
-  return { init, setVisible, isVisible };
+  return { init, setVisible };
 })();

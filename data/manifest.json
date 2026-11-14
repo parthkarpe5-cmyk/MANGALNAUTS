@@ -1,18 +1,69 @@
 {
-  "version": "2.0",
+  "version": "3.0",
+  "active_site": "jezero",
+  "default_site": "jezero",
   "aoi": "jezero",
   "graph_id": "jezero_delta_v1",
-  "title": "Jezero Crater Western Delta Mission Operations & GNN Traversability",
+  "title": "MANGALNAUTS — Planetary Multi-Site Operations & GNN Traversability",
   "center": { "lat": 18.45, "lon": 77.42 },
   "bbox": { "west": 77.355, "east": 77.485, "south": 18.395, "north": 18.505 },
   "citations": [
     "NASA Mars 2020 Perseverance Science Team / PDS Geosciences Node",
-    "NASA MOLA & HRSC Jezero Crater Digital Elevation Model (MDEM)",
-    "NASA HiRISE PDS ODE Observation Footprints (ESP_068294_1985, ESP_072051_1985)",
-    "THEMIS Thermal Inertia & CRISM Hyperspectral Mineralogy (Smectite clays & Carbonates)",
-    "NASA Perseverance MEDA & NOAA SWPC Space Weather Live In-Situ Telemetry",
+    "NASA Mars Science Laboratory (MSL) Curiosity Science Team / PDS",
+    "NASA MGS MOLA & HRSC Blended Digital Elevation Models (MDEM 200m)",
+    "THEMIS Thermal Inertia & CRISM Hyperspectral Mineralogy (Smectite Clays, Sulfates & Carbonates)",
+    "NASA Curiosity REMS, Perseverance MEDA & NOAA SWPC Space Weather Live Feeds",
+    "NASA Mars Odyssey Gamma Ray Spectrometer (GRS) Global Elemental Concentration Maps (Boynton et al. 2007)",
     "2-Layer Graph Convolutional Network (GCN) Multi-Task Traversability & Science Engine"
   ],
+  "sites": {
+    "jezero": {
+      "id": "jezero",
+      "name": "Jezero Crater (Western Delta)",
+      "rover": "Perseverance (Mars 2020)",
+      "graph_id": "jezero_delta_v1",
+      "center": { "lat": 18.4447, "lon": 77.4509 },
+      "bbox": { "west": 77.355, "east": 77.485, "south": 18.395, "north": 18.505 },
+      "datum_elev_m": -2530.0,
+      "globe_camera": { "lat": 18.44, "lon": 77.45, "height": 75000 },
+      "detail_zoom": 10,
+      "files": {
+        "terrain_graph": "data/jezero/v1/terrain_graph.json",
+        "gnn_scores": "data/jezero/v1/gnn_scores.json",
+        "science_stops": "data/jezero/v1/science_stops.geojson",
+        "routes": "data/jezero/v1/routes.geojson",
+        "environment": "data/jezero/v1/environment.json"
+      }
+    },
+    "gale": {
+      "id": "gale",
+      "name": "Gale Crater (Mount Sharp / Aeolis Mons)",
+      "rover": "Curiosity (MSL)",
+      "graph_id": "gale_mount_sharp_v1",
+      "center": { "lat": -4.650, "lon": 137.400 },
+      "bbox": { "west": 137.330, "east": 137.460, "south": -4.720, "north": -4.580 },
+      "datum_elev_m": -4450.0,
+      "globe_camera": { "lat": -4.65, "lon": 137.40, "height": 95000 },
+      "detail_zoom": 10,
+      "files": {
+        "terrain_graph": "data/gale/v1/terrain_graph.json",
+        "gnn_scores": "data/gale/v1/gnn_scores.json",
+        "science_stops": "data/gale/v1/science_stops.geojson",
+        "routes": "data/gale/v1/routes.geojson",
+        "environment": "data/gale/v1/environment.json"
+      }
+    }
+  },
+  "global_datasets": {
+    "traverses": "data/traverses.json",
+    "caves": "data/caves.json",
+    "grs_water": "data/grs/h2o.json",
+    "grs_iron": "data/grs/fe.json",
+    "grs_silicon": "data/grs/si.json",
+    "grs_potassium": "data/grs/k.json",
+    "grs_thorium": "data/grs/th.json",
+    "grs_chlorine": "data/grs/cl.json"
+  },
   "files": {
     "terrain_graph": "data/jezero/v1/terrain_graph.json",
     "gnn_scores": "data/jezero/v1/gnn_scores.json",

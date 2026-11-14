@@ -1,4 +1,4 @@
-/* global MarsGlobe, MarsHybrid, MarsDetailMap, MarsPlaces, TrekLayers, MarsTravelMode, MarsSegmentDrawer, MarsSegmentPick, MarsData, MarsTelemetry, MarsHeatmap, MarsPresetRoutes, MarsScienceStops, MarsTheme, MarsAudio, Cesium */
+/* global MarsGlobe, MarsHybrid, MarsDetailMap, MarsPlaces, TrekLayers, MarsTravelMode, MarsSegmentDrawer, MarsSegmentPick, MarsData, MarsTelemetry, MarsHeatmap, MarsPresetRoutes, MarsScienceStops, MarsTheme, MarsAudio, MarsHistoricalTraverses, MarsGrsOverlays, Cesium */
 (function () {
   function formatCoord(lat, lon) {
     const ns = lat >= 0 ? "N" : "S";
@@ -33,14 +33,18 @@
   const themeSelector = document.getElementById("theme-selector");
   const audioToggle = document.getElementById("audio-toggle");
   const audioLabel = document.getElementById("audio-label");
+  const windToggle = document.getElementById("ambient-wind-toggle");
+  const windLabel = document.getElementById("wind-label");
 
   // Optional globe layers controls
   const globeLayersToggle = document.getElementById("globe-layers-toggle");
   const globeLayersMenu = document.getElementById("globe-layers-menu");
   const toggleLandmarks = document.getElementById("toggle-landmarks");
+  const toggleTraverses = document.getElementById("toggle-traverses");
   const toggleAoi = document.getElementById("toggle-aoi");
   const toggleGraticule = document.getElementById("toggle-graticule");
   const toggleLighting = document.getElementById("toggle-lighting");
+  const grsSelect = document.getElementById("grs-element-select");
 
   // Detail map layer controls
   const heatmapModeSelect = document.getElementById("heatmap-mode");
@@ -86,9 +90,18 @@
     if (window.MarsAudio) MarsAudio.playClick();
     const place = MarsPlaces[key];
     if (!place) return;
+
+    // Switch active site in MarsData
+    if (place.siteKey && window.MarsData) {
+      window.MarsData.setActiveSite(place.siteKey).catch(console.warn);
+    }
+
     MarsGlobe.flyTo(place.lat, place.lon, place.globeHeight, 1.5);
-    if (MarsDetailMap.isReady() && MarsHybrid.isInDetailMode()) {
-      MarsDetailMap.flyTo(place.lat, place.lon, place.detailZoom);
+    if (MarsDetailMap.isReady()) {
+      MarsDetailMap.setSite(key);
+      if (MarsHybrid.isInDetailMode()) {
+        MarsDetailMap.flyTo(place.lat, place.lon, place.detailZoom);
+      }
     }
   }
 
@@ -101,6 +114,9 @@
       detailLayersInitialized = true;
       MarsScienceStops.init(map);
       MarsPresetRoutes.init(map);
+      if (window.MarsHistoricalTraverses) {
+        MarsHistoricalTraverses.initLeaflet(map);
+      }
     }
 
     if (heatmapModeSelect) {
@@ -111,6 +127,9 @@
     }
     if (toggleScienceStops) {
       MarsScienceStops.setVisible(map, toggleScienceStops.checked);
+    }
+    if (toggleTraverses && window.MarsHistoricalTraverses) {
+      MarsHistoricalTraverses.setVisible(toggleTraverses.checked, map, MarsGlobe.getViewer());
     }
   }
 
@@ -147,36 +166,64 @@
       });
     }
 
-    populateFilters();
-    await MarsGlobe.init("globe");
-    onFilterChange();
-
-    MarsHybrid.init({
-      detailPane: document.getElementById("detail-pane"),
-      modeEl,
-      heightEl,
-      onDetailChange: function (isDetail) {
-        if (isDetail) {
-          ensureDetailLayers();
+    // Init ambient Martian wind button
+    if (windToggle && window.MarsAudio) {
+      windToggle.addEventListener("click", function () {
+        const active = MarsAudio.toggleAmbientWind();
+        if (windLabel) {
+          windLabel.textContent = active ? "WIND: ON" : "WIND: OFF";
         }
-      },
-    });
+        windToggle.classList.toggle("active-wind", active);
+      });
+    }
+
+    populateFilters();
+    try {
+      await MarsGlobe.init("globe");
+      onFilterChange();
+    } catch (e) {
+      console.error("[MarsGlobe] Globe init error:", e);
+      const hud = document.getElementById("globe");
+      if (hud) {
+        hud.innerHTML =
+          '<p style="padding:1rem;color:#f88;">Failed to start 3D globe: ' +
+          (e.message || e) +
+          "</p>";
+      }
+    }
+
+    try {
+      MarsHybrid.init({
+        detailPane: document.getElementById("detail-pane"),
+        modeEl,
+        heightEl,
+        onDetailChange: function (isDetail) {
+          if (isDetail) {
+            ensureDetailLayers();
+          }
+        },
+      });
+    } catch (e) {
+      console.error("[MarsHybrid] Hybrid init error:", e);
+    }
 
     const viewer = MarsGlobe.getViewer();
-    const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
-    handler.setInputAction(function (movement) {
-      const cartesian = viewer.camera.pickEllipsoid(
-        movement.endPosition,
-        viewer.scene.globe.ellipsoid
-      );
-      if (cartesian && coordsEl) {
-        const carto = Cesium.Cartographic.fromCartesian(cartesian);
-        coordsEl.textContent = formatCoord(
-          Cesium.Math.toDegrees(carto.latitude),
-          Cesium.Math.toDegrees(carto.longitude)
+    if (viewer && viewer.scene && viewer.scene.canvas) {
+      const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+      handler.setInputAction(function (movement) {
+        const cartesian = viewer.camera.pickEllipsoid(
+          movement.endPosition,
+          viewer.scene.globe.ellipsoid
         );
-      }
-    }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+        if (cartesian && coordsEl) {
+          const carto = Cesium.Cartographic.fromCartesian(cartesian);
+          coordsEl.textContent = formatCoord(
+            Cesium.Math.toDegrees(carto.latitude),
+            Cesium.Math.toDegrees(carto.longitude)
+          );
+        }
+      }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+    }
 
     filterSelect.addEventListener("change", onFilterChange);
     overlayToggle.addEventListener("change", function () {
@@ -223,6 +270,15 @@
         MarsGlobe.setLandmarksVisible(toggleLandmarks.checked);
       });
     }
+    if (toggleTraverses) {
+      toggleTraverses.addEventListener("change", function () {
+        if (window.MarsAudio) MarsAudio.playClick();
+        const map = MarsDetailMap.isReady() ? MarsDetailMap.getMap() : null;
+        if (window.MarsHistoricalTraverses) {
+          MarsHistoricalTraverses.setVisible(toggleTraverses.checked, map, viewer);
+        }
+      });
+    }
     if (toggleAoi) {
       toggleAoi.addEventListener("change", function () {
         if (window.MarsAudio) MarsAudio.playClick();
@@ -239,6 +295,22 @@
       toggleLighting.addEventListener("change", function () {
         if (window.MarsAudio) MarsAudio.playClick();
         MarsGlobe.setLightingEnabled(toggleLighting.checked);
+      });
+    }
+
+    // Odyssey GRS ISRU Select
+    if (grsSelect) {
+      grsSelect.addEventListener("change", function () {
+        if (window.MarsAudio) MarsAudio.playClick();
+        const val = grsSelect.value;
+        const elemKey = val === "none" ? null : val;
+        const map = MarsDetailMap.isReady() ? MarsDetailMap.getMap() : null;
+        if (window.MarsGrsOverlays) {
+          MarsGrsOverlays.applyCesium(viewer, elemKey, 0.65);
+          if (map) {
+            MarsGrsOverlays.applyLeaflet(map, elemKey, 0.65);
+          }
+        }
       });
     }
 

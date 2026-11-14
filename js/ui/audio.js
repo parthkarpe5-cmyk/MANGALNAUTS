@@ -1,7 +1,9 @@
-/* global window, localStorage */
+/* global window, localStorage, Audio */
 window.MarsAudio = (function () {
   let ctx = null;
   let muted = localStorage.getItem("mars_audio_muted") === "true";
+  let windAudio = null;
+  let isWindPlaying = false;
 
   function getCtx() {
     if (!ctx && typeof window.AudioContext !== "undefined") {
@@ -60,14 +62,84 @@ window.MarsAudio = (function () {
     }, 140);
   }
 
+  // --- Real NASA Planetary Soundscapes ---
+  function playSuperCamLaser() {
+    if (muted) return;
+    try {
+      const laserAudio = new Audio("audio/nasa_supercam_laser_sol12.mp3");
+      laserAudio.volume = 0.45;
+      laserAudio.play().catch(function () {});
+    } catch (e) {}
+  }
+
+  function playMarsquake() {
+    if (muted) return;
+    try {
+      const quakeAudio = new Audio("audio/nasa_insight_marsquake_sol128.mp4");
+      quakeAudio.volume = 0.50;
+      quakeAudio.play().catch(function () {});
+    } catch (e) {}
+  }
+
+  function playNasaWind(loop) {
+    if (muted) return;
+    try {
+      if (!windAudio) {
+        windAudio = new Audio("audio/nasa_perseverance_wind_sol4.mp3");
+        windAudio.volume = 0.25;
+        windAudio.loop = loop !== false;
+      }
+      windAudio.play().then(function () {
+        isWindPlaying = true;
+      }).catch(function () {});
+    } catch (e) {}
+  }
+
+  function stopNasaWind() {
+    if (windAudio) {
+      windAudio.pause();
+      windAudio.currentTime = 0;
+      isWindPlaying = false;
+    }
+  }
+
+  function toggleAmbientWind() {
+    if (isWindPlaying) {
+      stopNasaWind();
+      return false;
+    } else {
+      playNasaWind(true);
+      return true;
+    }
+  }
+
   function setMuted(isMuted) {
     muted = isMuted;
     localStorage.setItem("mars_audio_muted", String(muted));
+    if (muted) {
+      stopNasaWind();
+    }
   }
 
   function isMuted() {
     return muted;
   }
 
-  return { playClick, playLock, playSuccess, setMuted, isMuted };
+  function isAmbientWindActive() {
+    return isWindPlaying;
+  }
+
+  return {
+    playClick,
+    playLock,
+    playSuccess,
+    playSuperCamLaser,
+    playMarsquake,
+    playNasaWind,
+    stopNasaWind,
+    toggleAmbientWind,
+    isAmbientWindActive,
+    setMuted,
+    isMuted,
+  };
 })();

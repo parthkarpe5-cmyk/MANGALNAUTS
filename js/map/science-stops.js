@@ -1,13 +1,14 @@
 /* global L, MarsData, MarsSegmentDrawer, MarsIcons, window */
 window.MarsScienceStops = (function () {
   let layerGroup = null;
+  let currentMap = null;
   let visible = true;
 
   function stopIcon(type) {
-    const isCritical = type.includes("Delta") || type.includes("Canyon");
+    const isCritical = type.includes("Delta") || type.includes("Canyon") || type.includes("Boxwork") || type.includes("Habitable");
     const borderColor = isCritical ? "#ef4444" : "#c9f31d";
     const ic = window.MarsIcons ? window.MarsIcons.get : function () { return ""; };
-    const svgIcon = type.includes("Delta")
+    const svgIcon = (type.includes("Delta") || type.includes("Lake") || type.includes("Habitable"))
       ? ic("waves")
       : type.includes("Landing")
       ? ic("rocket")
@@ -29,12 +30,14 @@ window.MarsScienceStops = (function () {
   }
 
   async function init(map) {
+    currentMap = map;
     if (!layerGroup) {
       layerGroup = L.layerGroup();
     }
     layerGroup.clearLayers();
 
     const data = await MarsData.loadScienceStops();
+    if (!data || !data.features) return;
 
     data.features.forEach(function (feat) {
       const p = feat.properties;
@@ -54,6 +57,7 @@ window.MarsScienceStops = (function () {
       marker.on("click", function () {
         if (window.MarsAudio) {
           window.MarsAudio.playClick();
+          window.MarsAudio.playSuperCamLaser();
         }
         if (window.MarsSegmentDrawer) {
           MarsSegmentDrawer.renderScienceStop(p);
@@ -63,27 +67,35 @@ window.MarsScienceStops = (function () {
       layerGroup.addLayer(marker);
     });
 
-    if (visible) {
+    if (visible && !map.hasLayer(layerGroup)) {
       layerGroup.addTo(map);
     }
   }
 
   function setVisible(map, isVisible) {
     visible = isVisible;
+    currentMap = map;
     if (!layerGroup) {
       init(map);
       return;
     }
     if (visible) {
-      layerGroup.addTo(map);
+      if (!map.hasLayer(layerGroup)) {
+        layerGroup.addTo(map);
+      }
     } else {
-      map.removeLayer(layerGroup);
+      if (map.hasLayer(layerGroup)) {
+        map.removeLayer(layerGroup);
+      }
     }
   }
 
-  function isVisible() {
-    return visible;
-  }
+  // React to site changes across the application
+  window.addEventListener("mars:site-changed", function () {
+    if (currentMap) {
+      init(currentMap);
+    }
+  });
 
-  return { init, setVisible, isVisible };
+  return { init, setVisible };
 })();

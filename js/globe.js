@@ -17,24 +17,27 @@ window.MarsGlobe = (function () {
   const LANDMARKS = [
     {
       id: "perseverance",
+      siteKey: "jezero",
       name: "Perseverance Rover (Jezero)",
       lat: 18.4447,
       lon: 77.4509,
-      alt: 60000,
+      alt: 85000,
       color: "#c9f31d",
-      description: "NASA Mars 2020 landing site in Jezero Crater.",
+      description: "NASA Mars 2020 landing site in Jezero Crater Western Delta.",
     },
     {
       id: "curiosity",
+      siteKey: "gale",
       name: "Curiosity Rover (Gale)",
-      lat: -4.5895,
-      lon: 137.4417,
-      alt: 80000,
+      lat: -4.650,
+      lon: 137.400,
+      alt: 95000,
       color: "#38bdf8",
-      description: "NASA Mars Science Laboratory landing site in Gale Crater.",
+      description: "NASA Mars Science Laboratory landing site climbing Mount Sharp in Gale Crater.",
     },
     {
       id: "insight",
+      siteKey: null,
       name: "InSight Lander (Elysium)",
       lat: 4.5024,
       lon: 135.6234,
@@ -44,6 +47,7 @@ window.MarsGlobe = (function () {
     },
     {
       id: "opportunity",
+      siteKey: null,
       name: "Opportunity Rover (Meridiani)",
       lat: -1.9462,
       lon: 354.4734,
@@ -53,6 +57,7 @@ window.MarsGlobe = (function () {
     },
     {
       id: "spirit",
+      siteKey: null,
       name: "Spirit Rover (Gusev)",
       lat: -14.5684,
       lon: 175.4726,
@@ -62,6 +67,7 @@ window.MarsGlobe = (function () {
     },
     {
       id: "olympus",
+      siteKey: "olympus",
       name: "Olympus Mons",
       lat: 18.65,
       lon: -133.8,
@@ -71,6 +77,7 @@ window.MarsGlobe = (function () {
     },
     {
       id: "valles_marineris",
+      siteKey: null,
       name: "Valles Marineris",
       lat: -14.0,
       lon: -59.0,
@@ -99,50 +106,65 @@ window.MarsGlobe = (function () {
     });
 
     viewer.scene.globe.ellipsoid = Cesium.Ellipsoid.MARS;
-    if (viewer.scene.skyBox) viewer.scene.skyBox.show = false;
-    if (viewer.scene.sun) viewer.scene.sun.show = false;
-    if (viewer.scene.moon) viewer.scene.moon.show = false;
-
-    viewer.scene.backgroundColor = Cesium.Color.BLACK;
+    viewer.scene.globe.baseColor = Cesium.Color.fromCssColorString("#1a0804");
     viewer.scene.globe.enableLighting = false;
-    viewer.scene.globe.maximumScreenSpaceError = 2.5;
-    viewer.scene.globe.baseColor = Cesium.Color.fromCssColorString("#4a3628");
-    viewer.scene.globe.show = true;
-
-    viewer.terrainProvider = new Cesium.EllipsoidTerrainProvider({
-      ellipsoid: Cesium.Ellipsoid.MARS,
-    });
-    try {
-      viewer.terrainProvider = new Cesium.ArcGisImageServerTerrainProvider({
-        url: MDEM_URL,
-        ellipsoid: Cesium.Ellipsoid.MARS,
-      });
-    } catch (err) {
-      console.warn("MDEM terrain unavailable, using smooth ellipsoid.", err);
+    if (viewer.scene.skyAtmosphere) {
+      viewer.scene.skyAtmosphere.show = true;
+      viewer.scene.skyAtmosphere.hueShift = -0.55;
+      viewer.scene.skyAtmosphere.saturationShift = 0.4;
+      viewer.scene.skyAtmosphere.brightnessShift = -0.2;
     }
 
-    viewer.imageryLayers.removeAll();
-    await setBaseFilter("viking");
+    viewer.scene.screenSpaceCameraController.minimumZoomDistance = 5000;
+    viewer.scene.screenSpaceCameraController.maximumZoomDistance = 30000000;
+    viewer.scene.screenSpaceCameraController.enableCollisionDetection = true;
+
+    // Load MDEM Elevation if available
+    try {
+      const terrainProvider = await Cesium.ArcGisImageServerTerrainProvider.fromUrl(
+        MDEM_URL,
+        {
+          ellipsoid: Cesium.Ellipsoid.MARS,
+          token: undefined,
+        }
+      );
+      viewer.terrainProvider = terrainProvider;
+    } catch (e) {
+      console.warn("[MarsGlobe] MDEM elevation unavailable, falling back to ellipsoid:", e);
+    }
 
     initOptionalLayers();
 
-    viewer.camera.setView({
-      destination: Cesium.Cartesian3.fromDegrees(77.58, 18.44, 8000000),
-    });
+    // Init Historical Traverses on 3D globe
+    if (window.MarsHistoricalTraverses) {
+      window.MarsHistoricalTraverses.initCesium(viewer).catch(console.warn);
+    }
 
-    // Handle clicks on landmark pins
+    // Landmark click listener on 3D globe
     const clickHandler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
     clickHandler.setInputAction(function (movement) {
-      const pickedObject = viewer.scene.pick(movement.position);
-      if (
-        Cesium.defined(pickedObject) &&
-        pickedObject.id &&
-        pickedObject.id.landmarkData
-      ) {
-        const d = pickedObject.id.landmarkData;
-        flyTo(d.lat, d.lon, d.alt, 2.0);
+      const picked = viewer.scene.pick(movement.position);
+      if (picked && picked.id && picked.id.landmarkData) {
+        const lm = picked.id.landmarkData;
+        if (window.MarsAudio) window.MarsAudio.playClick();
+        if (lm.siteKey && window.MarsData) {
+          window.MarsData.setActiveSite(lm.siteKey);
+          const locSelect = document.getElementById("location");
+          if (locSelect) locSelect.value = lm.siteKey;
+        }
+        flyTo(lm.lat, lm.lon, lm.alt, 1.5);
       }
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+
+    // Initial camera position (Jezero Crater)
+    viewer.camera.setView({
+      destination: Cesium.Cartesian3.fromDegrees(77.4509, 18.4447, 85000),
+      orientation: {
+        heading: Cesium.Math.toRadians(0),
+        pitch: Cesium.Math.toRadians(-55),
+        roll: 0,
+      },
+    });
 
     return viewer;
   }
@@ -178,15 +200,15 @@ window.MarsGlobe = (function () {
       landmarksCollection.push(entity);
     });
 
-    // 2. Jezero AOI Footprint
+    // 2. Active Site AOI Footprint
     aoiEntity = viewer.entities.add({
-      name: "Jezero Pilot AOI Boundary",
+      name: "Mission Exploration AOI Footprint",
       polygon: {
         hierarchy: Cesium.Cartesian3.fromDegreesArray([
-          77.53, 18.39,
-          77.63, 18.39,
-          77.63, 18.49,
-          77.53, 18.49,
+          77.355, 18.395,
+          77.485, 18.395,
+          77.485, 18.505,
+          77.355, 18.505,
         ]),
         material: Cesium.Color.fromCssColorString("#c9f31d").withAlpha(0.18),
         outline: true,
@@ -199,7 +221,6 @@ window.MarsGlobe = (function () {
 
     // 3. Graticule
     graticuleCollection = [];
-    // Parallels (-60, -30, 0, 30, 60)
     [-60, -30, 0, 30, 60].forEach(function (lat) {
       const coords = [];
       for (let lon = -180; lon <= 180; lon += 5) {
@@ -219,7 +240,6 @@ window.MarsGlobe = (function () {
       graticuleCollection.push(polyline);
     });
 
-    // Meridians (-120, -60, 0, 60, 120, 180)
     [-120, -60, 0, 60, 120, 180].forEach(function (lon) {
       const coords = [];
       for (let lat = -80; lat <= 80; lat += 5) {
@@ -238,6 +258,16 @@ window.MarsGlobe = (function () {
       });
       graticuleCollection.push(polyline);
     });
+  }
+
+  function updateAoiFootprint(bbox) {
+    if (!aoiEntity || !bbox) return;
+    aoiEntity.polygon.hierarchy = Cesium.Cartesian3.fromDegreesArray([
+      bbox.west, bbox.south,
+      bbox.east, bbox.south,
+      bbox.east, bbox.north,
+      bbox.west, bbox.north,
+    ]);
   }
 
   function setLandmarksVisible(visible) {
@@ -344,6 +374,14 @@ window.MarsGlobe = (function () {
     }
   }
 
+  // React to site changes across the application
+  window.addEventListener("mars:site-changed", function (e) {
+    const meta = e.detail ? e.detail.siteMeta : null;
+    if (meta && meta.bbox) {
+      updateAoiFootprint(meta.bbox);
+    }
+  });
+
   return {
     init,
     setBaseFilter,
@@ -356,6 +394,7 @@ window.MarsGlobe = (function () {
     setGlobeOpacity,
     setLandmarksVisible,
     setAoiFootprintVisible,
+    updateAoiFootprint,
     setGraticuleVisible,
     setLightingEnabled,
   };

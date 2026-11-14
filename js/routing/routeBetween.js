@@ -42,8 +42,11 @@ window.MarsRouteBetween = (function () {
 
   async function solve(latA, lonA, latB, lonB) {
     const graph = await MarsData.loadGraph();
+    const siteMeta = window.MarsData && window.MarsData.getActiveSiteMeta
+      ? await MarsData.getActiveSiteMeta()
+      : null;
     const manifest = await MarsData.loadManifest();
-    const bounds = manifest.bbox;
+    const bounds = graph.bbox || (siteMeta && siteMeta.bbox) || manifest.bbox;
     function inCoverage(lat, lon) {
       return (
         Number.isFinite(lat) &&

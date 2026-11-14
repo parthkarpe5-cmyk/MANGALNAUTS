@@ -1,5 +1,6 @@
 {
-  "site": "Jezero Crater (Western Delta) (Perseverance AOI)",
+  "site": "Jezero Crater (Western Delta)",
+  "site_id": "jezero",
   "coordinates": {
     "lat": 18.445,
     "lon": 77.42,
@@ -7,11 +8,11 @@
   },
   "sol": 1133,
   "terrestrial_date": "2024-04-27",
-  "local_solar_time": "06:27 MTC",
-  "ltst": "06:27:36",
+  "local_solar_time": "08:54 MTC",
+  "ltst": "08:54:36",
   "is_daylight": true,
-  "sunset_in_min": 647.6,
-  "sunset_in_minutes": 647,
+  "sunset_in_min": 500.6,
+  "sunset_in_minutes": 500,
   "sunset_utc": "2026-11-14T23:07:40Z",
   "temp_C": -52.0,
   "temp_min_C": -79.3,
@@ -22,7 +23,7 @@
   "ls_deg": 244.106,
   "rad_dose_proxy": 28.5,
   "rad_dose_unit": "uSv/hr",
-  "flare_level": "B6.9",
+  "flare_level": "B6.8",
   "atmosphere": {
     "air_temp_c": {
       "current": -52.0,
@@ -45,7 +46,7 @@
     "dose_rate_uSv_hr": 28.5,
     "daily_dose_uSv": 684.0,
     "spe_event_status": "NORMAL",
-    "flare_level": "B6.9",
+    "flare_level": "B6.8",
     "cumulative_mission_mSv": 164.7,
     "suit_shielding_factor": 0.65
   },
@@ -56,13 +57,13 @@
       "title": "Cold Eva",
       "severity": "advisory",
       "message": "Diurnal low reaches -79.3\u00b0C. Maintain suit thermal circulation.",
-      "sunset_in_min": 647
+      "sunset_in_min": 500
     }
   ],
   "metadata": {
-    "generated_at_utc": "2026-11-14T12:20:09.659494+00:00",
-    "weather_source": "NASA Mars 2020 Perseverance MEDA (Live API)",
+    "generated_at_utc": "2026-11-14T14:47:08.163317+00:00",
+    "weather_source": "NASA Mars 2020 Perseverance MEDA (Live API, Jezero Crater)",
     "space_weather_source": "NOAA Space Weather Prediction Center (GOES X-ray)",
-    "radiation_model": "MSL RAD proxy scaled for Jezero MOLA elevation (-2500m)"
+    "rover": "Perseverance (Mars 2020)"
   }
 }

@@ -1,0 +1,98 @@
+{
+  "type": "FeatureCollection",
+  "name": "Gale_Curiosity_Routes",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            137.4416,
+            -4.5895
+          ],
+          [
+            137.4491,
+            -4.5905
+          ],
+          [
+            137.4364,
+            -4.5985
+          ],
+          [
+            137.4187,
+            -4.6186
+          ],
+          [
+            137.4002,
+            -4.6345
+          ],
+          [
+            137.3848,
+            -4.6483
+          ],
+          [
+            137.3748,
+            -4.666
+          ],
+          [
+            137.366,
+            -4.678
+          ],
+          [
+            137.3527,
+            -4.6933
+          ],
+          [
+            137.3546,
+            -4.6976
+          ]
+        ]
+      },
+      "properties": {
+        "id": "route_curiosity_mount_sharp_ascent",
+        "name": "Curiosity Primary Mount Sharp Ascent Route",
+        "color": "#38bdf8",
+        "distance_km": 33.28,
+        "elevation_gain_m": 651,
+        "description": "Historical 33.28 km traverse of the Mars Science Laboratory Curiosity rover climbing lower Mount Sharp (Aeolis Mons), crossing Yellowknife Bay, The Kimberley, Vera Rubin Ridge, and ascending to the 2025 Boxwork Formations.",
+        "sol_span": "Sol 0 \u2013 Sol 4200+",
+        "science_highlights": "Discovered ancient freshwater lake habitability, clay-rich sedimentary mudstones, and groundwater fracture boxwork networks."
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            137.3748,
+            -4.666
+          ],
+          [
+            137.366,
+            -4.678
+          ],
+          [
+            137.355,
+            -4.685
+          ],
+          [
+            137.3527,
+            -4.6933
+          ]
+        ]
+      },
+      "properties": {
+        "id": "route_boxwork_rapid_survey",
+        "name": "Mount Sharp Boxwork Formations Exploration Loop",
+        "color": "#c084fc",
+        "distance_km": 6.84,
+        "elevation_gain_m": 275,
+        "description": "Hyperlocalized human Marswalk excursion corridor targeting the striking web of mineral boxwork ridges studied by NASA in 2025.",
+        "sol_span": "Astronaut EVA Phase",
+        "science_highlights": "Inspects groundwater boxwork mineralization and sampling for sub-surface fluid flow history."
+      }
+    }
+  ]
+}

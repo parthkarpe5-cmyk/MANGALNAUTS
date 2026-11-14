@@ -1,0 +1,204 @@
+{
+  "type": "FeatureCollection",
+  "name": "Gale_Science_Stops",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          137.4416,
+          -4.5895
+        ]
+      },
+      "properties": {
+        "id": "stop_bradbury_landing",
+        "name": "Bradbury Landing",
+        "badge": "\ud83d\ude80",
+        "type": "Landing Site",
+        "sol": 0,
+        "elev_m": -4501,
+        "science_priority": "High",
+        "primary_target": "Curiosity Touchdown Datum",
+        "description": "Historic touchdown site of NASA's Mars Science Laboratory Curiosity rover on August 6, 2012 in northern Gale Crater.",
+        "geology": "Alluvial fan gravels and basaltic regolith washed down from the northern crater rim (Peace Vallis).",
+        "image_url": "https://mars.nasa.gov/system/resources/detail_files/4102_PIA16075-full2.jpg",
+        "image_caption": "Bradbury Landing viewed by Curiosity Mastcam"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          137.4491,
+          -4.5905
+        ]
+      },
+      "properties": {
+        "id": "stop_yellowknife_bay",
+        "name": "Yellowknife Bay (John Klein Drill)",
+        "badge": "\ud83d\udca7",
+        "type": "Ancient Habitable Lakebed",
+        "sol": 182,
+        "elev_m": -4525,
+        "science_priority": "Critical",
+        "primary_target": "Smectite mudstones & organic elements",
+        "description": "Depression where Curiosity discovered evidence of an ancient freshwater lake with neutral pH, low salinity, and essential bio-elements (C, H, N, O, P, S).",
+        "geology": "Fine-grained Sheepbed mudstone with phyllosilicate smectite clays, calcium sulfate veins, and magnetite.",
+        "image_url": "https://mars.nasa.gov/system/resources/detail_files/5049_PIA16834_sol182_raw_full.jpg",
+        "image_caption": "First drill hole on Mars at John Klein outcrop"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          137.4187,
+          -4.6186
+        ]
+      },
+      "properties": {
+        "id": "stop_the_kimberley",
+        "name": "The Kimberley Outcrops",
+        "badge": "\ud83e\udea8",
+        "type": "Fluvial Sandstone",
+        "sol": 620,
+        "elev_m": -4482,
+        "science_priority": "High",
+        "primary_target": "Cross-bedded sandstones",
+        "description": "Intersection of three distinct geological terrains showing prominent cross-bedding and high potassium concentrations (Windjana drill).",
+        "geology": "Feldspar-rich sanidine basalt sandstone with complex river channel migration stratification.",
+        "image_url": "https://mars.nasa.gov/system/resources/detail_files/6020_PIA18081-full.jpg",
+        "image_caption": "Cross-bedded strata at Mount Remarkable in The Kimberley"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          137.4002,
+          -4.6345
+        ]
+      },
+      "properties": {
+        "id": "stop_pahrump_hills",
+        "name": "Pahrump Hills (Murray Formation Base)",
+        "badge": "\u26f0\ufe0f",
+        "type": "Basal Mount Sharp Mudstone",
+        "sol": 753,
+        "elev_m": -4450,
+        "science_priority": "Critical",
+        "primary_target": "Mount Sharp base stratigraphy",
+        "description": "First exposed basal strata of Mount Sharp (Aeolis Mons), marking the boundary between crater floor gravels and the 5-km-high central peak.",
+        "geology": "Laminated lacustrine mudstone with dendritic crystals, silica enrichments, and jarosite sulfates.",
+        "image_url": "https://mars.nasa.gov/system/resources/detail_files/6325_PIA19063_sol753.jpg",
+        "image_caption": "Curiosity self-portrait at Pahrump Hills"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          137.3748,
+          -4.666
+        ]
+      },
+      "properties": {
+        "id": "stop_vera_rubin_ridge",
+        "name": "Vera Rubin Ridge (Hematite Ridge)",
+        "badge": "\ud83d\udd34",
+        "type": "Iron Oxide Ridge",
+        "sol": 1800,
+        "elev_m": -4255,
+        "science_priority": "Critical",
+        "primary_target": "Crystalline gray hematite",
+        "description": "A prominent topographic ridge standing 30 meters above surrounding plains, enriched in crystalline hematite formed by ancient groundwater interaction.",
+        "geology": "Hardened mudstones and sandstones intensely cemented by gray hematite, resistant to wind erosion.",
+        "image_url": "https://mars.nasa.gov/system/resources/detail_files/7950_PIA22207_full.jpg",
+        "image_caption": "Panorama of Vera Rubin Ridge and Mount Sharp summit"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          137.366,
+          -4.678
+        ]
+      },
+      "properties": {
+        "id": "stop_glen_torridon",
+        "name": "Glen Torridon (Clay-Bearing Trough)",
+        "badge": "\ud83c\udffa",
+        "type": "High-Concentration Clay Trough",
+        "sol": 2300,
+        "elev_m": -4205,
+        "science_priority": "Critical",
+        "primary_target": "Smectite clays & organic molecules",
+        "description": "Trough south of Vera Rubin Ridge with the highest concentration of clay minerals observed from orbit by CRISM, indicating prolonged quiet lake conditions.",
+        "geology": "Fine-grained smectite clay phyllosilicates preserving organic molecules and cyclic lacustrine depositional rhythms.",
+        "image_url": "https://mars.nasa.gov/system/resources/detail_files/8450_PIA23623_full.jpg",
+        "image_caption": "Curiosity panorama of the clay-bearing Glen Torridon trough"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          137.3527,
+          -4.6933
+        ]
+      },
+      "properties": {
+        "id": "stop_boxwork_formations",
+        "name": "Mount Sharp Boxwork Formations (NASA 2025/2026 Target)",
+        "badge": "\ud83d\udd78\ufe0f",
+        "type": "Subterranean Fracture Boxwork",
+        "sol": 3950,
+        "elev_m": -3980,
+        "science_priority": "Highest",
+        "primary_target": "Groundwater fracture boxwork network",
+        "description": "A striking web of prominent mineral ridges formed when mineral-saturated warm groundwater seeped into bedrock cracks and hardened. Later wind erosion stripped away the softer rock, leaving the boxwork standing.",
+        "geology": "Calcium sulfate / silica mineral vein networks stretching for kilometers, providing a subterranean habitable oasis during Mars drying era.",
+        "image_url": "https://mars.nasa.gov/system/resources/detail_files/26000_boxwork_formation.jpg",
+        "image_caption": "Curiosity Mastcam-Z inspection of spiderweb-like boxwork ridges"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          137.3546,
+          -4.6976
+        ]
+      },
+      "properties": {
+        "id": "stop_sulfate_unit",
+        "name": "Layered Sulfate-Bearing Unit",
+        "badge": "\ud83e\uddea",
+        "type": "Arid Climate Transition Strata",
+        "sol": 4200,
+        "elev_m": -3850,
+        "science_priority": "Critical",
+        "primary_target": "Magnesium & calcium sulfates",
+        "description": "Marks the dramatic planetary climate transition when Mars lost its surface water, shifting from warm/wet lake environments to a hyper-arid desert.",
+        "geology": "Rippled sandstones cemented with pure magnesium and calcium sulfates, interbedded with wind-blown dune cross-beds.",
+        "image_url": "https://mars.nasa.gov/system/resources/detail_files/9000_PIA25000_sulfates.jpg",
+        "image_caption": "Sulfate-rich layered canyon walls of lower Mount Sharp"
+      }
+    }
+  ]
+}

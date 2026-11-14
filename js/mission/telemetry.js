@@ -3,10 +3,12 @@ window.MarsTelemetry = (function () {
   let envData = null;
   let timer = null;
   let simulatedSeconds = 0;
+  let currentContainerId = "telemetry-bar";
 
   async function init(containerId) {
+    currentContainerId = containerId || currentContainerId;
     envData = await MarsData.loadEnvironment();
-    renderBar(containerId);
+    renderBar(currentContainerId);
     startClock();
   }
 
@@ -23,9 +25,16 @@ window.MarsTelemetry = (function () {
   }
 
   function getFormattedLTST() {
-    if (!envData) return "--:--:--";
-    const parts = envData.ltst.split(":").map(Number);
-    let totalSec = parts[0] * 3600 + parts[1] * 60 + parts[2] + simulatedSeconds;
+    if (!envData) return "--:-- MTC";
+    const raw = envData.local_solar_time || envData.ltst || "12:00:00 MTC";
+    // If it's already a string like "07:57 MTC"
+    const cleaned = raw.replace(/[A-Za-z\s]/g, "");
+    const parts = cleaned.split(":").map(Number);
+    const h0 = parts[0] || 12;
+    const m0 = parts[1] || 0;
+    const s0 = parts[2] || 0;
+
+    let totalSec = h0 * 3600 + m0 * 60 + s0 + simulatedSeconds;
     const h = Math.floor((totalSec / 3600) % 24);
     const m = Math.floor((totalSec % 3600) / 60);
     const s = Math.floor(totalSec % 60);
@@ -34,7 +43,8 @@ window.MarsTelemetry = (function () {
       ":" +
       (m < 10 ? "0" + m : m) +
       ":" +
-      (s < 10 ? "0" + s : s)
+      (s < 10 ? "0" + s : s) +
+      " MTC"
     );
   }
 
@@ -66,74 +76,75 @@ window.MarsTelemetry = (function () {
     const el = document.getElementById(containerId);
     if (!el || !envData) return;
 
-    const atmo = envData.atmosphere;
-    const rad = envData.radiation;
+    const temp = envData.temp_C != null ? envData.temp_C : (envData.atmosphere ? envData.atmosphere.air_temp_c.current : -45.0);
+    const press = envData.pressure_pa != null ? envData.pressure_pa : (envData.atmosphere ? envData.atmosphere.pressure_pa : 775.0);
+    const wind = envData.wind_m_s != null ? envData.wind_m_s : (envData.atmosphere ? envData.atmosphere.wind_speed_ms : 5.0);
+    const radVal = envData.rad_dose_proxy != null ? envData.rad_dose_proxy : (envData.radiation ? envData.radiation.dose_rate_uSv_hr : 28.5);
+    const flare = envData.flare_level || "A (Quiet)";
+    const sol = envData.sol != null ? envData.sol : 1133;
+
     const ic = window.MarsIcons ? window.MarsIcons.get : function () { return ""; };
 
-    const alertHtml =
-      envData.alerts && envData.alerts.length > 0
-        ? '<div class="telemetry-alert-badge ' +
-          envData.alerts[0].severity +
-          '" title="' +
-          envData.alerts[0].message +
-          '">' +
-          '<span class="alert-icon">' + ic("alertTriangle") + '</span>' +
-          '<div class="alert-content">' +
-          '  <span class="alert-title">' + envData.alerts[0].title + '</span>' +
-          '  <span class="alert-sub">EVA thermal cap in effect</span>' +
-          '</div>' +
-          '</div>'
-        : "";
+    let alertHtml = "";
+    if (envData.alerts && envData.alerts.length > 0) {
+      const topAlert = envData.alerts[0];
+      const title = topAlert.title || topAlert.code || "SAFETY ADVISORY";
+      alertHtml =
+        '<div class="telemetry-alert-badge ' +
+        topAlert.severity +
+        '" title="' +
+        topAlert.message +
+        '">' +
+        '<span class="alert-icon">' + ic("alertTriangle") + '</span>' +
+        '<div class="alert-content">' +
+        '  <span class="alert-title">' + title + '</span>' +
+        '  <span class="alert-sub">' + topAlert.message.substring(0, 48) + '...</span>' +
+        '</div>' +
+        '</div>';
+    }
 
     el.innerHTML =
       '<div class="telemetry-pill-group">' +
-      '  <div class="telemetry-pill highlight">' +
+      '  <div class="telemetry-pill highlight" title="Current Martian Mission Sol">' +
       '    <span class="pill-icon">' + ic("rocket") + '</span>' +
       '    <div class="pill-text">' +
-      '      <span class="telemetry-label">SOL</span>' +
-      '      <span class="telemetry-value font-mono">' + envData.sol + '</span>' +
+      '      <span class="telemetry-label">MISSION SOL</span>' +
+      '      <span class="telemetry-value font-mono">Sol ' + sol + '</span>' +
       '    </div>' +
       '  </div>' +
-      '  <div class="telemetry-pill">' +
+      '  <div class="telemetry-pill" title="Local Mars Solar Time (NASA Mars24)">' +
       '    <span class="pill-icon">' + ic("clock") + '</span>' +
       '    <div class="pill-text">' +
       '      <span class="telemetry-label">LTST (SOLAR)</span>' +
       '      <span class="telemetry-value font-mono neon-time" id="telemetry-ltst">' + getFormattedLTST() + '</span>' +
       '    </div>' +
       '  </div>' +
-      '  <div class="telemetry-pill">' +
+      '  <div class="telemetry-pill" title="In-situ surface temperature from rover sensors">' +
       '    <span class="pill-icon">' + ic("thermometer") + '</span>' +
       '    <div class="pill-text">' +
       '      <span class="telemetry-label">SURFACE TEMP</span>' +
-      '      <span class="telemetry-value font-mono">' + atmo.air_temp_c.current + '°C</span>' +
+      '      <span class="telemetry-value font-mono">' + temp + '°C</span>' +
       '    </div>' +
       '  </div>' +
-      '  <div class="telemetry-pill">' +
+      '  <div class="telemetry-pill" title="Atmospheric surface pressure">' +
       '    <span class="pill-icon">' + ic("gauge") + '</span>' +
       '    <div class="pill-text">' +
-      '      <span class="telemetry-label">ATM PRESSURE</span>' +
-      '      <span class="telemetry-value font-mono">' + atmo.pressure_pa.toFixed(0) + ' Pa</span>' +
+      '      <span class="telemetry-label">PRESSURE</span>' +
+      '      <span class="telemetry-value font-mono">' + Math.round(press) + ' Pa</span>' +
       '    </div>' +
       '  </div>' +
-      '  <div class="telemetry-pill">' +
+      '  <div class="telemetry-pill" title="Surface wind velocity from rover anemometer">' +
       '    <span class="pill-icon">' + ic("wind") + '</span>' +
       '    <div class="pill-text">' +
-      '      <span class="telemetry-label">WIND</span>' +
-      '      <span class="telemetry-value font-mono">' + atmo.wind_speed_ms + ' m/s ' + atmo.wind_dir_compass + '</span>' +
+      '      <span class="telemetry-label">SURFACE WIND</span>' +
+      '      <span class="telemetry-value font-mono">' + wind + ' m/s</span>' +
       '    </div>' +
       '  </div>' +
-      '  <div class="telemetry-pill">' +
-      '    <span class="pill-icon">' + ic("dust") + '</span>' +
-      '    <div class="pill-text">' +
-      '      <span class="telemetry-label">DUST &tau;</span>' +
-      '      <span class="telemetry-value font-mono">' + atmo.dust_opacity_tau + '</span>' +
-      '    </div>' +
-      '  </div>' +
-      '  <div class="telemetry-pill">' +
+      '  <div class="telemetry-pill" title="NOAA GOES X-ray solar flare flux & MSL RAD surface dose rate">' +
       '    <span class="pill-icon">' + ic("shield") + '</span>' +
       '    <div class="pill-text">' +
-      '      <span class="telemetry-label">RADIATION</span>' +
-      '      <span class="telemetry-value font-mono">' + rad.dose_rate_uSv_hr + ' &mu;Sv/h</span>' +
+      '      <span class="telemetry-label">RADIATION (NOAA/RAD)</span>' +
+      '      <span class="telemetry-value font-mono">' + radVal + ' µSv/h · ' + flare + '</span>' +
       '    </div>' +
       '  </div>' +
       '</div>' +
@@ -143,6 +154,13 @@ window.MarsTelemetry = (function () {
   function getEnv() {
     return envData;
   }
+
+  // React to site changes across the application
+  window.addEventListener("mars:site-changed", async function () {
+    envData = await MarsData.loadEnvironment();
+    simulatedSeconds = 0;
+    renderBar(currentContainerId);
+  });
 
   return { init, calculateConsumables, getEnv };
 })();
