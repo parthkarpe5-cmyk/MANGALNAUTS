@@ -3,7 +3,7 @@
   "active_site": "jezero",
   "default_site": "jezero",
   "aoi": "jezero",
-  "graph_id": "jezero_measured_dem_v1",
+  "graph_id": "jezero_delta_v1",
   "title": "MANGALNAUTS — Planetary Multi-Site Operations & GNN Traversability",
   "center": { "lat": 18.45, "lon": 77.35 },
   "bbox": { "west": 77.20, "east": 77.50, "south": 18.38, "north": 18.52 },
@@ -21,7 +21,7 @@
       "id": "jezero",
       "name": "Jezero Crater (Western Delta)",
       "rover": "Perseverance (Mars 2020)",
-      "graph_id": "jezero_measured_dem_v1",
+      "graph_id": "jezero_delta_v1",
       "boundary_color": "#c9f31d",
       "center": { "lat": 18.4447, "lon": 77.4509 },
       "bbox": { "west": 77.20, "east": 77.50, "south": 18.38, "north": 18.52 },
@@ -33,13 +33,12 @@
       },
       "detail_zoom": 10,
       "files": {
-        "aoi": "data/jezero/measured/aoi.geojson",
-        "terrain_graph": "data/jezero/measured/terrain_graph.json",
-        "gnn_scores": "data/jezero/measured/gnn_scores.json",
+        "aoi": "data/jezero/v1/aoi.geojson",
+        "terrain_graph": "data/jezero/v1/terrain_graph.json",
+        "gnn_scores": "data/jezero/v1/gnn_scores.json",
         "science_stops": "data/jezero/v1/science_stops.geojson",
-        "routes": "data/jezero/measured/routes.geojson",
-        "environment": "data/jezero/v1/environment.json",
-        "slope": "data/jezero/measured/slope.png"
+        "routes": "data/jezero/v1/routes.geojson",
+        "environment": "data/jezero/v1/environment.json"
       },
       "quick_missions": [
         {
@@ -87,7 +86,7 @@
       "id": "gale",
       "name": "Gale Crater (Mount Sharp / Aeolis Mons)",
       "rover": "Curiosity (MSL)",
-      "graph_id": "gale_measured_dem_v1",
+      "graph_id": "gale_mount_sharp_v1",
       "boundary_color": "#f59e0b",
       "center": { "lat": -4.670, "lon": 137.390 },
       "bbox": { "west": 137.300, "east": 137.480, "south": -4.850, "north": -4.550 },
@@ -99,13 +98,12 @@
       },
       "detail_zoom": 10,
       "files": {
-        "aoi": "data/gale/measured/aoi.geojson",
-        "terrain_graph": "data/gale/measured/terrain_graph.json",
-        "gnn_scores": "data/gale/measured/gnn_scores.json",
+        "aoi": "data/gale/v1/aoi.geojson",
+        "terrain_graph": "data/gale/v1/terrain_graph.json",
+        "gnn_scores": "data/gale/v1/gnn_scores.json",
         "science_stops": "data/gale/v1/science_stops.geojson",
-        "routes": "data/gale/measured/routes.geojson",
-        "environment": "data/gale/v1/environment.json",
-        "slope": "data/gale/measured/slope.png"
+        "routes": "data/gale/v1/routes.geojson",
+        "environment": "data/gale/v1/environment.json"
       },
       "quick_missions": [
         {

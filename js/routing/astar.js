@@ -3,10 +3,14 @@ window.MarsAstar = (function () {
   function buildAdjacency(edges) {
     const adj = {};
     edges.forEach(function (e) {
-      if (!adj[e.from]) adj[e.from] = [];
-      if (!adj[e.to]) adj[e.to] = [];
-      adj[e.from].push({ to: e.to, length_m: e.length_m, crossingGrade: e.crossing_grade_deg });
-      adj[e.to].push({ to: e.from, length_m: e.length_m, crossingGrade: e.crossing_grade_deg });
+      const u = e.from || e.u;
+      const v = e.to || e.v;
+      const len = e.length_m != null ? e.length_m : e.dist_m;
+      if (!u || !v) return;
+      if (!adj[u]) adj[u] = [];
+      if (!adj[v]) adj[v] = [];
+      adj[u].push({ to: v, length_m: len, crossingGrade: e.crossing_grade_deg });
+      adj[v].push({ to: u, length_m: len, crossingGrade: e.crossing_grade_deg });
     });
     return adj;
   }
@@ -100,7 +104,12 @@ window.MarsAstar = (function () {
     };
     const edgeLen = {};
     graph.edges.forEach(function (e) {
-      edgeLen[key(e.from, e.to)] = e.length_m;
+      const u = e.from || e.u;
+      const v = e.to || e.v;
+      const len = e.length_m != null ? e.length_m : e.dist_m;
+      if (u && v && len != null) {
+        edgeLen[key(u, v)] = len;
+      }
     });
     let total = 0;
     for (let i = 0; i < pathIds.length - 1; i++) {
@@ -120,7 +129,12 @@ window.MarsAstar = (function () {
     };
     const edgeLen = {};
     graph.edges.forEach(function (e) {
-      edgeLen[key(e.from, e.to)] = e.length_m;
+      const u = e.from || e.u;
+      const v = e.to || e.v;
+      const len = e.length_m != null ? e.length_m : e.dist_m;
+      if (u && v && len != null) {
+        edgeLen[key(u, v)] = len;
+      }
     });
     let maxSlope = 0;
     let elevs = [];

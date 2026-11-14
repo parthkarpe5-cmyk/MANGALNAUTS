@@ -42,46 +42,22 @@ window.MarsRouteBetween = (function () {
 
   async function solve(latA, lonA, latB, lonB) {
     const graph = await MarsData.loadGraph();
-    const siteMeta = window.MarsData && window.MarsData.getActiveSiteMeta
-      ? await MarsData.getActiveSiteMeta()
-      : null;
-    const manifest = await MarsData.loadManifest();
-    const bounds = graph.bbox || (siteMeta && siteMeta.bbox) || manifest.bbox;
-    function inCoverage(lat, lon) {
-      return (
-        Number.isFinite(lat) &&
-        Number.isFinite(lon) &&
-        (!bounds ||
-          (lat >= bounds.south &&
-            lat <= bounds.north &&
-            lon >= bounds.west &&
-            lon <= bounds.east))
-      );
+    if (!graph || !graph.nodes || graph.nodes.length === 0) {
+      return { error: "No terrain graph available for this sector." };
     }
-    if (!inCoverage(latA, lonA) || !inCoverage(latB, lonB)) {
-      return {
-        status: "out_of_coverage",
-        error: "Choose both points inside the terrain coverage.",
-      };
-    }
+
     const candidate = await MarsData.loadScores().catch(() => null);
     const scores =
       graph.graph_id != null && candidate?.graph_id === graph.graph_id
         ? candidate
-        : null;
+        : candidate || null;
     const mode = MarsTravelMode.get();
     const maxSlope = mode.maxSlopeDeg;
 
     const nodeA = snapNearest(graph, latA, lonA);
     const nodeB = snapNearest(graph, latB, lonB);
     if (!nodeA || !nodeB) {
-      return { error: "No graph nodes in area" };
-    }
-
-    if (graph.max_snap_m != null &&
-        (MarsGeodesic.haversineMeters(latA, lonA, nodeA.lat, nodeA.lon) > graph.max_snap_m ||
-         MarsGeodesic.haversineMeters(latB, lonB, nodeB.lat, nodeB.lon) > graph.max_snap_m)) {
-      return { status: "out_of_coverage", error: "Choose both points near valid elevation samples." };
+      return { error: "No graph nodes in area." };
     }
 
     const geodesic_m = MarsGeodesic.haversineMeters(latA, lonA, latB, lonB);
