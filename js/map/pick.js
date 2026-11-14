@@ -1,4 +1,4 @@
-/* global L, MarsDetailMap, MarsRouteBetween, MarsSegmentDrawer, window */
+/* global L, MarsDetailMap, MarsRouteBetween, MarsSegmentDrawer, MarsData, window */
 window.MarsSegmentPick = (function () {
   let active = false;
   let step = 0;
@@ -8,6 +8,34 @@ window.MarsSegmentPick = (function () {
   let lineLayer = null;
   let map = null;
   let clickHandler = null;
+  let coverageLayer = null;
+  let coverageRequest = 0;
+
+  async function showCoverage() {
+    const request = ++coverageRequest;
+    try {
+      const { bbox } = await MarsData.loadManifest();
+      if (!active || request !== coverageRequest || !bbox) return;
+      const bounds = [[bbox.south, bbox.west], [bbox.north, bbox.east]];
+      if (coverageLayer) map.removeLayer(coverageLayer);
+      coverageLayer = L.rectangle(bounds, {
+        color: "#c9f31d",
+        weight: 2,
+        dashArray: "7 5",
+        fill: false,
+        interactive: false,
+      }).addTo(map);
+      map.invalidateSize();
+      map.fitBounds(bounds, { padding: [20, 20], animate: false });
+      if (step === 0 && !markerB) {
+        MarsSegmentDrawer.render(null, "Click point A inside the outlined routing area.");
+      }
+    } catch {
+      if (active && request === coverageRequest) {
+        MarsSegmentDrawer.render(null, "Could not load the routing area. Refresh and try again.");
+      }
+    }
+  }
 
   function ensureMap() {
     if (!MarsDetailMap.isReady()) {
@@ -102,9 +130,15 @@ window.MarsSegmentPick = (function () {
     }
     if (on) {
       m.on("click", clickHandler);
-      MarsSegmentDrawer.render(null, "Click point A on the map.");
+      showCoverage();
+      MarsSegmentDrawer.render(null, "Click point A inside the routing area.");
     } else {
       m.off("click", clickHandler);
+      coverageRequest++;
+      if (coverageLayer) {
+        m.removeLayer(coverageLayer);
+        coverageLayer = null;
+      }
       clearMarkers();
       MarsSegmentDrawer.render(null, "Plan segment is off.");
     }
@@ -113,7 +147,7 @@ window.MarsSegmentPick = (function () {
   function reset() {
     if (map) clearMarkers();
     if (active) {
-      MarsSegmentDrawer.render(null, "Click point A on the map.");
+      MarsSegmentDrawer.render(null, "Click point A inside the routing area.");
     }
   }
 

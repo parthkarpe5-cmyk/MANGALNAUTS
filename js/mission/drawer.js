@@ -18,7 +18,8 @@ window.MarsSegmentDrawer = (function () {
     }
     if (segment.error) {
       panel.innerHTML =
-        '<p class="drawer-error">' + segment.error + "</p>";
+        '<p class="drawer-error"></p>';
+      panel.firstElementChild.textContent = segment.error;
       return;
     }
 
@@ -33,7 +34,7 @@ window.MarsSegmentDrawer = (function () {
       ? feasible
         ? "Feasible for current mode"
         : "Exceeds slope limit or blocked"
-      : "No graph path (try closer points)";
+      : "No route under the current slope limit";
 
     panel.innerHTML =
       "<h3 class=\"drawer-title\">Segment A → B</h3>" +

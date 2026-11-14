@@ -12,8 +12,7 @@ window.MarsRouteBetween = (function () {
     let best = null;
     let bestD = Infinity;
     graph.nodes.forEach(function (n) {
-      const d =
-        (n.lat - lat) * (n.lat - lat) + (n.lon - lon) * (n.lon - lon);
+      const d = MarsGeodesic.haversineMeters(lat, lon, n.lat, n.lon);
       if (d < bestD) {
         bestD = d;
         best = n;
@@ -22,23 +21,41 @@ window.MarsRouteBetween = (function () {
     return best;
   }
 
+  function nodeRisk(nodes, id) {
+    const risk = nodes[id]?.risk_0_1;
+    return Number.isFinite(risk) && risk >= 0 && risk <= 1 ? risk : null;
+  }
+
   function meanRisk(pathIds, scoresPayload) {
-    const nodes = scoresPayload.nodes || scoresPayload;
+    const nodes = scoresPayload?.nodes || scoresPayload || {};
     let sum = 0;
     let n = 0;
     pathIds.forEach(function (id) {
-      const s = nodes[id];
-      if (s && s.risk_0_1 != null) {
-        sum += s.risk_0_1;
+      const risk = nodeRisk(nodes, id);
+      if (risk != null) {
+        sum += risk;
         n += 1;
       }
     });
-    return n ? sum / n : 0;
+    return n ? sum / n : null;
   }
 
   async function solve(latA, lonA, latB, lonB) {
     const graph = await MarsData.loadGraph();
-    const scores = await MarsData.loadScores();
+    const manifest = await MarsData.loadManifest();
+    const bounds = manifest.bbox;
+    function inCoverage(lat, lon) {
+      return Number.isFinite(lat) && Number.isFinite(lon) &&
+        (!bounds || (lat >= bounds.south && lat <= bounds.north &&
+          lon >= bounds.west && lon <= bounds.east));
+    }
+    if (!inCoverage(latA, lonA) || !inCoverage(latB, lonB)) {
+      return { status: "out_of_coverage", error: "Choose both points inside the terrain coverage." };
+    }
+    const candidate = await MarsData.loadScores().catch(() => null);
+    const scores = graph.graph_id != null && candidate?.graph_id === graph.graph_id
+      ? candidate
+      : null;
     const mode = MarsTravelMode.get();
     const maxSlope = mode.maxSlopeDeg;
 
@@ -55,12 +72,11 @@ window.MarsRouteBetween = (function () {
       lonB
     );
 
-    const edgeCostFn = function (fromId, toId, len) {
-      const sn = scores.nodes || scores;
-      const a = (sn[fromId] && sn[fromId].risk_0_1) || 0.3;
-      const b = (sn[toId] && sn[toId].risk_0_1) || 0.3;
-      const risk = (a + b) / 2;
-      return len * (1 + 2 * risk);
+    const scoreNodes = scores?.nodes || {};
+    const edgeCostFn = function (fromId, toId, lengthM) {
+      const fromRisk = nodeRisk(scoreNodes, fromId) ?? 0;
+      const toRisk = nodeRisk(scoreNodes, toId) ?? 0;
+      return lengthM * (1 + fromRisk + toRisk);
     };
 
     const pathResult = MarsAstar.findPath(graph, nodeA.id, nodeB.id, {
@@ -80,11 +96,7 @@ window.MarsRouteBetween = (function () {
       ? pathResult.path.map(function (id) {
           const n = nodesById[id];
           return [n.lon, n.lat];
-        })
-      : [
-          [lonA, latA],
-          [lonB, latB],
-        ];
+        }) : [];
 
     const feasible =
       pathResult.found &&
@@ -113,9 +125,15 @@ window.MarsRouteBetween = (function () {
       mode: mode.id,
       feasible: feasible,
       path_found: pathResult.found,
-      geometry: { type: "LineString", coordinates: coords },
+      status: pathResult.found ? "ok" : "no_route",
+      node_ids: pathResult.path,
+      geometry: coords.length > 1 ? { type: "LineString", coordinates: coords } : null,
     };
   }
 
-  return { solve, snapNearest };
+  function solveReturn(crew, habitat) {
+    return solve(crew.lat, crew.lon, habitat.lat, habitat.lon);
+  }
+
+  return { solve, solveReturn, snapNearest };
 })();
