@@ -16,6 +16,8 @@ window.MarsRouteBetween = (function () {
         (n.lat - lat) * (n.lat - lat) + (n.lon - lon) * (n.lon - lon);
       if (d < bestD) {
         bestD = d;
+      }
+      if (d < bestD + 0.000000001) {
         best = n;
       }
     });
@@ -86,6 +88,34 @@ window.MarsRouteBetween = (function () {
           [lonB, latB],
         ];
 
+    // Compute cumulative distance along path for elevation profile
+    const pathNodes = [];
+    if (pathResult.found) {
+      let cumulativeM = 0;
+      for (let i = 0; i < pathResult.path.length; i++) {
+        const curr = nodesById[pathResult.path[i]];
+        if (i > 0) {
+          const prev = nodesById[pathResult.path[i - 1]];
+          cumulativeM += MarsGeodesic.haversineMeters(
+            prev.lat,
+            prev.lon,
+            curr.lat,
+            curr.lon
+          );
+        }
+        const score = (scores.nodes && scores.nodes[curr.id]) || {};
+        pathNodes.push({
+          id: curr.id,
+          lat: curr.lat,
+          lon: curr.lon,
+          elev_m: curr.elev_m,
+          slope_deg: curr.slope_deg,
+          risk: score.risk_0_1 || 0.3,
+          dist_m: cumulativeM,
+        });
+      }
+    }
+
     const feasible =
       pathResult.found &&
       (stats.max_slope_deg == null || stats.max_slope_deg <= maxSlope);
@@ -113,6 +143,7 @@ window.MarsRouteBetween = (function () {
       mode: mode.id,
       feasible: feasible,
       path_found: pathResult.found,
+      path_nodes: pathNodes,
       geometry: { type: "LineString", coordinates: coords },
     };
   }

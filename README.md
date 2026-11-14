@@ -1,57 +1,105 @@
-# Martian Map — 3D hybrid globe
+# MANGALNAUTS — Martian Mission OS & 3D Globe
 
-Google Earth–style **Mars globe** for the NASA Space Apps *Interplanetary Survival Guide: Martian Map* challenge.
+Google Earth–style **3D Mars Globe and Mission Cockpit** for the NASA Space Apps *Interplanetary Survival Guide: Martian Map* challenge.
 
-## Features
+Combines high-resolution NASA orbital imagery and USGS elevation with graph-based traversability analysis, GNN safety scoring, dynamic telemetry, and route planning.
 
-- **3D globe** (Cesium): rotate, tilt, zoom on Mars with **MDEM200M** terrain (OnMars).
-- **NASA Trek imagery filters**: Viking color, MOLA hillshade, THEMIS day/night IR, TES albedo.
-- **Hybrid detail mode**: zoom below ~400 km camera height → **2D CTX (5 m)** map slides up (lazy-loaded Leaflet).
-- **Jump to** Jezero, Gale, Olympus Mons, or global view.
+---
 
-## Data sources
+## Key Features
+
+### 1. 3D Planetary Globe (CesiumJS)
+- **True Mars Ellipsoid**: Custom `Cesium.Ellipsoid.MARS` coordinate frame with USGS/Esri **OnMars MDEM200M** digital elevation model.
+- **NASA Trek Scientific Basemaps**:
+  - Viking Color Mosaic (232 m) & Viking B&W (USGS MDIM 2.1)
+  - MOLA Color Hillshade & MOLA Grayscale Relief (463 m)
+  - THEMIS Day IR & Night IR (100 m)
+  - TES Albedo (7.4 km), TES Dust Cover Index (DCI), and TES Thermal Inertia.
+- **Optional Modular Globe Overlays (Toggleable Menu)**:
+  - `☑ Landing Sites & Landmarks`: 3D pins for Perseverance, Curiosity, InSight, Opportunity, Spirit, Olympus Mons, and Valles Marineris. Clicking any pin smoothly flies the camera to the site.
+  - `☑ Jezero AOI Boundary Footprint`: Orbital bounding box marking the high-resolution mission sector.
+  - `☑ Coordinate Graticule`: Equator, prime meridian, and Martian latitude/longitude grid parallels.
+  - `☑ Real-time Sun Lighting & Terminator`: Day/night solar illumination across the Martian terrain.
+
+### 2. Hybrid Zoom Transition
+- Zooming below **~400 km** camera altitude smoothly transitions into the **2D Surface Detail Mode**, revealing the CTX 5 m/px imagery while fading the globe into the background.
+
+### 3. Surface Detail Engine (Leaflet & Esri)
+- **High-Resolution CTX**: 5 m/pixel Murray Lab CTX beta mosaic layered over USGS MColorDEM.
+- **GNN Risk & Science Heatmap**: Interactive overlay color-coding 121 traversability nodes by **Risk Index** ($0 \to 1$) or **Science Return** ($0 \to 100\%$) with hover telemetry tooltips.
+- **Preset Mission Routes**: Toggleable pre-planned traverses:
+  - 🚙 **ROVER Main Highway**: Graded, low-slope arterial route ($\le 8.4^\circ$).
+  - 🚶 **MARSWALK Science Loop**: Pedestrian loop visiting high-yield delta outcrops ($\le 13.8^\circ$).
+  - 🚨 **EMERGENCY Abort Vector**: Direct low-obstacle evacuation corridor back to the lander.
+- **Science Stops & Landmark POIs**: Waypoints marking the **Octavia E. Butler Landing Site**, **Western Delta Scarp**, **Kodiak Butte**, **Belva Crater**, and **Neretva Vallis Inlet**. Clicking any stop displays NASA Perseverance rover imagery, Sol discovered, target mineralogy, and geologic context in the mission drawer.
+
+### 4. Interactive A→B Segment Planner & Mission Telemetry
+- Click **Plan segment (A→B)**, pick any two points on the Jezero CTX map.
+- Computes geodesic vs. graph path distance, maximum slope, elevation change ($\Delta z$), and mode feasibility:
+  - **Marswalk Mode**: Enforces slope limit $\le 15^\circ$.
+  - **Rover Mode**: Enforces slope limit $\le 20^\circ$.
+- **Responsive Elevation Cross-Section**: Renders an inline SVG elevation profile chart along the route path with slope warnings and risk color highlights.
+- **EVA Consumables Estimator**: Automatically calculates estimated travel duration, $O_2$ requirement (liters), and suit/rover battery power consumption (Wh).
+- **Environmental Telemetry Bar**: Real-time Mars Local Solar Time (LTST) clock, Sol counter, surface temperature (REMS/MEDA), pressure, wind speed/direction, dust optical depth ($\tau$), and radiation dose rate ($\mu\text{Sv/hr}$).
+
+---
+
+## Data Sources
 
 | Layer | Source |
-|-------|--------|
-| Globe imagery | [Mars Trek WMTS](https://trek.nasa.gov/tiles/apidoc/trekAPI.html?body=mars) |
-| 3D terrain | [OnMars MDEM200M](https://astro.arcgis.com/arcgis/rest/services/OnMars/MDEM200M/ImageServer) |
-| Surface detail | [OnMars CTX](https://astro.arcgis.com/arcgis/rest/services/OnMars/CTX/MapServer), [MColorDEM](https://astro.arcgis.com/arcgis/rest/services/OnMars/MColorDEM/MapServer) |
+|---|---|
+| Globe Imagery | [NASA Mars Trek WMTS](https://trek.nasa.gov/tiles/apidoc/trekAPI.html?body=mars) (Viking, MOLA, THEMIS, TES) |
+| 3D Digital Elevation | [USGS / Esri OnMars MDEM200M](https://astro.arcgis.com/arcgis/rest/services/OnMars/MDEM200M/ImageServer) |
+| High-Res Surface Detail | [OnMars CTX](https://astro.arcgis.com/arcgis/rest/services/OnMars/CTX/MapServer) (5 m/px), [MColorDEM](https://astro.arcgis.com/arcgis/rest/services/OnMars/MColorDEM/MapServer) |
+| Environmental Telemetry | NASA Mars 2020 Perseverance MEDA & Curiosity REMS/RAD archives |
+| Science Waypoints & Imagery | NASA / JPL-Caltech / MSSS / USGS / PDS Geosciences Node |
 
-Educational [NASA Mars glTF model](https://science.nasa.gov/resource/planet-mars-3d-model/) — linked in the app header (not used as the scientific basemap).
+---
 
-## Run locally
+## Run Locally
 
 ```bash
 cd "D:\NASA Space challenge\MANGALNAUTS"
 python -m http.server 8080
 ```
 
-Open [http://localhost:8080](http://localhost:8080). Requires network access for NASA/Esri tiles and the Cesium CDN.
+Open [http://localhost:8080](http://localhost:8080) in your web browser.
 
-## Optional: Cesium Ion Mars 3D Tiles
+---
 
-For Jezero/Gale centimeter–meter 3D Tiles, add a free [Cesium ion](https://cesium.com/ion/) token and load asset `3644333` in `js/globe.js` (not required for this build).
+## Project Structure
 
-## Project layout
-
-- `js/globe.js` — Cesium viewer, terrain, filter switching  
-- `js/layers/trek-layers.js` — lazy Trek WMTS providers  
-- `js/detail-map.js` — 2D CTX map (init once)  
-- `js/hybrid.js` — camera threshold → detail pane  
-- `js/app.js` — UI wiring  
-
-## Plan segment (A→B)
-
-In **surface detail** mode (zoom the globe below ~400 km):
-
-1. Enable **Plan segment (A→B)** on the detail pane toolbar.
-2. Click **point A**, then **point B** on the CTX map.
-3. The drawer shows **geodesic** vs **graph path** distance, slope, and feasibility for **Marswalk (15°)** or **Rover (20°)**.
-
-Mock graph data lives in `data/jezero/v1/` (replace with P3 pipeline output).
-
-## Next steps
-
-- Replace mock `terrain_graph.json` with real MOLA/THEMIS/CRISM pipeline  
-- Point query for NASA Ames Mars climate reference (MCS)  
-- HiRISE / CRISM footprints from PDS ODE
+```
+MANGALNAUTS/
+├── index.html                       # Mission cockpit shell
+├── css/styles.css                   # Dark sci-fi mission HUD styling
+├── data/
+│   ├── manifest.json                # Mission dataset registry & citations
+│   └── jezero/v1/
+│       ├── terrain_graph.json       # Graph traversability nodes & edges
+│       ├── gnn_scores.json          # GNN safety risk & science scores
+│       ├── science_stops.geojson    # POIs with NASA photography & geology
+│       ├── routes.geojson           # Preset Rover, Marswalk, & Abort routes
+│       └── environment.json         # Atmospheric & radiation telemetry
+├── js/
+│   ├── globe.js                     # Cesium 3D Mars globe & optional layers
+│   ├── layers/trek-layers.js        # NASA Trek WMTS tile providers
+│   ├── detail-map.js                # Leaflet 2D CTX surface map
+│   ├── hybrid.js                    # Altitude camera threshold watcher
+│   ├── map/
+│   │   ├── geodesic.js              # Haversine distance on Mars ellipsoid
+│   │   ├── heatmap.js               # Interactive GNN Risk / Science heatmap
+│   │   ├── preset-routes.js         # GeoJSON mission routes layer
+│   │   ├── science-stops.js         # Interactive POI marker badges
+│   │   └── pick.js                  # A->B two-point pick listener
+│   ├── routing/
+│   │   ├── astar.js                 # A* pathfinder with slope & risk weights
+│   │   └── routeBetween.js          # Snap-to-graph solver
+│   ├── mission/
+│   │   ├── modes.js                 # Travel modes (Marswalk vs Rover)
+│   │   ├── telemetry.js             # Environmental HUD bar & consumables
+│   │   ├── elevation-profile.js     # Responsive SVG elevation profile
+│   │   └── drawer.js                # Slide-out analytics & science cards
+│   └── app.js                       # Main application coordinator
+└── README.md
+```

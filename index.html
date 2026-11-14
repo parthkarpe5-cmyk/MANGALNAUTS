@@ -1,9 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="perseverance">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Martian Map — 3D Globe</title>
+    <title>MANGALNAUTS — Martian Mission OS &amp; 3D Globe</title>
+    <!-- Google Fonts: Orbitron (Aerospace display), Plus Jakarta Sans (UI), JetBrains Mono (Telemetry) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Orbitron:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <link
       href="https://cesium.com/downloads/cesiumjs/releases/1.123/Build/Cesium/Widgets/widgets.css"
       rel="stylesheet"
@@ -16,103 +23,214 @@
   </head>
   <body>
     <header class="header">
-      <div>
-        <h1>Martian Map</h1>
+      <div class="brand">
+        <div class="brand-title-row">
+          <h1>MANGALNAUTS <span class="tag">Mission OS</span></h1>
+          <span class="status-indicator"><span class="dot"></span> TELEMETRY NOMINAL</span>
+        </div>
         <p class="subtitle">
-          3D Mars globe ·
-          <a href="https://trek.nasa.gov/mars/">NASA Trek</a> ·
-          <a href="https://astro.arcgis.com/arcgis/rest/services/OnMars">OnMars</a>
+          NASA Space Apps Challenge · Hybrid 3D Mars Globe &amp; Traversability Engine ·
+          <a href="https://trek.nasa.gov/mars/" target="_blank" rel="noopener">NASA Trek</a> ·
+          <a href="https://astro.arcgis.com/arcgis/rest/services/OnMars" target="_blank" rel="noopener">OnMars</a>
         </p>
       </div>
+
       <div class="controls">
-        <label class="control">
-          <span>Imagery filter</span>
-          <select id="globe-filter" aria-label="Globe imagery filter"></select>
-        </label>
-        <label class="control checkbox">
-          <input type="checkbox" id="overlay-mola" checked />
-          <span>MOLA underlay</span>
-        </label>
-        <label class="control">
-          <span>Underlay opacity</span>
-          <input
-            type="range"
-            id="overlay-opacity"
-            min="0.1"
-            max="1"
-            step="0.05"
-            value="0.45"
-            aria-label="Overlay opacity"
-          />
-        </label>
-        <label class="control">
-          <span>Jump to</span>
-          <select id="location" aria-label="Preset location">
-            <option value="jezero">Jezero Crater (Perseverance)</option>
-            <option value="gale">Gale Crater (Curiosity)</option>
-            <option value="olympus">Olympus Mons</option>
-            <option value="global">Full globe</option>
-          </select>
-        </label>
-        <label class="control">
-          <span>Travel mode</span>
-          <select id="travel-mode" aria-label="Rover or Marswalk slope limits">
-            <option value="walk">Marswalk (≤15°)</option>
-            <option value="rover">Rover (≤20°)</option>
-          </select>
-        </label>
+        <div class="control-group">
+          <label class="control">
+            <span>Imagery Filter</span>
+            <select id="globe-filter" aria-label="Globe imagery filter"></select>
+          </label>
+
+          <!-- Industry-standard switch toggle for MOLA -->
+          <label class="switch-field" title="Toggle MOLA Topographic Underlay">
+            <span class="field-label">MOLA Underlay</span>
+            <span class="switch-toggle">
+              <input type="checkbox" id="overlay-mola" checked />
+              <span class="switch-slider"></span>
+            </span>
+          </label>
+
+          <label class="control">
+            <span>Blend</span>
+            <input
+              type="range"
+              id="overlay-opacity"
+              min="0.1"
+              max="1"
+              step="0.05"
+              value="0.45"
+              aria-label="Overlay opacity"
+            />
+          </label>
+        </div>
+
+        <div class="control-group">
+          <label class="control">
+            <span>Jump To</span>
+            <select id="location" aria-label="Preset location">
+              <option value="jezero">Jezero Crater (Perseverance)</option>
+              <option value="gale">Gale Crater (Curiosity)</option>
+              <option value="olympus">Olympus Mons</option>
+              <option value="global">Full Globe</option>
+            </select>
+          </label>
+
+          <label class="control">
+            <span>Travel Mode</span>
+            <select id="travel-mode" aria-label="Rover or Marswalk slope limits">
+              <option value="walk">Marswalk (≤15°)</option>
+              <option value="rover">Rover (≤20°)</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="control-group">
+          <!-- Mission Theme Selector -->
+          <label class="control">
+            <span>Theme</span>
+            <select id="theme-selector" aria-label="Mission UI theme">
+              <option value="perseverance">Perseverance Lime</option>
+              <option value="ares">Ares Mars Rust</option>
+              <option value="deepspace">Deep Space Cyan</option>
+            </select>
+          </label>
+
+          <!-- Audio Feedback Toggle -->
+          <button type="button" class="btn-ghost btn-audio" id="audio-toggle" title="Toggle Tactical Audio Cues">
+            <span id="audio-label">AUDIO: ON</span>
+          </button>
+        </div>
+
+        <!-- Optional Globe Layers Dropdown -->
+        <div class="dropdown-wrapper">
+          <button type="button" class="btn-ghost dropdown-trigger" id="globe-layers-toggle">
+            Globe Overlays ▾
+          </button>
+          <div class="dropdown-menu" id="globe-layers-menu" hidden>
+            <div class="dropdown-title">3D GLOBE OVERLAYS</div>
+            <label class="dropdown-item">
+              <input type="checkbox" id="toggle-landmarks" checked />
+              <span>Landing Sites &amp; Landmarks</span>
+            </label>
+            <label class="dropdown-item">
+              <input type="checkbox" id="toggle-aoi" checked />
+              <span>Jezero AOI Sector Footprint</span>
+            </label>
+            <label class="dropdown-item">
+              <input type="checkbox" id="toggle-graticule" />
+              <span>Coordinate Graticule</span>
+            </label>
+            <label class="dropdown-item">
+              <input type="checkbox" id="toggle-lighting" />
+              <span>Sun Lighting &amp; Terminator</span>
+            </label>
+          </div>
+        </div>
+
         <button type="button" class="btn-ghost" id="about-toggle">
-          About Mars model
+          About
         </button>
       </div>
     </header>
+
+    <!-- Top Environmental & Mission Telemetry Bar -->
+    <div id="telemetry-bar" class="telemetry-bar" aria-label="Martian environmental telemetry"></div>
+
     <div id="about-panel" class="about-panel" hidden>
-      <p>
-        NASA offers an interactive
-        <a
-          href="https://science.nasa.gov/resource/planet-mars-3d-model/"
-          target="_blank"
-          rel="noopener"
-          >Mars glTF preview</a
-        >
-        for outreach. This app uses mission tile data (Trek WMTS, OnMars) for a
-        Google Earth–style explorer.
-      </p>
+      <div class="about-content">
+        <h3>NASA Space Apps Challenge — Interplanetary Survival Guide: Martian Map</h3>
+        <p>
+          <strong>MANGALNAUTS Martian Mission OS</strong> merges planetary-scale 3D satellite visualization with local rover/pedestrian traversability analytics. Powered by NASA Mars Trek WMTS, USGS/Esri OnMars elevation models, and custom Graph Neural Network hazard scores, astronauts and flight controllers can simulate multi-kilometer surface EVAs in Jezero Crater with zero network latency.
+        </p>
+      </div>
     </div>
+
     <main class="stage">
       <div id="globe" class="globe-wrap" role="application" aria-label="Mars 3D globe"></div>
+      
+      <!-- Aerospace Tech Reticle HUD -->
       <aside class="hud" aria-live="polite">
-        <div><strong>Mode</strong> <span id="mode-label">—</span></div>
-        <div><strong>Filter</strong> <span id="filter-label">—</span></div>
-        <div><strong>Camera</strong> <span id="camera-height">—</span></div>
-        <div><strong>Cursor</strong> <span id="coords">—</span></div>
+        <div class="hud-corner top-left"></div>
+        <div class="hud-corner top-right"></div>
+        <div class="hud-corner bottom-left"></div>
+        <div class="hud-corner bottom-right"></div>
+        <div class="hud-header">ORBITAL RECON HUD</div>
+        <div class="hud-grid">
+          <div class="hud-item"><span class="hud-key">MODE</span> <span id="mode-label" class="hud-val">—</span></div>
+          <div class="hud-item"><span class="hud-key">FILTER</span> <span id="filter-label" class="hud-val">—</span></div>
+          <div class="hud-item"><span class="hud-key">ALTITUDE</span> <span id="camera-height" class="hud-val font-mono">—</span></div>
+          <div class="hud-item"><span class="hud-key">COORDS</span> <span id="coords" class="hud-val font-mono">—</span></div>
+        </div>
       </aside>
+
       <section id="detail-pane" class="detail-pane" aria-label="High-resolution surface map">
         <header class="detail-head">
-          <span>Surface detail (CTX 5 m)</span>
+          <div class="detail-title-group">
+            <span class="detail-pulse-icon"></span>
+            <span class="detail-title">SURFACE TACTICAL RADAR (CTX 5M MOSAIC)</span>
+          </div>
+
           <div class="detail-actions">
-            <label class="control checkbox detail-check">
-              <input type="checkbox" id="plan-segment" />
-              <span>Plan segment (A→B)</span>
+            <!-- Heatmap Mode -->
+            <label class="control inline-control">
+              <span class="action-label">GNN HEATMAP</span>
+              <select id="heatmap-mode" class="select-sm">
+                <option value="off">Off (Standard)</option>
+                <option value="risk">Hazard Risk Index</option>
+                <option value="science">Science Yield</option>
+              </select>
             </label>
-            <button type="button" class="btn-ghost" id="clear-segment">
+
+            <!-- Preset Routes Toggle -->
+            <label class="chip-toggle">
+              <input type="checkbox" id="toggle-preset-routes" />
+              <span class="chip-label">Preset Routes</span>
+            </label>
+
+            <!-- Science Stops Toggle -->
+            <label class="chip-toggle">
+              <input type="checkbox" id="toggle-science-stops" checked />
+              <span class="chip-label">Science Stops</span>
+            </label>
+
+            <!-- A->B Routing Toggle Button -->
+            <label class="plan-segment-btn" id="plan-segment-label">
+              <input type="checkbox" id="plan-segment" />
+              <span class="btn-inner">
+                <span class="pulse-indicator"></span>
+                <span>Plan Segment (A→B)</span>
+              </span>
+            </label>
+
+            <button type="button" class="btn-ghost btn-sm" id="clear-segment" title="Clear current route">
               Clear
             </button>
-            <button type="button" class="btn-ghost" id="sync-globe-btn">
-              Sync globe
+            <button type="button" class="btn-ghost btn-sm" id="sync-globe-btn" title="Sync globe view to surface map center">
+              Sync Globe
             </button>
           </div>
         </header>
+
         <div class="detail-body">
           <div id="detail-map-inner" class="detail-map-inner"></div>
-          <aside id="segment-drawer" class="segment-drawer" aria-label="Segment metrics"></aside>
+          <aside id="segment-drawer" class="segment-drawer" aria-label="Mission metrics and telemetry"></aside>
         </div>
       </section>
     </main>
+
     <footer class="footer">
-      Imagery: NASA Trek (Viking, MOLA, THEMIS, TES). Terrain: OnMars MDEM200M.
-      Detail: Esri OnMars CTX &amp; MColorDEM. Not affiliated with NASA.
+      <div class="footer-left">
+        <span>IMAGERY: NASA Mars Trek (Viking, MOLA, THEMIS, TES)</span> ·
+        <span>TERRAIN: USGS / OnMars MDEM200M</span> ·
+        <span>SURFACE: Esri OnMars CTX 5m &amp; MColorDEM</span>
+      </div>
+      <div class="footer-right">
+        <span>DATA: NASA PDS Mars 2020 / MSL</span>
+      </div>
     </footer>
+
+    <!-- Scripts -->
     <script src="https://cesium.com/downloads/cesiumjs/releases/1.123/Build/Cesium/Cesium.js"></script>
     <script>
       window.CESIUM_BASE_URL =
@@ -132,7 +250,15 @@
     <script src="js/routing/astar.js"></script>
     <script src="js/mission/modes.js"></script>
     <script src="js/routing/routeBetween.js"></script>
+    <script src="js/ui/icons.js"></script>
+    <script src="js/ui/audio.js"></script>
+    <script src="js/ui/theme.js"></script>
+    <script src="js/mission/telemetry.js"></script>
+    <script src="js/mission/elevation-profile.js"></script>
     <script src="js/mission/drawer.js"></script>
+    <script src="js/map/heatmap.js"></script>
+    <script src="js/map/preset-routes.js"></script>
+    <script src="js/map/science-stops.js"></script>
     <script src="js/map/pick.js"></script>
     <script src="js/app.js"></script>
   </body>

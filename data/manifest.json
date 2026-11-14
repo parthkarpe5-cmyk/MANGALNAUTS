@@ -1,15 +1,20 @@
 {
-  "version": "1",
+  "version": "1.2",
   "aoi": "jezero",
-  "title": "Jezero Crater pilot patch (mock graph for demo)",
+  "title": "Jezero Crater pilot patch & mission operational datasets",
   "center": { "lat": 18.44, "lon": 77.58 },
   "bbox": { "west": 77.53, "east": 77.63, "south": 18.39, "north": 18.49 },
   "citations": [
     "NASA Mars Trek / OnMars CTX & MOLA",
-    "Mock terrain_graph for hackathon integration — replace with P3 pipeline output"
+    "NASA Mars 2020 Perseverance Science Team / PDS Geosciences Node",
+    "NASA Curiosity REMS & Perseverance MEDA environmental archives",
+    "Mock terrain_graph and GNN scores for hackathon mission integration"
   ],
   "files": {
     "terrain_graph": "data/jezero/v1/terrain_graph.json",
-    "gnn_scores": "data/jezero/v1/gnn_scores.json"
+    "gnn_scores": "data/jezero/v1/gnn_scores.json",
+    "science_stops": "data/jezero/v1/science_stops.geojson",
+    "routes": "data/jezero/v1/routes.geojson",
+    "environment": "data/jezero/v1/environment.json"
   }
 }

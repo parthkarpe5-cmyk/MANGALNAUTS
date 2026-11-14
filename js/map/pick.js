@@ -60,6 +60,7 @@ window.MarsSegmentPick = (function () {
         map
       );
       step = 1;
+      if (window.MarsAudio) window.MarsAudio.playClick();
       MarsSegmentDrawer.render(null, "Now click point B.");
       return;
     }
@@ -67,6 +68,7 @@ window.MarsSegmentPick = (function () {
     markerB = L.marker([lat, lon], { icon: markerIcon("B", "#5eb8ff") }).addTo(
       map
     );
+    if (window.MarsAudio) window.MarsAudio.playLock();
     MarsSegmentDrawer.render(null, "Computing route…");
 
     try {
@@ -85,6 +87,7 @@ window.MarsSegmentPick = (function () {
           },
         }).addTo(map);
       }
+      if (window.MarsAudio) window.MarsAudio.playSuccess();
       MarsSegmentDrawer.render(segment);
     } catch (err) {
       MarsSegmentDrawer.render({ error: err.message });

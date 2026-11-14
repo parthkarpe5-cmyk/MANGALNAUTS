@@ -1,0 +1,97 @@
+{
+  "type": "FeatureCollection",
+  "name": "Jezero_Science_Stops",
+  "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [77.4509, 18.4447] },
+      "properties": {
+        "id": "stop_butler_landing",
+        "name": "Octavia E. Butler Landing",
+        "badge": "🚀",
+        "type": "Landing Site",
+        "sol": 0,
+        "elev_m": -2570,
+        "science_priority": "High",
+        "primary_target": "Perseverance Touchdown Datum",
+        "description": "Historic touchdown site of the Mars 2020 Perseverance rover and Ingenuity helicopter in western Isidis Planitia.",
+        "geology": "Volcanic/impact floor unit, mafic olivine-rich sand and bedrock regolith.",
+        "image_url": "https://mars.nasa.gov/system/resources/detail_files/25695_PIA24428-web.jpg",
+        "image_caption": "First high-resolution color view from Perseverance landing site"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [77.4082, 18.4553] },
+      "properties": {
+        "id": "stop_delta_front",
+        "name": "Western Delta Scarp (Three Forks)",
+        "badge": "🌊",
+        "type": "Fluvial Delta Deposit",
+        "sol": 415,
+        "elev_m": -2530,
+        "science_priority": "Critical",
+        "primary_target": "Clay-bearing sedimentary mudstones",
+        "description": "Ancient river delta front where Jezero's river entered the crater lake ~3.7 billion years ago, preserving fine-grained biosignature targets.",
+        "geology": "Layered smectite clays, carbonate minerals, and silica siltstones with high biosignature preservation potential.",
+        "image_url": "https://mars.nasa.gov/system/resources/detail_files/26653_PIA25178-web.jpg",
+        "image_caption": "Perseverance Mastcam-Z mosaic of the Western Delta scarp"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [77.4372, 18.4234] },
+      "properties": {
+        "id": "stop_kodiak_butte",
+        "name": "Kodiak Butte",
+        "badge": "⛰️",
+        "type": "Erosional Remnant",
+        "sol": 92,
+        "elev_m": -2480,
+        "science_priority": "High",
+        "primary_target": "Delta Architecture Bottomsets & Foresets",
+        "description": "Isolated mesa remnant of the delta proving lake depth and multi-stage flooding in Jezero's ancient lacustrine system.",
+        "geology": "Steep-dipping delta foreset beds overlain by horizontal topset conglomerate layers with rounded boulders.",
+        "image_url": "https://mars.nasa.gov/system/resources/detail_files/26322_PIA24925-web.jpg",
+        "image_caption": "SuperCam long-distance view of Kodiak mesa cross-bedding"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [77.4785, 18.4021] },
+      "properties": {
+        "id": "stop_belva_crater",
+        "name": "Belva Impact Crater",
+        "badge": "☄️",
+        "type": "Impact Structure",
+        "sol": 772,
+        "elev_m": -2640,
+        "science_priority": "Medium",
+        "primary_target": "Deep Subsurface Megabreccia",
+        "description": "Large ~1 km wide impact crater penetrating the delta deposit, excavating pre-existing crater floor strata and hydrothermal rocks.",
+        "geology": "Hydrothermally altered megabreccia, tilted fault blocks, and deep-seated Isidis basin crustal units.",
+        "image_url": "https://mars.nasa.gov/system/resources/detail_files/27447_PIA25867-web.jpg",
+        "image_caption": "Mastcam-Z 360-degree panorama from Belva crater rim"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [77.3621, 18.4982] },
+      "properties": {
+        "id": "stop_neretva_vallis",
+        "name": "Neretva Vallis Inlet",
+        "badge": "🏞️",
+        "type": "Inflow River Canyon",
+        "sol": 1150,
+        "elev_m": -2420,
+        "science_priority": "Critical",
+        "primary_target": "Upstream Crustal Sieve & Boulder Fields",
+        "description": "The deep fluvial channel carved through the western rim of Jezero Crater by catastrophic torrents sourcing materials from hundreds of kilometers away.",
+        "geology": "Conglomerates with exotic volcanic clasts, quartz-bearing igneous rocks, and noachian basement terranes.",
+        "image_url": "https://mars.nasa.gov/system/resources/detail_files/28224_PIA26300-web.jpg",
+        "image_caption": "Neretva Vallis canyon breach looking upstream into Noachian highlands"
+      }
+    }
+  ]
+}
