@@ -108,6 +108,7 @@ window.MarsGlobe = (function () {
     viewer.scene.globe.ellipsoid = Cesium.Ellipsoid.MARS;
     viewer.scene.globe.baseColor = Cesium.Color.fromCssColorString("#1a0804");
     viewer.scene.globe.enableLighting = false;
+    viewer.scene.globe.depthTestAgainstTerrain = true;
     if (viewer.scene.skyAtmosphere) {
       viewer.scene.skyAtmosphere.show = true;
       viewer.scene.skyAtmosphere.hueShift = -0.55;
@@ -189,7 +190,6 @@ window.MarsGlobe = (function () {
           color: Cesium.Color.fromCssColorString(lm.color),
           outlineColor: Cesium.Color.BLACK,
           outlineWidth: 2,
-          disableDepthTestDistance: Number.POSITIVE_INFINITY,
         },
         label: {
           text: lm.name,
@@ -200,8 +200,7 @@ window.MarsGlobe = (function () {
           outlineWidth: 3,
           verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
           pixelOffset: new Cesium.Cartesian2(0, -10),
-          disableDepthTestDistance: Number.POSITIVE_INFINITY,
-          distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 15000000),
+          distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 5000000),
         },
       });
       entity.landmarkData = lm;

@@ -51,7 +51,7 @@ window.MarsSegmentPick = (function () {
       if (step === 0 && !markerB) {
         MarsSegmentDrawer.render(
           null,
-          `Route Planner Active: Click Start Point (A) inside ${siteMeta.name}.`
+          `Whole-Site Traverse Planner Active: Click Start Point (A) inside ${siteMeta.name}.`
         );
       }
     } catch (err) {

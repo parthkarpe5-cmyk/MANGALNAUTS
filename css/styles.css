@@ -265,6 +265,8 @@ body {
   padding: 0.32rem 0.2rem;
   cursor: pointer;
   outline: none;
+  max-width: 155px;
+  text-overflow: ellipsis;
 }
 
 .select-badge select option {
@@ -958,6 +960,8 @@ body {
   align-items: center;
   cursor: pointer;
   user-select: none;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .dock-btn-plan input {
@@ -977,6 +981,8 @@ body {
   border-radius: 999px;
   border: 1px solid var(--border-light);
   transition: all 0.18s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .dock-btn-plan:hover .btn-inner {
@@ -2003,4 +2009,61 @@ body {
     opacity: 1;
   }
 }
+
+/* 6. Tactical Operational Boundary Tooltip */
+.tactical-boundary-tooltip {
+  background: rgba(10, 13, 20, 0.94) !important;
+  border: 1px solid var(--border-light) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.8) !important;
+  border-radius: 4px !important;
+  padding: 3px 8px !important;
+  backdrop-filter: blur(8px);
+}
+.tactical-boundary-tooltip::before {
+  display: none !important;
+}
+
+/* 7. Responsive Aerospace Flight Cockpit */
+@media (max-width: 1450px) {
+  .status-indicator {
+    display: none !important;
+  }
+  .select-badge select {
+    max-width: 135px;
+  }
+}
+
+@media (max-width: 1250px) {
+  .nav-brand h1 .sub {
+    display: none !important;
+  }
+  .select-badge select {
+    max-width: 110px;
+  }
+  .select-badge-lbl {
+    display: none;
+  }
+  #audio-label, #wind-label {
+    font-size: 0;
+  }
+  #audio-label::before {
+    content: "🔊";
+    font-size: 0.75rem;
+  }
+  #wind-label::before {
+    content: "💨";
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 1050px) {
+  .view-mode-btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.62rem;
+  }
+  .select-badge select {
+    max-width: 90px;
+  }
+}
+
 
