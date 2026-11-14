@@ -1,6 +1,6 @@
 ---
-name: Martian Mission OS
-overview: "End-to-end plan for the Interplanetary Survival Guide challenge: extend the existing hybrid Cesium/Leaflet app into a six-role “Mission OS” using precomputed NASA-derived graphs, GNN scores, routes, and safety telemetry delivered as static JSON/GeoJSON, with P5/P6 owning the integrated cockpit UI."
+name: MANGALNAUTS Martian Mission OS
+overview: "Team MANGALNAUTS — Interplanetary Survival Guide challenge: extend the hybrid Cesium/Leaflet app in this repo into a six-role Mission OS using precomputed NASA graph/scores/routes/safety data as static JSON/GeoJSON."
 todos:
   - id: w1-contracts
     content: Define data/manifest.json + node/route/alert JSON schemas; lock Jezero AOI bbox with team
@@ -29,26 +29,71 @@ todos:
 isProject: false
 ---
 
-# Martian Map — Whole Project Plan
+# MANGALNAUTS — Martian Mission OS (whole project plan)
 
-## Challenge fit
-
-NASA asks for a **layered, integrated view** of a **location or route** that helps a suited astronaut plan a **safe, science-rich Marswalk**, using **multiple NASA missions** ([challenge brief](https://www.spaceappschallenge.org/2026/challenges/interplanetary-survival-guide-martian-map/)).
-
-**Product thesis:** *Mission OS for one AO* — **Jezero Crater** (rich CTX/HiRISE, Perseverance ground truth, challenge examples). User flows: globe → filter stacks (optical/thermal/topography) → zoom to surface → **ROVER highway** vs **Marswalk loop** with **risk heatmap**, **science stops**, **P4 conditions/alerts**, and **abort path**.
-
-**What exists today** ([`index.html`](D:\NASA Space challenge\index.html), [`js/globe.js`](D:\NASA Space challenge\js\globe.js), [`js/hybrid.js`](D:\NASA Space challenge\js\hybrid.js), [`js/detail-map.js`](D:\NASA Space challenge\js\detail-map.js)): 3D Trek globe, hybrid CTX detail pane, jump-to presets — **P5 baseline ~40% done**; **P6 shell ~25%** (HUD labels, detail header only).
+**Repo root:** `MANGALNAUTS/` (this folder).  
+**Challenge:** [Interplanetary Survival Guide: Martian Map](https://www.spaceappschallenge.org/2026/challenges/interplanetary-survival-guide-martian-map/)  
+**Delivery model:** Full six-role vision over several weeks; **runtime = static site** + precomputed `data/jezero/v1/*.json|geojson` (no live ML API required at demo).
 
 ---
 
-## Target architecture (static-data pipeline)
+## Team roles at a glance
 
-You chose **precompute → files in repo** for hackathon reliability and “full vision” over time. Runtime = static site + `python -m http.server`; no required GPU at demo time.
+| # | Role | Builds | Demo output |
+|---|------|--------|-------------|
+| P1 | GNN Model Architect | PyG GAT/GCN | `gnn_scores.json` (risk 0–1, science 0–100%) |
+| P2 | Neural Pathfinder | A* / Neural A* | `routes.geojson` (highway ≤20°, walk ≤15°, abort) |
+| P3 | Geospatial Data Engineer | HiRISE/MOLA/THEMIS/CRISM pipeline | `terrain_graph.json`, `aoi.geojson` |
+| P4 | Environmental & Radiation Safety | REMS/RAD/MCS planning data | `environment.json` + `alerts[]` |
+| P5 | Web GIS / Map Engine | Cesium + Leaflet overlays | Heatmap, routes, 60 FPS on detail map |
+| P6 | Cockpit HUD / Mission OS | Dashboard, modes, drawer | ROVER/WALK, telemetry, science UI |
+
+**Dependencies (not fully sequential):** P3 graph **blocks** real P1/P2; P5/P6 can use **mock data** in parallel from day one. P4 feeds P6 alerts; does not block the graph.
+
+---
+
+## Challenge fit
+
+NASA wants a **layered, integrated view** of a **route or site** for a **safe, science-rich Marswalk** using **multiple NASA missions**.
+
+**Product thesis:** Mission OS for one area of interest — **Jezero Crater** — globe (optical/thermal/topography filters) → zoom to surface → **risk heatmap** + **ROVER highway** / **Marswalk loop** + **abort** + **conditions/alerts**.
+
+**Built today (P5/P6 baseline):**
+
+- [`index.html`](index.html) — cockpit shell  
+- [`js/globe.js`](js/globe.js) — Cesium Mars globe, Trek filters, MDEM terrain  
+- [`js/hybrid.js`](js/hybrid.js) — &lt; ~400 km → CTX detail pane  
+- [`js/detail-map.js`](js/detail-map.js) — Leaflet CTX + MColorDEM  
+- [`js/app.js`](js/app.js) — filter UI, HUD, jump-to ([`js/config/places.js`](js/config/places.js))
+
+Rough completion: **P5 ~40%**, **P6 ~25%** (HUD labels, detail header; no routes/heatmap/drawer/modes yet).
+
+---
+
+## P5 vs P6 (who owns what)
+
+### P5 — Map engine
+
+- Everything that **renders** Mars: globe, tiles, terrain, hybrid camera, **heatmap**, **route lines**, click → node id  
+- Load artifacts via [`js/api/manifest.js`](js/api/manifest.js) (to add)  
+- Performance: precomputed heatmap on **detail map**; avoid per-frame GNN in browser  
+
+### P6 — Mission OS
+
+- **ROVER / WALK** mode, slide-out **drawer** (GNN stats, route summary, NASA surface photos)  
+- Telemetry meters (O₂, battery, EVA time — planning assumptions, not flight rules)  
+- P4 **alert banner**, abort CTA, [`docs/ASSUMPTIONS.md`](docs/ASSUMPTIONS.md), demo narrative  
+
+**Contract:** P5 draws; P6 explains. Shared JSON schemas below.
+
+---
+
+## Architecture (static-data pipeline)
 
 ```mermaid
 flowchart LR
-  subgraph offline [Offline batch P3 P1 P2 P4]
-    NASA[NASA tiles PDS ODE]
+  subgraph offline [Offline P3 P1 P2 P4]
+    NASA[NASA_PDS_Trek_OnMars]
     Graph[terrain_graph.json]
     Scores[gnn_scores.json]
     Routes[routes.geojson]
@@ -57,9 +102,9 @@ flowchart LR
     NASA --> Env
   end
   subgraph runtime [Browser P5 P6]
-    Globe[Cesium globe]
-    Detail[Leaflet CTX map]
-    HUD[Mission drawer]
+    Globe[Cesium_globe]
+    Detail[Leaflet_CTX]
+    HUD[Mission_drawer]
     Graph --> Detail
     Scores --> Detail
     Routes --> Detail
@@ -68,44 +113,51 @@ flowchart LR
   end
 ```
 
-**Integration rule:** P3–P4 never talk to the browser directly; they publish versioned artifacts under `data/jezero/v1/` with a small [`data/manifest.json`](D:\NASA Space challenge\data\manifest.json) (AOI bbox, resolution, build time, citations).
+P3–P4 publish under **`data/jezero/v1/`** plus [`data/manifest.json`](data/manifest.json) (bbox, version, build time, citations).
 
 ---
 
-## Shared contracts (agree in week 1)
+## Shared data contracts (week 1 sign-off)
 
-| Artifact | Owner | Contents |
-|----------|--------|----------|
-| `aoi.geojson` | P3/P5 | Polygon bbox, CRS note (Mars 2000 / lon-lat) |
-| `terrain_graph.json` | P3 | `nodes[]`: `{id, lat, lon, elev_m, slope_deg, themis_I, crism_class?}`; `edges[]`: `{from, to, length_m, cost_base}` |
-| `gnn_scores.json` | P1 | `nodes[id]`: `{risk_0_1, science_0_100}` + model metadata |
-| `routes.geojson` | P2 | FeatureCollection: `highway_rover` (slope ≤20°), `loop_walk` (≤15°), `abort_emergency` |
+| Artifact | Owner | Schema (summary) |
+|----------|--------|------------------|
+| `aoi.geojson` | P3/P5 | Polygon bbox; lon/lat; Mars 2000 note |
+| `terrain_graph.json` | P3 | `nodes[]` `{id, lat, lon, elev_m, slope_deg, themis_I, crism_class?}`; `edges[]` `{from, to, length_m, cost_base}` |
+| `gnn_scores.json` | P1 | `nodes[id]` `{risk_0_1, science_0_100}` + `model_meta` |
+| `routes.geojson` | P2 | Features: `highway_rover`, `loop_walk`, `abort_emergency` (properties: max_slope_deg, length_m) |
 | `environment.json` | P4 | `{site, sol, temp_C, wind_m_s, sunset_utc, rad_dose_proxy, flare_level, alerts[]}` |
-| `science_stops.geojson` | P3/P2 | CRISM/mineral highlights as points |
+| `science_stops.geojson` | P3/P2 | Point features for CRISM/high-science nodes |
 
-**Node ID stability** is the critical contract: P1 and P2 must use P3’s `id` field; P5 maps clicks to nearest node via `id` or grid index.
+**Critical:** stable **`node.id`** from P3 → used by P1, P2, P5 click lookup, P6 drawer.
+
+### Example alert object (P4 → P6)
+
+```json
+{
+  "code": "COLD_EVA",
+  "severity": "warning",
+  "message": "Forecast below suit thermal limit after sunset.",
+  "sunset_in_min": 142
+}
+```
 
 ---
 
-## Repository layout (end state)
+## Repository layout (target)
+
+All paths relative to **`MANGALNAUTS/`**:
 
 ```
-D:\NASA Space challenge\
+MANGALNAUTS/
   index.html
-  css/
+  plan.md
+  README.md
+  css/styles.css
   js/
-    globe.js, hybrid.js, detail-map.js, app.js   # P5 core (existing)
-    map/                                         # NEW P5 overlays
-      heatmap.js
-      routes.js
-      pick.js
-    mission/                                     # NEW P6
-      hud.js
-      modes.js
-      drawer.js
-      telemetry.js
-    api/                                         # NEW client loaders
-      manifest.js
+    globe.js, hybrid.js, detail-map.js, app.js, config/
+    map/              # P5 NEW: heatmap.js, routes.js, pick.js
+    mission/          # P6 NEW: hud.js, modes.js, drawer.js, telemetry.js
+    api/              # NEW: manifest.js
   data/
     manifest.json
     jezero/v1/
@@ -115,177 +167,145 @@ D:\NASA Space challenge\
       routes.geojson
       environment.json
       science_stops.geojson
-      heatmap_preview.png            # optional fast preview layer
-  python/                            # NEW P3–P4 offline (not required at runtime)
-    pipeline/
-      build_graph.py
-      sample_the_mis.py
-      sample_crism.py
-    ml/
-      train_gnn.py
-      export_scores.py
-    routing/
-      neural_astar.py                # or classical A* + learned heuristic v1
-      export_routes.py
-    safety/
-      rems_rad_snapshot.py
+      heatmap_preview.png   # optional
+  python/               # offline only
+    pipeline/build_graph.py, sample_themis.py, sample_crism.py
+    ml/train_gnn.py, export_scores.py
+    routing/neural_astar.py, export_routes.py
+    safety/rems_rad_snapshot.py
   docs/
     DATA_CITATIONS.md
     ASSUMPTIONS.md
     DEMO_SCRIPT.md
-  README.md
 ```
 
+**Run app:**
+
+```bash
+cd MANGALNAUTS
+python -m http.server 8080
+```
+
+Open `http://localhost:8080/`.
+
 ---
 
-## Six roles — deliverables and phases
+## Per-person phases
 
-### Person 3 — NASA Geospatial Data Engineer
-
-**Build:** Jezero AOI graph from NASA products.
+### P3 — Geospatial pipeline
 
 | Phase | Deliverable |
 |-------|-------------|
-| **1** | `aoi.geojson`, coarse 200–463 m lattice from MOLA/MDEM slope; ODE HiRISE footprint index for AOI |
-| **2** | THEMIS thermal inertia bins (rock vs sand proxy) per node; CRISM class or simplified mineral flag |
-| **3** | HiRISE-driven refinement patch (optional higher-res subgraph near route corridor) |
+| 1 | `aoi.geojson`, MOLA/MDEM slope grid; HiRISE footprint index (ODE) |
+| 2 | THEMIS thermal inertia bins; CRISM mineral flags per node |
+| 3 | Optional HiRISE corridor refinement near planned routes |
 
-**Sources:** Mars Trek/OnMars (already in app), PDS ODE, HiRISE/CRISM searches (per challenge resources).
-
----
-
-### Person 1 — GNN Model Architect
-
-**Build:** PyTorch Geometric GAT/GCN → traversability risk + science value.
+### P1 — GNN
 
 | Phase | Deliverable |
 |-------|-------------|
-| **1** | Features from P3 tensor; baseline **heuristic** scores (`risk = f(slope, themis)`, `science = f(crism)`) exported as `gnn_scores.json` so P5/P6 unblock |
-| **2** | Trained GNN; ablation doc; inference **<150 ms** on full AOI → batch export only (static JSON at demo) |
-| **3** | Optional: small subgraph API later; **not required** for your static-json choice |
+| 1 | Heuristic `gnn_scores.json` from slope + THEMIS (+ CRISM) to unblock UI |
+| 2 | Trained GNN; batch export; document &lt;150 ms inference on AOI |
+| 3 | (Optional) subgraph scoring — out of scope for static-json demo |
 
-**Edge features:** slope, thermal inertia, elevation change; **labels:** weak supervision from slope/themis until human labels exist.
-
----
-
-### Person 2 — Neural Pathfinder and Route Optimizer
-
-**Build:** Paths on P3 graph with P1 costs.
+### P2 — Routing
 
 | Phase | Deliverable |
 |-------|-------------|
-| **1** | Classical A* / Dijkstra with slope caps (20° rover, 15° walk) + `routes.geojson` |
-| **2** | “Neural A*” — learned heuristic or edge cost from GNN embeddings; same output schema |
-| **3** | Abort path: shortest low-risk exit to habitat waypoint; metadata on worst segment |
+| 1 | Classical A* / Dijkstra, slope caps, `routes.geojson` |
+| 2 | Learned edge costs / Neural A* heuristic |
+| 3 | Abort path to habitat waypoint; worst-segment metadata |
 
----
-
-### Person 4 — Environmental and Radiation Safety Engineer
-
-**Build:** Planning-time “current conditions” from NASA archives (not live ops).
+### P4 — Safety / environment
 
 | Phase | Deliverable |
 |-------|-------------|
-| **1** | `environment.json` template + REMS/RAD **representative sol** for Jezero region (Curiosity archive as proxy with clear caveat) |
-| **2** | Sunset countdown from astronomy + MCS **reference** temp/wind for season |
-| **3** | `alerts[]` schema (e.g. `FLARE`, `COLD_EVA`, `DUST`) consumed by P6 |
+| 1 | `environment.json` template; REMS/RAD representative sol (cite Curiosity as proxy if needed) |
+| 2 | Sunset countdown; MCS reference wind/temp for season |
+| 3 | `alerts[]` consumed by P6 banner |
 
----
-
-### Person 5 — Interactive Web GIS and Map Engine Lead
-
-**Build:** Rendering and interaction on top of existing stack.
+### P5 — Map engine
 
 | Phase | Deliverable |
 |-------|-------------|
-| **1** | [`js/api/manifest.js`](D:\NASA Space challenge\js\api\manifest.js) loads `data/`; extend [`detail-map.js`](D:\NASA Space challenge\js\detail-map.js) with route layers + legend |
-| **2** | Heatmap (canvas or Leaflet plugin) from `gnn_scores.json`; THEMIS overlay toggle on detail map |
-| **3** | Globe: low-res heatmap draped or omitted for perf; click → nearest node highlight; 60 FPS = **precomputed** heatmap, not per-frame GNN |
+| 1 | `manifest.js` + route layers on `detail-map.js` |
+| 2 | Heatmap from `gnn_scores.json`; layer legend |
+| 3 | Node pick → highlight; globe stays filter-focused (heatmap optional low-res) |
 
-**Keep:** Cesium globe + hybrid threshold in [`hybrid.js`](D:\NASA Space challenge\js\hybrid.js); challenge wants **hyperlocal** view — detail pane is primary ops map.
-
----
-
-### Person 6 — Astronaut Cockpit HUD and Mission OS Lead
-
-**Build:** Mission narrative and controls.
+### P6 — Cockpit
 
 | Phase | Deliverable |
 |-------|-------------|
-| **1** | **ROVER / WALK** mode in header; slide-out **mission drawer** (GNN stats, route summary, assumptions link) |
-| **2** | Telemetry meters (O₂, battery, EVA time) — static demo profiles + labels from [`docs/ASSUMPTIONS.md`](D:\NASA Space challenge\docs\ASSUMPTIONS.md) |
-| **3** | P4 alert banner; “Abort route” button flies map to emergency polyline; NASA Image API thumbnails at science stops |
-
-**Refactor:** Thin [`app.js`](D:\NASA Space challenge\js\app.js) → import `mission/hud.js` + `mission/modes.js` so P6 owns UI without breaking globe init.
+| 1 | ROVER/WALK toggle; mission drawer shell |
+| 2 | Telemetry strip; link to assumptions doc |
+| 3 | Alerts, abort fly-to, NASA Image API thumbs at science stops |
 
 ---
 
-## Phased timeline (full vision, static JSON)
+## Week milestones
+
+| Week | Goal | Ship? |
+|------|------|-------|
+| 1 | Contracts + **mock** `data/jezero/v1/*` + routes on map + ROVER/WALK UI | Yes |
+| 2 | Real graph, scores, three routes, heatmap | Yes |
+| 3 | Environment + alerts + drawer content | Yes |
+| 4 | Citations, demo script, pitch video story | Submit |
 
 ```mermaid
 gantt
-  title Martian Mission OS phases
+  title MANGALNAUTS phases
   dateFormat YYYY-MM-DD
   section Foundation
-  Contracts_and_AOI           :w1a, 2026-11-14, 4d
-  Mock_data_plus_routes_UI    :w1b, after w1a, 4d
-  section Data_and_ML
-  P3_graph_v1                 :w2a, after w1b, 7d
-  P1_heuristic_then_GNN       :w2b, after w2a, 7d
-  P2_routing_and_abort        :w2c, after w2a, 7d
-  section Safety_and_HUD
-  P4_environment_json         :w3a, after w2b, 5d
-  P6_cockpit_drawer           :w3b, after w1b, 14d
+  Contracts_AOI           :w1a, 2026-11-14, 4d
+  Mock_data_routes_UI    :w1b, after w1a, 4d
+  section Data_ML
+  P3_graph                :w2a, after w1b, 7d
+  P1_scores               :w2b, after w2a, 7d
+  P2_routes               :w2c, after w2a, 7d
+  section Safety_HUD
+  P4_environment          :w3a, after w2b, 5d
+  P6_cockpit              :w3b, after w1b, 14d
   section Polish
-  Citations_demo_video        :w4a, after w3a, 7d
+  Submission_pack         :w4a, after w3a, 7d
 ```
 
-| Week | Milestone | Demo-able |
-|------|-----------|-----------|
-| **1** | Manifest + mock `routes.geojson` + ROVER/WALK on Jezero detail map | Yes |
-| **2** | Real P3 graph; P1 scores; P2 three routes; heatmap on map | Yes |
-| **3** | P4 alerts in HUD; drawer with science stops + images | Yes |
-| **4** | Judging package: citations, limitations, 3-min pitch script | Submit |
+---
+
+## NASA judging checklist
+
+- ≥ **3 data types** on the same AO: optical (CTX/Viking), thermal (THEMIS), topography (MOLA), spectral (CRISM)  
+- **Safety-first** routing with slope/obstacle called out in UI  
+- **Cite every source** in `docs/DATA_CITATIONS.md` and app footer  
+- Demo arc: problem → Jezero science goal → globe filters → zoom → routes → abort → conditions  
 
 ---
 
-## NASA challenge checklist (judging)
-
-- **≥3 data types** on same route: optical (CTX/Viking), thermal (THEMIS), topography (MOLA), spectral (CRISM) — map filters + graph features.
-- **Safety-first route** with obstacles/slope called out in drawer and route metadata.
-- **Cite every source** in `docs/DATA_CITATIONS.md` and UI footer.
-- **Presentation:** problem → Jezero science goal → demo globe → zoom → routes → abort → conditions.
-
----
-
-## Risks and mitigations
+## Risks
 
 | Risk | Mitigation |
 |------|------------|
-| GNN not ready | Ship P1 heuristic scores under same JSON schema; swap file in `data/jezero/v1/` |
-| Neural A* slips | Ship classical A*; rename to “cost-optimized path” in README |
-| Cesium perf with heatmap | Heatmap **only on Leaflet detail** map |
-| REMS not at Jezero | Use MCS reference + Curiosity REMS with explicit “analog conditions” disclaimer (P4) |
-| Team parallel drift | Weekly lock on `manifest.json` version + node ID schema |
+| GNN late | Ship heuristic scores in same `gnn_scores.json` schema |
+| Neural A* late | Classical A* with GNN edge weights |
+| Heatmap perf | Detail map only; PNG preview optional |
+| No REMS at Jezero | MCS + Curiosity analog; disclaim in ASSUMPTIONS.md |
+| Parallel drift | Lock `manifest.json` version weekly |
 
 ---
 
-## Success criteria (full vision)
+## Success criteria
 
-1. User can explore Mars in 3D with Trek filters (existing).
-2. Zoom to Jezero → CTX detail with **risk heatmap** and **three route types**.
-3. ROVER vs WALK toggles visible routes and slope policy copy (P6).
-4. Click node/stop → drawer shows **risk, science %, mineral note, NASA photo**.
-5. Banner shows **sunset / temp / flare-style alert** from `environment.json`.
-6. All artifacts traceable to NASA data in citations doc.
+1. 3D globe with Trek filters (done).  
+2. Jezero detail: heatmap + highway / walk loop / abort.  
+3. ROVER vs WALK changes visible routes + policy text.  
+4. Click → drawer: risk, science %, mineral note, NASA image.  
+5. Alerts: sunset, temp, flare-style events from `environment.json`.  
+6. Full NASA data citations.  
 
 ---
 
-## Immediate next steps (when leaving Plan mode)
+## Immediate next steps
 
-1. Add `data/manifest.json` + mock Jezero bundle for P5/P6 integration testing.
-2. Split `app.js` mission UI into `js/mission/*` (P6).
-3. Add `js/map/routes.js` + `heatmap.js` wired to `MarsDetailMap` (P5).
-4. P3 starts `python/pipeline/build_graph.py` for Jezero bbox aligned with [`js/config/places.js`](D:\NASA Space challenge\js\config\places.js) Jezero center.
-
-No changes to the attached plan file from the prior 3D globe work; this plan **extends** that codebase rather than replacing it.
+1. **Team:** sign `aoi.geojson` bbox (Jezero) aligned with `js/config/places.js` (18.44°N, 77.58°E).  
+2. **P3:** scaffold `python/pipeline/build_graph.py`.  
+3. **P5/P6:** add `data/manifest.json` + mock bundle; implement `js/map/routes.js` and `js/mission/modes.js`.  
+4. **All:** read challenge Resources tab and add URLs to `docs/DATA_CITATIONS.md` as you touch each dataset.
