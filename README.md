@@ -118,3 +118,10 @@ MANGALNAUTS/
 │   └── app.js                       # Main application coordinator
 └── README.md
 ```
+
+## Measured routing terrain
+
+- Jezero uses a 20 m crop from the USGS [Mars 2020 CTX elevation mosaic](https://astrogeology.usgs.gov/search/map/mars_2020_science_investigation_ctx_dem_mosaic).
+- Gale uses a crop of the USGS HRSC–MOLA Global 200 m v2 DEM repackaged by [Martis / Team Ovikorsho](https://github.com/Dipbroto/Martis-Ovikorsho/blob/HEAD/public/data/dem/index.json).
+- Rebuild with `python build_measured_terrain.py PATH_TO_JEZERO_TIF PATH_TO_MARTIS_DEM_FOLDER` (NumPy and Pillow).
+- Old risk predictions and preset corridor files target different grids. The measured layers do not use either. Contingency inputs are simulated.

@@ -3,7 +3,7 @@ window.MarsHistoricalTraverses = (function () {
   let traversesData = null;
   let leafletLayerGroup = null;
   let cesiumEntities = [];
-  let isVisible = true;
+  let isVisible = false;
 
   const ROVER_COLORS = {
     perseverance: "#fb923c", // Mars 2020 orange

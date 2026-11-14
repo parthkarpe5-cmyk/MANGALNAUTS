@@ -25,7 +25,7 @@ window.MarsHeatmap = (function () {
       MarsData.loadGraph(),
       MarsData.loadScores(),
     ]);
-    const scoreMap = scores.nodes || scores;
+    const scoreMap = scores?.graph_id === graph.graph_id ? (scores.nodes || scores) : {};
     cachedData = { graph, scoreMap };
     return cachedData;
   }
@@ -42,18 +42,31 @@ window.MarsHeatmap = (function () {
       return;
     }
 
+    if (mode === "slope") {
+      const site = await MarsData.getActiveSiteMeta();
+      if (currentMap !== map || activeMode !== mode || !site?.files?.slope) return;
+      const b = site.bbox;
+      L.imageOverlay(site.files.slope, [[b.south, b.west], [b.north, b.east]], {
+        interactive: false,
+        className: "measured-slope-overlay",
+        alt: "Terrain slope: amber 8–15°, orange 15–20°, coral 20° or more.",
+      }).addTo(layerGroup);
+      return;
+    }
     const { graph, scoreMap } = await loadData();
+    if (currentMap !== map || activeMode !== mode) return;
     if (!graph || !graph.nodes) return;
 
     graph.nodes.forEach(function (n) {
-      const s = scoreMap[n.id] || { risk_0_1: 0.3, science_0_100: 50 };
+      const s = scoreMap[n.id];
+      if (!s) return;
       const isRisk = mode === "risk";
       const color = isRisk
         ? riskColor(s.risk_0_1)
         : scienceColor(s.science_0_100);
 
       const circle = L.circle([n.lat, n.lon], {
-        radius: 280, // ~300 meters coverage per node
+        radius: MarsDetailMap.marsRadius ? MarsDetailMap.marsRadius(280) : 280, // ~280 m (Mars) per node
         fillColor: color,
         fillOpacity: 0.45,
         stroke: true,
