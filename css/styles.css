@@ -1596,6 +1596,190 @@ body {
   margin-bottom: 0.2rem;
 }
 
+/* Science Action Row */
+.science-action-row {
+  margin-top: 0.65rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--border-light);
+}
+
+.btn-primary {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 6px;
+  background: var(--accent);
+  color: #07090d;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 800;
+  border: 1px solid var(--accent);
+  cursor: pointer;
+  box-shadow: 0 0 12px var(--accent-glow);
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 18px var(--accent-glow);
+  filter: brightness(1.1);
+}
+
+/* Route Action Bar */
+.route-action-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--border-light);
+}
+
+.route-action-bar .btn-ghost {
+  flex: 1;
+  text-align: center;
+  justify-content: center;
+}
+
+/* Drawer Overview & Sector Status Card */
+.drawer-overview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sector-status-card {
+  padding: 0.65rem 0.85rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--border-light);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.sector-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.sector-color-tag {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.sector-title-text {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--text-bright);
+  letter-spacing: 0.06em;
+}
+
+.sector-meta-line {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--muted);
+}
+
+.drawer-hint-card {
+  padding: 0.65rem 0.85rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed var(--border-light);
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.drawer-hint-card p {
+  margin: 0;
+}
+
+/* Quick Missions Group */
+.quick-missions-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.qm-group-title {
+  font-family: var(--font-display);
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: var(--accent-sub);
+  letter-spacing: 0.08em;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.qm-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.55rem 0.65rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--border-light);
+  transition: all 0.18s ease;
+}
+
+.qm-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--accent);
+}
+
+.qm-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.qm-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-bright);
+}
+
+.qm-desc {
+  font-size: 0.62rem;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.btn-qm-run {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-light);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  font-weight: 700;
+  padding: 0.3rem 0.55rem;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.btn-qm-run:hover {
+  background: var(--accent);
+  color: #07090d;
+  border-color: var(--accent);
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
 /* Markers & Popups */
 .seg-marker span {
   display: flex;

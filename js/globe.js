@@ -166,6 +166,14 @@ window.MarsGlobe = (function () {
       },
     });
 
+    window.addEventListener("mars:site-changed", function (e) {
+      if (e.detail && e.detail.siteMeta) {
+        const meta = e.detail.siteMeta;
+        const color = meta.boundary_color || (meta.id === "gale" ? "#f59e0b" : "#c9f31d");
+        updateAoiFootprint(meta.bbox, color);
+      }
+    });
+
     return viewer;
   }
 
@@ -260,14 +268,17 @@ window.MarsGlobe = (function () {
     });
   }
 
-  function updateAoiFootprint(bbox) {
+  function updateAoiFootprint(bbox, colorHex) {
     if (!aoiEntity || !bbox) return;
+    const color = Cesium.Color.fromCssColorString(colorHex || "#c9f31d");
     aoiEntity.polygon.hierarchy = Cesium.Cartesian3.fromDegreesArray([
       bbox.west, bbox.south,
       bbox.east, bbox.south,
       bbox.east, bbox.north,
       bbox.west, bbox.north,
     ]);
+    aoiEntity.polygon.material = color.withAlpha(0.2);
+    aoiEntity.polygon.outlineColor = color;
   }
 
   function setLandmarksVisible(visible) {
@@ -358,6 +369,14 @@ window.MarsGlobe = (function () {
   }
 
   function getViewer() {
+    window.addEventListener("mars:site-changed", function (e) {
+      if (e.detail && e.detail.siteMeta) {
+        const meta = e.detail.siteMeta;
+        const color = meta.boundary_color || (meta.id === "gale" ? "#f59e0b" : "#c9f31d");
+        updateAoiFootprint(meta.bbox, color);
+      }
+    });
+
     return viewer;
   }
 

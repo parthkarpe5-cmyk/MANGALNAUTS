@@ -1,4 +1,4 @@
-/* global MarsGeodesic, MarsElevationProfile, MarsTelemetry, MarsIcons, window */
+/* global MarsGeodesic, MarsElevationProfile, MarsTelemetry, MarsIcons, MarsData, MarsSegmentPick, window */
 window.MarsSegmentDrawer = (function () {
   let panel = null;
   let lastSegment = null;
@@ -10,9 +10,16 @@ window.MarsSegmentDrawer = (function () {
   function init(panelId) {
     panel = document.getElementById(panelId);
     render(null);
+
+    // Re-render when site changes
+    window.addEventListener("mars:site-changed", function () {
+      if (!lastSegment) {
+        render(null);
+      }
+    });
   }
 
-  function render(segment, statusText) {
+  async function render(segment, statusText) {
     if (!panel) return;
     if (statusText) {
       panel.innerHTML =
@@ -22,23 +29,84 @@ window.MarsSegmentDrawer = (function () {
         '</div>';
       return;
     }
+
     if (!segment) {
+      lastSegment = null;
+      const siteMeta = window.MarsData && window.MarsData.getActiveSiteMeta
+        ? await MarsData.getActiveSiteMeta()
+        : null;
+
+      const siteName = siteMeta ? siteMeta.name : "Jezero Crater (Western Delta)";
+      const rover = siteMeta ? siteMeta.rover : "Perseverance (Mars 2020)";
+      const color = siteMeta?.boundary_color || (siteMeta?.id === "gale" ? "#f59e0b" : "#c9f31d");
+      const quickMissions = siteMeta?.quick_missions || [];
+
+      let qmHtml = "";
+      if (quickMissions.length > 0) {
+        qmHtml = '<div class="quick-missions-group">' +
+          '  <div class="qm-group-title">VERIFIED MISSION SCENARIOS</div>';
+        quickMissions.forEach(function (qm) {
+          qmHtml +=
+            '<div class="qm-card">' +
+            '  <div class="qm-info">' +
+            '    <div class="qm-title">' + qm.title + '</div>' +
+            '    <div class="qm-desc">' + qm.desc + '</div>' +
+            '  </div>' +
+            '  <button type="button" class="btn-qm-run" data-flat="' + qm.from.lat + '" data-flon="' + qm.from.lon + '" data-tlat="' + qm.to.lat + '" data-tlon="' + qm.to.lon + '">' +
+            '    <span>Run Traverse</span> ➔' +
+            '  </button>' +
+            '</div>';
+        });
+        qmHtml += '</div>';
+      }
+
       panel.innerHTML =
-        '<div class="drawer-empty">' +
-        '  <div class="drawer-empty-icon">' + ic("crosshair") + '</div>' +
-        '  <h4 class="drawer-empty-title">TACTICAL MISSION NAVIGATOR</h4>' +
-        '  <p class="drawer-hint">Activate <strong>Plan Segment (A→B)</strong> on the surface toolbar, then select any two points on the CTX map to calculate optimal surface traverse, slope profile, and life-support consumables.</p>' +
-        '  <div class="drawer-tip">' + ic("sparkles") + ' Tip: Click any <strong>Science Stop</strong> marker (e.g. Western Delta) to inspect high-resolution NASA rover photography &amp; geologic data.</div>' +
+        '<div class="drawer-overview">' +
+        '  <div class="sector-status-card" style="border-left: 3px solid ' + color + ';">' +
+        '    <div class="sector-badge-row">' +
+        '      <span class="sector-color-tag" style="background: ' + color + ';"></span>' +
+        '      <span class="sector-title-text">' + siteName.toUpperCase() + '</span>' +
+        '    </div>' +
+        '    <div class="sector-meta-line">' +
+        '      <span>ROVER: <strong>' + rover + '</strong></span> · ' +
+        '      <span>BOUNDARY: <strong style="color: ' + color + ';">ACTIVE</strong></span>' +
+        '    </div>' +
+        '  </div>' +
+        '  <div class="drawer-hint-card">' +
+        '    <p>Select any two points on the map or click a verified scenario below to calculate an optimal GNN safe route, slope profile, and life support consumables.</p>' +
+        '  </div>' +
+        qmHtml +
         '</div>';
+
+      // Bind quick mission buttons
+      panel.querySelectorAll(".btn-qm-run").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          const flat = parseFloat(btn.dataset.flat);
+          const flon = parseFloat(btn.dataset.flon);
+          const tlat = parseFloat(btn.dataset.tlat);
+          const tlon = parseFloat(btn.dataset.tlon);
+          if (window.MarsSegmentPick) {
+            MarsSegmentPick.planRoute(flat, flon, tlat, tlon);
+          }
+        });
+      });
       return;
     }
+
     if (segment.error) {
       panel.innerHTML =
         '<div class="drawer-error-box">' +
         '  <span class="error-badge">ERROR</span>' +
         '  <p class="drawer-error"></p>' +
+        '  <button type="button" class="btn-ghost" id="drawer-retry-btn" style="margin-top: 0.5rem;">Reset Route</button>' +
         "</div>";
       panel.querySelector(".drawer-error").textContent = segment.error;
+      const retryBtn = document.getElementById("drawer-retry-btn");
+      if (retryBtn) {
+        retryBtn.addEventListener("click", function () {
+          if (window.MarsSegmentPick) MarsSegmentPick.reset();
+        });
+      }
       return;
     }
 
@@ -74,7 +142,7 @@ window.MarsSegmentDrawer = (function () {
         '  <div class="section-title-row">' +
         "    <h4>" +
         ic("zap") +
-        " EVA Consumables Projection</h4>" +
+        " Consumables Projection</h4>" +
         '    <span class="badge-mini">' +
         (segment.mode === "walk" ? "EVA SUIT" : "ROVER CABIN") +
         "</span>" +
@@ -83,7 +151,7 @@ window.MarsSegmentDrawer = (function () {
         '    <div class="consumable-item">' +
         '      <span class="c-icon">' +
         ic("clock") +
-        '</span>' +
+        "</span>" +
         '      <div class="c-info">' +
         '        <span class="c-label">Est. Duration</span>' +
         '        <span class="c-val font-mono">' +
@@ -94,7 +162,7 @@ window.MarsSegmentDrawer = (function () {
         '    <div class="consumable-item">' +
         '      <span class="c-icon">' +
         ic("oxygen") +
-        '</span>' +
+        "</span>" +
         '      <div class="c-info">' +
         '        <span class="c-label">O₂ Required</span>' +
         '        <span class="c-val font-mono">' +
@@ -105,7 +173,7 @@ window.MarsSegmentDrawer = (function () {
         '    <div class="consumable-item">' +
         '      <span class="c-icon">' +
         ic("battery") +
-        '</span>' +
+        "</span>" +
         '      <div class="c-info">' +
         '        <span class="c-label">Energy Draw</span>' +
         '        <span class="c-val font-mono">' +
@@ -135,7 +203,7 @@ window.MarsSegmentDrawer = (function () {
 
     panel.innerHTML =
       '<div class="drawer-header-row">' +
-      '  <h3 class="drawer-title">' + ic("route") + ' ROUTE INTEL</h3>' +
+      '  <h3 class="drawer-title">' + ic("route") + ' OPTIMAL SAFE TRAVERSE</h3>' +
       '  <span class="drawer-feasible ' + feasClass + '">' + feasText + '</span>' +
       '</div>' +
       '<div class="drawer-stats-grid">' +
@@ -158,14 +226,14 @@ window.MarsSegmentDrawer = (function () {
       '    <div class="meter-bar"><div class="meter-fill risk-fill" style="width:' + riskPercent + '%"></div></div>' +
       '  </div>' +
       '</div>' +
-      '<div class="nodes-banner">' +
-      '  <span class="nodes-label">Waypoints</span>' +
-      '  <span class="nodes-val font-mono">' + segment.from.node_id + ' &rarr; ' + segment.to.node_id + '</span>' +
-      '</div>' +
       consumablesHtml +
-      profileHtml;
+      profileHtml +
+      '<div class="route-action-bar">' +
+      '  <button type="button" class="btn-ghost btn-sm" id="btn-reverse-route">🔄 Reverse Path</button>' +
+      '  <button type="button" class="btn-ghost btn-sm" id="btn-clear-active-route">✕ Clear Route</button>' +
+      '</div>';
 
-    // Synchronize elevation cross-section hover with interactive map scrubber cursor
+    // Hook up elevation scrubber
     const svgEl = panel.querySelector(".elevation-profile-svg");
     if (svgEl && segment.path_nodes && segment.path_nodes.length > 1) {
       const totalDist = segment.path_nodes[segment.path_nodes.length - 1].dist_m;
@@ -193,15 +261,36 @@ window.MarsSegmentDrawer = (function () {
         }
       });
     }
+
+    // Action buttons
+    const clearBtn = document.getElementById("btn-clear-active-route");
+    if (clearBtn) {
+      clearBtn.addEventListener("click", function () {
+        if (window.MarsSegmentPick) MarsSegmentPick.reset();
+      });
+    }
+
+    const revBtn = document.getElementById("btn-reverse-route");
+    if (revBtn && segment.from && segment.to) {
+      revBtn.addEventListener("click", function () {
+        if (window.MarsSegmentPick) {
+          MarsSegmentPick.planRoute(segment.to.lat, segment.to.lon, segment.from.lat, segment.from.lon);
+        }
+      });
+    }
   }
 
-  function renderScienceStop(stop) {
+  async function renderScienceStop(stop) {
     if (!panel) return;
-    const catIcon = stop.type.includes("Delta")
+    const catIcon = (stop.type || "").includes("Delta")
       ? ic("waves")
-      : stop.type.includes("Landing")
+      : (stop.type || "").includes("Landing")
       ? ic("rocket")
       : ic("mountain");
+
+    const siteMeta = window.MarsData && window.MarsData.getActiveSiteMeta
+      ? await MarsData.getActiveSiteMeta()
+      : null;
 
     panel.innerHTML =
       '<div class="science-card">' +
@@ -209,7 +298,7 @@ window.MarsSegmentDrawer = (function () {
       '    <div class="stop-avatar">' + catIcon + '</div>' +
       '    <div class="stop-head-text">' +
       '      <h3>' + stop.name + '</h3>' +
-      '      <span class="type-tag">' + stop.type + '</span>' +
+      '      <span class="type-tag">' + (stop.type || "Science Target") + '</span>' +
       '    </div>' +
       '    <button type="button" class="btn-ghost btn-icon close-card-btn" id="close-science-card" title="Close Intel">' + ic("close") + '</button>' +
       '  </div>' +
@@ -220,21 +309,24 @@ window.MarsSegmentDrawer = (function () {
           '      <span class="img-caption">' + (stop.image_caption || "") + '</span>' +
           '    </div>' +
           '  </div>'
-        : '') +
+        : "") +
       '  <div class="science-details">' +
       '    <div class="meta-pills">' +
-      '      <span class="meta-pill"><strong>Discovery:</strong> Sol ' + stop.sol + '</span>' +
-      '      <span class="meta-pill"><strong>Elevation:</strong> ' + stop.elev_m + ' m</span>' +
-      '      <span class="meta-pill priority-' + (stop.science_priority || "").toLowerCase() + '">Priority: ' + stop.science_priority + '</span>' +
+      '      <span class="meta-pill"><strong>Discovery:</strong> Sol ' + (stop.sol != null ? stop.sol : "Initial") + '</span>' +
+      '      <span class="meta-pill"><strong>Elevation:</strong> ' + (stop.elev_m != null ? stop.elev_m + " m" : "—") + '</span>' +
+      '      <span class="meta-pill priority-' + (stop.science_priority || "normal").toLowerCase() + '">Priority: ' + (stop.science_priority || "High") + '</span>' +
       '    </div>' +
       '    <div class="intel-block">' +
       '      <div class="intel-label">PRIMARY SCIENCE TARGET</div>' +
-      '      <div class="intel-content">' + stop.primary_target + '</div>' +
+      '      <div class="intel-content">' + (stop.primary_target || stop.name) + '</div>' +
       '    </div>' +
-      '    <p class="desc">' + stop.description + '</p>' +
+      '    <p class="desc">' + (stop.description || "Documented scientific target analyzed by rover instruments.") + '</p>' +
       '    <div class="geology-box">' +
       '      <div class="geo-label">GEOLOGIC CONTEXT</div>' +
-      '      ' + stop.geology +
+      '      ' + (stop.geology || "Stratified Martian sedimentary/bedrock outcrop.") +
+      '    </div>' +
+      '    <div class="science-action-row">' +
+      '      <button type="button" class="btn-primary" id="btn-route-to-stop">🎯 Plan Route to this Target</button>' +
       '    </div>' +
       '  </div>' +
       '</div>';
@@ -243,6 +335,21 @@ window.MarsSegmentDrawer = (function () {
     if (closeBtn) {
       closeBtn.onclick = function () {
         render(lastSegment);
+      };
+    }
+
+    const routeToStopBtn = document.getElementById("btn-route-to-stop");
+    if (routeToStopBtn) {
+      routeToStopBtn.onclick = function () {
+        // Base coordinates: default to landing site
+        const baseLat = siteMeta?.id === "gale" ? -4.5895 : 18.4447;
+        const baseLon = siteMeta?.id === "gale" ? 137.4417 : 77.4509;
+        const stopLat = stop.lat != null ? stop.lat : (stop.coordinates ? stop.coordinates[1] : 18.4312);
+        const stopLon = stop.lon != null ? stop.lon : (stop.coordinates ? stop.coordinates[0] : 77.4128);
+
+        if (window.MarsSegmentPick) {
+          MarsSegmentPick.planRoute(baseLat, baseLon, stopLat, stopLon);
+        }
       };
     }
   }

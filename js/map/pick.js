@@ -16,37 +16,46 @@ window.MarsSegmentPick = (function () {
   async function showCoverage() {
     const request = ++coverageRequest;
     try {
-      const { bbox } = await MarsData.loadManifest();
+      const siteMeta = await MarsData.getActiveSiteMeta();
+      const bbox = siteMeta?.bbox;
       if (!active || request !== coverageRequest || !bbox) return;
+
       const bounds = [
         [bbox.south, bbox.west],
         [bbox.north, bbox.east],
       ];
-      if (coverageLayer) map.removeLayer(coverageLayer);
+      const color = siteMeta.boundary_color || (siteMeta.id === "gale" ? "#f59e0b" : "#c9f31d");
+
+      if (coverageLayer && map) map.removeLayer(coverageLayer);
       coverageLayer = L.rectangle(bounds, {
-        color: "#38bdf8",
-        weight: 1.5,
-        dashArray: "6 6",
+        color: color,
+        weight: 2,
+        dashArray: "6, 6",
         fill: true,
-        fillColor: "#38bdf8",
-        fillOpacity: 0.03,
+        fillColor: color,
+        fillOpacity: 0.05,
         interactive: false,
       }).addTo(map);
-      map.invalidateSize();
-      map.fitBounds(bounds, { padding: [20, 20], animate: false });
+
+      // Smoothly pan into view if out of bounds
+      const center = map.getCenter();
+      if (
+        center.lat < bbox.south ||
+        center.lat > bbox.north ||
+        center.lng < bbox.west ||
+        center.lng > bbox.east
+      ) {
+        map.fitBounds(bounds, { padding: [24, 24], animate: true });
+      }
+
       if (step === 0 && !markerB) {
         MarsSegmentDrawer.render(
           null,
-          "Click point A inside the outlined mission area."
+          `Route Planner Active: Click Start Point (A) inside ${siteMeta.name}.`
         );
       }
-    } catch {
-      if (active && request === coverageRequest) {
-        MarsSegmentDrawer.render(
-          null,
-          "Could not load the routing area. Refresh and try again."
-        );
-      }
+    } catch (err) {
+      console.warn("[MarsSegmentPick] showCoverage error:", err);
     }
   }
 
@@ -59,15 +68,15 @@ window.MarsSegmentPick = (function () {
   }
 
   function clearMarkers() {
-    if (markerA) {
+    if (markerA && map) {
       map.removeLayer(markerA);
       markerA = null;
     }
-    if (markerB) {
+    if (markerB && map) {
       map.removeLayer(markerB);
       markerB = null;
     }
-    if (lineLayer) {
+    if (lineLayer && map) {
       map.removeLayer(lineLayer);
       lineLayer = null;
     }
@@ -77,26 +86,104 @@ window.MarsSegmentPick = (function () {
     step = 0;
   }
 
+  /**
+   * Programmatic route execution for Quick Mission presets & Science Stop clicks
+   */
+  async function planRoute(latA, lonA, latB, lonB) {
+    ensureMap();
+    clearMarkers();
+
+    // Enable planner checkbox in UI if present
+    const planCheckbox = document.getElementById("plan-segment");
+    if (planCheckbox && !planCheckbox.checked) {
+      planCheckbox.checked = true;
+      setActive(true);
+    }
+
+    if (window.MarsAudio) window.MarsAudio.playLock();
+    MarsSegmentDrawer.render(null, "Computing optimal Martian traverse & GNN safety scores…");
+
+    try {
+      const graph = await MarsData.loadGraph();
+      const nodeA = MarsRouteBetween.snapNearest(graph, latA, lonA);
+      const nodeB = MarsRouteBetween.snapNearest(graph, latB, lonB);
+
+      const startLat = nodeA ? nodeA.lat : latA;
+      const startLon = nodeA ? nodeA.lon : lonA;
+      const goalLat = nodeB ? nodeB.lat : latB;
+      const goalLon = nodeB ? nodeB.lon : lonB;
+
+      // Drop snapped markers
+      markerA = L.marker([startLat, startLon], {
+        icon: MarsRouteRenderer.createWaypointPin("start", "A", "#22c55e"),
+      }).addTo(map);
+
+      markerB = L.marker([goalLat, goalLon], {
+        icon: MarsRouteRenderer.createWaypointPin("target", "B", "#5eb8ff"),
+      }).addTo(map);
+
+      const segment = await MarsRouteBetween.solve(startLat, startLon, goalLat, goalLon);
+      lastSolvedSegment = segment;
+
+      if (segment.path_found && segment.path_nodes && segment.path_nodes.length > 1) {
+        const latlngs = segment.path_nodes.map((n) => [n.lat, n.lon]);
+        const routeColor = segment.feasible ? "#c9f31d" : "#ef4444";
+
+        lineLayer = MarsRouteRenderer.createCorridorLayer(latlngs, {
+          color: routeColor,
+          animated: true,
+          drawIn: true,
+          ticks: true,
+          pathNodes: segment.path_nodes,
+        }).addTo(map);
+
+        // Zoom map to encompass the route
+        map.fitBounds(L.latLngBounds(latlngs), { padding: [40, 40], animate: true });
+      }
+
+      if (window.MarsAudio) window.MarsAudio.playSuccess();
+      MarsSegmentDrawer.render(segment);
+    } catch (err) {
+      MarsSegmentDrawer.render({ error: err.message });
+    }
+
+    step = 0;
+    pointA = null;
+  }
+
   async function onMapClick(e) {
     if (!active) return;
     const lat = e.latlng.lat;
     const lon = e.latlng.lng;
 
+    const graph = await MarsData.loadGraph().catch(() => null);
+    if (!graph) return;
+
     if (step === 0) {
       clearMarkers();
-      pointA = { lat, lon };
-      markerA = L.marker([lat, lon], {
+      const nodeA = MarsRouteBetween.snapNearest(graph, lat, lon);
+      const snapLat = nodeA ? nodeA.lat : lat;
+      const snapLon = nodeA ? nodeA.lon : lon;
+
+      pointA = { lat: snapLat, lon: snapLon };
+      markerA = L.marker([snapLat, snapLon], {
         icon: MarsRouteRenderer.createWaypointPin("start", "A", "#22c55e"),
       }).addTo(map);
+
       step = 1;
       if (window.MarsAudio) window.MarsAudio.playClick();
-      MarsSegmentDrawer.render(null, "Now click point B (Objective destination).");
+      MarsSegmentDrawer.render(null, "Point A set. Now click Destination Point B on the map.");
       return;
     }
 
-    markerB = L.marker([lat, lon], {
+    const nodeB = MarsRouteBetween.snapNearest(graph, lat, lon);
+    const snapLatB = nodeB ? nodeB.lat : lat;
+    const snapLonB = nodeB ? nodeB.lon : lon;
+
+    markerB = L.marker([snapLatB, snapLonB], {
       icon: MarsRouteRenderer.createWaypointPin("target", "B", "#5eb8ff"),
     }).addTo(map);
+
     if (window.MarsAudio) window.MarsAudio.playLock();
     MarsSegmentDrawer.render(null, "Computing optimal Martian traverse & GNN safety scores…");
 
@@ -104,18 +191,15 @@ window.MarsSegmentPick = (function () {
       const segment = await MarsRouteBetween.solve(
         pointA.lat,
         pointA.lon,
-        lat,
-        lon
+        snapLatB,
+        snapLonB
       );
       lastSolvedSegment = segment;
 
       if (segment.path_found && segment.path_nodes && segment.path_nodes.length > 1) {
-        const latlngs = segment.path_nodes.map(function (n) {
-          return [n.lat, n.lon];
-        });
+        const latlngs = segment.path_nodes.map((n) => [n.lat, n.lon]);
         const routeColor = segment.feasible ? "#c9f31d" : "#ef4444";
 
-        // Render advanced multi-layer glowing sci-fi corridor with directional pulse & km ticks
         lineLayer = MarsRouteRenderer.createCorridorLayer(latlngs, {
           color: routeColor,
           animated: true,
@@ -124,10 +208,7 @@ window.MarsSegmentPick = (function () {
           pathNodes: segment.path_nodes,
         }).addTo(map);
       } else if (segment.geometry) {
-        // Fallback for simple geometry
-        const latlngs = segment.geometry.coordinates.map(function (c) {
-          return [c[1], c[0]];
-        });
+        const latlngs = segment.geometry.coordinates.map((c) => [c[1], c[0]]);
         lineLayer = MarsRouteRenderer.createCorridorLayer(latlngs, {
           color: segment.feasible ? "#c9f31d" : "#ef4444",
           animated: true,
@@ -146,9 +227,6 @@ window.MarsSegmentPick = (function () {
     pointA = null;
   }
 
-  /**
-   * Highlights a distance location along the active solved route (synced with elevation scrubber)
-   */
   function showScrubber(distM) {
     if (!lastSolvedSegment || !lastSolvedSegment.path_nodes || !map) return;
     const nodes = lastSolvedSegment.path_nodes;
@@ -209,7 +287,7 @@ window.MarsSegmentPick = (function () {
     if (on) {
       m.on("click", clickHandler);
       showCoverage();
-      MarsSegmentDrawer.render(null, "Click point A inside the routing area.");
+      MarsSegmentDrawer.render(null, "Route Planner Active: Click Start Point (A).");
     } else {
       m.off("click", clickHandler);
       coverageRequest++;
@@ -218,14 +296,16 @@ window.MarsSegmentPick = (function () {
         coverageLayer = null;
       }
       clearMarkers();
-      MarsSegmentDrawer.render(null, "Plan segment is off.");
+      MarsSegmentDrawer.render(null);
     }
   }
 
   function reset() {
     if (map) clearMarkers();
     if (active) {
-      MarsSegmentDrawer.render(null, "Click point A inside the routing area.");
+      MarsSegmentDrawer.render(null, "Route Planner Active: Click Start Point (A).");
+    } else {
+      MarsSegmentDrawer.render(null);
     }
   }
 
@@ -233,5 +313,17 @@ window.MarsSegmentPick = (function () {
     return active;
   }
 
-  return { setActive, reset, isActive, showScrubber, hideScrubber };
+  function getLastSolvedSegment() {
+    return lastSolvedSegment;
+  }
+
+  return {
+    setActive,
+    reset,
+    isActive,
+    showScrubber,
+    hideScrubber,
+    planRoute,
+    getLastSolvedSegment,
+  };
 })();

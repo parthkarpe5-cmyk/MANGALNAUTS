@@ -22,36 +22,86 @@
       "name": "Jezero Crater (Western Delta)",
       "rover": "Perseverance (Mars 2020)",
       "graph_id": "jezero_delta_v1",
+      "boundary_color": "#c9f31d",
       "center": { "lat": 18.4447, "lon": 77.4509 },
       "bbox": { "west": 77.355, "east": 77.485, "south": 18.395, "north": 18.505 },
       "datum_elev_m": -2530.0,
       "globe_camera": { "lat": 18.44, "lon": 77.45, "height": 75000 },
       "detail_zoom": 10,
       "files": {
+        "aoi": "data/jezero/v1/aoi.geojson",
         "terrain_graph": "data/jezero/v1/terrain_graph.json",
         "gnn_scores": "data/jezero/v1/gnn_scores.json",
         "science_stops": "data/jezero/v1/science_stops.geojson",
         "routes": "data/jezero/v1/routes.geojson",
         "environment": "data/jezero/v1/environment.json"
-      }
+      },
+      "quick_missions": [
+        {
+          "id": "landing_to_delta",
+          "title": "Landing Site → Western Delta Scarp",
+          "desc": "Primary traverse from Octavia E. Butler Landing to the Three Forks delta front.",
+          "from": { "lat": 18.4447, "lon": 77.4509 },
+          "to": { "lat": 18.4312, "lon": 77.4128 }
+        },
+        {
+          "id": "delta_to_kodiak",
+          "title": "Western Delta → Kodiak Butte",
+          "desc": "Reconnaissance of the ancient delta erosional remnant.",
+          "from": { "lat": 18.4312, "lon": 77.4128 },
+          "to": { "lat": 18.4185, "lon": 77.4352 }
+        },
+        {
+          "id": "kodiak_to_belva",
+          "title": "Kodiak Butte → Belva Crater",
+          "desc": "Sample caching traverse near the Belva impact ejecta rim.",
+          "from": { "lat": 18.4185, "lon": 77.4352 },
+          "to": { "lat": 18.4055, "lon": 77.462 }
+        }
+      ]
     },
     "gale": {
       "id": "gale",
       "name": "Gale Crater (Mount Sharp / Aeolis Mons)",
       "rover": "Curiosity (MSL)",
       "graph_id": "gale_mount_sharp_v1",
+      "boundary_color": "#f59e0b",
       "center": { "lat": -4.650, "lon": 137.400 },
       "bbox": { "west": 137.330, "east": 137.460, "south": -4.720, "north": -4.580 },
       "datum_elev_m": -4450.0,
       "globe_camera": { "lat": -4.65, "lon": 137.40, "height": 95000 },
       "detail_zoom": 10,
       "files": {
+        "aoi": "data/gale/v1/aoi.geojson",
         "terrain_graph": "data/gale/v1/terrain_graph.json",
         "gnn_scores": "data/gale/v1/gnn_scores.json",
         "science_stops": "data/gale/v1/science_stops.geojson",
         "routes": "data/gale/v1/routes.geojson",
         "environment": "data/gale/v1/environment.json"
-      }
+      },
+      "quick_missions": [
+        {
+          "id": "bradbury_to_yellowknife",
+          "title": "Bradbury Landing → Yellowknife Bay",
+          "desc": "Initial mudstone sampling campaign at Sheepbed member.",
+          "from": { "lat": -4.5895, "lon": 137.4417 },
+          "to": { "lat": -4.5925, "lon": 137.4485 }
+        },
+        {
+          "id": "yellowknife_to_kimberley",
+          "title": "Yellowknife Bay → The Kimberley",
+          "desc": "Traverse to triple-sandstone outcrop intersection.",
+          "from": { "lat": -4.5925, "lon": 137.4485 },
+          "to": { "lat": -4.6148, "lon": 137.3982 }
+        },
+        {
+          "id": "kimberley_to_verarubin",
+          "title": "The Kimberley → Vera Rubin Ridge",
+          "desc": "Ascent into hematite-rich ridge along Mount Sharp lower foothills.",
+          "from": { "lat": -4.6148, "lon": 137.3982 },
+          "to": { "lat": -4.6850, "lon": 137.3780 }
+        }
+      ]
     }
   },
   "global_datasets": {

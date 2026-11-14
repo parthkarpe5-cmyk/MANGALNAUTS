@@ -1,9 +1,10 @@
-/* global L, window, MarsPlaces */
+/* global L, window, MarsPlaces, MarsData */
 window.MarsDetailMap = (function () {
   let map = null;
   let vikingLayer = null;
   let reliefLayer = null;
   let hiriseLayer = null;
+  let boundaryLayer = null;
   let initialized = false;
   let currentSite = "jezero";
 
@@ -29,7 +30,7 @@ window.MarsDetailMap = (function () {
       maxBounds: MARS_BOUNDS,
       maxBoundsViscosity: 1,
       worldCopyJump: false,
-      zoomControl: false, // will position cleanly
+      zoomControl: false,
     });
 
     // Custom sleek zoom control in bottom-right
@@ -44,7 +45,7 @@ window.MarsDetailMap = (function () {
       attribution: "NASA Mars Trek / Viking MDIM 2.1 Mosaic",
     }).addTo(map);
 
-    // 2. Relief Overlay: HRSC-MOLA 200m Shaded Relief (multiplies hillshade for 3D depth)
+    // 2. Relief Overlay: HRSC-MOLA 200m Shaded Relief (3D depth)
     reliefLayer = L.tileLayer(RELIEF_URL, {
       maxZoom: 17,
       maxNativeZoom: 8,
@@ -57,7 +58,10 @@ window.MarsDetailMap = (function () {
     // 3. Localized Sub-Meter HiRISE Orthomosaic for Active Hero Sector
     updateHiRiseLayer();
 
-    // Listen for site changes to update sector tiles
+    // 4. Operational Site Boundary with Distinctive High-Tech Color
+    updateSiteBoundary();
+
+    // Listen for site changes to update sector tiles and boundary
     window.addEventListener("mars:site-changed", function (e) {
       if (e.detail && e.detail.siteKey) {
         setSite(e.detail.siteKey);
@@ -97,6 +101,38 @@ window.MarsDetailMap = (function () {
     }
   }
 
+  async function updateSiteBoundary() {
+    if (!map) return;
+    if (boundaryLayer) {
+      map.removeLayer(boundaryLayer);
+      boundaryLayer = null;
+    }
+
+    const meta = window.MarsData && window.MarsData.getActiveSiteMeta
+      ? await MarsData.getActiveSiteMeta()
+      : null;
+
+    if (!meta || !meta.bbox) return;
+
+    const b = meta.bbox;
+    const color = meta.boundary_color || (currentSite === "gale" ? "#f59e0b" : "#c9f31d");
+
+    boundaryLayer = L.rectangle(
+      [
+        [b.south, b.west],
+        [b.north, b.east],
+      ],
+      {
+        color: color,
+        weight: 2.5,
+        dashArray: "8, 6",
+        fillColor: color,
+        fillOpacity: 0.04,
+        interactive: false,
+      }
+    ).addTo(map);
+  }
+
   function flyTo(lat, lon, zoom) {
     if (!map) return;
     map.flyTo([lat, lon], zoom != null ? zoom : 10, { duration: 0.6 });
@@ -110,6 +146,7 @@ window.MarsDetailMap = (function () {
   function setSite(siteKey) {
     currentSite = siteKey || "jezero";
     updateHiRiseLayer();
+    updateSiteBoundary();
     if (!map) return;
     const place = window.MarsPlaces ? window.MarsPlaces[siteKey] : null;
     if (place) {

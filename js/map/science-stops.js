@@ -42,6 +42,8 @@ window.MarsScienceStops = (function () {
     data.features.forEach(function (feat) {
       const p = feat.properties;
       const coords = feat.geometry.coordinates; // [lon, lat]
+      p.lat = coords[1];
+      p.lon = coords[0];
       const marker = L.marker([coords[1], coords[0]], {
         icon: stopIcon(p.type),
       });

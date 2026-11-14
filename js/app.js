@@ -180,6 +180,10 @@
     populateFilters();
     try {
       await MarsGlobe.init("globe");
+      const v = MarsGlobe.getViewer();
+      if (v && window.MarsHistoricalTraverses) {
+        window.MarsHistoricalTraverses.initCesium(v);
+      }
       onFilterChange();
     } catch (e) {
       console.error("[MarsGlobe] Globe init error:", e);
