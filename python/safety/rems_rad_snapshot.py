@@ -11,8 +11,11 @@ Description:
 """
 
 import os
+import sys
 import json
 import math
+import time
+import argparse
 import datetime
 import urllib.request
 import urllib.error
@@ -293,13 +296,8 @@ def build_environment_snapshot():
     return output
 
 
-def main():
-    print("=======================================================")
-    print("MANGALNAUTS — Person 4: Environmental & Radiation Safety")
-    print(f"Target: {SITE_NAME} ({SITE_LAT}°N, {SITE_LON}°E)")
-    print("Connecting to live NASA & NOAA planetary telemetry...")
-    print("=======================================================")
-
+def run_once():
+    """Runs a single live capture cycle and writes environment.json."""
     snapshot = build_environment_snapshot()
 
     # Determine output path: data/jezero/v1/environment.json
@@ -311,16 +309,47 @@ def main():
     with open(out_file, "w", encoding="utf-8") as f:
         json.dump(snapshot, f, indent=2)
 
-    print(f"[SUCCESS] Exported live environment snapshot to: {out_file}")
-    print(f"  • Sol: {snapshot['sol']} ({snapshot['season']})")
-    print(f"  • Local True Solar Time: {snapshot['local_solar_time']}")
-    print(f"  • Current Temperature: {snapshot['temp_C']}°C (Low: {snapshot['temp_min_C']}°C, High: {snapshot['temp_max_C']}°C)")
-    print(f"  • Atmospheric Pressure: {snapshot['pressure_pa']} Pa")
-    print(f"  • Radiation Dose: {snapshot['rad_dose_proxy']} µSv/hr (Solar Flare: {snapshot['flare_level']})")
-    print(f"  • Sunset Countdown: {snapshot['sunset_in_min']} min remaining")
-    print(f"  • Active Alerts Emitted: {len(snapshot['alerts'])}")
+    timestamp = datetime.datetime.now().strftime("%H:%M:%S")
+    print(f"[{timestamp}] [LIVE UPDATE] Exported to: data/jezero/v1/environment.json")
+    print(f"  • Sol: {snapshot['sol']} | LST: {snapshot['local_solar_time']} | Daylight: {snapshot['is_daylight']}")
+    print(f"  • Temp: {snapshot['temp_C']}°C (Min: {snapshot['temp_min_C']}°C, Max: {snapshot['temp_max_C']}°C) | Pressure: {snapshot['pressure_pa']} Pa")
+    print(f"  • Rad: {snapshot['rad_dose_proxy']} µSv/hr | Solar Activity: {snapshot['flare_level']}")
+    print(f"  • Sunset: {snapshot['sunset_in_min']} min remaining | Active Alerts: {len(snapshot['alerts'])}")
     for a in snapshot["alerts"]:
         print(f"    - [{a['severity'].upper()}] {a['code']}: {a['message']}")
+    return snapshot
+
+
+def main():
+    parser = argparse.ArgumentParser(description="MANGALNAUTS Live Martian Weather & Space Weather Engine")
+    parser.add_argument("--watch", action="store_true", help="Run continuously with auto-refresh")
+    parser.add_argument("--interval", type=int, default=60, help="Refresh interval in seconds (default: 60)")
+    args = parser.parse_args()
+
+    print("=======================================================")
+    print("MANGALNAUTS — Person 4: Environmental & Radiation Safety")
+    print(f"Target: {SITE_NAME} ({SITE_LAT}°N, {SITE_LON}°E)")
+    print(f"NASA API Key: {'Authenticated' if NASA_API_KEY != 'DEMO_KEY' else 'DEMO_KEY'}")
+    if args.watch:
+        print(f"Mode: AUTO-REFRESH LIVE (Every {args.interval}s)")
+        print(f"Hourly rate: ~{3600 // args.interval} requests/hr (Safe limit: 1000/hr)")
+    else:
+        print("Mode: Single Snapshot (pass --watch for continuous live updates)")
+    print("=======================================================")
+
+    if not args.watch:
+        run_once()
+        return
+
+    # Continuous auto-refresh loop
+    print("Press Ctrl+C to stop auto-refresh.\n")
+    try:
+        while True:
+            run_once()
+            print(f"--- Sleeping for {args.interval} seconds... ---\n")
+            time.sleep(args.interval)
+    except KeyboardInterrupt:
+        print("\n[STOPPED] Auto-refresh stopped by user.")
 
 
 if __name__ == "__main__":
