@@ -29,8 +29,29 @@ NASA_MEDA_URL = "https://mars.nasa.gov/rss/api/?feed=weather&category=mars2020&f
 # NOAA Space Weather Prediction Center - Live GOES satellite X-ray flux (1-minute cadence)
 NOAA_XRAY_URL = "https://services.swpc.noaa.gov/json/goes/primary/xrays-7-day.json"
 
+def get_nasa_api_key():
+    """Reads NASA_API_KEY from environment variable or local .env file, fallback to DEMO_KEY."""
+    if os.environ.get("NASA_API_KEY"):
+        return os.environ["NASA_API_KEY"].strip()
+    
+    # Check for local .env file in project root
+    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    env_file = os.path.join(base_dir, ".env")
+    if os.path.exists(env_file):
+        try:
+            with open(env_file, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if line.startswith("NASA_API_KEY="):
+                        return line.split("=", 1)[1].strip().strip('"\'')
+        except Exception:
+            pass
+    return "DEMO_KEY"
+
+NASA_API_KEY = get_nasa_api_key()
+
 # NASA DONKI Solar Flare API (public fallback)
-NASA_DONKI_URL = "https://api.nasa.gov/DONKI/FLR?startDate={start}&endDate={end}&api_key=DEMO_KEY"
+NASA_DONKI_URL = f"https://api.nasa.gov/DONKI/FLR?startDate={{start}}&endDate={{end}}&api_key={NASA_API_KEY}"
 
 
 def fetch_json(url, timeout=8):
