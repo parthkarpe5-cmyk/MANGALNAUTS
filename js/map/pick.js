@@ -14,54 +14,6 @@ window.MarsSegmentPick = (function () {
   let lastSolvedSegment = null;
   let map = null;
   let clickHandler = null;
-  let coverageLayer = null;
-  let coverageRequest = 0;
-
-  async function showCoverage() {
-    const request = ++coverageRequest;
-    try {
-      const siteMeta = await MarsData.getActiveSiteMeta();
-      const bbox = siteMeta?.bbox;
-      if (!active || request !== coverageRequest || !bbox) return;
-
-      const bounds = [
-        [bbox.south, bbox.west],
-        [bbox.north, bbox.east],
-      ];
-      const color = siteMeta.boundary_color || (siteMeta.id === "gale" ? "#f59e0b" : "#c9f31d");
-
-      if (coverageLayer && map) map.removeLayer(coverageLayer);
-      coverageLayer = L.rectangle(bounds, {
-        color: color,
-        weight: 2,
-        dashArray: "6, 6",
-        fill: true,
-        fillColor: color,
-        fillOpacity: 0.05,
-        interactive: false,
-      }).addTo(map);
-
-      // Smoothly pan into view if out of bounds
-      const center = map.getCenter();
-      if (
-        center.lat < bbox.south ||
-        center.lat > bbox.north ||
-        center.lng < bbox.west ||
-        center.lng > bbox.east
-      ) {
-        map.fitBounds(bounds, { padding: [24, 24], animate: true });
-      }
-
-      if (step === 0 && !markerB) {
-        MarsSegmentDrawer.render(
-          null,
-          `Whole-Site Traverse Planner Active: Click Start Point (A) inside ${siteMeta.name}.`
-        );
-      }
-    } catch (err) {
-      console.warn("[MarsSegmentPick] showCoverage error:", err);
-    }
-  }
 
   function ensureMap() {
     if (!MarsDetailMap.isReady()) {
@@ -108,6 +60,13 @@ window.MarsSegmentPick = (function () {
       setActive(true);
     }
 
+    markerA = L.marker([latA, lonA], {
+      icon: MarsRouteRenderer.createWaypointPin("start", "A", "#F4C76A"),
+    }).addTo(map);
+    markerB = L.marker([latB, lonB], {
+      icon: MarsRouteRenderer.createWaypointPin("target", "B", "#FF5722"),
+    }).addTo(map);
+
     const current = ++request;
     solving = true;
     MarsSegmentDrawer.render(null, "Calculating route on measured terrain…");
@@ -115,18 +74,20 @@ window.MarsSegmentPick = (function () {
       const segment = await MarsRouteBetween.solve(latA, lonA, latB, lonB);
       if (current !== request) return;
       if (segment.path_found) {
-        markerA = L.marker([latA, lonA], {
-          icon: MarsRouteRenderer.createWaypointPin("start", "A", "#F4C76A"),
-        }).addTo(map);
-        markerB = L.marker([latB, lonB], {
-          icon: MarsRouteRenderer.createWaypointPin("target", "B", "#FF5722"),
-        }).addTo(map);
         snapLinks = L.layerGroup([segment.from, segment.to].map(point =>
           L.polyline([[point.lat, point.lon], [point.snap_lat, point.snap_lon]],
             { color: "#f3e8e2", weight: 2, dashArray: "3 5", interactive: false })
         )).addTo(map);
       }
 
+      if (segment.status === "out_of_coverage") {
+        const graph = await MarsData.loadGraph();
+        if (current !== request) return;
+        for (const [marker, lat, lon] of [[markerA, latA, lonA], [markerB, latB, lonB]]) {
+          marker.bindTooltip(MarsRouteBetween.hasElevation(graph, lat, lon)
+            ? "Elevation available" : "Outside measured terrain", { direction: "top" });
+        }
+      }
       lastSolvedSegment = segment;
 
       if (segment.path_found && segment.path_nodes && segment.path_nodes.length > 1) {
@@ -145,7 +106,7 @@ window.MarsSegmentPick = (function () {
         map.fitBounds(L.latLngBounds(latlngs), { padding: [40, 40], animate: true });
       }
 
-      if (window.MarsAudio) window.MarsAudio.playSuccess();
+      if (segment.path_found && window.MarsAudio) window.MarsAudio.playSuccess();
       MarsSegmentDrawer.render(segment);
     } catch (err) {
       if (current === request) MarsSegmentDrawer.render({ error: err.message });
@@ -164,7 +125,19 @@ window.MarsSegmentPick = (function () {
         icon: MarsRouteRenderer.createWaypointPin("start", "A", "#F4C76A"),
       }).addTo(map);
       step = 1;
-      MarsSegmentDrawer.render(null, "Start selected. Pick a destination inside routing coverage.");
+      MarsSegmentDrawer.render(null, "Start selected. Checking terrain coverage…");
+      const selection = request;
+      MarsData.loadGraph().then(graph => {
+        if (request !== selection || step !== 1) return;
+        const covered = MarsRouteBetween.hasElevation(graph, lat, lon);
+        const message = covered ? "Start: elevation available. Pick a destination."
+          : "Start: outside measured terrain. Pick a destination or clear the start.";
+        markerA.bindTooltip(message, { direction: "top" });
+        MarsSegmentDrawer.render(null, message);
+      }).catch(() => {
+        if (request === selection && step === 1)
+          MarsSegmentDrawer.render(null, "Elevation data could not load. Try selecting the region again.");
+      });
       return;
     }
     await planRoute(pointA.lat, pointA.lon, lat, lon);
@@ -241,15 +214,9 @@ window.MarsSegmentPick = (function () {
     }
     if (on) {
       m.on("click", clickHandler);
-      showCoverage();
       MarsSegmentDrawer.render(null, "Route Planner Active: Click Start Point (A).");
     } else {
       m.off("click", clickHandler);
-      coverageRequest++;
-      if (coverageLayer) {
-        m.removeLayer(coverageLayer);
-        coverageLayer = null;
-      }
       clearMarkers();
       MarsSegmentDrawer.render(null);
     }

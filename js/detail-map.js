@@ -1,15 +1,12 @@
 /* global L, window, MarsPlaces, MarsData */
 window.MarsDetailMap = (function () {
   let map = null;
-  let opmLayer = null;
-  let ctxLayer = null;
-  let boundaryLayer = null;
   let initialized = false;
   let currentSite = "jezero";
 
-  // 1. OpenPlanetary Mars Global Basemap (Web Mercator, 100% reliable 200 OK)
-  const OPM_URL = "https://cartocdn-gusc.global.ssl.fastly.net/opmbuilder/api/v1/map/named/opm-mars-basemap-v0-2/all/{z}/{x}/{y}.png";
-  // 2. NASA MRO Context Camera (CTX) Global 6m/px Mosaic (Esri Astrogeology / The Murray Lab)
+  const TREK_BASE = "https://trek.nasa.gov/tiles/Mars/EQ";
+  const VIKING_URL = `${TREK_BASE}/Mars_Viking_MDIM21_ClrMosaic_global_232m/1.0.0/default/default028mm/{z}/{y}/{x}.jpg`;
+  const THEMIS_URL = TREK_BASE + "/THEMIS_DayIR_ControlledMosaics_100m_v2_oct2018/1.0.0/default/default028mm/{z}/{y}/{x}.png";
   const CTX_URL = "https://astro.arcgis.com/arcgis/rest/services/OnMars/CTX/MapServer/tile/{z}/{y}/{x}";
 
   function init() {
@@ -21,10 +18,11 @@ window.MarsDetailMap = (function () {
     const MARS_BOUNDS = L.latLngBounds([-90, -180], [90, 180]);
 
     map = L.map("detail-map-inner", {
-      center: [18.4447, 77.35],
+      crs: L.CRS.EPSG4326,
+      center: [18.4447, 77.4509],
       zoom: 10,
       minZoom: 2,
-      maxZoom: 16,
+      maxZoom: 15,
       maxBounds: MARS_BOUNDS,
       maxBoundsViscosity: 1,
       worldCopyJump: false,
@@ -34,27 +32,15 @@ window.MarsDetailMap = (function () {
     // Custom sleek zoom control in bottom-right
     L.control.zoom({ position: "bottomright" }).addTo(map);
 
-    // 1. Base Layer: Global OpenPlanetary Mars (Color Mosaic & MOLA Shading)
-    opmLayer = L.tileLayer(OPM_URL, {
-      maxZoom: 16,
-      maxNativeZoom: 12,
-      noWrap: true,
-      bounds: [[-90, -180], [90, 180]],
-      attribution: "OpenPlanetary Mars / USGS / NASA MOLA",
-    }).addTo(map);
+    const bounds = [[-90, -180], [90, 180]];
+    L.tileLayer(VIKING_URL, { bounds, noWrap: true, maxNativeZoom: 7, maxZoom: 15,
+      attribution: "NASA Viking · Mars Trek" }).addTo(map);
+    L.tileLayer(THEMIS_URL, { bounds, noWrap: true, maxNativeZoom: 8, maxZoom: 15,
+      className: "surface-warm", attribution: "NASA Odyssey THEMIS · Mars Trek" }).addTo(map);
+    L.tileLayer(CTX_URL, { bounds, noWrap: true, tileSize: 512, zoomOffset: -1,
+      minZoom: 8, maxNativeZoom: 13, maxZoom: 15, className: "surface-warm",
+      attribution: "NASA/JPL/MSSS · CTX · USGS/Esri" }).addTo(map);
 
-    // 2. Ultra-High Resolution Surface Imagery: NASA MRO CTX Mosaic (6m/px)
-    ctxLayer = L.tileLayer(CTX_URL, {
-      maxZoom: 16,
-      maxNativeZoom: 12,
-      opacity: 0.88,
-      noWrap: true,
-      bounds: [[-90, -180], [90, 180]],
-      attribution: "NASA/JPL/MSSS/The Murray Lab CTX Mosaic",
-    }).addTo(map);
-
-    // 3. Operational Site Boundary with Distinctive High-Tech Color
-    updateSiteBoundary();
 
     // Listen for site changes to update sector tiles and boundary
     window.addEventListener("mars:site-changed", function (e) {
@@ -66,50 +52,6 @@ window.MarsDetailMap = (function () {
     return map;
   }
 
-  async function updateSiteBoundary() {
-    if (!map) return;
-    if (boundaryLayer) {
-      map.removeLayer(boundaryLayer);
-      boundaryLayer = null;
-    }
-
-    const meta = window.MarsData && window.MarsData.getActiveSiteMeta
-      ? await MarsData.getActiveSiteMeta()
-      : null;
-
-    if (!meta || !meta.bbox) return;
-
-    const b = meta.bbox;
-    const color = meta.boundary_color || (currentSite === "gale" ? "#f59e0b" : "#c9f31d");
-    const siteTitle = currentSite === "gale" ? "GALE CRATER (MOUNT SHARP)" : "JEZERO CRATER (DELTA)";
-
-    boundaryLayer = L.rectangle(
-      [
-        [b.south, b.west],
-        [b.north, b.east],
-      ],
-      {
-        color: color,
-        weight: 2.5,
-        dashArray: "8, 6",
-        fillColor: color,
-        fillOpacity: 0.04,
-        interactive: false,
-      }
-    ).addTo(map);
-
-    // Add tactical corner label tooltip
-    boundaryLayer.bindTooltip(
-      `<span style="color: ${color}; font-weight: 800; letter-spacing: 0.08em; font-family: monospace;">⬚ OPERATIONAL SECTOR: ${siteTitle}</span>`,
-      {
-        permanent: true,
-        direction: "top",
-        className: "tactical-boundary-tooltip",
-        offset: [0, -4],
-      }
-    );
-  }
-
   function flyTo(lat, lon, zoom) {
     if (!map) return;
     map.flyTo([lat, lon], zoom != null ? zoom : 10, { duration: 0.6 });
@@ -117,21 +59,18 @@ window.MarsDetailMap = (function () {
 
   function fitBounds(bounds, options) {
     if (!map || !bounds) return;
-    map.fitBounds(bounds, options || { padding: [24, 24], maxZoom: 12 });
+    map.fitBounds(bounds, options || { padding: [24, 24], maxZoom: 15 });
   }
 
-  function setSite(siteKey) {
+  async function setSite(siteKey) {
     currentSite = siteKey || "jezero";
-    updateSiteBoundary();
     if (!map) return;
-    const place = window.MarsPlaces ? window.MarsPlaces[siteKey] : null;
-    if (place) {
-      if (place.bounds) {
-        fitBounds(place.bounds);
-      } else {
-        flyTo(place.lat, place.lon, place.detailZoom || 10);
-      }
-    }
+    return MarsData.getActiveSiteMeta().then(meta => {
+      if (meta.id !== currentSite || !meta.bbox) return;
+      const b = meta.bbox;
+      map.invalidateSize({pan: false});
+      fitBounds([[b.south,b.west],[b.north,b.east]]);
+    }).catch(console.warn);
   }
 
   function getCenter() {

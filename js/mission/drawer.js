@@ -2,6 +2,7 @@
 window.MarsSegmentDrawer = (function () {
   let panel = null;
   let lastSegment = null;
+  let renderId = 0;
 
   function ic(name) {
     return window.MarsIcons ? window.MarsIcons.get(name) : "";
@@ -20,6 +21,7 @@ window.MarsSegmentDrawer = (function () {
   }
 
   async function render(segment, statusText) {
+    const id = ++renderId;
     if (!segment?.path_found) window.MarsContingency?.clear();
     if (!panel) return;
     if (statusText) {
@@ -37,15 +39,21 @@ window.MarsSegmentDrawer = (function () {
         ? await MarsData.getActiveSiteMeta()
         : null;
 
+      if (id !== renderId) return;
       const siteName = siteMeta ? siteMeta.name : "Jezero Crater (Western Delta)";
       const rover = siteMeta ? siteMeta.rover : "Perseverance (Mars 2020)";
       const color = siteMeta?.boundary_color || (siteMeta?.id === "gale" ? "#f59e0b" : "#c9f31d");
-      const quickMissions = siteMeta?.quick_missions || [];
+      const graph = await MarsData.loadGraph().catch(() => null);
+      if (id !== renderId) return;
+      const quickMissions = (siteMeta?.quick_missions || []).filter(mission =>
+        graph && [mission.from, mission.to].every(point =>
+          MarsRouteBetween.hasElevation(graph, point.lat, point.lon))
+      );
 
       let qmHtml = "";
       if (quickMissions.length > 0) {
         qmHtml = '<div class="quick-missions-group">' +
-          '  <div class="qm-group-title">VERIFIED MISSION SCENARIOS</div>';
+          '  <div class="qm-group-title">MISSION PRESETS WITH TERRAIN COVERAGE</div>';
         quickMissions.forEach(function (qm) {
           qmHtml +=
             '<div class="qm-card">' +
@@ -74,7 +82,7 @@ window.MarsSegmentDrawer = (function () {
         '    </div>' +
         '  </div>' +
         '  <div class="drawer-hint-card">' +
-        '    <p>Select any two points on the map or click a verified scenario below to calculate an optimal GNN safe route, slope profile, and life support consumables.</p>' +
+        '    <p>Choose two points to check elevation coverage and calculate a route under the selected slope limit.</p>' +
         '  </div>' +
         qmHtml +
         '</div>';
@@ -94,20 +102,16 @@ window.MarsSegmentDrawer = (function () {
       return;
     }
 
-    if (segment.error) {
+    if (segment.error || segment.status === "no_route") {
       panel.innerHTML =
         '<div class="drawer-error-box">' +
         '  <span class="error-badge">ERROR</span>' +
-        '  <p class="drawer-error"></p>' +
-        '  <button type="button" class="btn-ghost" id="drawer-retry-btn" style="margin-top: 0.5rem;">Reset Route</button>' +
+        '  <p class="drawer-error"></p>'
+        '  <button type="button" class="btn-ghost" id="drawer-retry-btn">Reset Route</button> <button type="button" class="btn-ghost" id="drawer-fit-terrain">Center on measured terrain</button>' +
         "</div>";
-      panel.querySelector(".drawer-error").textContent = segment.error;
-      const retryBtn = document.getElementById("drawer-retry-btn");
-      if (retryBtn) {
-        retryBtn.addEventListener("click", function () {
-          if (window.MarsSegmentPick) MarsSegmentPick.reset();
-        });
-      }
+      panel.querySelector(".drawer-error").textContent = segment.error || "No path meets the selected slope limit." ;
+      panel.querySelector("#drawer-retry-btn").onclick = () => MarsSegmentPick.reset();
+      panel.querySelector("#drawer-fit-terrain").onclick = () => MarsDetailMap.setSite(MarsData.getActiveSiteKey());
       return;
     }
 
@@ -276,16 +280,18 @@ window.MarsSegmentDrawer = (function () {
       svgEl.addEventListener("touchend", onLeave);
     }
 
+    if (segment.terrain_spacing_m) {
+      const label = document.createElement("p");
+      label.className = "drawer-hint";
+      label.textContent = "Elevation grid: " + segment.terrain_spacing_m + " m sampling";
+      panel.prepend(label);
+    }
     if (segment.path_found) window.MarsContingency?.attach(panel, segment);
 
     // Action buttons
-    const clearBtn = document.getElementById("btn-clear-active-route");
-    if (clearBtn) {
-      clearBtn.addEventListener("click", function () {
-        if (window.MarsSegmentPick) MarsSegmentPick.reset();
-      });
-    }
 
+    const clearBtn = document.getElementById("btn-clear-active-route");
+    if (clearBtn) clearBtn.onclick = () => MarsSegmentPick.reset();
     const revBtn = document.getElementById("btn-reverse-route");
     if (revBtn && segment.from && segment.to) {
       revBtn.addEventListener("click", function () {

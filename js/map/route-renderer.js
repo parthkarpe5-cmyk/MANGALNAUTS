@@ -197,7 +197,7 @@ window.MarsRouteRenderer = (function () {
     return L.divIcon({
       className: "mars-route-pin",
       html:
-        '<div class="mars-route-pin">' +
+        '<div class="mars-route-pin-content">' +
         '  <span class="mars-route-pin-icon" style="background: rgba(' +
         (kind === "start" ? "34, 197, 94" : "242, 106, 61") +
         ', 0.22); color: ' +
@@ -213,7 +213,7 @@ window.MarsRouteRenderer = (function () {
         tag +
         "</span>" +
         "</div>",
-      iconSize: [0, 0],
+      iconSize: [28, 28],
       iconAnchor: [14, 14],
     });
   }

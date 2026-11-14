@@ -91,6 +91,7 @@
     const place = MarsPlaces[key];
     if (!place) return;
 
+    MarsSegmentPick.reset();
     if (key === "global") {
       MarsGlobe.flyTo(place.lat, place.lon, place.globeHeight, 2.0);
       if (window.MarsGlobe && window.MarsGlobe.hideSiteEntryBanner) {
@@ -114,12 +115,7 @@
       });
     }
 
-    if (MarsDetailMap.isReady() && place.siteKey) {
-      MarsDetailMap.setSite(key);
-      if (MarsHybrid.isInDetailMode()) {
-        MarsDetailMap.flyTo(place.lat, place.lon, place.detailZoom);
-      }
-    }
+
   }
 
   function ensureDetailLayers() {
@@ -228,6 +224,7 @@
       console.error("[MarsHybrid] Hybrid init error:", e);
     }
 
+    MarsData.getActiveSiteMeta().then(meta => MarsDetailMap.setSite(meta.id)).catch(console.warn);
     const viewer = MarsGlobe.getViewer();
     if (viewer && viewer.scene && viewer.scene.canvas) {
       const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
@@ -397,6 +394,18 @@
         MarsSegmentPick.setActive(planSegment.checked);
       });
     }
+    document.getElementById("try-measured-route").addEventListener("click", async () => {
+      try {
+        const site = await MarsData.getActiveSiteMeta();
+        const example = site.example_route;
+        if (!example) return;
+        await MarsSegmentPick.planRoute(
+          example.from.lat, example.from.lon, example.to.lat, example.to.lon
+        );
+      } catch {
+        MarsSegmentDrawer.render({ error: "Could not load the example route." });
+      }
+    });
     if (clearSegment) {
       clearSegment.addEventListener("click", function () {
         if (window.MarsAudio) MarsAudio.playClick();

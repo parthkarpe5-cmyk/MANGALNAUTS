@@ -3,10 +3,18 @@
   "active_site": "jezero",
   "default_site": "jezero",
   "aoi": "jezero",
-  "graph_id": "jezero_delta_v1",
+  "graph_id": "jezero_measured_dem_v1",
   "title": "MANGALNAUTS — Planetary Multi-Site Operations & GNN Traversability",
-  "center": { "lat": 18.45, "lon": 77.35 },
-  "bbox": { "west": 77.20, "east": 77.50, "south": 18.38, "north": 18.52 },
+  "center": {
+    "lat": 18.450030884932012,
+    "lon": 77.42466700791792
+  },
+  "bbox": {
+    "west": 77.4083034962301,
+    "east": 77.44103051960573,
+    "north": 18.465551841401478,
+    "south": 18.434509928462546
+  },
   "citations": [
     "NASA Mars 2020 Perseverance Science Team / PDS Geosciences Node",
     "NASA Mars Science Laboratory (MSL) Curiosity Science Team / PDS",
@@ -21,10 +29,18 @@
       "id": "jezero",
       "name": "Jezero Crater (Western Delta)",
       "rover": "Perseverance (Mars 2020)",
-      "graph_id": "jezero_delta_v1",
+      "graph_id": "jezero_measured_dem_v1",
       "boundary_color": "#c9f31d",
-      "center": { "lat": 18.4447, "lon": 77.4509 },
-      "bbox": { "west": 77.20, "east": 77.50, "south": 18.38, "north": 18.52 },
+      "center": {
+        "lat": 18.450030884932012,
+        "lon": 77.42466700791792
+      },
+      "bbox": {
+        "west": 77.4083034962301,
+        "east": 77.44103051960573,
+        "north": 18.465551841401478,
+        "south": 18.434509928462546
+      },
       "datum_elev_m": -2530.0,
       "globe_camera": {
         "lat": 18.450030884932012,
@@ -33,12 +49,13 @@
       },
       "detail_zoom": 10,
       "files": {
-        "aoi": "data/jezero/v1/aoi.geojson",
-        "terrain_graph": "data/jezero/v1/terrain_graph.json",
-        "gnn_scores": "data/jezero/v1/gnn_scores.json",
+        "aoi": "data/jezero/measured/aoi.geojson",
+        "terrain_graph": "data/jezero/measured/terrain_graph.json",
+        "gnn_scores": "data/jezero/measured/gnn_scores.json",
         "science_stops": "data/jezero/v1/science_stops.geojson",
-        "routes": "data/jezero/v1/routes.geojson",
-        "environment": "data/jezero/v1/environment.json"
+        "routes": "data/jezero/measured/routes.geojson",
+        "environment": "data/jezero/v1/environment.json",
+        "slope": "data/jezero/measured/slope.png"
       },
       "quick_missions": [
         {
@@ -80,16 +97,34 @@
             "lon": 77.462
           }
         }
-      ]
+      ],
+      "example_route": {
+        "from": {
+          "lat": 18.450537,
+          "lon": 77.41346156
+        },
+        "to": {
+          "lat": 18.44851253,
+          "lon": 77.42804643
+        }
+      }
     },
     "gale": {
       "id": "gale",
       "name": "Gale Crater (Mount Sharp / Aeolis Mons)",
       "rover": "Curiosity (MSL)",
-      "graph_id": "gale_mount_sharp_v1",
+      "graph_id": "gale_measured_dem_v1",
       "boundary_color": "#f59e0b",
-      "center": { "lat": -4.670, "lon": 137.390 },
-      "bbox": { "west": 137.300, "east": 137.480, "south": -4.850, "north": -4.550 },
+      "center": {
+        "lat": -4.650837541141328,
+        "lon": 137.39511123632226
+      },
+      "bbox": {
+        "west": 137.32931588012477,
+        "east": 137.46090659251976,
+        "north": -4.579981003697868,
+        "south": -4.72169407858479
+      },
       "datum_elev_m": -4450.0,
       "globe_camera": {
         "lat": -4.650837541141328,
@@ -98,12 +133,13 @@
       },
       "detail_zoom": 10,
       "files": {
-        "aoi": "data/gale/v1/aoi.geojson",
-        "terrain_graph": "data/gale/v1/terrain_graph.json",
-        "gnn_scores": "data/gale/v1/gnn_scores.json",
+        "aoi": "data/gale/measured/aoi.geojson",
+        "terrain_graph": "data/gale/measured/terrain_graph.json",
+        "gnn_scores": "data/gale/measured/gnn_scores.json",
         "science_stops": "data/gale/v1/science_stops.geojson",
-        "routes": "data/gale/v1/routes.geojson",
-        "environment": "data/gale/v1/environment.json"
+        "routes": "data/gale/measured/routes.geojson",
+        "environment": "data/gale/v1/environment.json",
+        "slope": "data/gale/measured/slope.png"
       },
       "quick_missions": [
         {
@@ -145,7 +181,54 @@
             "lon": 137.378
           }
         }
-      ]
+      ],
+      "example_route": {
+        "from": {
+          "lat": -4.64915048,
+          "lon": 137.35124767
+        },
+        "to": {
+          "lat": -4.65927284,
+          "lon": 137.3411253
+        }
+      }
+    },
+    "olympus": {
+      "id": "olympus",
+      "name": "Olympus Mons (Summit Caldera)",
+      "rover": "Orbital survey",
+      "graph_id": "olympus_measured_dem_v1",
+      "center": {
+        "lat": 18.640718552773496,
+        "lon": -133.84877527849238
+      },
+      "bbox": {
+        "west": -134.00061071587123,
+        "east": -133.69693984111353,
+        "north": 18.78243162766042,
+        "south": 18.499005477886573
+      },
+      "files": {
+        "terrain_graph": "data/olympus/measured/terrain_graph.json",
+        "gnn_scores": "data/olympus/measured/gnn_scores.json",
+        "routes": "data/olympus/measured/routes.geojson",
+        "slope": "data/olympus/measured/slope.png"
+      },
+      "example_route": {
+        "from": {
+          "lat": 18.64577973,
+          "lon": -133.90444827
+        },
+        "to": {
+          "lat": 18.62553501,
+          "lon": -133.93818948
+        }
+      },
+      "globe_camera": {
+        "lat": 18.640718552773496,
+        "lon": -133.84877527849238,
+        "height": 95000
+      }
     }
   },
   "global_datasets": {

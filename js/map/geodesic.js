@@ -1,5 +1,5 @@
 /* global window */
-window.MarsGeodesic = (function () {
+self.MarsGeodesic = (function () {
   const R_M = 3396190.0;
   const DEG = Math.PI / 180;
 

@@ -2107,8 +2107,10 @@ body {
 }
 
 /* 4. Aerospace HUD Start & Destination Waypoint Pins */
-.mars-route-pin {
-  transform: translate(-50%, -50%);
+.mars-route-pin-content {
+  position: absolute;
+  top: 0;
+  left: 0;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -2117,6 +2119,7 @@ body {
   cursor: pointer;
 }
 .mars-route-pin-icon {
+  flex: 0 0 28px;
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -2438,3 +2441,37 @@ body {
   --pl-muted: #a8948d; --pl-orange: #ff5722; --pl-gold: #f4c76a;
   --pl-cyan: #66d9ff; --pl-coral: #ff8b86; --pl-line-strong: #473739;
 }
+
+/* Colorized orbital imagery. Map symbols and data overlays retain their own colors. */
+.surface-warm { filter: sepia(.64) saturate(1.55) brightness(1.12) contrast(1.07); }
+
+.radar-dial {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: 0 0 38px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid var(--accent);
+  box-shadow: 0 0 10px var(--accent-glow);
+  background: repeating-radial-gradient(circle, transparent 0 5px,
+    var(--border-active) 6px 7px);
+}
+.radar-dial::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: conic-gradient(transparent 72%, var(--accent-glow));
+  animation: radar-sweep 5s linear infinite;
+}
+.radar-dial i {
+  z-index: 1;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+@keyframes radar-sweep { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .radar-dial::before { animation: none; } }

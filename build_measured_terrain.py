@@ -54,7 +54,7 @@ def export(site, values, west, north, dx, dy, source, spacing):
     folder.mkdir(parents=True,exist_ok=True)
     bounds = dict(west=west,east=west+cols*dx,north=north,south=north-rows*dy)
     graph = dict(graph_id=graph_id,bbox=bounds,source=source,spacing_m=spacing,
-                 max_snap_m=round(spacing*.8,2),nodes=nodes,edges=edges)
+                 max_snap_m=round(spacing*.8,2),raster=dict(rows=rows,cols=cols),nodes=nodes)
     (folder/"terrain_graph.json").write_text(json.dumps(graph,separators=(",",":")),encoding="utf-8")
     Image.fromarray(pixels).save(folder/"slope.png")
     (folder/"gnn_scores.json").write_text('{"nodes":{}}',encoding="ascii")
@@ -79,23 +79,33 @@ def main():
     jezero = export("jezero",values,west+c*dx,north-r*dy,dx,dy,CTX_SOURCE,20)
     folder = Path(sys.argv[2])
     index = json.loads((folder/"index.json").read_text(encoding="utf-8"))
-    meta = next(g for g in index["grids"] if g["id"]=="gale")
-    raster = np.frombuffer(gzip.decompress((folder/"gale.i16z").read_bytes()),dtype="<i2")
-    raster = raster.reshape((meta["height"],meta["width"]))
-    dx=(meta["east"]-meta["west"])/meta["width"]
-    dy=(meta["north"]-meta["south"])/meta["height"]
-    c=math.floor((137.33-meta["west"])/dx)
-    r=math.floor((meta["north"]+4.58)/dy)
-    cols=math.ceil((137.46-meta["west"])/dx)-c
-    rows=math.ceil((meta["north"]+4.72)/dy)-r
-    values=raster[r:r+rows,c:c+cols].astype(float)
-    values[values==index["nodata"]]=np.nan
-    gale=export("gale",values,meta["west"]+c*dx,meta["north"]-r*dy,dx,dy,GALE_SOURCE,200)
+    def regional(site, west, south, east, north):
+        meta = next(g for g in index["grids"] if g["id"] == site)
+        raster = np.frombuffer(gzip.decompress((folder/f"{site}.i16z").read_bytes()),dtype="<i2")
+        raster = raster.reshape((meta["height"],meta["width"]))
+        dx = (meta["east"]-meta["west"])/meta["width"]
+        dy = (meta["north"]-meta["south"])/meta["height"]
+        c = math.floor((west-meta["west"])/dx)
+        r = math.floor((meta["north"]-north)/dy)
+        end_c = math.ceil((east-meta["west"])/dx)
+        end_r = math.ceil((meta["north"]-south)/dy)
+        values = raster[r:end_r,c:end_c].astype(float)
+        values[values==index["nodata"]] = np.nan
+        return export(site,values,meta["west"]+c*dx,meta["north"]-r*dy,dx,dy,GALE_SOURCE,200)
+
+    gale = regional("gale",137.33,-4.72,137.46,-4.58)
+    olympus = regional("olympus",-134.0,18.50,-133.70,18.78)
     manifest=Path("data/manifest.json")
     config=json.loads(manifest.read_text(encoding="utf-8"))
-    for site,(graph_id,bounds,path) in (("jezero",jezero),("gale",gale)):
+    config["sites"].setdefault("olympus", {
+        "id":"olympus", "name":"Olympus Mons (Summit Caldera)", "rover":"Orbital survey",
+        "files":{}, "detail_zoom":10,
+    })
+    for site,(graph_id,bounds,path) in (("jezero",jezero),("gale",gale),("olympus",olympus)):
         entry=config["sites"][site]
-        entry.update(graph_id=graph_id,bbox=bounds)
+        center = dict(lat=(bounds["north"]+bounds["south"])/2,lon=(bounds["east"]+bounds["west"])/2)
+        entry.update(graph_id=graph_id,bbox=bounds,center=center)
+        entry["globe_camera"] = dict(**center,height=95000)
         entry["files"].update(terrain_graph=f"{path}/terrain_graph.json",gnn_scores=f"{path}/gnn_scores.json",routes=f"{path}/routes.geojson",slope=f"{path}/slope.png")
     for key in ("graph_id","bbox","files"):
         config[key]=config["sites"]["jezero"][key]

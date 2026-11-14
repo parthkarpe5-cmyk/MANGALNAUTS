@@ -21,6 +21,14 @@ window.MarsRouteBetween = (function () {
     return best;
   }
 
+  function hasElevation(graph, lat, lon) {
+    const b = graph.bbox;
+    if (b && !(lat >= b.south && lat <= b.north && lon >= b.west && lon <= b.east)) return false;
+    const node = snapNearest(graph, lat, lon);
+    return !!node && (graph.max_snap_m == null ||
+      MarsGeodesic.haversineMeters(lat, lon, node.lat, node.lon) <= graph.max_snap_m);
+  }
+
   function nodeRisk(nodes, id) {
     const risk = nodes[id]?.risk_0_1;
     return Number.isFinite(risk) && risk >= 0 && risk <= 1 ? risk : null;
@@ -42,22 +50,48 @@ window.MarsRouteBetween = (function () {
 
   async function solve(latA, lonA, latB, lonB) {
     const graph = await MarsData.loadGraph();
-    if (!graph || !graph.nodes || graph.nodes.length === 0) {
-      return { error: "No terrain graph available for this sector." };
+    const siteMeta = window.MarsData && window.MarsData.getActiveSiteMeta
+      ? await MarsData.getActiveSiteMeta()
+      : null;
+    const manifest = await MarsData.loadManifest();
+    const bounds = graph.bbox || (siteMeta && siteMeta.bbox) || manifest.bbox;
+    function inCoverage(lat, lon) {
+      return (
+        Number.isFinite(lat) &&
+        Number.isFinite(lon) &&
+        (!bounds ||
+          (lat >= bounds.south &&
+            lat <= bounds.north &&
+            lon >= bounds.west &&
+            lon <= bounds.east))
+      );
     }
-
+    const missing = [];
+    if (!inCoverage(latA, lonA)) missing.push("start");
+    if (!inCoverage(latB, lonB)) missing.push("destination");
+    if (missing.length) return {
+      status: "out_of_coverage",
+      error: "No measured elevation at the " + missing.join(" and ") + ". Move " +
+        (missing.length === 2 ? "both points" : "that point") + " toward the site center.",
+    };
     const candidate = await MarsData.loadScores().catch(() => null);
     const scores =
       graph.graph_id != null && candidate?.graph_id === graph.graph_id
         ? candidate
-        : candidate || null;
+        : null;
     const mode = MarsTravelMode.get();
     const maxSlope = mode.maxSlopeDeg;
 
     const nodeA = snapNearest(graph, latA, lonA);
     const nodeB = snapNearest(graph, latB, lonB);
     if (!nodeA || !nodeB) {
-      return { error: "No graph nodes in area." };
+      return { error: "No graph nodes in area" };
+    }
+
+    if (graph.max_snap_m != null &&
+        (MarsGeodesic.haversineMeters(latA, lonA, nodeA.lat, nodeA.lon) > graph.max_snap_m ||
+         MarsGeodesic.haversineMeters(latB, lonB, nodeB.lat, nodeB.lon) > graph.max_snap_m)) {
+      return { status: "out_of_coverage", error: "No route available. One or both points have no nearby elevation sample." };
     }
 
     const geodesic_m = MarsGeodesic.haversineMeters(latA, lonA, latB, lonB);
@@ -69,10 +103,14 @@ window.MarsRouteBetween = (function () {
       return lengthM * (1 + fromRisk + toRisk);
     };
 
-    const pathResult = MarsAstar.findPath(graph, nodeA.id, nodeB.id, {
-      maxSlopeDeg: maxSlope,
-      edgeCostFn: edgeCostFn,
-    });
+    let pathResult;
+    try {
+      pathResult = await MarsRouteWorker.solve(graph, nodeA.id, nodeB.id, maxSlope, scoreNodes);
+    } catch {
+      pathResult = MarsAstar.findPath(graph, nodeA.id, nodeB.id, {
+        maxSlopeDeg: maxSlope, edgeCostFn,
+      });
+    }
 
     const path_m = pathResult.found
       ? MarsAstar.pathLengthM(graph, pathResult.path)
@@ -121,6 +159,7 @@ window.MarsRouteBetween = (function () {
       (stats.max_slope_deg == null || stats.max_slope_deg <= maxSlope);
 
     return {
+      terrain_spacing_m: graph.spacing_m,
       from: {
         lat: latA,
         lon: lonA,
@@ -157,5 +196,5 @@ window.MarsRouteBetween = (function () {
     return solve(crew.lat, crew.lon, habitat.lat, habitat.lon);
   }
 
-  return { solve, solveReturn, snapNearest };
+  return { solve, solveReturn, snapNearest, hasElevation };
 })();

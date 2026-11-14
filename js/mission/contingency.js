@@ -73,10 +73,11 @@ window.MarsContingency = (function () {
   function without(g, blocked) {
     if (!blocked || !blocked.size) return g;
     return {
+      ...g,
       nodes: g.nodes.filter(function (n) {
         return !blocked.has(n.id);
       }),
-      edges: g.edges.filter(function (e) {
+      edges: (g.edges || []).filter(function (e) {
         return !blocked.has(e.from) && !blocked.has(e.to);
       }),
     };

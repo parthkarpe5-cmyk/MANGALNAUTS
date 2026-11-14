@@ -21,7 +21,7 @@
       href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/styles.css?v=radar-pins" />
   </head>
   <body class="theme-perseverance">
     <header class="top-nav">
@@ -219,7 +219,7 @@
         <!-- Sleek Floating Glass Tactical Dock -->
         <div class="tactical-dock">
           <div class="dock-badge">
-            <span class="dock-pulse"></span>
+            <span class="radar-dial" aria-hidden="true"><i></i></span>
             <span>TACTICAL RADAR</span>
           </div>
 
@@ -236,6 +236,7 @@
             ✕ Clear
           </button>
 
+          <button type="button" class="dock-btn" id="try-measured-route">Try example route</button>
           <div class="dock-divider"></div>
 
           <!-- Heatmap Layer Selector -->
@@ -301,25 +302,26 @@
     <script src="js/map/historical-traverses.js"></script>
     <script src="js/visual/cosmic-galaxy.js"></script>
     <script src="js/globe.js"></script>
-    <script src="js/detail-map.js"></script>
-    <script src="js/hybrid.js"></script>
+    <script src="js/detail-map.js?v=coverage-feedback"></script>
+    <script src="js/hybrid.js?v=regions-1"></script>
     <script src="js/map/geodesic.js"></script>
-    <script src="js/api/manifest.js"></script>
-    <script src="js/routing/astar.js"></script>
+    <script src="js/api/manifest.js?v=regions-1"></script>
+    <script src="js/routing/astar.js?v=raster-1"></script>
+    <script src="js/routing/worker-client.js?v=raster-1"></script>
     <script src="js/mission/modes.js"></script>
-    <script src="js/routing/routeBetween.js"></script>
+    <script src="js/routing/routeBetween.js?v=raster-1"></script>
     <script src="js/ui/icons.js"></script>
     <script src="js/ui/audio.js"></script>
-    <script src="js/ui/theme.js"></script>
+    <script src="js/ui/theme.js?v=planner-rollback"></script>
     <script src="js/mission/telemetry.js"></script>
     <script src="js/mission/elevation-profile.js"></script>
-    <script src="js/mission/drawer.js"></script>
-    <script src="js/mission/contingency.js"></script>
+    <script src="js/mission/drawer.js?v=planner-rollback"></script>
+    <script src="js/mission/contingency.js?v=raster-1"></script>
     <script src="js/map/heatmap.js"></script>
-    <script src="js/map/route-renderer.js"></script>
+    <script src="js/map/route-renderer.js?v=radar-pins"></script>
     <script src="js/map/preset-routes.js"></script>
     <script src="js/map/science-stops.js"></script>
-    <script src="js/map/pick.js"></script>
-    <script src="js/app.js"></script>
+    <script src="js/map/pick.js?v=coverage-feedback"></script>
+    <script src="js/app.js?v=measured-example"></script>
   </body>
 </html>

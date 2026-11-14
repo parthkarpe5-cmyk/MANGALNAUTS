@@ -1,6 +1,6 @@
 /* global MarsGlobe, MarsDetailMap, window */
 window.MarsHybrid = (function () {
-  let currentMode = "split"; // "3d" | "2d" | "split"
+  let currentMode = "2d"; // "3d" | "2d" | "split"
   let container = null;
   let globePane = null;
   let detailPane = null;
@@ -41,7 +41,7 @@ window.MarsHybrid = (function () {
   }
 
   function setViewMode(mode) {
-    currentMode = mode || "split";
+    currentMode = ["3d", "2d", "split"].includes(mode) ? mode : "2d";
 
     if (!container) container = document.getElementById("viewport-split");
     if (!globePane) globePane = document.getElementById("globe-pane");
@@ -50,6 +50,7 @@ window.MarsHybrid = (function () {
     // Update active button state
     document.querySelectorAll(".view-mode-btn").forEach(function (btn) {
       btn.classList.toggle("active", btn.dataset.mode === currentMode);
+      btn.setAttribute("aria-pressed", String(btn.dataset.mode === currentMode));
     });
 
     if (container) {
@@ -88,6 +89,7 @@ window.MarsHybrid = (function () {
       modeEl.textContent = modeLabels[currentMode] || currentMode.toUpperCase();
     }
 
+    if (currentMode !== "3d") MarsDetailMap.setSite(window.MarsData.getActiveSiteKey());
     if (onDetailChange) {
       onDetailChange(currentMode !== "3d");
     }

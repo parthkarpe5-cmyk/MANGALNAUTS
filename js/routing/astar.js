@@ -1,18 +1,87 @@
-/* global window */
-window.MarsAstar = (function () {
+/* global self */
+self.MarsAstar = (function () {
   function buildAdjacency(edges) {
     const adj = {};
     edges.forEach(function (e) {
-      const u = e.from || e.u;
-      const v = e.to || e.v;
-      const len = e.length_m != null ? e.length_m : e.dist_m;
-      if (!u || !v) return;
-      if (!adj[u]) adj[u] = [];
-      if (!adj[v]) adj[v] = [];
-      adj[u].push({ to: v, length_m: len, crossingGrade: e.crossing_grade_deg });
-      adj[v].push({ to: u, length_m: len, crossingGrade: e.crossing_grade_deg });
+      if (!adj[e.from]) adj[e.from] = [];
+      if (!adj[e.to]) adj[e.to] = [];
+      adj[e.from].push({ to: e.to, length_m: e.length_m, crossingGrade: e.crossing_grade_deg });
+      adj[e.to].push({ to: e.from, length_m: e.length_m, crossingGrade: e.crossing_grade_deg });
     });
     return adj;
+  }
+
+  function connections(graph) {
+    if (!graph.raster) {
+      const adjacency = buildAdjacency(graph.edges);
+      return id => adjacency[id] || [];
+    }
+    const { rows, cols } = graph.raster;
+    const cells = new Array(rows * cols);
+    const indices = new Map();
+    for (const node of graph.nodes) {
+      const [, row, col] = node.id.split("_");
+      const index = Number(row) * cols + Number(col);
+      cells[index] = node;
+      indices.set(node.id, index);
+    }
+    const moves = [[0,1],[0,-1],[1,0],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]];
+    const distance = (a, b) => self.MarsGeodesic.haversineMeters(a.lat, a.lon, b.lat, b.lon);
+    const grade = (a, b) => Math.atan2(Math.abs(a.elev_m - b.elev_m), distance(a, b)) * 180 / Math.PI;
+    return function neighbors(id) {
+      const i = indices.get(id);
+      if (i == null) return [];
+      const r = Math.floor(i / cols), c = i % cols;
+      const from = cells[i];
+      const result = [];
+      for (const [dr, dc] of moves) {
+        const nr = r + dr, nc = c + dc;
+        if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) continue;
+        const to = cells[nr * cols + nc];
+        if (!to) continue;
+        let crossingGrade = 0;
+        if (dr && dc) {
+          const a = cells[r * cols + nc], b = cells[nr * cols + c];
+          if (!a || !b) continue;
+          crossingGrade = Math.max(grade(from, a), grade(from, b), grade(a, to), grade(b, to));
+        }
+        result.push({ to: to.id, length_m: distance(from, to), crossingGrade });
+      }
+      return result;
+    };
+  }
+
+  class MinHeap {
+    items = [];
+    push(entry) {
+      const items = this.items;
+      let i = items.length;
+      items.push(entry);
+      while (i > 0) {
+        const parent = (i - 1) >> 1;
+        if (items[parent].f <= entry.f) break;
+        items[i] = items[parent];
+        i = parent;
+      }
+      items[i] = entry;
+    }
+    pop() {
+      const items = this.items;
+      const first = items[0];
+      const last = items.pop();
+      if (items.length) {
+        let i = 0;
+        while (2 * i + 1 < items.length) {
+          let child = 2 * i + 1;
+          if (child + 1 < items.length && items[child + 1].f < items[child].f) child++;
+          if (items[child].f >= last.f) break;
+          items[i] = items[child];
+          i = child;
+        }
+        items[i] = last;
+      }
+      return first;
+    }
   }
 
   /**
@@ -26,7 +95,7 @@ window.MarsAstar = (function () {
     graph.nodes.forEach(function (n) {
       nodesById[n.id] = n;
     });
-    const adj = buildAdjacency(graph.edges);
+    const neighborsOf = connections(graph);
     const maxSlope = opts.maxSlopeDeg != null ? opts.maxSlopeDeg : 90;
     const edgeCost =
       opts.edgeCostFn ||
@@ -46,18 +115,19 @@ window.MarsAstar = (function () {
       return edgeSlopeDeg(aId, bId, lengthM) <= maxSlope;
     }
 
-    const open = [{ id: startId, f: 0 }];
+    if (!nodesById[startId] || !nodesById[goalId]) return { found: false, path: [] };
+    const heuristic = opts.heuristic || (() => 0);
+    const open = new MinHeap();
+    open.push({ id: startId, g: 0, f: heuristic(startId) });
     const cameFrom = {};
     const gScore = {};
     gScore[startId] = 0;
 
     const closed = new Set();
 
-    while (open.length > 0) {
-      open.sort(function (x, y) {
-        return x.f - y.f;
-      });
-      const current = open.shift().id;
+    while (open.items.length) {
+      const { id: current, g } = open.pop();
+      if (g !== gScore[current]) continue;
       if (current === goalId) {
         const path = [goalId];
         let c = goalId;
@@ -71,7 +141,7 @@ window.MarsAstar = (function () {
       if (closed.has(current)) continue;
       closed.add(current);
 
-      const neighbors = adj[current] || [];
+      const neighbors = neighborsOf(current);
       neighbors.forEach(function (edge) {
         if (edge.crossingGrade > maxSlope || !slopeOk(current, edge.to, edge.length_m)) return;
         const tentative =
@@ -79,15 +149,7 @@ window.MarsAstar = (function () {
         if (gScore[edge.to] == null || tentative < gScore[edge.to]) {
           cameFrom[edge.to] = current;
           gScore[edge.to] = tentative;
-          const f = tentative;
-          const existing = open.find(function (o) {
-            return o.id === edge.to;
-          });
-          if (existing) {
-            existing.f = f;
-          } else {
-            open.push({ id: edge.to, f: f });
-          }
+          open.push({ id: edge.to, g: tentative, f: tentative + heuristic(edge.to) });
         }
       });
     }
@@ -99,21 +161,10 @@ window.MarsAstar = (function () {
     graph.nodes.forEach(function (n) {
       nodesById[n.id] = n;
     });
-    const key = function (a, b) {
-      return a < b ? a + "|" + b : b + "|" + a;
-    };
-    const edgeLen = {};
-    graph.edges.forEach(function (e) {
-      const u = e.from || e.u;
-      const v = e.to || e.v;
-      const len = e.length_m != null ? e.length_m : e.dist_m;
-      if (u && v && len != null) {
-        edgeLen[key(u, v)] = len;
-      }
-    });
+    const neighborsOf = connections(graph);
     let total = 0;
     for (let i = 0; i < pathIds.length - 1; i++) {
-      const len = edgeLen[key(pathIds[i], pathIds[i + 1])];
+      const len = neighborsOf(pathIds[i]).find(edge => edge.to === pathIds[i + 1])?.length_m;
       if (len != null) total += len;
     }
     return total;
@@ -124,18 +175,7 @@ window.MarsAstar = (function () {
     graph.nodes.forEach(function (n) {
       nodesById[n.id] = n;
     });
-    const key = function (a, b) {
-      return a < b ? a + "|" + b : b + "|" + a;
-    };
-    const edgeLen = {};
-    graph.edges.forEach(function (e) {
-      const u = e.from || e.u;
-      const v = e.to || e.v;
-      const len = e.length_m != null ? e.length_m : e.dist_m;
-      if (u && v && len != null) {
-        edgeLen[key(u, v)] = len;
-      }
-    });
+    const neighborsOf = connections(graph);
     let maxSlope = 0;
     let elevs = [];
     pathIds.forEach(function (id) {
@@ -147,7 +187,7 @@ window.MarsAstar = (function () {
     for (let i = 0; i < pathIds.length - 1; i++) {
       const a = nodesById[pathIds[i]];
       const b = nodesById[pathIds[i + 1]];
-      const len = edgeLen[key(pathIds[i], pathIds[i + 1])];
+      const len = neighborsOf(pathIds[i]).find(edge => edge.to === pathIds[i + 1])?.length_m;
       if (a && b && len) {
         const rise = Math.abs((b.elev_m || 0) - (a.elev_m || 0));
         maxSlope = Math.max(maxSlope, (Math.atan(rise / len) * 180) / Math.PI);
