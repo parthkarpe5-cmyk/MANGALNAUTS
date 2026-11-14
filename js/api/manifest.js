@@ -22,7 +22,9 @@ window.MarsData = (function () {
   async function loadScores() {
     if (scores) return scores;
     const m = await loadManifest();
+    if (!m.files.gnn_scores) return null;
     const res = await fetch(m.files.gnn_scores);
+    if (!res.ok) return null;
     scores = await res.json();
     return scores;
   }

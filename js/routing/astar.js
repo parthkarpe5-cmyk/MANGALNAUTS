@@ -11,15 +11,6 @@ window.MarsAstar = (function () {
     return adj;
   }
 
-  function heuristic(nodeA, nodeB, nodesById) {
-    const a = nodesById[nodeA];
-    const b = nodesById[nodeB];
-  if (!a || !b) return 0;
-  return (
-    (Math.abs(a.lat - b.lat) + Math.abs(a.lon - b.lon)) * 111320
-    );
-  }
-
   /**
    * @param {object} graph - { nodes, edges }
    * @param {string} startId
@@ -42,7 +33,7 @@ window.MarsAstar = (function () {
     function edgeSlopeDeg(aId, bId, lengthM) {
       const a = nodesById[aId];
       const b = nodesById[bId];
-      if (!a || !b || !lengthM) return 90;
+      if (!Number.isFinite(a?.elev_m) || !Number.isFinite(b?.elev_m) || !Number.isFinite(lengthM) || lengthM <= 0) return Infinity;
       const rise = Math.abs((b.elev_m || 0) - (a.elev_m || 0));
       return (Math.atan(rise / lengthM) * 180) / Math.PI;
     }
@@ -66,7 +57,7 @@ window.MarsAstar = (function () {
       if (current === goalId) {
         const path = [goalId];
         let c = goalId;
-        while (cameFrom[c]) {
+        while (cameFrom[c] != null) {
           c = cameFrom[c];
           path.push(c);
         }
@@ -84,8 +75,7 @@ window.MarsAstar = (function () {
         if (gScore[edge.to] == null || tentative < gScore[edge.to]) {
           cameFrom[edge.to] = current;
           gScore[edge.to] = tentative;
-          const f =
-            tentative + heuristic(edge.to, goalId, nodesById);
+          const f = tentative;
           const existing = open.find(function (o) {
             return o.id === edge.to;
           });
