@@ -164,6 +164,35 @@ window.MarsSegmentDrawer = (function () {
       '</div>' +
       consumablesHtml +
       profileHtml;
+
+    // Synchronize elevation cross-section hover with interactive map scrubber cursor
+    const svgEl = panel.querySelector(".elevation-profile-svg");
+    if (svgEl && segment.path_nodes && segment.path_nodes.length > 1) {
+      const totalDist = segment.path_nodes[segment.path_nodes.length - 1].dist_m;
+      const paddingLeft = 45;
+      const paddingRight = 20;
+
+      svgEl.style.cursor = "crosshair";
+      svgEl.addEventListener("mousemove", function (e) {
+        const rect = svgEl.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const pLeftPx = rect.width * (paddingLeft / 330);
+        const pRightPx = rect.width * (paddingRight / 330);
+        const chartWPx = rect.width - pLeftPx - pRightPx;
+        const offsetX = Math.max(0, Math.min(chartWPx, x - pLeftPx));
+        const ratio = chartWPx > 0 ? offsetX / chartWPx : 0;
+        const distM = ratio * totalDist;
+        if (window.MarsSegmentPick && window.MarsSegmentPick.showScrubber) {
+          window.MarsSegmentPick.showScrubber(distM);
+        }
+      });
+
+      svgEl.addEventListener("mouseleave", function () {
+        if (window.MarsSegmentPick && window.MarsSegmentPick.hideScrubber) {
+          window.MarsSegmentPick.hideScrubber();
+        }
+      });
+    }
   }
 
   function renderScienceStop(stop) {

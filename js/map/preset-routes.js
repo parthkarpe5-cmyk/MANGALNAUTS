@@ -1,4 +1,4 @@
-/* global L, MarsData, window */
+/* global L, MarsData, MarsRouteRenderer, window */
 window.MarsPresetRoutes = (function () {
   let layerGroup = null;
   let visible = false;
@@ -7,22 +7,19 @@ window.MarsPresetRoutes = (function () {
     if (!layerGroup) {
       layerGroup = L.layerGroup();
     }
+    layerGroup.clearLayers();
 
     const routesGeoJson = await MarsData.loadRoutes();
 
     routesGeoJson.features.forEach(function (feature) {
       const p = feature.properties;
-      const polyline = L.geoJSON(feature, {
-        style: {
-          color: p.color || "#38bdf8",
-          weight: 4,
-          dashArray: p.dashArray || null,
-          opacity: 0.9,
-        },
+      const coords = feature.geometry.coordinates;
+      const latlngs = coords.map(function (c) {
+        return [c[1], c[0]];
       });
 
       const popupHtml =
-        "<div class=\"route-popup\">" +
+        '<div class="route-popup">' +
         "<h4>" +
         p.name +
         "</h4>" +
@@ -45,8 +42,15 @@ window.MarsPresetRoutes = (function () {
         "</ul>" +
         "</div>";
 
-      polyline.bindPopup(popupHtml, { className: "hud-popup" });
-      layerGroup.addLayer(polyline);
+      // Render advanced multi-layered corridor with glowing halo, directional pulse flow, and km ticks
+      const corridor = MarsRouteRenderer.createCorridorLayer(latlngs, {
+        color: p.color || "#38bdf8",
+        animated: true,
+        ticks: true,
+        popupHtml: popupHtml,
+      });
+
+      layerGroup.addLayer(corridor);
     });
 
     if (visible) {
