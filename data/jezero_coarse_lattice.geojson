@@ -1,0 +1,7781 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 0,
+        "lat": 18.415,
+        "lon": 77.39,
+        "elevation_m": -2535.0,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39,
+          18.415
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 1,
+        "lat": 18.415,
+        "lon": 77.39441,
+        "elevation_m": -2535.0,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39441,
+          18.415
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 2,
+        "lat": 18.415,
+        "lon": 77.39882,
+        "elevation_m": -2535.0,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39882,
+          18.415
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 3,
+        "lat": 18.415,
+        "lon": 77.40324,
+        "elevation_m": -2535.0,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40324,
+          18.415
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 4,
+        "lat": 18.415,
+        "lon": 77.40765,
+        "elevation_m": -2535.0,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40765,
+          18.415
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 5,
+        "lat": 18.415,
+        "lon": 77.41206,
+        "elevation_m": -2535.0,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41206,
+          18.415
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 6,
+        "lat": 18.415,
+        "lon": 77.41647,
+        "elevation_m": -2535.0,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41647,
+          18.415
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 7,
+        "lat": 18.415,
+        "lon": 77.42088,
+        "elevation_m": -2535.0,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42088,
+          18.415
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 8,
+        "lat": 18.415,
+        "lon": 77.42529,
+        "elevation_m": -2620.0,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42529,
+          18.415
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 9,
+        "lat": 18.415,
+        "lon": 77.42971,
+        "elevation_m": -2619.6,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42971,
+          18.415
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 10,
+        "lat": 18.415,
+        "lon": 77.43412,
+        "elevation_m": -2618.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43412,
+          18.415
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 11,
+        "lat": 18.415,
+        "lon": 77.43853,
+        "elevation_m": -2619.3,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43853,
+          18.415
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 12,
+        "lat": 18.415,
+        "lon": 77.44294,
+        "elevation_m": -2619.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44294,
+          18.415
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 13,
+        "lat": 18.415,
+        "lon": 77.44735,
+        "elevation_m": -2620.0,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44735,
+          18.415
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 14,
+        "lat": 18.415,
+        "lon": 77.45176,
+        "elevation_m": -2620.0,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45176,
+          18.415
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 15,
+        "lat": 18.415,
+        "lon": 77.45618,
+        "elevation_m": -2620.0,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45618,
+          18.415
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 16,
+        "lat": 18.415,
+        "lon": 77.46059,
+        "elevation_m": -2620.0,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.46059,
+          18.415
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 17,
+        "lat": 18.415,
+        "lon": 77.465,
+        "elevation_m": -2620.0,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.465,
+          18.415
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 18,
+        "lat": 18.41824,
+        "lon": 77.39,
+        "elevation_m": -2534.6,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39,
+          18.41824
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 19,
+        "lat": 18.41824,
+        "lon": 77.39441,
+        "elevation_m": -2534.6,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39441,
+          18.41824
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 20,
+        "lat": 18.41824,
+        "lon": 77.39882,
+        "elevation_m": -2534.6,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39882,
+          18.41824
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 21,
+        "lat": 18.41824,
+        "lon": 77.40324,
+        "elevation_m": -2534.6,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40324,
+          18.41824
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 22,
+        "lat": 18.41824,
+        "lon": 77.40765,
+        "elevation_m": -2534.6,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40765,
+          18.41824
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 23,
+        "lat": 18.41824,
+        "lon": 77.41206,
+        "elevation_m": -2534.6,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41206,
+          18.41824
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 24,
+        "lat": 18.41824,
+        "lon": 77.41647,
+        "elevation_m": -2534.6,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41647,
+          18.41824
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 25,
+        "lat": 18.41824,
+        "lon": 77.42088,
+        "elevation_m": -2534.6,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42088,
+          18.41824
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 26,
+        "lat": 18.41824,
+        "lon": 77.42529,
+        "elevation_m": -2619.4,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42529,
+          18.41824
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 27,
+        "lat": 18.41824,
+        "lon": 77.42971,
+        "elevation_m": -2616.5,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42971,
+          18.41824
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 28,
+        "lat": 18.41824,
+        "lon": 77.43412,
+        "elevation_m": -2610.3,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43412,
+          18.41824
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 29,
+        "lat": 18.41824,
+        "lon": 77.43853,
+        "elevation_m": -2613.8,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43853,
+          18.41824
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 30,
+        "lat": 18.41824,
+        "lon": 77.44294,
+        "elevation_m": -2618.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44294,
+          18.41824
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 31,
+        "lat": 18.41824,
+        "lon": 77.44735,
+        "elevation_m": -2619.6,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44735,
+          18.41824
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 32,
+        "lat": 18.41824,
+        "lon": 77.45176,
+        "elevation_m": -2619.6,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45176,
+          18.41824
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 33,
+        "lat": 18.41824,
+        "lon": 77.45618,
+        "elevation_m": -2619.6,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45618,
+          18.41824
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 34,
+        "lat": 18.41824,
+        "lon": 77.46059,
+        "elevation_m": -2619.6,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.46059,
+          18.41824
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 35,
+        "lat": 18.41824,
+        "lon": 77.465,
+        "elevation_m": -2619.6,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.465,
+          18.41824
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 36,
+        "lat": 18.42147,
+        "lon": 77.39,
+        "elevation_m": -2534.3,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39,
+          18.42147
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 37,
+        "lat": 18.42147,
+        "lon": 77.39441,
+        "elevation_m": -2534.3,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39441,
+          18.42147
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 38,
+        "lat": 18.42147,
+        "lon": 77.39882,
+        "elevation_m": -2534.3,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39882,
+          18.42147
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 39,
+        "lat": 18.42147,
+        "lon": 77.40324,
+        "elevation_m": -2534.3,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40324,
+          18.42147
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 40,
+        "lat": 18.42147,
+        "lon": 77.40765,
+        "elevation_m": -2534.3,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40765,
+          18.42147
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 41,
+        "lat": 18.42147,
+        "lon": 77.41206,
+        "elevation_m": -2534.3,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41206,
+          18.42147
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 42,
+        "lat": 18.42147,
+        "lon": 77.41647,
+        "elevation_m": -2534.3,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41647,
+          18.42147
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 43,
+        "lat": 18.42147,
+        "lon": 77.42088,
+        "elevation_m": -2534.3,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42088,
+          18.42147
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 44,
+        "lat": 18.42147,
+        "lon": 77.42529,
+        "elevation_m": -2618.4,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42529,
+          18.42147
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 45,
+        "lat": 18.42147,
+        "lon": 77.42971,
+        "elevation_m": -2607.4,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42971,
+          18.42147
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 46,
+        "lat": 18.42147,
+        "lon": 77.43412,
+        "elevation_m": -2584.0,
+        "slope_deg": 24.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43412,
+          18.42147
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 47,
+        "lat": 18.42147,
+        "lon": 77.43853,
+        "elevation_m": -2597.1,
+        "slope_deg": 24.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43853,
+          18.42147
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 48,
+        "lat": 18.42147,
+        "lon": 77.44294,
+        "elevation_m": -2616.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44294,
+          18.42147
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 49,
+        "lat": 18.42147,
+        "lon": 77.44735,
+        "elevation_m": -2619.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44735,
+          18.42147
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 50,
+        "lat": 18.42147,
+        "lon": 77.45176,
+        "elevation_m": -2619.3,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45176,
+          18.42147
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 51,
+        "lat": 18.42147,
+        "lon": 77.45618,
+        "elevation_m": -2619.3,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45618,
+          18.42147
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 52,
+        "lat": 18.42147,
+        "lon": 77.46059,
+        "elevation_m": -2619.3,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.46059,
+          18.42147
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 53,
+        "lat": 18.42147,
+        "lon": 77.465,
+        "elevation_m": -2619.3,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.465,
+          18.42147
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 54,
+        "lat": 18.42471,
+        "lon": 77.39,
+        "elevation_m": -2533.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39,
+          18.42471
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 55,
+        "lat": 18.42471,
+        "lon": 77.39441,
+        "elevation_m": -2533.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39441,
+          18.42471
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 56,
+        "lat": 18.42471,
+        "lon": 77.39882,
+        "elevation_m": -2533.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39882,
+          18.42471
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 57,
+        "lat": 18.42471,
+        "lon": 77.40324,
+        "elevation_m": -2533.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40324,
+          18.42471
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 58,
+        "lat": 18.42471,
+        "lon": 77.40765,
+        "elevation_m": -2533.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40765,
+          18.42471
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 59,
+        "lat": 18.42471,
+        "lon": 77.41206,
+        "elevation_m": -2533.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41206,
+          18.42471
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 60,
+        "lat": 18.42471,
+        "lon": 77.41647,
+        "elevation_m": -2533.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41647,
+          18.42471
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 61,
+        "lat": 18.42471,
+        "lon": 77.42088,
+        "elevation_m": -2533.9,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42088,
+          18.42471
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 62,
+        "lat": 18.42471,
+        "lon": 77.42529,
+        "elevation_m": -2617.6,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42529,
+          18.42471
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 63,
+        "lat": 18.42471,
+        "lon": 77.42971,
+        "elevation_m": -2599.4,
+        "slope_deg": 24.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42971,
+          18.42471
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 64,
+        "lat": 18.42471,
+        "lon": 77.43412,
+        "elevation_m": -2561.0,
+        "slope_deg": 24.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43412,
+          18.42471
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 65,
+        "lat": 18.42471,
+        "lon": 77.43853,
+        "elevation_m": -2582.6,
+        "slope_deg": 24.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43853,
+          18.42471
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 66,
+        "lat": 18.42471,
+        "lon": 77.44294,
+        "elevation_m": -2614.1,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44294,
+          18.42471
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 67,
+        "lat": 18.42471,
+        "lon": 77.44735,
+        "elevation_m": -2618.8,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44735,
+          18.42471
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 68,
+        "lat": 18.42471,
+        "lon": 77.45176,
+        "elevation_m": -2618.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45176,
+          18.42471
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 69,
+        "lat": 18.42471,
+        "lon": 77.45618,
+        "elevation_m": -2618.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45618,
+          18.42471
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 70,
+        "lat": 18.42471,
+        "lon": 77.46059,
+        "elevation_m": -2618.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.46059,
+          18.42471
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 71,
+        "lat": 18.42471,
+        "lon": 77.465,
+        "elevation_m": -2618.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.465,
+          18.42471
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 72,
+        "lat": 18.42794,
+        "lon": 77.39,
+        "elevation_m": -2533.6,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39,
+          18.42794
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 73,
+        "lat": 18.42794,
+        "lon": 77.39441,
+        "elevation_m": -2533.6,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39441,
+          18.42794
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 74,
+        "lat": 18.42794,
+        "lon": 77.39882,
+        "elevation_m": -2533.6,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39882,
+          18.42794
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 75,
+        "lat": 18.42794,
+        "lon": 77.40324,
+        "elevation_m": -2533.6,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40324,
+          18.42794
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 76,
+        "lat": 18.42794,
+        "lon": 77.40765,
+        "elevation_m": -2533.6,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40765,
+          18.42794
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 77,
+        "lat": 18.42794,
+        "lon": 77.41206,
+        "elevation_m": -2533.6,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41206,
+          18.42794
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 78,
+        "lat": 18.42794,
+        "lon": 77.41647,
+        "elevation_m": -2533.6,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41647,
+          18.42794
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 79,
+        "lat": 18.42794,
+        "lon": 77.42088,
+        "elevation_m": -2533.6,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42088,
+          18.42794
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 80,
+        "lat": 18.42794,
+        "lon": 77.42529,
+        "elevation_m": -2617.6,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42529,
+          18.42794
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 81,
+        "lat": 18.42794,
+        "lon": 77.42971,
+        "elevation_m": -2604.7,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42971,
+          18.42794
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 82,
+        "lat": 18.42794,
+        "lon": 77.43412,
+        "elevation_m": -2577.4,
+        "slope_deg": 24.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43412,
+          18.42794
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 83,
+        "lat": 18.42794,
+        "lon": 77.43853,
+        "elevation_m": -2592.8,
+        "slope_deg": 24.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43853,
+          18.42794
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 84,
+        "lat": 18.42794,
+        "lon": 77.44294,
+        "elevation_m": -2615.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44294,
+          18.42794
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 85,
+        "lat": 18.42794,
+        "lon": 77.44735,
+        "elevation_m": -2618.5,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44735,
+          18.42794
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 86,
+        "lat": 18.42794,
+        "lon": 77.45176,
+        "elevation_m": -2618.6,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45176,
+          18.42794
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 87,
+        "lat": 18.42794,
+        "lon": 77.45618,
+        "elevation_m": -2618.6,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45618,
+          18.42794
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 88,
+        "lat": 18.42794,
+        "lon": 77.46059,
+        "elevation_m": -2618.6,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.46059,
+          18.42794
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 89,
+        "lat": 18.42794,
+        "lon": 77.465,
+        "elevation_m": -2618.6,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.465,
+          18.42794
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 90,
+        "lat": 18.43118,
+        "lon": 77.39,
+        "elevation_m": -2533.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39,
+          18.43118
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 91,
+        "lat": 18.43118,
+        "lon": 77.39441,
+        "elevation_m": -2533.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39441,
+          18.43118
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 92,
+        "lat": 18.43118,
+        "lon": 77.39882,
+        "elevation_m": -2533.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39882,
+          18.43118
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 93,
+        "lat": 18.43118,
+        "lon": 77.40324,
+        "elevation_m": -2533.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40324,
+          18.43118
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 94,
+        "lat": 18.43118,
+        "lon": 77.40765,
+        "elevation_m": -2533.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40765,
+          18.43118
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 95,
+        "lat": 18.43118,
+        "lon": 77.41206,
+        "elevation_m": -2533.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "CARBONATE_MARGIN",
+        "crism_science_flag": 1,
+        "science_score": 0.85,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41206,
+          18.43118
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 96,
+        "lat": 18.43118,
+        "lon": 77.41647,
+        "elevation_m": -2533.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "CARBONATE_MARGIN",
+        "crism_science_flag": 1,
+        "science_score": 0.85,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41647,
+          18.43118
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 97,
+        "lat": 18.43118,
+        "lon": 77.42088,
+        "elevation_m": -2533.2,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42088,
+          18.43118
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 98,
+        "lat": 18.43118,
+        "lon": 77.42529,
+        "elevation_m": -2617.9,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42529,
+          18.43118
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 99,
+        "lat": 18.43118,
+        "lon": 77.42971,
+        "elevation_m": -2614.0,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42971,
+          18.43118
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 100,
+        "lat": 18.43118,
+        "lon": 77.43412,
+        "elevation_m": -2605.6,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43412,
+          18.43118
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 101,
+        "lat": 18.43118,
+        "lon": 77.43853,
+        "elevation_m": -2610.3,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43853,
+          18.43118
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 102,
+        "lat": 18.43118,
+        "lon": 77.44294,
+        "elevation_m": -2617.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44294,
+          18.43118
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 103,
+        "lat": 18.43118,
+        "lon": 77.44735,
+        "elevation_m": -2618.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44735,
+          18.43118
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 104,
+        "lat": 18.43118,
+        "lon": 77.45176,
+        "elevation_m": -2618.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45176,
+          18.43118
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 105,
+        "lat": 18.43118,
+        "lon": 77.45618,
+        "elevation_m": -2618.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45618,
+          18.43118
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 106,
+        "lat": 18.43118,
+        "lon": 77.46059,
+        "elevation_m": -2618.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.46059,
+          18.43118
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 107,
+        "lat": 18.43118,
+        "lon": 77.465,
+        "elevation_m": -2618.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.465,
+          18.43118
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 108,
+        "lat": 18.43441,
+        "lon": 77.39,
+        "elevation_m": -2532.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39,
+          18.43441
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 109,
+        "lat": 18.43441,
+        "lon": 77.39441,
+        "elevation_m": -2532.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39441,
+          18.43441
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 110,
+        "lat": 18.43441,
+        "lon": 77.39882,
+        "elevation_m": -2532.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39882,
+          18.43441
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 111,
+        "lat": 18.43441,
+        "lon": 77.40324,
+        "elevation_m": -2532.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40324,
+          18.43441
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 112,
+        "lat": 18.43441,
+        "lon": 77.40765,
+        "elevation_m": -2532.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40765,
+          18.43441
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 113,
+        "lat": 18.43441,
+        "lon": 77.41206,
+        "elevation_m": -2532.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "CARBONATE_MARGIN",
+        "crism_science_flag": 1,
+        "science_score": 0.85,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41206,
+          18.43441
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 114,
+        "lat": 18.43441,
+        "lon": 77.41647,
+        "elevation_m": -2532.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "CARBONATE_MARGIN",
+        "crism_science_flag": 1,
+        "science_score": 0.85,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41647,
+          18.43441
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 115,
+        "lat": 18.43441,
+        "lon": 77.42088,
+        "elevation_m": -2532.9,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "CARBONATE_MARGIN",
+        "crism_science_flag": 1,
+        "science_score": 0.85,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42088,
+          18.43441
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 116,
+        "lat": 18.43441,
+        "lon": 77.42529,
+        "elevation_m": -2617.8,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42529,
+          18.43441
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 117,
+        "lat": 18.43441,
+        "lon": 77.42971,
+        "elevation_m": -2617.3,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42971,
+          18.43441
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 118,
+        "lat": 18.43441,
+        "lon": 77.43412,
+        "elevation_m": -2616.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43412,
+          18.43441
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 119,
+        "lat": 18.43441,
+        "lon": 77.43853,
+        "elevation_m": -2616.8,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43853,
+          18.43441
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 120,
+        "lat": 18.43441,
+        "lon": 77.44294,
+        "elevation_m": -2617.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44294,
+          18.43441
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 121,
+        "lat": 18.43441,
+        "lon": 77.44735,
+        "elevation_m": -2617.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44735,
+          18.43441
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 122,
+        "lat": 18.43441,
+        "lon": 77.45176,
+        "elevation_m": -2617.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45176,
+          18.43441
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 123,
+        "lat": 18.43441,
+        "lon": 77.45618,
+        "elevation_m": -2617.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45618,
+          18.43441
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 124,
+        "lat": 18.43441,
+        "lon": 77.46059,
+        "elevation_m": -2617.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.46059,
+          18.43441
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 125,
+        "lat": 18.43441,
+        "lon": 77.465,
+        "elevation_m": -2617.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.465,
+          18.43441
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 126,
+        "lat": 18.43765,
+        "lon": 77.39,
+        "elevation_m": -2532.5,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39,
+          18.43765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 127,
+        "lat": 18.43765,
+        "lon": 77.39441,
+        "elevation_m": -2532.5,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39441,
+          18.43765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 128,
+        "lat": 18.43765,
+        "lon": 77.39882,
+        "elevation_m": -2532.5,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39882,
+          18.43765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 129,
+        "lat": 18.43765,
+        "lon": 77.40324,
+        "elevation_m": -2532.5,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40324,
+          18.43765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 130,
+        "lat": 18.43765,
+        "lon": 77.40765,
+        "elevation_m": -2532.5,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40765,
+          18.43765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 131,
+        "lat": 18.43765,
+        "lon": 77.41206,
+        "elevation_m": -2532.5,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "CARBONATE_MARGIN",
+        "crism_science_flag": 1,
+        "science_score": 0.85,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41206,
+          18.43765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 132,
+        "lat": 18.43765,
+        "lon": 77.41647,
+        "elevation_m": -2532.5,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "CARBONATE_MARGIN",
+        "crism_science_flag": 1,
+        "science_score": 0.85,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41647,
+          18.43765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 133,
+        "lat": 18.43765,
+        "lon": 77.42088,
+        "elevation_m": -2532.5,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42088,
+          18.43765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 134,
+        "lat": 18.43765,
+        "lon": 77.42529,
+        "elevation_m": -2617.5,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42529,
+          18.43765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 135,
+        "lat": 18.43765,
+        "lon": 77.42971,
+        "elevation_m": -2617.5,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42971,
+          18.43765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 136,
+        "lat": 18.43765,
+        "lon": 77.43412,
+        "elevation_m": -2617.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43412,
+          18.43765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 137,
+        "lat": 18.43765,
+        "lon": 77.43853,
+        "elevation_m": -2617.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43853,
+          18.43765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 138,
+        "lat": 18.43765,
+        "lon": 77.44294,
+        "elevation_m": -2617.5,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44294,
+          18.43765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 139,
+        "lat": 18.43765,
+        "lon": 77.44735,
+        "elevation_m": -2617.5,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44735,
+          18.43765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 140,
+        "lat": 18.43765,
+        "lon": 77.45176,
+        "elevation_m": -2617.5,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45176,
+          18.43765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 141,
+        "lat": 18.43765,
+        "lon": 77.45618,
+        "elevation_m": -2617.5,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45618,
+          18.43765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 142,
+        "lat": 18.43765,
+        "lon": 77.46059,
+        "elevation_m": -2617.5,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.46059,
+          18.43765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 143,
+        "lat": 18.43765,
+        "lon": 77.465,
+        "elevation_m": -2617.5,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.465,
+          18.43765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 144,
+        "lat": 18.44088,
+        "lon": 77.39,
+        "elevation_m": -2532.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39,
+          18.44088
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 145,
+        "lat": 18.44088,
+        "lon": 77.39441,
+        "elevation_m": -2532.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39441,
+          18.44088
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 146,
+        "lat": 18.44088,
+        "lon": 77.39882,
+        "elevation_m": -2532.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39882,
+          18.44088
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 147,
+        "lat": 18.44088,
+        "lon": 77.40324,
+        "elevation_m": -2532.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40324,
+          18.44088
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 148,
+        "lat": 18.44088,
+        "lon": 77.40765,
+        "elevation_m": -2532.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40765,
+          18.44088
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 149,
+        "lat": 18.44088,
+        "lon": 77.41206,
+        "elevation_m": -2532.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41206,
+          18.44088
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 150,
+        "lat": 18.44088,
+        "lon": 77.41647,
+        "elevation_m": -2532.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41647,
+          18.44088
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 151,
+        "lat": 18.44088,
+        "lon": 77.42088,
+        "elevation_m": -2532.2,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42088,
+          18.44088
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 152,
+        "lat": 18.44088,
+        "lon": 77.42529,
+        "elevation_m": -2617.2,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42529,
+          18.44088
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 153,
+        "lat": 18.44088,
+        "lon": 77.42971,
+        "elevation_m": -2617.2,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42971,
+          18.44088
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 154,
+        "lat": 18.44088,
+        "lon": 77.43412,
+        "elevation_m": -2617.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43412,
+          18.44088
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 155,
+        "lat": 18.44088,
+        "lon": 77.43853,
+        "elevation_m": -2617.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43853,
+          18.44088
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 156,
+        "lat": 18.44088,
+        "lon": 77.44294,
+        "elevation_m": -2617.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44294,
+          18.44088
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 157,
+        "lat": 18.44088,
+        "lon": 77.44735,
+        "elevation_m": -2617.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44735,
+          18.44088
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 158,
+        "lat": 18.44088,
+        "lon": 77.45176,
+        "elevation_m": -2617.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45176,
+          18.44088
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 159,
+        "lat": 18.44088,
+        "lon": 77.45618,
+        "elevation_m": -2617.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45618,
+          18.44088
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 160,
+        "lat": 18.44088,
+        "lon": 77.46059,
+        "elevation_m": -2617.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.46059,
+          18.44088
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 161,
+        "lat": 18.44088,
+        "lon": 77.465,
+        "elevation_m": -2617.2,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.465,
+          18.44088
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 162,
+        "lat": 18.44412,
+        "lon": 77.39,
+        "elevation_m": -2531.8,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39,
+          18.44412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 163,
+        "lat": 18.44412,
+        "lon": 77.39441,
+        "elevation_m": -2531.8,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39441,
+          18.44412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 164,
+        "lat": 18.44412,
+        "lon": 77.39882,
+        "elevation_m": -2531.8,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39882,
+          18.44412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 165,
+        "lat": 18.44412,
+        "lon": 77.40324,
+        "elevation_m": -2531.8,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40324,
+          18.44412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 166,
+        "lat": 18.44412,
+        "lon": 77.40765,
+        "elevation_m": -2531.8,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40765,
+          18.44412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 167,
+        "lat": 18.44412,
+        "lon": 77.41206,
+        "elevation_m": -2531.8,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41206,
+          18.44412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 168,
+        "lat": 18.44412,
+        "lon": 77.41647,
+        "elevation_m": -2531.8,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41647,
+          18.44412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 169,
+        "lat": 18.44412,
+        "lon": 77.42088,
+        "elevation_m": -2531.8,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42088,
+          18.44412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 170,
+        "lat": 18.44412,
+        "lon": 77.42529,
+        "elevation_m": -2616.8,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42529,
+          18.44412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 171,
+        "lat": 18.44412,
+        "lon": 77.42971,
+        "elevation_m": -2616.8,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42971,
+          18.44412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 172,
+        "lat": 18.44412,
+        "lon": 77.43412,
+        "elevation_m": -2616.8,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43412,
+          18.44412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 173,
+        "lat": 18.44412,
+        "lon": 77.43853,
+        "elevation_m": -2616.8,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43853,
+          18.44412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 174,
+        "lat": 18.44412,
+        "lon": 77.44294,
+        "elevation_m": -2616.8,
+        "slope_deg": 4.5,
+        "themis_ti_val": 160,
+        "themis_ti_bin": "SAND_DUNES_LOW_TI",
+        "traction_risk": 0.85,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44294,
+          18.44412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 175,
+        "lat": 18.44412,
+        "lon": 77.44735,
+        "elevation_m": -2616.8,
+        "slope_deg": 4.5,
+        "themis_ti_val": 160,
+        "themis_ti_bin": "SAND_DUNES_LOW_TI",
+        "traction_risk": 0.85,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44735,
+          18.44412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 176,
+        "lat": 18.44412,
+        "lon": 77.45176,
+        "elevation_m": -2616.8,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45176,
+          18.44412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 177,
+        "lat": 18.44412,
+        "lon": 77.45618,
+        "elevation_m": -2616.8,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45618,
+          18.44412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 178,
+        "lat": 18.44412,
+        "lon": 77.46059,
+        "elevation_m": -2616.8,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.46059,
+          18.44412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 179,
+        "lat": 18.44412,
+        "lon": 77.465,
+        "elevation_m": -2616.8,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.465,
+          18.44412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 180,
+        "lat": 18.44735,
+        "lon": 77.39,
+        "elevation_m": -2531.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39,
+          18.44735
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 181,
+        "lat": 18.44735,
+        "lon": 77.39441,
+        "elevation_m": -2531.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39441,
+          18.44735
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 182,
+        "lat": 18.44735,
+        "lon": 77.39882,
+        "elevation_m": -2531.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39882,
+          18.44735
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 183,
+        "lat": 18.44735,
+        "lon": 77.40324,
+        "elevation_m": -2531.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40324,
+          18.44735
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 184,
+        "lat": 18.44735,
+        "lon": 77.40765,
+        "elevation_m": -2531.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40765,
+          18.44735
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 185,
+        "lat": 18.44735,
+        "lon": 77.41206,
+        "elevation_m": -2531.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41206,
+          18.44735
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 186,
+        "lat": 18.44735,
+        "lon": 77.41647,
+        "elevation_m": -2531.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41647,
+          18.44735
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 187,
+        "lat": 18.44735,
+        "lon": 77.42088,
+        "elevation_m": -2531.4,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42088,
+          18.44735
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 188,
+        "lat": 18.44735,
+        "lon": 77.42529,
+        "elevation_m": -2616.4,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42529,
+          18.44735
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 189,
+        "lat": 18.44735,
+        "lon": 77.42971,
+        "elevation_m": -2616.4,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42971,
+          18.44735
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 190,
+        "lat": 18.44735,
+        "lon": 77.43412,
+        "elevation_m": -2616.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43412,
+          18.44735
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 191,
+        "lat": 18.44735,
+        "lon": 77.43853,
+        "elevation_m": -2616.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 160,
+        "themis_ti_bin": "SAND_DUNES_LOW_TI",
+        "traction_risk": 0.85,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43853,
+          18.44735
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 192,
+        "lat": 18.44735,
+        "lon": 77.44294,
+        "elevation_m": -2616.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 160,
+        "themis_ti_bin": "SAND_DUNES_LOW_TI",
+        "traction_risk": 0.85,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44294,
+          18.44735
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 193,
+        "lat": 18.44735,
+        "lon": 77.44735,
+        "elevation_m": -2616.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 160,
+        "themis_ti_bin": "SAND_DUNES_LOW_TI",
+        "traction_risk": 0.85,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44735,
+          18.44735
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 194,
+        "lat": 18.44735,
+        "lon": 77.45176,
+        "elevation_m": -2616.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 160,
+        "themis_ti_bin": "SAND_DUNES_LOW_TI",
+        "traction_risk": 0.85,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45176,
+          18.44735
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 195,
+        "lat": 18.44735,
+        "lon": 77.45618,
+        "elevation_m": -2616.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45618,
+          18.44735
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 196,
+        "lat": 18.44735,
+        "lon": 77.46059,
+        "elevation_m": -2616.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.46059,
+          18.44735
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 197,
+        "lat": 18.44735,
+        "lon": 77.465,
+        "elevation_m": -2616.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.465,
+          18.44735
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 198,
+        "lat": 18.45059,
+        "lon": 77.39,
+        "elevation_m": -2531.1,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39,
+          18.45059
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 199,
+        "lat": 18.45059,
+        "lon": 77.39441,
+        "elevation_m": -2531.1,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39441,
+          18.45059
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 200,
+        "lat": 18.45059,
+        "lon": 77.39882,
+        "elevation_m": -2531.1,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39882,
+          18.45059
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 201,
+        "lat": 18.45059,
+        "lon": 77.40324,
+        "elevation_m": -2531.1,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "FE_MG_SMECTITE_CLAY",
+        "crism_science_flag": 1,
+        "science_score": 0.98,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40324,
+          18.45059
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 202,
+        "lat": 18.45059,
+        "lon": 77.40765,
+        "elevation_m": -2531.1,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "FE_MG_SMECTITE_CLAY",
+        "crism_science_flag": 1,
+        "science_score": 0.98,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40765,
+          18.45059
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 203,
+        "lat": 18.45059,
+        "lon": 77.41206,
+        "elevation_m": -2531.1,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41206,
+          18.45059
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 204,
+        "lat": 18.45059,
+        "lon": 77.41647,
+        "elevation_m": -2531.1,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41647,
+          18.45059
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 205,
+        "lat": 18.45059,
+        "lon": 77.42088,
+        "elevation_m": -2531.1,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42088,
+          18.45059
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 206,
+        "lat": 18.45059,
+        "lon": 77.42529,
+        "elevation_m": -2616.1,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42529,
+          18.45059
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 207,
+        "lat": 18.45059,
+        "lon": 77.42971,
+        "elevation_m": -2616.1,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42971,
+          18.45059
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 208,
+        "lat": 18.45059,
+        "lon": 77.43412,
+        "elevation_m": -2616.1,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43412,
+          18.45059
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 209,
+        "lat": 18.45059,
+        "lon": 77.43853,
+        "elevation_m": -2616.1,
+        "slope_deg": 4.5,
+        "themis_ti_val": 160,
+        "themis_ti_bin": "SAND_DUNES_LOW_TI",
+        "traction_risk": 0.85,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43853,
+          18.45059
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 210,
+        "lat": 18.45059,
+        "lon": 77.44294,
+        "elevation_m": -2616.1,
+        "slope_deg": 4.5,
+        "themis_ti_val": 160,
+        "themis_ti_bin": "SAND_DUNES_LOW_TI",
+        "traction_risk": 0.85,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44294,
+          18.45059
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 211,
+        "lat": 18.45059,
+        "lon": 77.44735,
+        "elevation_m": -2616.1,
+        "slope_deg": 4.5,
+        "themis_ti_val": 160,
+        "themis_ti_bin": "SAND_DUNES_LOW_TI",
+        "traction_risk": 0.85,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44735,
+          18.45059
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 212,
+        "lat": 18.45059,
+        "lon": 77.45176,
+        "elevation_m": -2616.1,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45176,
+          18.45059
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 213,
+        "lat": 18.45059,
+        "lon": 77.45618,
+        "elevation_m": -2616.1,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45618,
+          18.45059
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 214,
+        "lat": 18.45059,
+        "lon": 77.46059,
+        "elevation_m": -2616.1,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.46059,
+          18.45059
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 215,
+        "lat": 18.45059,
+        "lon": 77.465,
+        "elevation_m": -2616.1,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.465,
+          18.45059
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 216,
+        "lat": 18.45382,
+        "lon": 77.39,
+        "elevation_m": -2530.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39,
+          18.45382
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 217,
+        "lat": 18.45382,
+        "lon": 77.39441,
+        "elevation_m": -2530.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39441,
+          18.45382
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 218,
+        "lat": 18.45382,
+        "lon": 77.39882,
+        "elevation_m": -2530.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39882,
+          18.45382
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 219,
+        "lat": 18.45382,
+        "lon": 77.40324,
+        "elevation_m": -2530.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "FE_MG_SMECTITE_CLAY",
+        "crism_science_flag": 1,
+        "science_score": 0.98,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40324,
+          18.45382
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 220,
+        "lat": 18.45382,
+        "lon": 77.40765,
+        "elevation_m": -2530.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "FE_MG_SMECTITE_CLAY",
+        "crism_science_flag": 1,
+        "science_score": 0.98,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40765,
+          18.45382
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 221,
+        "lat": 18.45382,
+        "lon": 77.41206,
+        "elevation_m": -2530.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41206,
+          18.45382
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 222,
+        "lat": 18.45382,
+        "lon": 77.41647,
+        "elevation_m": -2530.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41647,
+          18.45382
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 223,
+        "lat": 18.45382,
+        "lon": 77.42088,
+        "elevation_m": -2530.7,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42088,
+          18.45382
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 224,
+        "lat": 18.45382,
+        "lon": 77.42529,
+        "elevation_m": -2615.7,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42529,
+          18.45382
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 225,
+        "lat": 18.45382,
+        "lon": 77.42971,
+        "elevation_m": -2615.7,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42971,
+          18.45382
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 226,
+        "lat": 18.45382,
+        "lon": 77.43412,
+        "elevation_m": -2615.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43412,
+          18.45382
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 227,
+        "lat": 18.45382,
+        "lon": 77.43853,
+        "elevation_m": -2615.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43853,
+          18.45382
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 228,
+        "lat": 18.45382,
+        "lon": 77.44294,
+        "elevation_m": -2615.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 160,
+        "themis_ti_bin": "SAND_DUNES_LOW_TI",
+        "traction_risk": 0.85,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44294,
+          18.45382
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 229,
+        "lat": 18.45382,
+        "lon": 77.44735,
+        "elevation_m": -2615.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 160,
+        "themis_ti_bin": "SAND_DUNES_LOW_TI",
+        "traction_risk": 0.85,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44735,
+          18.45382
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 230,
+        "lat": 18.45382,
+        "lon": 77.45176,
+        "elevation_m": -2615.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45176,
+          18.45382
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 231,
+        "lat": 18.45382,
+        "lon": 77.45618,
+        "elevation_m": -2615.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45618,
+          18.45382
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 232,
+        "lat": 18.45382,
+        "lon": 77.46059,
+        "elevation_m": -2615.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.46059,
+          18.45382
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 233,
+        "lat": 18.45382,
+        "lon": 77.465,
+        "elevation_m": -2615.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.465,
+          18.45382
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 234,
+        "lat": 18.45706,
+        "lon": 77.39,
+        "elevation_m": -2530.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39,
+          18.45706
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 235,
+        "lat": 18.45706,
+        "lon": 77.39441,
+        "elevation_m": -2530.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39441,
+          18.45706
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 236,
+        "lat": 18.45706,
+        "lon": 77.39882,
+        "elevation_m": -2530.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39882,
+          18.45706
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 237,
+        "lat": 18.45706,
+        "lon": 77.40324,
+        "elevation_m": -2530.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "FE_MG_SMECTITE_CLAY",
+        "crism_science_flag": 1,
+        "science_score": 0.98,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40324,
+          18.45706
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 238,
+        "lat": 18.45706,
+        "lon": 77.40765,
+        "elevation_m": -2530.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "FE_MG_SMECTITE_CLAY",
+        "crism_science_flag": 1,
+        "science_score": 0.98,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40765,
+          18.45706
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 239,
+        "lat": 18.45706,
+        "lon": 77.41206,
+        "elevation_m": -2530.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41206,
+          18.45706
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 240,
+        "lat": 18.45706,
+        "lon": 77.41647,
+        "elevation_m": -2530.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41647,
+          18.45706
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 241,
+        "lat": 18.45706,
+        "lon": 77.42088,
+        "elevation_m": -2530.4,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42088,
+          18.45706
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 242,
+        "lat": 18.45706,
+        "lon": 77.42529,
+        "elevation_m": -2615.4,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42529,
+          18.45706
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 243,
+        "lat": 18.45706,
+        "lon": 77.42971,
+        "elevation_m": -2615.4,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42971,
+          18.45706
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 244,
+        "lat": 18.45706,
+        "lon": 77.43412,
+        "elevation_m": -2615.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43412,
+          18.45706
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 245,
+        "lat": 18.45706,
+        "lon": 77.43853,
+        "elevation_m": -2615.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43853,
+          18.45706
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 246,
+        "lat": 18.45706,
+        "lon": 77.44294,
+        "elevation_m": -2615.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44294,
+          18.45706
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 247,
+        "lat": 18.45706,
+        "lon": 77.44735,
+        "elevation_m": -2615.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44735,
+          18.45706
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 248,
+        "lat": 18.45706,
+        "lon": 77.45176,
+        "elevation_m": -2615.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45176,
+          18.45706
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 249,
+        "lat": 18.45706,
+        "lon": 77.45618,
+        "elevation_m": -2615.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45618,
+          18.45706
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 250,
+        "lat": 18.45706,
+        "lon": 77.46059,
+        "elevation_m": -2615.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.46059,
+          18.45706
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 251,
+        "lat": 18.45706,
+        "lon": 77.465,
+        "elevation_m": -2615.4,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.465,
+          18.45706
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 252,
+        "lat": 18.46029,
+        "lon": 77.39,
+        "elevation_m": -2530.0,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39,
+          18.46029
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 253,
+        "lat": 18.46029,
+        "lon": 77.39441,
+        "elevation_m": -2530.0,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39441,
+          18.46029
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 254,
+        "lat": 18.46029,
+        "lon": 77.39882,
+        "elevation_m": -2530.0,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39882,
+          18.46029
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 255,
+        "lat": 18.46029,
+        "lon": 77.40324,
+        "elevation_m": -2530.0,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40324,
+          18.46029
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 256,
+        "lat": 18.46029,
+        "lon": 77.40765,
+        "elevation_m": -2530.0,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40765,
+          18.46029
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 257,
+        "lat": 18.46029,
+        "lon": 77.41206,
+        "elevation_m": -2530.0,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41206,
+          18.46029
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 258,
+        "lat": 18.46029,
+        "lon": 77.41647,
+        "elevation_m": -2530.0,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41647,
+          18.46029
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 259,
+        "lat": 18.46029,
+        "lon": 77.42088,
+        "elevation_m": -2530.0,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42088,
+          18.46029
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 260,
+        "lat": 18.46029,
+        "lon": 77.42529,
+        "elevation_m": -2615.0,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42529,
+          18.46029
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 261,
+        "lat": 18.46029,
+        "lon": 77.42971,
+        "elevation_m": -2615.0,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42971,
+          18.46029
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 262,
+        "lat": 18.46029,
+        "lon": 77.43412,
+        "elevation_m": -2615.0,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43412,
+          18.46029
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 263,
+        "lat": 18.46029,
+        "lon": 77.43853,
+        "elevation_m": -2615.0,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43853,
+          18.46029
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 264,
+        "lat": 18.46029,
+        "lon": 77.44294,
+        "elevation_m": -2615.0,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44294,
+          18.46029
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 265,
+        "lat": 18.46029,
+        "lon": 77.44735,
+        "elevation_m": -2615.0,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44735,
+          18.46029
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 266,
+        "lat": 18.46029,
+        "lon": 77.45176,
+        "elevation_m": -2615.0,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45176,
+          18.46029
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 267,
+        "lat": 18.46029,
+        "lon": 77.45618,
+        "elevation_m": -2615.0,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45618,
+          18.46029
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 268,
+        "lat": 18.46029,
+        "lon": 77.46059,
+        "elevation_m": -2615.0,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.46059,
+          18.46029
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 269,
+        "lat": 18.46029,
+        "lon": 77.465,
+        "elevation_m": -2615.0,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.465,
+          18.46029
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 270,
+        "lat": 18.46353,
+        "lon": 77.39,
+        "elevation_m": -2529.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39,
+          18.46353
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 271,
+        "lat": 18.46353,
+        "lon": 77.39441,
+        "elevation_m": -2529.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39441,
+          18.46353
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 272,
+        "lat": 18.46353,
+        "lon": 77.39882,
+        "elevation_m": -2529.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39882,
+          18.46353
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 273,
+        "lat": 18.46353,
+        "lon": 77.40324,
+        "elevation_m": -2529.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40324,
+          18.46353
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 274,
+        "lat": 18.46353,
+        "lon": 77.40765,
+        "elevation_m": -2529.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40765,
+          18.46353
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 275,
+        "lat": 18.46353,
+        "lon": 77.41206,
+        "elevation_m": -2529.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41206,
+          18.46353
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 276,
+        "lat": 18.46353,
+        "lon": 77.41647,
+        "elevation_m": -2529.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41647,
+          18.46353
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 277,
+        "lat": 18.46353,
+        "lon": 77.42088,
+        "elevation_m": -2529.7,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42088,
+          18.46353
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 278,
+        "lat": 18.46353,
+        "lon": 77.42529,
+        "elevation_m": -2614.7,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42529,
+          18.46353
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 279,
+        "lat": 18.46353,
+        "lon": 77.42971,
+        "elevation_m": -2614.7,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42971,
+          18.46353
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 280,
+        "lat": 18.46353,
+        "lon": 77.43412,
+        "elevation_m": -2614.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43412,
+          18.46353
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 281,
+        "lat": 18.46353,
+        "lon": 77.43853,
+        "elevation_m": -2614.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43853,
+          18.46353
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 282,
+        "lat": 18.46353,
+        "lon": 77.44294,
+        "elevation_m": -2614.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44294,
+          18.46353
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 283,
+        "lat": 18.46353,
+        "lon": 77.44735,
+        "elevation_m": -2614.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44735,
+          18.46353
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 284,
+        "lat": 18.46353,
+        "lon": 77.45176,
+        "elevation_m": -2614.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45176,
+          18.46353
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 285,
+        "lat": 18.46353,
+        "lon": 77.45618,
+        "elevation_m": -2614.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45618,
+          18.46353
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 286,
+        "lat": 18.46353,
+        "lon": 77.46059,
+        "elevation_m": -2614.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.46059,
+          18.46353
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 287,
+        "lat": 18.46353,
+        "lon": 77.465,
+        "elevation_m": -2614.7,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.465,
+          18.46353
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 288,
+        "lat": 18.46676,
+        "lon": 77.39,
+        "elevation_m": -2529.3,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39,
+          18.46676
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 289,
+        "lat": 18.46676,
+        "lon": 77.39441,
+        "elevation_m": -2529.3,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39441,
+          18.46676
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 290,
+        "lat": 18.46676,
+        "lon": 77.39882,
+        "elevation_m": -2529.3,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39882,
+          18.46676
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 291,
+        "lat": 18.46676,
+        "lon": 77.40324,
+        "elevation_m": -2529.3,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40324,
+          18.46676
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 292,
+        "lat": 18.46676,
+        "lon": 77.40765,
+        "elevation_m": -2529.3,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40765,
+          18.46676
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 293,
+        "lat": 18.46676,
+        "lon": 77.41206,
+        "elevation_m": -2529.3,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41206,
+          18.46676
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 294,
+        "lat": 18.46676,
+        "lon": 77.41647,
+        "elevation_m": -2529.3,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41647,
+          18.46676
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 295,
+        "lat": 18.46676,
+        "lon": 77.42088,
+        "elevation_m": -2529.3,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42088,
+          18.46676
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 296,
+        "lat": 18.46676,
+        "lon": 77.42529,
+        "elevation_m": -2614.3,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42529,
+          18.46676
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 297,
+        "lat": 18.46676,
+        "lon": 77.42971,
+        "elevation_m": -2614.3,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42971,
+          18.46676
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 298,
+        "lat": 18.46676,
+        "lon": 77.43412,
+        "elevation_m": -2614.3,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43412,
+          18.46676
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 299,
+        "lat": 18.46676,
+        "lon": 77.43853,
+        "elevation_m": -2614.3,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43853,
+          18.46676
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 300,
+        "lat": 18.46676,
+        "lon": 77.44294,
+        "elevation_m": -2614.3,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44294,
+          18.46676
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 301,
+        "lat": 18.46676,
+        "lon": 77.44735,
+        "elevation_m": -2614.3,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44735,
+          18.46676
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 302,
+        "lat": 18.46676,
+        "lon": 77.45176,
+        "elevation_m": -2614.3,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45176,
+          18.46676
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 303,
+        "lat": 18.46676,
+        "lon": 77.45618,
+        "elevation_m": -2614.3,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45618,
+          18.46676
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 304,
+        "lat": 18.46676,
+        "lon": 77.46059,
+        "elevation_m": -2614.3,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.46059,
+          18.46676
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 305,
+        "lat": 18.46676,
+        "lon": 77.465,
+        "elevation_m": -2614.3,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.465,
+          18.46676
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 306,
+        "lat": 18.47,
+        "lon": 77.39,
+        "elevation_m": -2528.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39,
+          18.47
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 307,
+        "lat": 18.47,
+        "lon": 77.39441,
+        "elevation_m": -2528.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39441,
+          18.47
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 308,
+        "lat": 18.47,
+        "lon": 77.39882,
+        "elevation_m": -2528.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.39882,
+          18.47
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 309,
+        "lat": 18.47,
+        "lon": 77.40324,
+        "elevation_m": -2528.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40324,
+          18.47
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 310,
+        "lat": 18.47,
+        "lon": 77.40765,
+        "elevation_m": -2528.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.40765,
+          18.47
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 311,
+        "lat": 18.47,
+        "lon": 77.41206,
+        "elevation_m": -2528.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41206,
+          18.47
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 312,
+        "lat": 18.47,
+        "lon": 77.41647,
+        "elevation_m": -2528.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.41647,
+          18.47
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 313,
+        "lat": 18.47,
+        "lon": 77.42088,
+        "elevation_m": -2528.9,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42088,
+          18.47
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 314,
+        "lat": 18.47,
+        "lon": 77.42529,
+        "elevation_m": -2613.9,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42529,
+          18.47
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 315,
+        "lat": 18.47,
+        "lon": 77.42971,
+        "elevation_m": -2613.9,
+        "slope_deg": 20.5,
+        "themis_ti_val": 480,
+        "themis_ti_bin": "BEDROCK_HIGH_TI",
+        "traction_risk": 0.15,
+        "crism_class": "MAFIC_PYROXENE",
+        "crism_science_flag": 0,
+        "science_score": 0.2,
+        "is_slope_hazard": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.42971,
+          18.47
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 316,
+        "lat": 18.47,
+        "lon": 77.43412,
+        "elevation_m": -2613.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43412,
+          18.47
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 317,
+        "lat": 18.47,
+        "lon": 77.43853,
+        "elevation_m": -2613.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.43853,
+          18.47
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 318,
+        "lat": 18.47,
+        "lon": 77.44294,
+        "elevation_m": -2613.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44294,
+          18.47
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 319,
+        "lat": 18.47,
+        "lon": 77.44735,
+        "elevation_m": -2613.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.44735,
+          18.47
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 320,
+        "lat": 18.47,
+        "lon": 77.45176,
+        "elevation_m": -2613.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45176,
+          18.47
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 321,
+        "lat": 18.47,
+        "lon": 77.45618,
+        "elevation_m": -2613.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.45618,
+          18.47
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 322,
+        "lat": 18.47,
+        "lon": 77.46059,
+        "elevation_m": -2613.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.46059,
+          18.47
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": 323,
+        "lat": 18.47,
+        "lon": 77.465,
+        "elevation_m": -2613.9,
+        "slope_deg": 4.5,
+        "themis_ti_val": 290,
+        "themis_ti_bin": "DURICRUST_MID_TI",
+        "traction_risk": 0.35,
+        "crism_class": "UNALTERED_DUST",
+        "crism_science_flag": 0,
+        "science_score": 0.05,
+        "is_slope_hazard": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.465,
+          18.47
+        ]
+      }
+    }
+  ]
+}

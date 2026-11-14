@@ -45,17 +45,27 @@ window.MarsRouteBetween = (function () {
     const manifest = await MarsData.loadManifest();
     const bounds = manifest.bbox;
     function inCoverage(lat, lon) {
-      return Number.isFinite(lat) && Number.isFinite(lon) &&
-        (!bounds || (lat >= bounds.south && lat <= bounds.north &&
-          lon >= bounds.west && lon <= bounds.east));
+      return (
+        Number.isFinite(lat) &&
+        Number.isFinite(lon) &&
+        (!bounds ||
+          (lat >= bounds.south &&
+            lat <= bounds.north &&
+            lon >= bounds.west &&
+            lon <= bounds.east))
+      );
     }
     if (!inCoverage(latA, lonA) || !inCoverage(latB, lonB)) {
-      return { status: "out_of_coverage", error: "Choose both points inside the terrain coverage." };
+      return {
+        status: "out_of_coverage",
+        error: "Choose both points inside the terrain coverage.",
+      };
     }
     const candidate = await MarsData.loadScores().catch(() => null);
-    const scores = graph.graph_id != null && candidate?.graph_id === graph.graph_id
-      ? candidate
-      : null;
+    const scores =
+      graph.graph_id != null && candidate?.graph_id === graph.graph_id
+        ? candidate
+        : null;
     const mode = MarsTravelMode.get();
     const maxSlope = mode.maxSlopeDeg;
 
@@ -65,12 +75,7 @@ window.MarsRouteBetween = (function () {
       return { error: "No graph nodes in area" };
     }
 
-    const geodesic_m = MarsGeodesic.haversineMeters(
-      latA,
-      lonA,
-      latB,
-      lonB
-    );
+    const geodesic_m = MarsGeodesic.haversineMeters(latA, lonA, latB, lonB);
 
     const scoreNodes = scores?.nodes || {};
     const edgeCostFn = function (fromId, toId, lengthM) {
@@ -96,7 +101,35 @@ window.MarsRouteBetween = (function () {
       ? pathResult.path.map(function (id) {
           const n = nodesById[id];
           return [n.lon, n.lat];
-        }) : [];
+        })
+      : [];
+
+    const pathNodes = [];
+    if (pathResult.found) {
+      let cumulativeM = 0;
+      for (let i = 0; i < pathResult.path.length; i++) {
+        const curr = nodesById[pathResult.path[i]];
+        if (i > 0) {
+          const prev = nodesById[pathResult.path[i - 1]];
+          cumulativeM += MarsGeodesic.haversineMeters(
+            prev.lat,
+            prev.lon,
+            curr.lat,
+            curr.lon
+          );
+        }
+        const score = scoreNodes[curr.id] || {};
+        pathNodes.push({
+          id: curr.id,
+          lat: curr.lat,
+          lon: curr.lon,
+          elev_m: curr.elev_m,
+          slope_deg: curr.slope_deg,
+          risk: score.risk_0_1 || 0.3,
+          dist_m: cumulativeM,
+        });
+      }
+    }
 
     const feasible =
       pathResult.found &&
@@ -126,8 +159,12 @@ window.MarsRouteBetween = (function () {
       feasible: feasible,
       path_found: pathResult.found,
       status: pathResult.found ? "ok" : "no_route",
-      node_ids: pathResult.path,
-      geometry: coords.length > 1 ? { type: "LineString", coordinates: coords } : null,
+      node_ids: pathResult.found ? pathResult.path : [],
+      path_nodes: pathNodes,
+      geometry:
+        coords.length > 1
+          ? { type: "LineString", coordinates: coords }
+          : null,
     };
   }
 

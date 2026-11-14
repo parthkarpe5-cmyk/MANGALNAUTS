@@ -18,11 +18,25 @@ window.TrekLayers = (function () {
       label: "Viking color",
       credit: "NASA Viking MDIM · Mars Trek / USGS",
     },
+    vikingBw: {
+      layerId: "Mars_Viking_MDIM21_mosaic_global_232m",
+      ext: "jpg",
+      maxLevel: 7,
+      label: "Viking B&W (USGS)",
+      credit: "USGS Astrogeology · Viking MDIM 2.1",
+    },
     mola: {
       layerId: "Mars_MGS_MOLA_ClrShade_merge_global_463m",
       ext: "jpg",
       maxLevel: 10,
-      label: "MOLA hillshade",
+      label: "MOLA hillshade (color)",
+      credit: "NASA MGS MOLA · Mars Trek",
+    },
+    molaRelief: {
+      layerId: "Mars_MGS_MOLA_Shade_merge_global_463m",
+      ext: "jpg",
+      maxLevel: 10,
+      label: "MOLA relief (grayscale)",
       credit: "NASA MGS MOLA · Mars Trek",
     },
     themisDay: {
@@ -44,6 +58,20 @@ window.TrekLayers = (function () {
       ext: "png",
       maxLevel: 6,
       label: "TES albedo",
+      credit: "NASA MGS TES · Mars Trek",
+    },
+    tesDust: {
+      layerId: "Mars_MGS_TES_Dust_Cover_Index_mosaic_global_7410m",
+      ext: "png",
+      maxLevel: 6,
+      label: "TES dust cover index",
+      credit: "NASA MGS TES · Mars Trek",
+    },
+    tesThermal: {
+      layerId: "Mars_MGS_TES_Thermal_Inertia_mosaic_global_7410m",
+      ext: "png",
+      maxLevel: 6,
+      label: "TES thermal inertia",
       credit: "NASA MGS TES · Mars Trek",
     },
   };
