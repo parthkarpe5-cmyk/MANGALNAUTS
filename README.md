@@ -58,12 +58,27 @@ Combines high-resolution NASA orbital imagery and USGS elevation with graph-base
 
 ## Run Locally
 
+### 1. Launch Mission Web Cockpit
 ```bash
-cd "D:\NASA Space challenge\MANGALNAUTS"
-python -m http.server 8080
+cd "D:\Sem_5\NASA\MANGALNAUTS"
+python run_app.py
+```
+*(Or run `python -m http.server 8000`)*. Open **[http://localhost:8000](http://localhost:8000)** in your browser.
+
+### 2. Run GNN Scoring Pipeline
+```bash
+python python/ml/export_scores.py
 ```
 
-Open [http://localhost:8080](http://localhost:8080) in your web browser.
+### 3. Run In-Situ Live Telemetry & Radiation Snapshot
+```bash
+python python/safety/rems_rad_snapshot.py
+```
+
+### 4. Run Routing & System Integration Verification
+```bash
+python python/ml/verify_routing_integration.py
+```
 
 ---
 
