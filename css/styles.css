@@ -827,75 +827,105 @@ body {
 /* Globe Site Exploration HUD Banner */
 .globe-site-banner {
   position: absolute;
-  top: 14px;
-  left: 14px;
-  z-index: 30;
-  width: min(180px, calc(100% - 28px));
-  padding: 10px;
-  background: var(--map-glass, var(--panel));
-  border: 1px solid var(--map-glass-border, var(--border-active));
-  border-radius: 8px;
-  backdrop-filter: blur(12px);
-  box-shadow: 0 5px 18px #0005;
+  bottom: 96px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-width: 480px;
+  max-width: calc(100% - 32px);
+  padding: 10px 18px;
+  background: rgba(13, 17, 26, 0.95);
+  border: 1px solid rgba(56, 189, 248, 0.5);
+  border-radius: 20px;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.85), 0 0 24px rgba(56, 189, 248, 0.22);
+  animation: bannerSlideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: auto;
+}
+
+@keyframes bannerSlideUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 14px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
 }
 
 .globe-site-info {
   display: flex;
-  align-items: flex-start;
-  gap: 7px;
+  align-items: center;
+  gap: 10px;
 }
 
 .globe-site-pulse {
-  width: 6px;
-  height: 6px;
-  margin-top: 5px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: var(--accent);
+  background: var(--accent, #38bdf8);
+  box-shadow: 0 0 8px var(--accent, #38bdf8);
+  animation: navPulse 1.4s infinite;
   flex: none;
 }
 
 .globe-site-title {
-  font-size: .8rem;
+  font-size: .88rem;
   font-weight: 700;
-  color: var(--text-bright);
+  color: var(--text-bright, #fff);
+  letter-spacing: 0.03em;
 }
 
 .globe-site-sub {
   margin-top: 2px;
-  font: .64rem var(--font-mono);
-  color: var(--muted);
+  font: .68rem var(--font-mono);
+  color: var(--muted, #94a3b8);
 }
 
 .globe-site-actions {
   display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  margin-top: 8px;
+  align-items: center;
+  gap: 8px;
+  margin-top: 0;
 }
 
 .btn-enter-tactical,
 .btn-globe-orbit {
-  padding: 5px 7px;
-  border-radius: 5px;
-  font: 700 .69rem var(--font-body);
+  padding: 6px 14px;
+  border-radius: 12px;
+  font: 700 .72rem var(--font-body);
   cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-enter-tactical {
   color: #071017;
-  background: var(--accent);
+  background: linear-gradient(105deg, #bcf76e, #52ccef);
   border: 1px solid transparent;
+  box-shadow: 0 0 12px rgba(188, 247, 110, 0.3);
 }
 
 .btn-globe-orbit {
-  color: var(--text-bright);
-  background: rgba(255, 255, 255, .06);
-  border: 1px solid var(--border-light);
+  color: var(--text-bright, #fff);
+  background: rgba(255, 255, 255, .08);
+  border: 1px solid rgba(255, 255, 255, .2);
 }
 
-.btn-enter-tactical:hover,
-.btn-globe-orbit:hover {
+.btn-enter-tactical:hover {
   filter: brightness(1.15);
+  box-shadow: 0 0 18px rgba(82, 204, 239, 0.5);
+  transform: translateY(-1px);
+}
+
+.btn-globe-orbit:hover {
+  background: rgba(255, 255, 255, .15);
+  border-color: rgba(255, 255, 255, .35);
 }
 
 .cesium-viewer,
@@ -1532,108 +1562,180 @@ body {
   margin-top: 1px;
 }
 
-/* Payload mass selector */
-.payload-selector-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.45rem;
-  padding: 0.35rem 0.5rem;
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.payload-lbl {
-  font-size: 0.58rem;
-  font-weight: 700;
-  font-family: var(--font-mono);
-  color: var(--muted);
-  letter-spacing: 0.03em;
-}
-
-.payload-chips {
-  display: flex;
-  gap: 0.3rem;
-}
-
-.payload-chip {
-  padding: 0.18rem 0.45rem;
-  font-size: 0.58rem;
-  font-family: var(--font-mono);
-  font-weight: 600;
-  color: var(--text-muted);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.payload-chip:hover {
-  background: rgba(56, 189, 248, 0.12);
-  border-color: rgba(56, 189, 248, 0.4);
-  color: #fff;
-}
-
-.payload-chip.active {
-  background: rgba(56, 189, 248, 0.22);
-  border-color: var(--accent);
-  color: var(--accent);
-  box-shadow: 0 0 8px rgba(56, 189, 248, 0.25);
-}
-
-.stat-sub {
-  font-size: 0.58rem;
-  color: var(--muted);
-  font-family: var(--font-mono);
-  letter-spacing: 0.02em;
-}
-
-.metric-explainer-box {
-  margin-top: 0.65rem;
-  padding: 0.55rem 0.75rem;
-  background: rgba(56, 189, 248, 0.05);
-  border: 1px solid rgba(56, 189, 248, 0.22);
-  border-radius: 6px;
-  font-size: 0.65rem;
-  color: var(--muted);
-  line-height: 1.45;
-}
-
-.explainer-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.3rem;
-}
-
-.explainer-header strong {
-  color: var(--accent-sub);
-  font-family: var(--font-mono);
-  font-size: 0.66rem;
-  letter-spacing: 0.03em;
-}
-
-.explainer-text {
-  margin: 0 0 0.4rem 0;
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 0.63rem;
-}
-
-.explainer-bio {
+/* =======================================================
+   Unified Expedition Flow Console & Pandolf Consumables
+   ======================================================= */
+.expedition-flow-card {
+  padding: 10px 12px;
+  background: rgba(16, 22, 34, 0.75);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
-  font-size: 0.60rem;
-  font-family: var(--font-mono);
-  color: #94a3b8;
-  border-top: 1px dashed rgba(255, 255, 255, 0.08);
-  padding-top: 0.35rem;
+  gap: 9px;
+  backdrop-filter: blur(10px);
 }
 
-.explainer-bio strong {
+.expedition-loadout-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 6px 8px;
+}
+
+.loadout-strip-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.60rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--muted, #94a3b8);
+  letter-spacing: 0.04em;
+}
+
+.loadout-mass-badge {
+  color: var(--accent-sub, #38bdf8);
+  font-size: 0.60rem;
+}
+
+.loadout-pills {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+}
+
+.loadout-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 5px 3px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: center;
+}
+
+.loadout-pill .pill-icon {
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.loadout-pill .pill-text {
+  font-size: 0.58rem;
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
+.loadout-pill:hover {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.35);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.loadout-pill.active {
+  background: rgba(56, 189, 248, 0.22);
+  border-color: var(--accent-sub, #38bdf8);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+}
+
+.expedition-telemetry-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  padding: 8px 6px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.telemetry-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 2px;
+}
+
+.stat-hdr {
+  font-size: 0.54rem;
+  font-weight: 700;
+  font-family: var(--font-body);
+  color: var(--muted, #94a3b8);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  letter-spacing: 0.03em;
+}
+
+.stat-val {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #f8fafc;
+  line-height: 1.15;
+}
+
+.stat-foot {
+  font-size: 0.54rem;
+  color: #64748b;
+  margin-top: 1px;
+}
+
+.safe-pill {
+  color: #22c55e !important;
+  font-weight: 600;
+}
+
+.expedition-physics-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 8px;
+  background: rgba(56, 189, 248, 0.04);
+  border: 1px solid rgba(56, 189, 248, 0.15);
+  border-radius: 6px;
+  font-size: 0.58rem;
+}
+
+.physics-summary {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #cbd5e1;
+}
+
+.physics-badge {
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: var(--accent-sub, #38bdf8);
+  font-weight: 700;
+  font-size: 0.54rem;
+}
+
+.physics-text strong {
   color: #38bdf8;
+}
+
+.physics-reserve-tag {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  color: #4ade80;
+  font-size: 0.56rem;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 /* Science Stop Card */

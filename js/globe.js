@@ -531,15 +531,19 @@ window.MarsGlobe = (function () {
     const coordsEl = document.getElementById("globe-site-coords");
     const enterBtn = document.getElementById("btn-enter-tactical");
 
-    if (nameEl) nameEl.textContent = lm.name || "Martian site";
+    if (nameEl) nameEl.textContent = (lm.name || "Martian Site").toUpperCase();
     if (coordsEl) {
       const latStr = Math.abs(lm.lat).toFixed(2) + (lm.lat >= 0 ? "°N" : "°S");
       const lonStr = Math.abs(lm.lon).toFixed(2) + (lm.lon >= 0 ? "°E" : "°W");
-      coordsEl.textContent = latStr + ", " + lonStr;
+      const sub = lm.siteKey
+        ? latStr + ", " + lonStr + " · Surface Exploration Ready"
+        : latStr + ", " + lonStr + " · Planetary Orbital Observation";
+      coordsEl.textContent = sub;
     }
     if (enterBtn) {
       enterBtn.style.display = lm.siteKey ? "inline-flex" : "none";
       enterBtn.dataset.site = lm.siteKey || "";
+      enterBtn.innerHTML = "🗺️ Explore Surface Tactical Radar ➔";
     }
     banner.hidden = false;
   }

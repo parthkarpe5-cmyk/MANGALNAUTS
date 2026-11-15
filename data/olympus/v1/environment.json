@@ -8,11 +8,11 @@
   },
   "sol": 1200,
   "terrestrial_date": "2026-11-15",
-  "local_solar_time": "13:58 MTC",
-  "ltst": "13:58:12",
+  "local_solar_time": "14:33 MTC",
+  "ltst": "14:33:00",
   "is_daylight": true,
-  "sunset_in_min": 196.6,
-  "sunset_in_minutes": 196,
+  "sunset_in_min": 162.0,
+  "sunset_in_minutes": 162,
   "sunset_utc": "2026-11-15T13:12:45Z",
   "temp_C": -82.0,
   "temp_min_C": -115.0,
@@ -23,7 +23,7 @@
   "ls_deg": 240.0,
   "rad_dose_proxy": 42.0,
   "rad_dose_unit": "uSv/hr",
-  "flare_level": "B7.4",
+  "flare_level": "B6.0",
   "atmosphere": {
     "air_temp_c": {
       "current": -82.0,
@@ -46,7 +46,7 @@
     "dose_rate_uSv_hr": 42.0,
     "daily_dose_uSv": 1008.0,
     "spe_event_status": "NORMAL",
-    "flare_level": "B7.4",
+    "flare_level": "B6.0",
     "cumulative_mission_mSv": 164.7,
     "suit_shielding_factor": 0.65
   },
@@ -57,11 +57,11 @@
       "title": "Cold Eva",
       "severity": "advisory",
       "message": "Diurnal low reaches -115.0\u00b0C. Maintain suit thermal circulation.",
-      "sunset_in_min": 196
+      "sunset_in_min": 162
     }
   ],
   "metadata": {
-    "generated_at_utc": "2026-11-15T09:56:10.266292+00:00",
+    "generated_at_utc": "2026-11-15T10:30:48.418439+00:00",
     "weather_source": "NASA Mars Atmosphere Scale-Height Model (Olympus Caldera)",
     "space_weather_source": "NOAA Space Weather Prediction Center (GOES X-ray)",
     "rover": "Orbital survey"

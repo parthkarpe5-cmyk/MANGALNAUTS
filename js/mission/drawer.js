@@ -3,7 +3,7 @@ window.MarsSegmentDrawer = (function () {
   let panel = null;
   let lastSegment = null;
   let renderId = 0;
-  let currentPayloadKg = 20;
+  let currentPayloadKg = 15;
 
   function ic(name) {
     return window.MarsIcons ? window.MarsIcons.get(name) : "";
@@ -153,91 +153,77 @@ window.MarsSegmentDrawer = (function () {
       });
 
       const isWalk = (modeObj.type || "walk") === "walk";
-      const payloadSelectorHtml = isWalk
-        ? '<div class="payload-selector-row">' +
-          '  <span class="payload-lbl">CARRIED PAYLOAD:</span>' +
-          '  <div class="payload-chips">' +
-          '    <button type="button" class="payload-chip ' + (currentPayloadKg === 5 ? "active" : "") + '" data-kg="5">5 kg (Light)</button>' +
-          '    <button type="button" class="payload-chip ' + (currentPayloadKg === 20 ? "active" : "") + '" data-kg="20">20 kg (Nominal)</button>' +
-          '    <button type="button" class="payload-chip ' + (currentPayloadKg === 40 ? "active" : "") + '" data-kg="40">40 kg (Heavy)</button>' +
+      const loadouts = window.MarsTelemetry?.PAYLOAD_LOADOUTS || [
+        { id: "scout", label: "Scout", kg: 0, toolWatts: 0, icon: "🔎", desc: "Camera & Optical Recon" },
+        { id: "sample", label: "Science", kg: 15, toolWatts: 45, icon: "🔬", desc: "Sample Tubes & Spectrometer" },
+        { id: "drill", label: "Drill", kg: 25, toolWatts: 90, icon: "⚡", desc: "Percussive Rock Drill" },
+        { id: "survey", label: "Survey", kg: 40, toolWatts: 150, icon: "📡", desc: "GPR Ground Radar" },
+      ];
+
+      const loadoutPillsHtml = isWalk
+        ? '<div class="expedition-loadout-strip">' +
+          '  <div class="loadout-strip-label">' +
+          '    <span>EQUIPMENT LOADOUT</span>' +
+          '    <span class="loadout-mass-badge font-mono">' + c.apparentWeightMarsKg + ' kg (0.38g Apparent)</span>' +
+          '  </div>' +
+          '  <div class="loadout-pills" role="radiogroup" aria-label="Payload Equipment">' +
+          loadouts.map(function (ld) {
+            const active = currentPayloadKg === ld.kg ? "active" : "";
+            return (
+              '<button type="button" class="loadout-pill ' + active + '" data-kg="' + ld.kg + '" title="' + ld.desc + ' (' + ld.toolWatts + 'W tools)">' +
+              '  <span class="pill-icon">' + ld.icon + '</span>' +
+              '  <span class="pill-text"><strong>' + ld.label + '</strong> ' + ld.kg + 'kg</span>' +
+              '</button>'
+            );
+          }).join("") +
           '  </div>' +
           '</div>'
         : "";
 
       consumablesHtml =
-        '<div class="drawer-section drawer-consumables">' +
+        '<div class="drawer-section expedition-flow-card">' +
         '  <div class="section-title-row">' +
         "    <h4>" +
         ic("zap") +
-        " Consumables Projection</h4>" +
-        '    <span class="badge-mini">' +
-        (isWalk ? "EVA SUIT (2 CREW)" : "ROVER CABIN") +
+        " Expedition Consumables &amp; Safety</h4>" +
+        '    <span class="badge-mini font-mono">' +
+        (isWalk ? "2 CREW · EVA-01" : "AUTONAV ROVER") +
         "</span>" +
         "  </div>" +
-        payloadSelectorHtml +
-        '  <div class="consumables-grid">' +
-        '    <div class="consumable-item">' +
-        '      <span class="c-icon">' +
-        ic("clock") +
-        "</span>" +
-        '      <div class="c-info">' +
-        '        <span class="c-label">Est. Duration</span>' +
-        '        <span class="c-val font-mono">' +
-        (c.durationMin < 60 ? c.durationMin + " min" : c.durationHours + " hrs") +
-        "</span>" +
-        '        <span class="c-sub">Tobler 0.38g slope speed</span>' +
-        "      </div>" +
-        "    </div>" +
-        '    <div class="consumable-item">' +
-        '      <span class="c-icon">' +
-        ic("oxygen") +
-        "</span>" +
-        '      <div class="c-info">' +
-        '        <span class="c-label">O₂ Required</span>' +
-        '        <span class="c-val font-mono">' +
-        c.o2Liters +
-        " L</span>" +
-        '        <span class="c-sub">' + (isWalk ? "2 Crew · 20% margin" : "Cabin Life Support") + '</span>' +
-        "      </div>" +
-        "    </div>" +
-        '    <div class="consumable-item">' +
-        '      <span class="c-icon">' +
-        ic("battery") +
-        "</span>" +
-        '      <div class="c-info">' +
-        '        <span class="c-label">Energy Draw</span>' +
-        '        <span class="c-val font-mono">' +
-        c.batteryWh +
-        " Wh</span>" +
-        '        <span class="c-sub">' + (isWalk ? "Dual PLSS &amp; -60°C thermal" : "Drive motors &amp; sensors") + '</span>' +
-        "      </div>" +
-        "    </div>" +
-        '    <div class="consumable-item">' +
-        '      <span class="c-icon">' +
-        (isWalk ? ic("droplet") : ic("gauge")) +
-        "</span>" +
-        '      <div class="c-info">' +
-        '        <span class="c-label">' + (isWalk ? "Cooling H₂O" : "Mean Speed") + '</span>' +
-        '        <span class="c-val font-mono">' +
-        (isWalk ? c.waterCoolingL + " L" : c.avgSpeedMs + " m/s") +
-        "</span>" +
-        '        <span class="c-sub">' + (isWalk ? "Sublimator heat rejection" : "AutoNav traverse pace") + '</span>' +
-        "      </div>" +
-        "    </div>" +
-        "  </div>" +
-        '  <div class="metric-explainer-box">' +
-        '    <div class="explainer-header">' +
-        '      <strong>ℹ ' + (isWalk ? "NASA FLIGHT RULE EVA-01 &amp; TERRAIN PHYSICS" : "JPL AUTONAV WHEEL MOBILITY RULE") + '</strong>' +
-        '      <span class="badge-mini">' + (modeObj.nasaStandard || "NASA Standard") + '</span>' +
+        loadoutPillsHtml +
+        '  <div class="expedition-telemetry-row">' +
+        '    <div class="telemetry-stat">' +
+        '      <span class="stat-hdr">' + ic("clock") + ' DURATION</span>' +
+        '      <span class="stat-val font-mono">' + (c.durationMin < 60 ? c.durationMin + "m" : c.durationHours + "h") + '</span>' +
+        '      <span class="stat-foot font-mono">' + c.avgSpeedMs + ' m/s</span>' +
         '    </div>' +
-        '    <p class="explainer-text">' + (modeObj.rationale || "Operational limit set to maintain traction safety and metabolic thermal equilibrium.") + '</p>' +
-        '    <div class="explainer-bio">' +
-        '      <span>• <strong>Crew Buddy Pair:</strong> ' + (isWalk ? "2 Astronauts mandatory under NASA EVA Flight Rules (never solo)." : "Autonomous robotic rover or 2-astronaut pressurized cabin.") + '</span>' +
-        '      <span>• <strong>Payload Effect:</strong> ' + c.payloadKg + ' kg equipment carried under 0.38g gravity (' + (c.payloadKg * 0.38).toFixed(1) + ' kg apparent weight).</span>' +
-        '      <span>• <strong>Incline Drag:</strong> Avg slope ' + c.meanSlopeDeg + '° slows pace to ' + c.avgSpeedMs + ' m/s and increases metabolic work.</span>' +
+        '    <div class="telemetry-stat">' +
+        '      <span class="stat-hdr">' + ic("oxygen") + ' O₂ REQUIRED</span>' +
+        '      <span class="stat-val font-mono">' + c.o2Liters + ' L</span>' +
+        '      <span class="stat-foot safe-pill font-mono" title="NASA 20% Contingency Safe Return Reserve">Safe: ' + c.o2SafeReturnL + 'L</span>' +
+        '    </div>' +
+        '    <div class="telemetry-stat">' +
+        '      <span class="stat-hdr">' + ic("battery") + ' BATTERY</span>' +
+        '      <span class="stat-val font-mono">' + c.batteryWh + ' Wh</span>' +
+        '      <span class="stat-foot safe-pill font-mono" title="NASA 20% Contingency Safe Return Reserve">Safe: ' + c.batterySafeReturnWh + 'Wh</span>' +
+        '    </div>' +
+        '    <div class="telemetry-stat">' +
+        '      <span class="stat-hdr">' + (isWalk ? ic("droplet") : ic("gauge")) + ' ' + (isWalk ? 'COOLING' : 'CLIMB') + '</span>' +
+        '      <span class="stat-val font-mono">' + (isWalk ? c.waterCoolingL + ' L' : c.meanSlopeDeg + '°') + '</span>' +
+        '      <span class="stat-foot font-mono">' + (isWalk ? 'Safe: ' + c.waterCoolingSafeReturnL + 'L' : '&Delta;z +' + c.elevationGainM + 'm') + '</span>' +
         '    </div>' +
         '  </div>' +
-        "</div>";
+        '  <div class="expedition-physics-bar">' +
+        '    <div class="physics-summary">' +
+        '      <span class="physics-badge font-mono">PANDOLF 0.38g</span>' +
+        '      <span class="physics-text">P<sub>met</sub>: <strong>' + c.pMetWatts + 'W</strong> · Suit Total: <strong>' + c.pSuitWatts + 'W</strong> (' + (c.ambientTempC) + '&deg;C ambient)</span>' +
+        '    </div>' +
+        '    <div class="physics-reserve-tag" title="NASA Flight Rule EVA-01: Mandatory 20% Life Support Buffer">' +
+        '      <span class="reserve-shield">🛡️</span>' +
+        '      <span>+20% Contingency Reserve</span>' +
+        '    </div>' +
+        '  </div>' +
+        '</div>';
     }
 
     let profileHtml = "";
@@ -345,11 +331,12 @@ window.MarsSegmentDrawer = (function () {
     }
     if (segment.path_found && !segment.regional) window.MarsContingency?.attach(panel, segment);
 
-    // Payload chip listeners
-    panel.querySelectorAll(".payload-chip").forEach(function (btn) {
+    // Loadout pill listeners
+    panel.querySelectorAll(".loadout-pill, .payload-chip").forEach(function (btn) {
       btn.addEventListener("click", function () {
         currentPayloadKg = parseInt(btn.dataset.kg, 10);
-        render(lastSegment);
+        if (window.MarsAudio && window.MarsAudio.playClick) window.MarsAudio.playClick();
+        render(lastSegment, lastTitle);
       });
     });
 
