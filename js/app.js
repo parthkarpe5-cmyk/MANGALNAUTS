@@ -165,7 +165,6 @@
     const railBtnMissions = document.getElementById("rail-btn-missions");
     const railBtnProjects = document.getElementById("rail-btn-projects");
     const railBtnLayers = document.getElementById("rail-btn-layers");
-    const railBtnMeasure = document.getElementById("rail-btn-measure");
     const railBtnRoute = document.getElementById("rail-btn-route");
     const railBtnAbout = document.getElementById("rail-btn-about");
 
@@ -247,13 +246,6 @@
           const currentMode = MarsHybrid.getViewMode();
           setLayersSubTab(currentMode === "2d" ? "2d" : "3d");
         }
-      });
-    }
-
-    if (railBtnMeasure) {
-      railBtnMeasure.addEventListener("click", function () {
-        if (window.MarsAudio) MarsAudio.playClick();
-        if (window.MarsWorkspace) MarsWorkspace.show("measure");
       });
     }
 

@@ -107,16 +107,6 @@
           <span class="rail-label">Layers</span>
         </button>
 
-        <button type="button" class="rail-btn" id="rail-btn-measure" data-rail-action="measure" aria-label="Measure" title="Measure Distance & Safe Return Corridors">
-          <svg class="rail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m21.5 8.5-7-7a2.12 2.12 0 0 0-3 0l-9 9a2.12 2.12 0 0 0 0 3l7 7a2.12 2.12 0 0 0 3 0l9-9a2.12 2.12 0 0 0 0-3Z"></path>
-            <line x1="7" y1="13" x2="8" y2="14"></line>
-            <line x1="10" y1="10" x2="11" y2="11"></line>
-            <line x1="13" y1="7" x2="14" y2="8"></line>
-          </svg>
-          <span class="rail-label">Measure</span>
-        </button>
-
         <button type="button" class="rail-btn" id="rail-btn-route" data-rail-action="route" aria-label="Route" title="GNN Safe Route Planner & Consumables">
           <svg class="rail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="6" cy="19" r="3"></circle>
@@ -398,40 +388,6 @@
             <p style="color:var(--muted-text); font-size:12px; line-height:1.5; margin:4px 0 8px;">
               Includes official NASA Mars 2020 Perseverance Western Delta path, MSL Curiosity Mount Sharp path, Opportunity Meridiani Planum traverse, and USGS Cushing cave skylight candidates.
             </p>
-          </div>
-        </div>
-
-        <!-- 3. Measure Panel -->
-        <div class="workspace-settings" id="workspace-measure-menu" role="tabpanel" hidden>
-          <div class="dropdown-section">
-            <span class="dropdown-section-title">DISTANCE &amp; TRAVERSAL MEASUREMENT</span>
-            <p style="color:var(--muted-text); font-size:12px; line-height:1.5; margin-bottom:12px;">
-              Compute safe topological traversal corridors between any two Martian points, verify slopes, and evaluate terrain obstacles.
-            </p>
-
-            <div class="dock-select-group" style="margin-bottom:12px; padding:10px 12px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:8px;">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                <span class="dock-lbl" style="font-weight:700; color:var(--text-muted, #A9A9B8); font-size:11px; letter-spacing:0.8px;">EXPEDITION TRAVEL MODE</span>
-                <span class="badge-mini font-mono" id="measure-travel-mode-badge" style="color:var(--mars-orange, #FF6B00); background:rgba(255,107,0,0.12); padding:2px 6px; border-radius:4px; font-size:10px;">≤20° SLOPE</span>
-              </div>
-              <select id="travel-mode-measure" class="dropdown-select" style="width:100%; padding:6px 10px; background:#15151C; color:#fff; border:1px solid rgba(255,255,255,0.15); border-radius:6px; font-size:12px;" aria-label="Expedition travel mode">
-                <option value="rover" selected>Rover AutoNav (≤20° safe slope)</option>
-                <option value="walk">Marswalk EVA (≤15° safe slope)</option>
-              </select>
-            </div>
-
-            <button type="button" class="dock-btn" id="panel-btn-plan-custom-route" style="width:100%; margin-bottom:8px; background:linear-gradient(135deg, #FF6B00, #EA580C); color:#fff; font-weight:700;">
-              📍 Plan Route (Click Point A &amp; B)
-            </button>
-            <button type="button" class="dock-btn" id="panel-btn-measured-route" style="width:100%; margin-bottom:8px;">
-              🚀 Try Verified Benchmark Route
-            </button>
-            <button type="button" class="dock-btn" id="panel-btn-clear-route" style="width:100%; margin-bottom:8px;">
-              ✕ Clear Active Route / Measurement
-            </button>
-            <button type="button" class="dock-btn" id="panel-btn-sync-globe" title="Sync 3D Globe camera to surface map center" style="width:100%;">
-              ⟲ Sync Globe to Surface View
-            </button>
           </div>
         </div>
 

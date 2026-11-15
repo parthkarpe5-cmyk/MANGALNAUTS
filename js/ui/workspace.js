@@ -10,7 +10,6 @@ window.MarsWorkspace = (() => {
     missions: document.getElementById("workspace-missions-menu"),
     projects: document.getElementById("workspace-projects-menu"),
     layers: document.getElementById("globe-layers-menu"),
-    measure: document.getElementById("workspace-measure-menu"),
     route: document.getElementById("segment-drawer"),
     split: document.getElementById("workspace-split-menu"),
   };
@@ -19,7 +18,6 @@ window.MarsWorkspace = (() => {
     missions: "MARTIAN MISSIONS & SECTORS",
     projects: "EXPLORATION PROJECTS & PDS",
     layers: "MAP CONTROLS & OVERLAYS",
-    measure: "TRAVERSAL MEASUREMENT",
     route: "EXPEDITION ROUTE & CONSUMABLES",
     split: "VIEWPORT DISPLAY ENGINE",
   };
