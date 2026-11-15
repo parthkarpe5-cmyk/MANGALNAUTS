@@ -25,7 +25,21 @@ self.MarsAstar = (function () {
       cells[index] = node;
       indices.set(node.id, index);
     }
-    const moves = [[0,1],[0,-1],[1,0],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]];
+    // 32-direction multi-angle stencil (8 primary + 8 Knight's + 16 radius-3 rays)
+    const moves = [
+      // 8 primary cardinal & diagonal moves (radius 1: 0°, 45°, 90°, 135°, ...)
+      [0, 1], [0, -1], [1, 0], [-1, 0],
+      [1, 1], [1, -1], [-1, 1], [-1, -1],
+      // 8 Knight's moves (radius 2: 26.6°, 63.4°, 116.6°, 153.4°, ...)
+      [1, 2], [1, -2], [-1, 2], [-1, -2],
+      [2, 1], [2, -1], [-2, 1], [-2, -1],
+      // 8 Camel moves (radius 3: 18.4°, 71.6°, 108.4°, 161.6°, ...)
+      [1, 3], [1, -3], [-1, 3], [-1, -3],
+      [3, 1], [3, -1], [-3, 1], [-3, -1],
+      // 8 Zebra moves (radius 3: 33.7°, 56.3°, 123.7°, 146.3°, ...)
+      [2, 3], [2, -3], [-2, 3], [-2, -3],
+      [3, 2], [3, -2], [-3, 2], [-3, -2],
+    ];
     const distance = (a, b) => self.MarsGeodesic.haversineMeters(a.lat, a.lon, b.lat, b.lon);
     const grade = (a, b) => Math.atan2(Math.abs(a.elev_m - b.elev_m), distance(a, b)) * 180 / Math.PI;
     return function neighbors(id) {
@@ -39,12 +53,22 @@ self.MarsAstar = (function () {
         if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) continue;
         const to = cells[nr * cols + nc];
         if (!to) continue;
+
         let crossingGrade = 0;
-        if (dr && dc) {
-          const a = cells[r * cols + nc], b = cells[nr * cols + c];
-          if (!a || !b) continue;
-          crossingGrade = Math.max(grade(from, a), grade(from, b), grade(a, to), grade(b, to));
+        const steps = Math.max(Math.abs(dr), Math.abs(dc));
+        let valid = true;
+        let prev = from;
+        for (let s = 1; s < steps; s++) {
+          const ir = Math.round(r + (dr * s) / steps);
+          const ic = Math.round(c + (dc * s) / steps);
+          const mid = cells[ir * cols + ic];
+          if (!mid) { valid = false; break; }
+          crossingGrade = Math.max(crossingGrade, grade(prev, mid));
+          prev = mid;
         }
+        if (!valid) continue;
+        crossingGrade = Math.max(crossingGrade, grade(prev, to));
+
         result.push({ to: to.id, length_m: distance(from, to), crossingGrade });
       }
       return result;
@@ -161,11 +185,14 @@ self.MarsAstar = (function () {
     graph.nodes.forEach(function (n) {
       nodesById[n.id] = n;
     });
-    const neighborsOf = connections(graph);
+    const distance = (a, b) => self.MarsGeodesic.haversineMeters(a.lat, a.lon, b.lat, b.lon);
     let total = 0;
     for (let i = 0; i < pathIds.length - 1; i++) {
-      const len = neighborsOf(pathIds[i]).find(edge => edge.to === pathIds[i + 1])?.length_m;
-      if (len != null) total += len;
+      const a = nodesById[pathIds[i]];
+      const b = nodesById[pathIds[i + 1]];
+      if (a && b) {
+        total += distance(a, b);
+      }
     }
     return total;
   }
@@ -175,7 +202,7 @@ self.MarsAstar = (function () {
     graph.nodes.forEach(function (n) {
       nodesById[n.id] = n;
     });
-    const neighborsOf = connections(graph);
+    const distance = (a, b) => self.MarsGeodesic.haversineMeters(a.lat, a.lon, b.lat, b.lon);
     let maxSlope = 0;
     let elevs = [];
     pathIds.forEach(function (id) {
@@ -187,10 +214,12 @@ self.MarsAstar = (function () {
     for (let i = 0; i < pathIds.length - 1; i++) {
       const a = nodesById[pathIds[i]];
       const b = nodesById[pathIds[i + 1]];
-      const len = neighborsOf(pathIds[i]).find(edge => edge.to === pathIds[i + 1])?.length_m;
-      if (a && b && len) {
-        const rise = Math.abs((b.elev_m || 0) - (a.elev_m || 0));
-        maxSlope = Math.max(maxSlope, (Math.atan(rise / len) * 180) / Math.PI);
+      if (a && b) {
+        const len = distance(a, b);
+        if (len > 0) {
+          const rise = Math.abs((b.elev_m || 0) - (a.elev_m || 0));
+          maxSlope = Math.max(maxSlope, (Math.atan(rise / len) * 180) / Math.PI);
+        }
       }
     }
     const elevDelta =

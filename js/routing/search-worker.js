@@ -1,4 +1,4 @@
-importScripts("../map/geodesic.js?v=terrain2", "astar.js?v=raster-1");
+importScripts("../map/geodesic.js?v=terrain2", "astar.js?v=raster-32grid");
 let graph, nodes, scale;
 function distance(a, b) {
   return MarsGeodesic.haversineMeters(a.lat, a.lon, b.lat, b.lon);
