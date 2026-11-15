@@ -325,6 +325,12 @@ window.MarsSegmentPick = (function () {
         const isWalk = segment.mode === "walk";
         const routeColor = segment.feasible ? (isWalk ? "#00f0ff" : "#f59e0b") : "#FF8B86";
 
+        const activeElem =
+          window.MarsGrsOverlays &&
+          window.MarsGrsOverlays.getActiveElement &&
+          window.MarsGrsOverlays.getActiveElement();
+        const chosenMineral = activeElem && activeElem !== "none" ? activeElem : "k";
+
         lineLayer = MarsRouteRenderer.createCorridorLayer(latlngs, {
           color: routeColor,
           mode: segment.mode,
@@ -332,6 +338,7 @@ window.MarsSegmentPick = (function () {
           drawIn: true,
           ticks: true,
           pathNodes: segment.path_nodes,
+          mineral: chosenMineral,
         }).addTo(map);
 
         // Zoom map to encompass the route
@@ -433,11 +440,29 @@ window.MarsSegmentPick = (function () {
       scrubberMarker.setLatLng([curLat, curLon]);
     }
 
+    let mineralInfo = "";
+    if (window.MarsGrsOverlays && window.MarsGrsOverlays.sampleSmooth) {
+      const actKey =
+        window.MarsGrsOverlays.getActiveElement &&
+        window.MarsGrsOverlays.getActiveElement();
+      const elemKey = actKey && actKey !== "none" ? actKey : "k";
+      const val = window.MarsGrsOverlays.sampleSmooth(elemKey, curLat, curLon);
+      const meta = window.MarsGrsOverlays.ELEMENTS
+        ? window.MarsGrsOverlays.ELEMENTS[elemKey]
+        : null;
+      const sym = meta ? meta.symbol : elemKey.toUpperCase();
+      const unit = meta ? meta.unit : "wt%";
+      mineralInfo =
+        " · " + sym + ": <strong>" + val.toFixed(2) + " " + unit + "</strong>";
+    }
+
     scrubberMarker
       .bindTooltip(
         '<div class="hud-tooltip font-mono text-xs"><strong>' +
           (distM / 1000).toFixed(2) +
-          " km</strong> · Elev: " +
+          " km</strong>" +
+          mineralInfo +
+          " · Elev: " +
           elev.toFixed(1) +
           "m · Risk: " +
           risk.toFixed(2) +
@@ -671,10 +696,29 @@ window.MarsSegmentPick = (function () {
       } else {
         const isWalk = lastSolvedSegment && lastSolvedSegment.mode === "walk";
         const tagPrefix = isWalk ? "EVA MARSWALK" : "ROVER AUTONAV";
+
+        let mineralTag = "";
+        if (window.MarsGrsOverlays && window.MarsGrsOverlays.sampleSmooth) {
+          const actKey =
+            window.MarsGrsOverlays.getActiveElement &&
+            window.MarsGrsOverlays.getActiveElement();
+          const elemKey = actKey && actKey !== "none" ? actKey : "k";
+          const val = window.MarsGrsOverlays.sampleSmooth(elemKey, curLat, curLon);
+          const meta = window.MarsGrsOverlays.ELEMENTS
+            ? window.MarsGrsOverlays.ELEMENTS[elemKey]
+            : null;
+          const sym = meta ? meta.symbol : elemKey.toUpperCase();
+          const unit = meta ? meta.unit : "wt%";
+          mineralTag = " · " + sym + ": " + val.toFixed(2) + " " + unit;
+        }
+
         tagTextEl.textContent =
-          tagPrefix + " // " +
+          tagPrefix +
+          " // " +
           (distM / 1000).toFixed(2) +
-          " km · " +
+          " km" +
+          mineralTag +
+          " · " +
           Math.round(curElev) +
           "m · " +
           curSlope.toFixed(1) +
@@ -765,6 +809,28 @@ window.MarsSegmentPick = (function () {
     return lastSolvedSegment;
   }
 
+  function refreshCorridorMineral(mineralKey) {
+    if (!lastSolvedSegment || !lastSolvedSegment.path_nodes || !map) return;
+    const segment = lastSolvedSegment;
+    if (lineLayer) {
+      map.removeLayer(lineLayer);
+      lineLayer = null;
+    }
+    const latlngs = segment.path_nodes.map((n) => [n.lat, n.lon]);
+    const isWalk = segment.mode === "walk";
+    const routeColor = segment.feasible ? (isWalk ? "#00f0ff" : "#f59e0b") : "#FF8B86";
+
+    lineLayer = MarsRouteRenderer.createCorridorLayer(latlngs, {
+      color: routeColor,
+      mode: segment.mode,
+      animated: true,
+      drawIn: false,
+      ticks: true,
+      pathNodes: segment.path_nodes,
+      mineral: mineralKey,
+    }).addTo(map);
+  }
+
   let travelModeAttached = false;
   function attachTravelModeSync() {
     if (travelModeAttached) return;
@@ -782,6 +848,11 @@ window.MarsSegmentPick = (function () {
     }
     if (window.MarsTravelMode && window.MarsTravelMode.onChange) {
       window.MarsTravelMode.onChange(triggerReplan);
+    }
+    if (window.MarsGrsOverlays && window.MarsGrsOverlays.onElementChange) {
+      window.MarsGrsOverlays.onElementChange(function (newKey) {
+        refreshCorridorMineral(newKey);
+      });
     }
     const travelSelect = document.getElementById("travel-mode");
     if (travelSelect) {
@@ -813,6 +884,7 @@ window.MarsSegmentPick = (function () {
     planRoute,
     onMapClick,
     getLastSolvedSegment,
+    refreshCorridorMineral,
     startAutoTraversal,
     stopAutoTraversal,
     togglePauseTraversal,

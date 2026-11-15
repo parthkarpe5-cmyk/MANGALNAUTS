@@ -292,21 +292,93 @@ window.MarsSegmentDrawer = (function () {
         const isru = await MarsGrsOverlays.calculateIsruMetrics(segment.from.lat, segment.from.lon);
         const hasChlorine = Number.isFinite(isru?.chlorineWtPct);
         if (id !== renderId) return;
+
+        const rawElem =
+          window.MarsGrsOverlays && window.MarsGrsOverlays.getActiveElement
+            ? window.MarsGrsOverlays.getActiveElement()
+            : null;
+        const curElem = rawElem && rawElem !== "none" ? rawElem : "k";
+
+        let pathMineralStats = null;
+        if (window.MarsGrsOverlays.sampleAlongPath && segment.path_nodes) {
+          pathMineralStats = window.MarsGrsOverlays.sampleAlongPath(curElem, segment.path_nodes);
+        }
+
+        const summaryMetricsHtml = pathMineralStats
+          ? '  <div class="isru-path-mineral-summary font-mono">' +
+            '    <div class="path-mineral-metric">' +
+            '      <span class="pm-label">Corridor Avg:</span>' +
+            '      <span class="pm-val" style="color:var(--accent);">' +
+            pathMineralStats.avgVal.toFixed(2) +
+            ' ' +
+            pathMineralStats.meta.unit +
+            '</span>' +
+            '    </div>' +
+            '    <div class="path-mineral-metric">' +
+            '      <span class="pm-label">Peak Encounter:</span>' +
+            '      <span class="pm-val" style="color:' +
+            (pathMineralStats.depositPeaks[0]?.color || '#c084fc') +
+            ';">' +
+            pathMineralStats.maxVal.toFixed(2) +
+            ' ' +
+            pathMineralStats.meta.unit +
+            '</span>' +
+            '    </div>' +
+            '    <div class="path-mineral-metric">' +
+            '      <span class="pm-label">High-Yield Zone:</span>' +
+            '      <span class="pm-val">' +
+            Math.round(pathMineralStats.highYieldFraction * 100) +
+            '% path</span>' +
+            '    </div>' +
+            '  </div>'
+          : '';
+
         isruHtml =
-          '<details class="drawer-section drawer-isru mission-details"><summary>Surface resources · Odyssey GRS</summary>' +
+          '<details class="drawer-section drawer-isru mission-details" open><summary>Surface resources · Odyssey GRS</summary>' +
+          '  <div class="isru-track-header">' +
+          '    <span class="isru-track-title">Route Mineral Swath Track</span>' +
+          '    <span class="isru-track-active font-mono">' +
+          curElem.toUpperCase() +
+          ' Active</span>' +
+          '  </div>' +
+          '  <div class="isru-mineral-track-bar">' +
+          '    <button type="button" class="btn-mineral-track ' +
+          (curElem === 'k' ? 'active' : '') +
+          '" data-elem="k" title="Potassium (K) Feldspar & Sanidine">⚗️ K</button>' +
+          '    <button type="button" class="btn-mineral-track ' +
+          (curElem === 'h2o' ? 'active' : '') +
+          '" data-elem="h2o" title="Subsurface Water Ice (H₂O)">💧 H₂O</button>' +
+          '    <button type="button" class="btn-mineral-track ' +
+          (curElem === 'fe' ? 'active' : '') +
+          '" data-elem="fe" title="Hematite & Elemental Iron (Fe)">🧱 Fe</button>' +
+          '    <button type="button" class="btn-mineral-track ' +
+          (curElem === 'si' ? 'active' : '') +
+          '" data-elem="si" title="Silica & Quartz (Si)">🔬 Si</button>' +
+          '    <button type="button" class="btn-mineral-track ' +
+          (curElem === 'cl' ? 'active' : '') +
+          '" data-elem="cl" title="Chlorine & Soil Halogens (Cl)">⚠️ Cl</button>' +
+          '    <button type="button" class="btn-mineral-track ' +
+          (curElem === 'th' ? 'active' : '') +
+          '" data-elem="th" title="Thorium Geothermal Radiogenic (Th)">☢️ Th</button>' +
+          '  </div>' +
+          summaryMetricsHtml +
           (!hasChlorine
             ? '<p class="drawer-hint">Perchlorates · Data unavailable</p>'
             : isru.chlorineAlert
             ? '  <div class="isru-hazard-alert">' +
               '    <span class="hazard-icon">⚠️</span>' +
               '    <div class="hazard-text">' +
-              '      <strong>HIGH PERCHLORATES (Cl: ' + isru.chlorineWtPct + ' wt%)</strong><br/>' +
+              '      <strong>HIGH PERCHLORATES (Cl: ' +
+              isru.chlorineWtPct +
+              ' wt%)</strong><br/>' +
               '      <span>Airlock Electrostatic De-dusting Required</span>' +
               '    </div>' +
               '  </div>'
             : '  <div class="isru-hazard-safe">' +
               '    <span class="safe-icon">✓</span>' +
-              '    <span>Chlorine estimate · ' + isru.chlorineWtPct + ' wt% Cl</span>' +
+              '    <span>Chlorine estimate · ' +
+              isru.chlorineWtPct +
+              ' wt% Cl</span>' +
               '  </div>'
           ) +
           '  <div class="consumables-grid isru-grid">' +
@@ -314,28 +386,40 @@ window.MarsSegmentDrawer = (function () {
           '      <span class="c-icon">💧</span>' +
           '      <div class="c-info">' +
           '        <span class="c-label">Local Water Abundance</span>' +
-          '        <span class="c-val font-mono">' + isru.waterWtPct + ' wt% <span class="c-sub-inline">' + (isru.waterUncertainty ?? '') + '</span></span>' +
+          '        <span class="c-val font-mono">' +
+          isru.waterWtPct +
+          ' wt% <span class="c-sub-inline">' +
+          (isru.waterUncertainty ?? '') +
+          '</span></span>' +
           '      </div>' +
           '    </div>' +
           '    <div class="consumable-item">' +
           '      <span class="c-icon">⛏️</span>' +
           '      <div class="c-info">' +
           '        <span class="c-label">Extractable Water</span>' +
-          '        <span class="c-val font-mono">~' + isru.waterKgPerM3 + ' kg / m³</span>' +
+          '        <span class="c-val font-mono">~' +
+          isru.waterKgPerM3 +
+          ' kg / m³</span>' +
           '      </div>' +
           '    </div>' +
           '    <div class="consumable-item">' +
           '      <span class="c-icon">🚀</span>' +
           '      <div class="c-info">' +
           '        <span class="c-label">Sabatier CH₄ Yield</span>' +
-          '        <span class="c-val font-mono">~' + isru.methaneYieldKgPerM3 + ' kg CH₄ / m³</span>' +
+          '        <span class="c-val font-mono">~' +
+          isru.methaneYieldKgPerM3 +
+          ' kg CH₄ / m³</span>' +
           '      </div>' +
           '    </div>' +
           '    <div class="consumable-item">' +
           '      <span class="c-icon">🧪</span>' +
           '      <div class="c-info">' +
           '        <span class="c-label">Regolith Composition</span>' +
-          '        <span class="c-val font-mono">Fe: ' + isru.ironWtPct + '% · Si: ' + isru.siliconWtPct + '%</span>' +
+          '        <span class="c-val font-mono">Fe: ' +
+          isru.ironWtPct +
+          '% · Si: ' +
+          isru.siliconWtPct +
+          '%</span>' +
           '      </div>' +
           '    </div>' +
           '  </div>' +
@@ -532,6 +616,66 @@ window.MarsSegmentDrawer = (function () {
         }
       });
     }
+
+    // Corridor Mineral Track Selector Buttons
+    const mineralBtns = panel.querySelectorAll(".btn-mineral-track");
+    mineralBtns.forEach(function (btn) {
+      btn.addEventListener("click", function (ev) {
+        ev.stopPropagation();
+        if (window.MarsAudio) MarsAudio.playClick();
+        const elemKey = btn.getAttribute("data-elem");
+        if (window.MarsGrsOverlays && window.MarsGrsOverlays.setActiveElement) {
+          window.MarsGrsOverlays.setActiveElement(elemKey);
+        }
+        mineralBtns.forEach((b) =>
+          b.classList.toggle("active", b.getAttribute("data-elem") === elemKey)
+        );
+        const titleBadge = panel.querySelector(".isru-track-active");
+        if (titleBadge) {
+          titleBadge.textContent = elemKey.toUpperCase() + " Active";
+        }
+        if (
+          window.MarsGrsOverlays &&
+          window.MarsGrsOverlays.sampleAlongPath &&
+          segment.path_nodes
+        ) {
+          const newStats = window.MarsGrsOverlays.sampleAlongPath(
+            elemKey,
+            segment.path_nodes
+          );
+          if (newStats) {
+            const summaryEl = panel.querySelector(".isru-path-mineral-summary");
+            if (summaryEl) {
+              summaryEl.innerHTML =
+                '<div class="path-mineral-metric">' +
+                '  <span class="pm-label">Corridor Avg:</span>' +
+                '  <span class="pm-val" style="color:var(--accent);">' +
+                newStats.avgVal.toFixed(2) +
+                ' ' +
+                newStats.meta.unit +
+                '</span>' +
+                '</div>' +
+                '<div class="path-mineral-metric">' +
+                '  <span class="pm-label">Peak Encounter:</span>' +
+                '  <span class="pm-val" style="color:' +
+                (newStats.depositPeaks[0]?.color || '#c084fc') +
+                ';">' +
+                newStats.maxVal.toFixed(2) +
+                ' ' +
+                newStats.meta.unit +
+                '</span>' +
+                '</div>' +
+                '<div class="path-mineral-metric">' +
+                '  <span class="pm-label">High-Yield Zone:</span>' +
+                '  <span class="pm-val">' +
+                Math.round(newStats.highYieldFraction * 100) +
+                '% path</span>' +
+                '</div>';
+            }
+          }
+        }
+      });
+    });
   }
 
   function notifyArrival(segment, title) {

@@ -21,11 +21,14 @@ window.MarsGrsOverlays = (function () {
       unit: "wt%",
       minVal: 1.65,
       maxVal: 7.40,
+      highThreshold: 4.80,
       minColor: [15, 30, 80, 110],       // semi-transparent deep navy
-      maxColor: [56, 189, 248, 230],     // glowing cyan
+      midColor: [6, 182, 212, 220],      // vibrant cyan
+      maxColor: [56, 189, 248, 240],     // glowing ice blue
       minColorHex: "#0f1e50",
+      midColorHex: "#06b6d4",
       maxColorHex: "#38bdf8",
-      hexGradient: "linear-gradient(90deg, #0f1e50, #1d4ed8, #06b6d4, #38bdf8)",
+      hexGradient: "linear-gradient(90deg, #0f1e50, #0284c7, #06b6d4, #38bdf8)",
       isruTagline: "Feedstock for Sabatier LOX/CH₄ propellant synthesis and life-support drinking loops",
       description: "Subsurface water ice and chemically bound hydration in top 1m. Essential for life support and Sabatier rocket propellant.",
     },
@@ -36,11 +39,14 @@ window.MarsGrsOverlays = (function () {
       unit: "wt%",
       minVal: 10.63,
       maxVal: 19.30,
+      highThreshold: 17.00,
       minColor: [60, 20, 10, 110],
-      maxColor: [239, 68, 68, 230],     // glowing rust red
+      midColor: [220, 38, 38, 220],      // crimson
+      maxColor: [249, 115, 22, 240],     // blazing orange-red
       minColorHex: "#3c140a",
-      maxColorHex: "#ef4444",
-      hexGradient: "linear-gradient(90deg, #3c140a, #991b1b, #dc2626, #ef4444)",
+      midColorHex: "#dc2626",
+      maxColorHex: "#f97316",
+      hexGradient: "linear-gradient(90deg, #3c140a, #991b1b, #dc2626, #f97316)",
       isruTagline: "In-situ structural beam sintering, 3D habitat reinforcement & radiation shielding",
       description: "Basaltic elemental iron for structural sintering and magnetic shielding.",
     },
@@ -51,11 +57,14 @@ window.MarsGrsOverlays = (function () {
       unit: "wt%",
       minVal: 18.11,
       maxVal: 22.11,
+      highThreshold: 21.20,
       minColor: [50, 40, 10, 110],
-      maxColor: [245, 158, 11, 230],    // amber
+      midColor: [217, 119, 6, 220],      // amber
+      maxColor: [251, 191, 36, 240],     // glowing gold
       minColorHex: "#32280a",
-      maxColorHex: "#f59e0b",
-      hexGradient: "linear-gradient(90deg, #32280a, #b45309, #d97706, #f59e0b)",
+      midColorHex: "#d97706",
+      maxColorHex: "#fbbf24",
+      hexGradient: "linear-gradient(90deg, #32280a, #b45309, #d97706, #fbbf24)",
       isruTagline: "Photovoltaic silicon solar cell fabrication & structural silica glass arrays",
       description: "Silica for habitat structural glass and photovoltaic silicon arrays.",
     },
@@ -66,11 +75,14 @@ window.MarsGrsOverlays = (function () {
       unit: "wt%",
       minVal: 0.071,
       maxVal: 0.561,
+      highThreshold: 0.350,
       minColor: [30, 15, 60, 110],
-      maxColor: [168, 85, 247, 230],    // purple
+      midColor: [147, 51, 234, 220],     // electric purple
+      maxColor: [192, 132, 252, 240],    // glowing radiant violet
       minColorHex: "#1e0f3c",
-      maxColorHex: "#a855f7",
-      hexGradient: "linear-gradient(90deg, #1e0f3c, #6b21a8, #9333ea, #a855f7)",
+      midColorHex: "#9333ea",
+      maxColorHex: "#c084fc",
+      hexGradient: "linear-gradient(90deg, #1e0f3c, #6b21a8, #9333ea, #c084fc)",
       isruTagline: "Macronutrient for closed-loop greenhouse botanical hydroponics & life support",
       description: "Macronutrient for greenhouse botanical food loops.",
     },
@@ -81,11 +93,14 @@ window.MarsGrsOverlays = (function () {
       unit: "ppm",
       minVal: 0.16,
       maxVal: 0.95,
+      highThreshold: 0.65,
       minColor: [10, 40, 30, 110],
-      maxColor: [16, 185, 129, 230],    // emerald
+      midColor: [5, 150, 105, 220],      // emerald
+      maxColor: [52, 211, 153, 240],     // radiant mint jade
       minColorHex: "#0a281e",
-      maxColorHex: "#10b981",
-      hexGradient: "linear-gradient(90deg, #0a281e, #047857, #059669, #10b981)",
+      midColorHex: "#059669",
+      maxColorHex: "#34d399",
+      hexGradient: "linear-gradient(90deg, #0a281e, #047857, #059669, #34d399)",
       isruTagline: "Actinide tracer & feedstock for compact molten-salt nuclear surface reactors",
       description: "Heavy actinide tracer for potential nuclear molten-salt reactor feedstock.",
     },
@@ -96,15 +111,191 @@ window.MarsGrsOverlays = (function () {
       unit: "wt%",
       minVal: 0.216,
       maxVal: 0.797,
+      highThreshold: 0.600,
       minColor: [20, 45, 15, 110],
-      maxColor: [132, 204, 22, 230],    // lime green
+      midColor: [101, 163, 13, 220],     // lime green
+      maxColor: [163, 230, 53, 240],     // glowing hazard lime
       minColorHex: "#142d0f",
-      maxColorHex: "#84cc16",
-      hexGradient: "linear-gradient(90deg, #142d0f, #4d7c0f, #65a30d, #84cc16)",
+      midColorHex: "#65a30d",
+      maxColorHex: "#a3e635",
+      hexGradient: "linear-gradient(90deg, #142d0f, #3f6212, #65a30d, #a3e635)",
       isruTagline: "Halogen perchlorates: O₂ extraction resource & toxic dust mitigation trigger",
       description: "Halogen perchlorate concentrations affecting soil toxicity and oxygen extraction.",
     },
   };
+
+  const elementChangeListeners = [];
+
+  function onElementChange(fn) {
+    if (typeof fn === "function") elementChangeListeners.push(fn);
+  }
+
+  function notifyElementChange(key) {
+    elementChangeListeners.forEach(function (fn) {
+      try { fn(key); } catch (e) {}
+    });
+  }
+
+  function interpolateRgb(c1, c2, f) {
+    return [
+      Math.round(c1[0] + f * (c2[0] - c1[0])),
+      Math.round(c1[1] + f * (c2[1] - c1[1])),
+      Math.round(c1[2] + f * (c2[2] - c1[2])),
+    ];
+  }
+
+  function rgbToHex(rgb) {
+    return "#" + rgb.map(function (x) {
+      return Math.max(0, Math.min(255, x)).toString(16).padStart(2, "0");
+    }).join("");
+  }
+
+  function getMineralColor(key, val) {
+    const meta = ELEMENTS[key] || ELEMENTS.k;
+    const minV = meta.minVal;
+    const maxV = meta.maxVal;
+    const t = Math.max(0, Math.min(1, (val - minV) / Math.max(0.001, maxV - minV)));
+
+    const c1 = meta.minColor.slice(0, 3);
+    const c2 = meta.midColor ? meta.midColor.slice(0, 3) : [147, 51, 234];
+    const c3 = meta.maxColor.slice(0, 3);
+
+    let rgb;
+    if (t <= 0.5) {
+      rgb = interpolateRgb(c1, c2, t / 0.5);
+    } else {
+      rgb = interpolateRgb(c2, c3, (t - 0.5) / 0.5);
+    }
+    return rgbToHex(rgb);
+  }
+
+  // Known localized high-resolution in-situ mineral targets (CRISM & Rover Science Stops)
+  const LOCAL_MINERAL_TARGETS = [
+    // Jezero Western Delta smectite clay & silica
+    { lat: 18.4553, lon: 77.4082, name: "Western Delta Scarp", boosts: { h2o: 1.45, si: 1.80, k: 0.04 } },
+    // Jezero Bearwallow delta top sandstone with potassium feldspars
+    { lat: 18.4490, lon: 77.4285, name: "Bearwallow Delta Top", boosts: { k: 0.16, si: 1.20, fe: -0.80 } },
+    // Jezero Butler Landing mafic olivine floor
+    { lat: 18.4447, lon: 77.4509, name: "Butler Landing Regolith", boosts: { fe: 2.10, h2o: -0.40 } },
+    // Gale The Kimberley sanidine potassium sandstone
+    { lat: -4.6300, lon: 137.4000, name: "The Kimberley Sanidine", boosts: { k: 0.24, si: 1.50 } },
+    // Gale Vera Rubin Ridge hematite iron ore
+    { lat: -4.6800, lon: 137.3800, name: "Vera Rubin Hematite Ridge", boosts: { fe: 5.20, h2o: -0.60 } },
+    // Gale Glen Torridon smectite clay trough
+    { lat: -4.7100, lon: 137.3900, name: "Glen Torridon Smectite", boosts: { h2o: 2.10, fe: 1.20 } },
+  ];
+
+  function sampleSmooth(key, lat, lon) {
+    const entry = cache[key];
+    const g = entry?.data;
+    const meta = ELEMENTS[key] || ELEMENTS.k;
+
+    let baseVal;
+    if (g && g.values) {
+      let normLon = ((((lon + 180) % 360) + 360) % 360) - 180;
+      const colF = ((normLon - g.west) / (g.east - g.west)) * g.cols - 0.5;
+      const rowF = ((g.north - lat) / (g.north - g.south)) * g.rows - 0.5;
+      const c0 = Math.max(0, Math.min(g.cols - 1, Math.floor(colF)));
+      const c1 = Math.max(0, Math.min(g.cols - 1, c0 + 1));
+      const r0 = Math.max(0, Math.min(g.rows - 1, Math.floor(rowF)));
+      const r1 = Math.max(0, Math.min(g.rows - 1, r0 + 1));
+      const u = Math.max(0, Math.min(1, colF - c0));
+      const v = Math.max(0, Math.min(1, rowF - r0));
+      const v00 = (g.values[r0] && g.values[r0][c0] != null) ? g.values[r0][c0] : meta.minVal;
+      const v10 = (g.values[r0] && g.values[r0][c1] != null) ? g.values[r0][c1] : v00;
+      const v01 = (g.values[r1] && g.values[r1][c0] != null) ? g.values[r1][c0] : v00;
+      const v11 = (g.values[r1] && g.values[r1][c1] != null) ? g.values[r1][c1] : v10;
+      baseVal = (1 - u) * (1 - v) * v00 + u * (1 - v) * v10 + (1 - u) * v * v01 + u * v * v11;
+    } else {
+      baseVal = sample(key, lat, lon) ?? ((meta.minVal + meta.maxVal) * 0.5);
+    }
+
+    // Blend local high-resolution geologic target signatures (Gaussian falloff)
+    let totalBoost = 0;
+    if (typeof MarsGeodesic !== "undefined" && MarsGeodesic.haversineMeters) {
+      for (let i = 0; i < LOCAL_MINERAL_TARGETS.length; i++) {
+        const tgt = LOCAL_MINERAL_TARGETS[i];
+        if (tgt.boosts && tgt.boosts[key] != null) {
+          const dM = MarsGeodesic.haversineMeters(lat, lon, tgt.lat, tgt.lon);
+          if (dM < 3500) {
+            const w = Math.exp(-Math.pow(dM / 1400, 2));
+            totalBoost += tgt.boosts[key] * w;
+          }
+        }
+      }
+    }
+
+    return Math.max(meta.minVal, Math.min(meta.maxVal, baseVal + totalBoost));
+  }
+
+  function sampleAlongPath(key, pathNodes) {
+    key = key || currentElementKey || "k";
+    if (key === "none") key = "k";
+    const meta = ELEMENTS[key] || ELEMENTS.k;
+
+    if (!pathNodes || pathNodes.length < 2) return null;
+
+    let minVal = Infinity;
+    let maxVal = -Infinity;
+    let sumVal = 0;
+    let peakNode = null;
+    let highCount = 0;
+
+    const samples = pathNodes.map(function (n, idx) {
+      const lat = n.lat != null ? n.lat : n[0];
+      const lon = n.lon != null ? n.lon : n[1];
+      const val = sampleSmooth(key, lat, lon);
+      if (val < minVal) minVal = val;
+      if (val > maxVal) {
+        maxVal = val;
+        peakNode = { lat: lat, lon: lon, dist_m: n.dist_m, val: val, idx: idx };
+      }
+      sumVal += val;
+      if (val >= (meta.highThreshold || (meta.minVal + meta.maxVal) * 0.6)) {
+        highCount++;
+      }
+      const color = getMineralColor(key, val);
+      return {
+        lat: lat,
+        lon: lon,
+        dist_m: n.dist_m || 0,
+        val: val,
+        color: color,
+      };
+    });
+
+    const avgVal = sumVal / pathNodes.length;
+    const highYieldFraction = highCount / pathNodes.length;
+
+    // Detect 1-3 prominent local peak deposits along the path
+    const depositPeaks = [];
+    if (peakNode) {
+      depositPeaks.push({
+        lat: peakNode.lat,
+        lon: peakNode.lon,
+        dist_m: peakNode.dist_m,
+        val: peakNode.val,
+        symbol: meta.symbol,
+        name: meta.name,
+        unit: meta.unit,
+        color: getMineralColor(key, peakNode.val),
+        label: meta.symbol + " Peak: " + peakNode.val.toFixed(2) + " " + meta.unit,
+        tagline: meta.isruTagline,
+      });
+    }
+
+    return {
+      elementKey: key,
+      meta: meta,
+      samples: samples,
+      minVal: minVal,
+      maxVal: maxVal,
+      avgVal: avgVal,
+      peakNode: peakNode,
+      highYieldFraction: highYieldFraction,
+      depositPeaks: depositPeaks,
+    };
+  }
 
   async function loadElement(key) {
     if (cache[key]) return cache[key];
@@ -316,6 +507,7 @@ window.MarsGrsOverlays = (function () {
     }
 
     currentElementKey = elementKey;
+    notifyElementChange(elementKey);
 
     if (!elementKey || elementKey === "none") {
       hideLegend();
@@ -370,6 +562,7 @@ window.MarsGrsOverlays = (function () {
     }
 
     currentElementKey = elementKey;
+    notifyElementChange(elementKey);
 
     if (!elementKey || elementKey === "none") {
       hideLegend();
@@ -451,15 +644,34 @@ window.MarsGrsOverlays = (function () {
     return currentElementKey;
   }
 
+  function setActiveElement(elementKey) {
+    if (currentElementKey === elementKey) return;
+    currentElementKey = elementKey;
+    const map = window.MarsDetailMap && window.MarsDetailMap.isReady() ? window.MarsDetailMap.getMap() : null;
+    const viewer = window.MarsGlobe ? window.MarsGlobe.getViewer() : null;
+    if (viewer) applyCesium(viewer, elementKey);
+    if (map) applyLeaflet(map, elementKey);
+    const grsSel = document.getElementById("grs-element-select");
+    if (grsSel && grsSel.value !== elementKey) {
+      grsSel.value = elementKey || "none";
+    }
+    notifyElementChange(elementKey);
+  }
+
   return {
     ELEMENTS,
     loadElement,
     sample,
+    sampleSmooth,
+    getMineralColor,
+    sampleAlongPath,
     applyCesium,
     applyLeaflet,
     calculateIsruMetrics,
     showLegend,
     hideLegend,
     getActiveElement,
+    setActiveElement,
+    onElementChange,
   };
 })();

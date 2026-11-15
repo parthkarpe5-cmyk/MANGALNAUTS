@@ -788,9 +788,11 @@
         const curViewer = (window.MarsGlobe && window.MarsGlobe.getViewer) ? MarsGlobe.getViewer() : null;
         const map = MarsDetailMap.isReady() ? MarsDetailMap.getMap() : null;
         if (window.MarsGrsOverlays) {
-          MarsGrsOverlays.applyCesium(curViewer, elemKey, 0.65);
-          if (map) {
-            MarsGrsOverlays.applyLeaflet(map, elemKey, 0.65);
+          if (MarsGrsOverlays.setActiveElement) {
+            MarsGrsOverlays.setActiveElement(elemKey || "none");
+          } else {
+            MarsGrsOverlays.applyCesium(curViewer, elemKey, 0.65);
+            if (map) MarsGrsOverlays.applyLeaflet(map, elemKey, 0.65);
           }
         }
       });

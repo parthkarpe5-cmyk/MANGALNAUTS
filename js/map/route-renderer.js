@@ -122,7 +122,7 @@ window.MarsRouteRenderer = (function () {
    * Generates alternating astronaut footsteps / bootprints for Marswalk Mode (Photo 0 reference)
    * Ribbed cross-treads on ball of foot and chevrons on heel in Martian regolith
    */
-  function buildFootstepMarkers(smoothPoints) {
+  function buildFootstepMarkers(smoothPoints, mineralKey) {
     if (!smoothPoints || smoothPoints.length < 2) return [];
     const cum = [0];
     for (let i = 1; i < smoothPoints.length; i++) {
@@ -165,6 +165,12 @@ window.MarsRouteRenderer = (function () {
       const footClass = isRight ? "mars-foot-right" : "mars-foot-left";
       const svgTransform = isRight ? 'transform="scale(-1, 1) translate(-20, 0)"' : "";
 
+      let footStroke = "#00f0ff";
+      if (mineralKey && window.MarsGrsOverlays && window.MarsGrsOverlays.sampleSmooth) {
+        const val = MarsGrsOverlays.sampleSmooth(mineralKey, stepLat, stepLon);
+        footStroke = MarsGrsOverlays.getMineralColor(mineralKey, val);
+      }
+
       const footIcon = L.divIcon({
         className: "mars-footstep-icon",
         html:
@@ -177,17 +183,37 @@ window.MarsRouteRenderer = (function () {
           '    <g ' +
           svgTransform +
           ">" +
-          '      <path d="M 5,3 C 11,2 17,5 18,12 C 19,18 16,23 15,26 C 14,28 15,30 15,35 C 15,39 12,40 7,40 C 3,40 2,38 2,35 C 2,30 3,28 2,26 C 1,23 -1,18 0,12 C 1,5 2,3 5,3 Z" fill="rgba(6, 18, 30, 0.92)" stroke="#00f0ff" stroke-width="1.2"/>' +
-          '      <line x1="3" y1="6.5" x2="14.5" y2="6.5" stroke="#00f0ff" stroke-width="1.2" stroke-linecap="round"/>' +
-          '      <line x1="2.5" y1="9.5" x2="15.5" y2="9.5" stroke="#00f0ff" stroke-width="1.2" stroke-linecap="round"/>' +
-          '      <line x1="2" y1="12.5" x2="16" y2="12.5" stroke="#00f0ff" stroke-width="1.2" stroke-linecap="round"/>' +
-          '      <line x1="2.5" y1="15.5" x2="15.5" y2="15.5" stroke="#00f0ff" stroke-width="1.2" stroke-linecap="round"/>' +
-          '      <line x1="3" y1="18.5" x2="14.5" y2="18.5" stroke="#00f0ff" stroke-width="1.2" stroke-linecap="round"/>' +
-          '      <line x1="3.5" y1="21.5" x2="13.5" y2="21.5" stroke="#00f0ff" stroke-width="1.2" stroke-linecap="round"/>' +
+          '      <path d="M 5,3 C 11,2 17,5 18,12 C 19,18 16,23 15,26 C 14,28 15,30 15,35 C 15,39 12,40 7,40 C 3,40 2,38 2,35 C 2,30 3,28 2,26 C 1,23 -1,18 0,12 C 1,5 2,3 5,3 Z" fill="rgba(6, 18, 30, 0.92)" stroke="' +
+          footStroke +
+          '" stroke-width="1.2"/>' +
+          '      <line x1="3" y1="6.5" x2="14.5" y2="6.5" stroke="' +
+          footStroke +
+          '" stroke-width="1.2" stroke-linecap="round"/>' +
+          '      <line x1="2.5" y1="9.5" x2="15.5" y2="9.5" stroke="' +
+          footStroke +
+          '" stroke-width="1.2" stroke-linecap="round"/>' +
+          '      <line x1="2" y1="12.5" x2="16" y2="12.5" stroke="' +
+          footStroke +
+          '" stroke-width="1.2" stroke-linecap="round"/>' +
+          '      <line x1="2.5" y1="15.5" x2="15.5" y2="15.5" stroke="' +
+          footStroke +
+          '" stroke-width="1.2" stroke-linecap="round"/>' +
+          '      <line x1="3" y1="18.5" x2="14.5" y2="18.5" stroke="' +
+          footStroke +
+          '" stroke-width="1.2" stroke-linecap="round"/>' +
+          '      <line x1="3.5" y1="21.5" x2="13.5" y2="21.5" stroke="' +
+          footStroke +
+          '" stroke-width="1.2" stroke-linecap="round"/>' +
           '      <line x1="8.5" y1="5" x2="8.5" y2="23" stroke="rgba(6, 18, 30, 0.95)" stroke-width="1.4"/>' +
-          '      <path d="M 4,28 L 8.5,26 L 13,28" fill="none" stroke="#00f0ff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>' +
-          '      <path d="M 4,31.5 L 8.5,29.5 L 13,31.5" fill="none" stroke="#00f0ff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>' +
-          '      <path d="M 4,35 L 8.5,33 L 13,35" fill="none" stroke="#00f0ff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>' +
+          '      <path d="M 4,28 L 8.5,26 L 13,28" fill="none" stroke="' +
+          footStroke +
+          '" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>' +
+          '      <path d="M 4,31.5 L 8.5,29.5 L 13,31.5" fill="none" stroke="' +
+          footStroke +
+          '" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>' +
+          '      <path d="M 4,35 L 8.5,33 L 13,35" fill="none" stroke="' +
+          footStroke +
+          '" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>' +
           "    </g>" +
           "  </svg>" +
           "</div>",
@@ -315,6 +341,7 @@ window.MarsRouteRenderer = (function () {
    * Builds an advanced multi-layered aerospace traverse corridor:
    * - In Marswalk Mode (walk): Alternating astronaut bootprints (Photo 0) with glowing cyan lifeline
    * - In Rover Mode (rover): Dual parallel cleated wheel tracks (Photo 1) in Martian regolith with autonav flow
+   * - Dynamically rendered with mineral distribution swath & gradient colored segments based on local NASA GRS/CRISM data
    */
   function createCorridorLayer(latlngs, opts) {
     opts = opts || {};
@@ -325,32 +352,106 @@ window.MarsRouteRenderer = (function () {
     // Smooth discrete lattice points into an aerodynamic spline curve
     const smoothPoints = smoothSpline(latlngs, 4);
 
+    // Mineral distribution sampling along the corridor
+    const activeMineral =
+      (window.MarsGrsOverlays &&
+        window.MarsGrsOverlays.getActiveElement &&
+        window.MarsGrsOverlays.getActiveElement()) ||
+      "none";
+    const mineralKey =
+      opts.mineral && opts.mineral !== "none"
+        ? opts.mineral
+        : activeMineral !== "none"
+        ? activeMineral
+        : "k";
+
+    let mineralStats = null;
+    if (window.MarsGrsOverlays && window.MarsGrsOverlays.sampleAlongPath) {
+      mineralStats = window.MarsGrsOverlays.sampleAlongPath(
+        mineralKey,
+        opts.pathNodes || smoothPoints
+      );
+    }
+
+    // Pre-calculate per-point mineral values and colors along smoothPoints
+    const smoothMineralSamples = [];
+    if (
+      window.MarsGrsOverlays &&
+      window.MarsGrsOverlays.sampleSmooth &&
+      window.MarsGrsOverlays.getMineralColor
+    ) {
+      for (let i = 0; i < smoothPoints.length; i++) {
+        const pt = smoothPoints[i];
+        const val = window.MarsGrsOverlays.sampleSmooth(mineralKey, pt[0], pt[1]);
+        const segCol = window.MarsGrsOverlays.getMineralColor(mineralKey, val);
+        smoothMineralSamples.push({ val: val, color: segCol });
+      }
+    }
+
+    // 0. WIDE TRANSLUCENT MINERAL SWATH BUFFER (Corridor Mineral Distribution Region)
+    // Visualizes the region/swath along the chosen path where minerals are distributed
+    if (smoothMineralSamples.length >= 2) {
+      // Outer subtle dispersion glow (width 32-38, opacity 0.12)
+      for (let i = 0; i < smoothPoints.length - 1; i++) {
+        const segColor = smoothMineralSamples[i].color;
+        const outerSwath = L.polyline([smoothPoints[i], smoothPoints[i + 1]], {
+          color: segColor,
+          weight: isWalk ? 28 : 36,
+          opacity: 0.14,
+          lineCap: "round",
+          lineJoin: "round",
+          interactive: false,
+        });
+        group.addLayer(outerSwath);
+      }
+
+      // Core mineral distribution swath corridor (width 16-22, opacity 0.28)
+      for (let i = 0; i < smoothPoints.length - 1; i++) {
+        const segColor = smoothMineralSamples[i].color;
+        const innerSwath = L.polyline([smoothPoints[i], smoothPoints[i + 1]], {
+          color: segColor,
+          weight: isWalk ? 16 : 22,
+          opacity: 0.30,
+          lineCap: "round",
+          lineJoin: "round",
+          interactive: false,
+        });
+        group.addLayer(innerSwath);
+      }
+    }
+
     if (isWalk) {
       // 1. MARSWALK MODE (Photo 0 Astronaut Bootprints):
-      // Glowing cyan halo & lifeline
-      const halo = L.polyline(smoothPoints, {
-        color: "#00f0ff",
-        weight: 6,
-        opacity: 0.22,
-        lineCap: "round",
-        lineJoin: "round",
-        interactive: false,
-      });
-      group.addLayer(halo);
+      // Glowing segmented lifeline tinted by local mineral distribution
+      if (smoothMineralSamples.length >= 2) {
+        for (let i = 0; i < smoothPoints.length - 1; i++) {
+          const segColor = smoothMineralSamples[i].color;
+          const segLine = L.polyline([smoothPoints[i], smoothPoints[i + 1]], {
+            color: segColor,
+            weight: 2.2,
+            opacity: 0.85,
+            dashArray: "4, 6",
+            lineCap: "round",
+            lineJoin: "round",
+            interactive: false,
+          });
+          group.addLayer(segLine);
+        }
+      } else {
+        const coreTrace = L.polyline(smoothPoints, {
+          color: "#00f0ff",
+          weight: 1.6,
+          opacity: 0.55,
+          dashArray: "3, 8",
+          lineCap: "round",
+          lineJoin: "round",
+          interactive: false,
+        });
+        group.addLayer(coreTrace);
+      }
 
-      const coreTrace = L.polyline(smoothPoints, {
-        color: "#00f0ff",
-        weight: 1.6,
-        opacity: 0.55,
-        dashArray: "3, 8",
-        lineCap: "round",
-        lineJoin: "round",
-        interactive: false,
-      });
-      group.addLayer(coreTrace);
-
-      // Distinct astronaut footstep markers along the route (Photo 0)
-      const footMarkers = buildFootstepMarkers(smoothPoints);
+      // Distinct astronaut footstep markers along the route (Photo 0) tinted by local mineral
+      const footMarkers = buildFootstepMarkers(smoothPoints, mineralKey);
       footMarkers.forEach(function (m) {
         group.addLayer(m);
       });
@@ -359,13 +460,29 @@ window.MarsRouteRenderer = (function () {
       // Martian Regolith Soil Depression Bed
       const rutBed = L.polyline(smoothPoints, {
         color: "#1d0804",
-        weight: 11,
+        weight: 12,
         opacity: 0.72,
         lineCap: "round",
         lineJoin: "round",
         interactive: false,
       });
       group.addLayer(rutBed);
+
+      // Regolith mineral ground tint bed
+      if (smoothMineralSamples.length >= 2) {
+        for (let i = 0; i < smoothPoints.length - 1; i++) {
+          const segColor = smoothMineralSamples[i].color;
+          const regolithMineralBed = L.polyline([smoothPoints[i], smoothPoints[i + 1]], {
+            color: segColor,
+            weight: 8,
+            opacity: 0.35,
+            lineCap: "round",
+            lineJoin: "round",
+            interactive: false,
+          });
+          group.addLayer(regolithMineralBed);
+        }
+      }
 
       // Dual parallel cleated wheel tracks (separated by 4.0m track gauge)
       const tracks = buildParallelTracks(smoothPoints, 2.0);
@@ -391,12 +508,16 @@ window.MarsRouteRenderer = (function () {
       });
       group.addLayer(rightWheelTrack);
 
-      // Central directional marching pulse flow
+      // Central directional marching pulse flow with glowing mineral tint
       if (opts.animated !== false) {
+        const peakColor =
+          mineralStats && mineralStats.meta && mineralStats.meta.midColorHex
+            ? mineralStats.meta.midColorHex
+            : "#fbbf24";
         const flow = L.polyline(smoothPoints, {
-          color: "#fbbf24",
-          weight: 1.6,
-          opacity: 0.85,
+          color: peakColor,
+          weight: 1.8,
+          opacity: 0.9,
           dashArray: "2, 14",
           lineCap: "round",
           className: "route-flow",
@@ -437,6 +558,63 @@ window.MarsRouteRenderer = (function () {
       const ticks = buildKmTicks(smoothPoints);
       ticks.forEach(function (t) {
         group.addLayer(t);
+      });
+    }
+
+    // Interactive Mineral Peak Badges along the path
+    if (mineralStats && mineralStats.depositPeaks && mineralStats.depositPeaks.length > 0) {
+      mineralStats.depositPeaks.forEach(function (peak) {
+        const peakIcon = L.divIcon({
+          className: "mineral-peak-callout-marker",
+          html:
+            '<div class="mineral-peak-callout" style="--mineral-color:' +
+            peak.color +
+            ';">' +
+            '  <span class="mineral-peak-dot"></span>' +
+            '  <span class="mineral-peak-badge">' +
+            '    <span class="mineral-sym font-mono">' +
+            peak.symbol +
+            "</span>" +
+            '    <span class="mineral-val font-mono">' +
+            peak.val.toFixed(2) +
+            " " +
+            peak.unit +
+            "</span>" +
+            "  </span>" +
+            "</div>",
+          iconSize: [0, 0],
+          iconAnchor: [0, 0],
+        });
+
+        const peakMarker = L.marker([peak.lat, peak.lon], {
+          icon: peakIcon,
+          interactive: true,
+        });
+
+        peakMarker.bindTooltip(
+          '<div class="hud-tooltip font-mono text-xs">' +
+            '<div style="color:' +
+            peak.color +
+            '; font-weight:700; margin-bottom:2px;">' +
+            "⚗️ " +
+            peak.name +
+            " (" +
+            peak.symbol +
+            ") DEPOSIT PEAK" +
+            "</div>" +
+            "Abundance: <strong>" +
+            peak.val.toFixed(2) +
+            " " +
+            peak.unit +
+            "</strong><br/>" +
+            '<span style="opacity:0.85; font-size:10px;">' +
+            (peak.tagline || "In-Situ Resource Utilization target") +
+            "</span>" +
+            "</div>",
+          { className: "hud-tooltip", direction: "top" }
+        );
+
+        group.addLayer(peakMarker);
       });
     }
 
