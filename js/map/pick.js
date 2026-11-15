@@ -709,7 +709,18 @@ window.MarsSegmentPick = (function () {
             : null;
           const sym = meta ? meta.symbol : elemKey.toUpperCase();
           const unit = meta ? meta.unit : "wt%";
-          mineralTag = " · " + sym + ": " + val.toFixed(2) + " " + unit;
+          const isDep =
+            window.MarsGrsOverlays.isDepositPresent &&
+            window.MarsGrsOverlays.isDepositPresent(elemKey, val);
+          mineralTag =
+            " · " +
+            (isDep ? "⚗️ " : "") +
+            sym +
+            ": " +
+            val.toFixed(2) +
+            " " +
+            unit +
+            (isDep ? " [DEPOSIT]" : "");
         }
 
         tagTextEl.textContent =

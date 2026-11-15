@@ -304,6 +304,7 @@ window.MarsSegmentDrawer = (function () {
           pathMineralStats = window.MarsGrsOverlays.sampleAlongPath(curElem, segment.path_nodes);
         }
 
+        const hasDeposits = pathMineralStats && pathMineralStats.highYieldFraction > 0;
         const summaryMetricsHtml = pathMineralStats
           ? '  <div class="isru-path-mineral-summary font-mono">' +
             '    <div class="path-mineral-metric">' +
@@ -317,20 +318,33 @@ window.MarsSegmentDrawer = (function () {
             '    <div class="path-mineral-metric">' +
             '      <span class="pm-label">Peak Encounter:</span>' +
             '      <span class="pm-val" style="color:' +
-            (pathMineralStats.depositPeaks[0]?.color || '#c084fc') +
+            (pathMineralStats.depositPeaks[0]?.color || '#94a3b8') +
             ';">' +
-            pathMineralStats.maxVal.toFixed(2) +
-            ' ' +
-            pathMineralStats.meta.unit +
+            (pathMineralStats.depositPeaks.length > 0
+              ? pathMineralStats.maxVal.toFixed(2) + ' ' + pathMineralStats.meta.unit
+              : 'Nominal Baseline') +
             '</span>' +
             '    </div>' +
             '    <div class="path-mineral-metric">' +
-            '      <span class="pm-label">High-Yield Zone:</span>' +
-            '      <span class="pm-val">' +
-            Math.round(pathMineralStats.highYieldFraction * 100) +
-            '% path</span>' +
+            '      <span class="pm-label">Deposit Zone:</span>' +
+            '      <span class="pm-val" style="color:' +
+            (hasDeposits ? '#22c55e' : '#94a3b8') +
+            ';">' +
+            (hasDeposits
+              ? Math.round(pathMineralStats.highYieldFraction * 100) + '% path'
+              : '0% (Nominal)') +
+            '</span>' +
             '    </div>' +
-            '  </div>'
+            '  </div>' +
+            (hasDeposits
+              ? '  <p class="drawer-hint" style="color:var(--accent); font-size:11px; margin: 0 0 8px 0;">✨ Elevated ' +
+                pathMineralStats.meta.symbol +
+                ' deposit detected along ' +
+                Math.round(pathMineralStats.highYieldFraction * 100) +
+                '% of route (highlighted on map).</p>'
+              : '  <p class="drawer-hint" style="color:#94a3b8; font-size:11px; margin: 0 0 8px 0;">ℹ️ No elevated ' +
+                pathMineralStats.meta.symbol +
+                ' deposit along this corridor (standard terrain).</p>')
           : '';
 
         isruHtml =
@@ -644,6 +658,7 @@ window.MarsSegmentDrawer = (function () {
             segment.path_nodes
           );
           if (newStats) {
+            const hasNewDeposits = newStats.highYieldFraction > 0;
             const summaryEl = panel.querySelector(".isru-path-mineral-summary");
             if (summaryEl) {
               summaryEl.innerHTML =
@@ -658,18 +673,22 @@ window.MarsSegmentDrawer = (function () {
                 '<div class="path-mineral-metric">' +
                 '  <span class="pm-label">Peak Encounter:</span>' +
                 '  <span class="pm-val" style="color:' +
-                (newStats.depositPeaks[0]?.color || '#c084fc') +
+                (newStats.depositPeaks[0]?.color || '#94a3b8') +
                 ';">' +
-                newStats.maxVal.toFixed(2) +
-                ' ' +
-                newStats.meta.unit +
+                (newStats.depositPeaks.length > 0
+                  ? newStats.maxVal.toFixed(2) + ' ' + newStats.meta.unit
+                  : 'Nominal Baseline') +
                 '</span>' +
                 '</div>' +
                 '<div class="path-mineral-metric">' +
-                '  <span class="pm-label">High-Yield Zone:</span>' +
-                '  <span class="pm-val">' +
-                Math.round(newStats.highYieldFraction * 100) +
-                '% path</span>' +
+                '  <span class="pm-label">Deposit Zone:</span>' +
+                '  <span class="pm-val" style="color:' +
+                (hasNewDeposits ? '#22c55e' : '#94a3b8') +
+                ';">' +
+                (hasNewDeposits
+                  ? Math.round(newStats.highYieldFraction * 100) + '% path'
+                  : '0% (Nominal)') +
+                '</span>' +
                 '</div>';
             }
           }

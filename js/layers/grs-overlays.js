@@ -21,6 +21,7 @@ window.MarsGrsOverlays = (function () {
       unit: "wt%",
       minVal: 1.65,
       maxVal: 7.40,
+      presenceThreshold: 4.10,
       highThreshold: 4.80,
       minColor: [15, 30, 80, 110],       // semi-transparent deep navy
       midColor: [6, 182, 212, 220],      // vibrant cyan
@@ -39,6 +40,7 @@ window.MarsGrsOverlays = (function () {
       unit: "wt%",
       minVal: 10.63,
       maxVal: 19.30,
+      presenceThreshold: 15.50,
       highThreshold: 17.00,
       minColor: [60, 20, 10, 110],
       midColor: [220, 38, 38, 220],      // crimson
@@ -57,6 +59,7 @@ window.MarsGrsOverlays = (function () {
       unit: "wt%",
       minVal: 18.11,
       maxVal: 22.11,
+      presenceThreshold: 20.40,
       highThreshold: 21.20,
       minColor: [50, 40, 10, 110],
       midColor: [217, 119, 6, 220],      // amber
@@ -75,6 +78,7 @@ window.MarsGrsOverlays = (function () {
       unit: "wt%",
       minVal: 0.071,
       maxVal: 0.561,
+      presenceThreshold: 0.240,
       highThreshold: 0.350,
       minColor: [30, 15, 60, 110],
       midColor: [147, 51, 234, 220],     // electric purple
@@ -93,6 +97,7 @@ window.MarsGrsOverlays = (function () {
       unit: "ppm",
       minVal: 0.16,
       maxVal: 0.95,
+      presenceThreshold: 0.48,
       highThreshold: 0.65,
       minColor: [10, 40, 30, 110],
       midColor: [5, 150, 105, 220],      // emerald
@@ -111,6 +116,7 @@ window.MarsGrsOverlays = (function () {
       unit: "wt%",
       minVal: 0.216,
       maxVal: 0.797,
+      presenceThreshold: 0.500,
       highThreshold: 0.600,
       minColor: [20, 45, 15, 110],
       midColor: [101, 163, 13, 220],     // lime green
@@ -177,6 +183,8 @@ window.MarsGrsOverlays = (function () {
     { lat: 18.4490, lon: 77.4285, name: "Bearwallow Delta Top", boosts: { k: 0.16, si: 1.20, fe: -0.80 } },
     // Jezero Butler Landing mafic olivine floor
     { lat: 18.4447, lon: 77.4509, name: "Butler Landing Regolith", boosts: { fe: 2.10, h2o: -0.40 } },
+    // Jezero Floor perchlorate halogen brine basin
+    { lat: 18.4150, lon: 77.4650, name: "Jezero Floor Halogen Basin", boosts: { cl: 0.28 } },
     // Gale The Kimberley sanidine potassium sandstone
     { lat: -4.6300, lon: 137.4000, name: "The Kimberley Sanidine", boosts: { k: 0.24, si: 1.50 } },
     // Gale Vera Rubin Ridge hematite iron ore
@@ -184,6 +192,13 @@ window.MarsGrsOverlays = (function () {
     // Gale Glen Torridon smectite clay trough
     { lat: -4.7100, lon: 137.3900, name: "Glen Torridon Smectite", boosts: { h2o: 2.10, fe: 1.20 } },
   ];
+
+  function isDepositPresent(key, val) {
+    if (!key || key === "none") return false;
+    const meta = ELEMENTS[key] || ELEMENTS.k;
+    const thresh = meta.presenceThreshold || (meta.minVal + (meta.maxVal - meta.minVal) * 0.45);
+    return val >= thresh;
+  }
 
   function sampleSmooth(key, lat, lon) {
     const entry = cache[key];
@@ -251,7 +266,8 @@ window.MarsGrsOverlays = (function () {
         peakNode = { lat: lat, lon: lon, dist_m: n.dist_m, val: val, idx: idx };
       }
       sumVal += val;
-      if (val >= (meta.highThreshold || (meta.minVal + meta.maxVal) * 0.6)) {
+      const isDeposit = isDepositPresent(key, val);
+      if (isDeposit) {
         highCount++;
       }
       const color = getMineralColor(key, val);
@@ -261,15 +277,16 @@ window.MarsGrsOverlays = (function () {
         dist_m: n.dist_m || 0,
         val: val,
         color: color,
+        isDeposit: isDeposit,
       };
     });
 
     const avgVal = sumVal / pathNodes.length;
     const highYieldFraction = highCount / pathNodes.length;
 
-    // Detect 1-3 prominent local peak deposits along the path
+    // Detect deposit peaks ONLY where an actual deposit is present!
     const depositPeaks = [];
-    if (peakNode) {
+    if (peakNode && isDepositPresent(key, peakNode.val)) {
       depositPeaks.push({
         lat: peakNode.lat,
         lon: peakNode.lon,
@@ -663,6 +680,7 @@ window.MarsGrsOverlays = (function () {
     loadElement,
     sample,
     sampleSmooth,
+    isDepositPresent,
     getMineralColor,
     sampleAlongPath,
     applyCesium,

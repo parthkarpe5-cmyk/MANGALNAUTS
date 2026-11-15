@@ -168,7 +168,13 @@ window.MarsRouteRenderer = (function () {
       let footStroke = "#00f0ff";
       if (mineralKey && window.MarsGrsOverlays && window.MarsGrsOverlays.sampleSmooth) {
         const val = MarsGrsOverlays.sampleSmooth(mineralKey, stepLat, stepLon);
-        footStroke = MarsGrsOverlays.getMineralColor(mineralKey, val);
+        const isDep = window.MarsGrsOverlays.isDepositPresent
+          ? window.MarsGrsOverlays.isDepositPresent(mineralKey, val)
+          : false;
+        // ONLY color bootprint with mineral stroke where an actual deposit is present!
+        if (isDep) {
+          footStroke = MarsGrsOverlays.getMineralColor(mineralKey, val);
+        }
       }
 
       const footIcon = L.divIcon({
@@ -384,34 +390,39 @@ window.MarsRouteRenderer = (function () {
         const pt = smoothPoints[i];
         const val = window.MarsGrsOverlays.sampleSmooth(mineralKey, pt[0], pt[1]);
         const segCol = window.MarsGrsOverlays.getMineralColor(mineralKey, val);
-        smoothMineralSamples.push({ val: val, color: segCol });
+        const isDep = window.MarsGrsOverlays.isDepositPresent
+          ? window.MarsGrsOverlays.isDepositPresent(mineralKey, val)
+          : false;
+        smoothMineralSamples.push({ val: val, color: segCol, isDeposit: isDep });
       }
     }
 
-    // 0. WIDE TRANSLUCENT MINERAL SWATH BUFFER (Corridor Mineral Distribution Region)
-    // Visualizes the region/swath along the chosen path where minerals are distributed
+    // 0. WIDE TRANSLUCENT MINERAL SWATH BUFFER
+    // ONLY renders along segments where an elevated mineral deposit is ACTUALLY present!
     if (smoothMineralSamples.length >= 2) {
-      // Outer subtle dispersion glow (width 32-38, opacity 0.12)
       for (let i = 0; i < smoothPoints.length - 1; i++) {
+        const hasDeposit =
+          smoothMineralSamples[i]?.isDeposit ||
+          smoothMineralSamples[i + 1]?.isDeposit;
+        if (!hasDeposit) continue; // DO NOT color or swath areas where mineral deposit is absent!
+
         const segColor = smoothMineralSamples[i].color;
+        // Outer subtle dispersion glow
         const outerSwath = L.polyline([smoothPoints[i], smoothPoints[i + 1]], {
           color: segColor,
           weight: isWalk ? 28 : 36,
-          opacity: 0.14,
+          opacity: 0.16,
           lineCap: "round",
           lineJoin: "round",
           interactive: false,
         });
         group.addLayer(outerSwath);
-      }
 
-      // Core mineral distribution swath corridor (width 16-22, opacity 0.28)
-      for (let i = 0; i < smoothPoints.length - 1; i++) {
-        const segColor = smoothMineralSamples[i].color;
+        // Core mineral distribution swath
         const innerSwath = L.polyline([smoothPoints[i], smoothPoints[i + 1]], {
           color: segColor,
           weight: isWalk ? 16 : 22,
-          opacity: 0.30,
+          opacity: 0.32,
           lineCap: "round",
           lineJoin: "round",
           interactive: false,
@@ -422,35 +433,25 @@ window.MarsRouteRenderer = (function () {
 
     if (isWalk) {
       // 1. MARSWALK MODE (Photo 0 Astronaut Bootprints):
-      // Glowing segmented lifeline tinted by local mineral distribution
-      if (smoothMineralSamples.length >= 2) {
-        for (let i = 0; i < smoothPoints.length - 1; i++) {
-          const segColor = smoothMineralSamples[i].color;
-          const segLine = L.polyline([smoothPoints[i], smoothPoints[i + 1]], {
-            color: segColor,
-            weight: 2.2,
-            opacity: 0.85,
-            dashArray: "4, 6",
-            lineCap: "round",
-            lineJoin: "round",
-            interactive: false,
-          });
-          group.addLayer(segLine);
-        }
-      } else {
-        const coreTrace = L.polyline(smoothPoints, {
-          color: "#00f0ff",
-          weight: 1.6,
-          opacity: 0.55,
-          dashArray: "3, 8",
+      // Glowing lifeline: mineral color ONLY where deposit is present; otherwise clean cyan (#00f0ff)!
+      for (let i = 0; i < smoothPoints.length - 1; i++) {
+        const hasDeposit =
+          smoothMineralSamples[i]?.isDeposit ||
+          smoothMineralSamples[i + 1]?.isDeposit;
+        const segColor = hasDeposit ? smoothMineralSamples[i].color : "#00f0ff";
+        const segLine = L.polyline([smoothPoints[i], smoothPoints[i + 1]], {
+          color: segColor,
+          weight: hasDeposit ? 2.5 : 1.6,
+          opacity: hasDeposit ? 0.92 : 0.55,
+          dashArray: hasDeposit ? "3, 5" : "3, 8",
           lineCap: "round",
           lineJoin: "round",
           interactive: false,
         });
-        group.addLayer(coreTrace);
+        group.addLayer(segLine);
       }
 
-      // Distinct astronaut footstep markers along the route (Photo 0) tinted by local mineral
+      // Distinct astronaut footstep markers along the route (Photo 0) tinted by local mineral ONLY if present
       const footMarkers = buildFootstepMarkers(smoothPoints, mineralKey);
       footMarkers.forEach(function (m) {
         group.addLayer(m);
@@ -468,18 +469,26 @@ window.MarsRouteRenderer = (function () {
       });
       group.addLayer(rutBed);
 
-      // Regolith mineral ground tint bed
+      // Regolith mineral ground tint bed: ONLY where mineral deposit is present!
       if (smoothMineralSamples.length >= 2) {
         for (let i = 0; i < smoothPoints.length - 1; i++) {
+          const hasDeposit =
+            smoothMineralSamples[i]?.isDeposit ||
+            smoothMineralSamples[i + 1]?.isDeposit;
+          if (!hasDeposit) continue;
+
           const segColor = smoothMineralSamples[i].color;
-          const regolithMineralBed = L.polyline([smoothPoints[i], smoothPoints[i + 1]], {
-            color: segColor,
-            weight: 8,
-            opacity: 0.35,
-            lineCap: "round",
-            lineJoin: "round",
-            interactive: false,
-          });
+          const regolithMineralBed = L.polyline(
+            [smoothPoints[i], smoothPoints[i + 1]],
+            {
+              color: segColor,
+              weight: 8,
+              opacity: 0.4,
+              lineCap: "round",
+              lineJoin: "round",
+              interactive: false,
+            }
+          );
           group.addLayer(regolithMineralBed);
         }
       }
@@ -508,14 +517,10 @@ window.MarsRouteRenderer = (function () {
       });
       group.addLayer(rightWheelTrack);
 
-      // Central directional marching pulse flow with glowing mineral tint
+      // Central directional marching pulse flow
       if (opts.animated !== false) {
-        const peakColor =
-          mineralStats && mineralStats.meta && mineralStats.meta.midColorHex
-            ? mineralStats.meta.midColorHex
-            : "#fbbf24";
         const flow = L.polyline(smoothPoints, {
-          color: peakColor,
+          color: "#fbbf24",
           weight: 1.8,
           opacity: 0.9,
           dashArray: "2, 14",
