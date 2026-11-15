@@ -25,14 +25,15 @@ window.MarsSegmentDrawer = (function () {
     const id = ++renderId;
     if (!segment?.path_found) window.MarsContingency?.clear();
     if (!panel) return;
+    const prompt = document.getElementById("route-prompt");
+    prompt.textContent = statusText || "";
+    prompt.hidden = !statusText;
     if (statusText) {
-      panel.innerHTML =
-        '<div class="drawer-status-box">' +
-        '  <span class="status-pulse-dot"></span>' +
-        '  <p class="drawer-hint active-cue">' + statusText + '</p>' +
-        '</div>';
+      window.MarsWorkspace.closeRoute();
       return;
     }
+    if (segment) window.MarsWorkspace.show("route");
+    else window.MarsWorkspace.closeRoute();
 
     if (!segment) {
       lastSegment = null;
@@ -377,6 +378,7 @@ window.MarsSegmentDrawer = (function () {
 
   async function renderScienceStop(stop) {
     if (!panel) return;
+    const id = ++renderId;
     const catIcon = (stop.type || "").includes("Delta")
       ? ic("waves")
       : (stop.type || "").includes("Landing")
@@ -387,6 +389,8 @@ window.MarsSegmentDrawer = (function () {
       ? await MarsData.getActiveSiteMeta()
       : null;
 
+    if (id !== renderId) return;
+    window.MarsWorkspace.show("route");
     panel.innerHTML =
       '<div class="science-card">' +
       '  <div class="science-card-head">' +

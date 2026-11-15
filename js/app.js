@@ -37,8 +37,6 @@
   const windLabel = document.getElementById("wind-label");
 
   // Optional globe layers controls
-  const globeLayersToggle = document.getElementById("globe-layers-toggle");
-  const globeLayersMenu = document.getElementById("globe-layers-menu");
   const toggleLandmarks = document.getElementById("toggle-landmarks");
   const toggleTraverses = document.getElementById("toggle-traverses");
   const toggleAoi = document.getElementById("toggle-aoi");
@@ -263,31 +261,6 @@
       aboutToggle.addEventListener("click", function () {
         if (window.MarsAudio) MarsAudio.playClick();
         aboutPanel.hidden = !aboutPanel.hidden;
-      });
-    }
-
-    // Globe layers menu toggle
-    if (globeLayersToggle && globeLayersMenu) {
-      globeLayersToggle.addEventListener("click", function (e) {
-        e.stopPropagation();
-        if (window.MarsAudio) MarsAudio.playClick();
-        globeLayersMenu.hidden = !globeLayersMenu.hidden;
-        globeLayersToggle.setAttribute("aria-expanded", String(!globeLayersMenu.hidden));
-      });
-      document.addEventListener("click", function () {
-        if (!globeLayersMenu.hidden) {
-          globeLayersMenu.hidden = true;
-          globeLayersToggle.setAttribute("aria-expanded", "false");
-        }
-      });
-      document.addEventListener("keydown", function (e) {
-        if (e.key !== "Escape" || globeLayersMenu.hidden) return;
-        globeLayersMenu.hidden = true;
-        globeLayersToggle.setAttribute("aria-expanded", "false");
-        globeLayersToggle.focus();
-      });
-      globeLayersMenu.addEventListener("click", function (e) {
-        e.stopPropagation();
       });
     }
 
