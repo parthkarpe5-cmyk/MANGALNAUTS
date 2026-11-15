@@ -6,8 +6,8 @@
  */
 window.MarsNasaApi = (function () {
   const STORAGE_KEY = "mangalnauts_nasa_api_key";
-  // PRIMARY NASA API KEY: replace "DEMO_KEY" with your personal key from https://api.nasa.gov/
-  const NASA_API_KEY = "DEMO_KEY";
+  // PRIMARY NASA API KEY (synced from .env)
+  const NASA_API_KEY = "knm8FKN9QkHb9MFWRp6jFg9qG6qLLctGp9Nf8tcW";
 
   let cachedTelemetry = null;
   let lastFetchTime = 0;
