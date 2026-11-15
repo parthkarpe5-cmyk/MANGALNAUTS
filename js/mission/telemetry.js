@@ -221,8 +221,10 @@ window.MarsTelemetry = (function () {
       '      <span class="telemetry-value font-mono">' + radVal + ' µSv/h · ' + flare + '</span>' +
       '    </div>' +
       '  </div>' +
-      '</div>' +
-      alertHtml;
+      '</div>';
+    const advisory = document.getElementById("telemetry-advisory");
+    if (advisory) advisory.innerHTML = alertHtml;
+    else el.insertAdjacentHTML("beforeend", alertHtml);
   }
 
   function getEnv() {

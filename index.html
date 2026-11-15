@@ -21,15 +21,95 @@
       href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/styles.css?v=top-mission-controls" />
+    <link rel="stylesheet" href="css/styles.css?v=left-brand" />
   </head>
   <body>
     <header class="top-nav cockpit-bar">
       <!-- Left: Mission Identity & Live Telemetry Ping -->
       <div class="nav-brand">
+        <span class="nav-logo"><img src="assets/mangalnauts-logo.png" alt="" width="1024" height="1024"></span>
         <h1>MANGALNAUTS</h1>
       </div>
 
+      <div id="telemetry-bar" class="telemetry-bar cockpit-bar" aria-label="Martian environmental telemetry"></div>
+
+      <div class="nav-actions">
+        <button type="button" class="btn-ghost" id="about-toggle" title="Scientific Data Citations">
+          ℹ About
+        </button>
+      </div>
+    </header>
+
+    <div id="telemetry-advisory" class="telemetry-advisory" aria-label="Mission advisory"></div>
+
+    <div id="about-panel" class="about-panel" hidden>
+      <div class="about-card">
+        <h3>MANGALNAUTS — Planetary Multi-Site Operations &amp; GNN Traversability</h3>
+        <p>
+          Designed for the <strong>NASA Space Apps Challenge 2026: Interplanetary Survival Guide (Martian Map)</strong>.
+          Pulls together data from NASA Mars missions into an operational cockpit for human Marswalk and rover mission routing.
+        </p>
+        <div class="citations-block">
+          <h4>VERIFIED SCIENTIFIC DATA CITATIONS</h4>
+          <ul>
+            <li><strong>NASA Mars Science Laboratory (MSL):</strong> Curiosity REMS live daily in-situ atmospheric telemetry (4,745 sols in Gale Crater) &amp; 33.28 km PDS Mount Sharp traverse.</li>
+            <li><strong>NASA Mars 2020:</strong> Perseverance MEDA live in-situ weather telemetry &amp; 42.71 km PDS Western Delta traverse.</li>
+            <li><strong>NASA Odyssey GRS:</strong> Global elemental concentration maps (Water-Equivalent Hydrogen, Fe, Si, K, Th, Cl) from Boynton et al. 2007 (PDS Geosciences Node).</li>
+            <li><strong>Topography:</strong> USGS HRSC-MOLA 200m Blended DEM (Fergason et al. 2018) &amp; MGS MOLA MEGDR elevation data.</li>
+            <li><strong>Orbital Spectroscopy &amp; Thermal:</strong> ASU THEMIS Day/Night IR &amp; Thermal Inertia (Edwards et al.) + CRISM hyperspectral phyllosilicate clays and carbonates (Murchie et al.).</li>
+            <li><strong>3D spacecraft models</strong> · NASA Science, JPL, Ames Research Center, and Brian E. Kumanchik. Models are enlarged for visibility.</li>
+            <li><strong>Space Weather:</strong> NOAA Space Weather Prediction Center (SWPC) live 1-minute GOES X-ray solar flare flux &amp; MSL RAD cosmic ray dosimetry.</li>
+            <li><strong>AI / Navigation Engine:</strong> Vectorized 2-Layer Graph Convolutional Network (GCN) running spatial topological message passing for multi-task traversability and biosignature ranking.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dual Viewport Engine: Supports 3D Globe, 2D Tactical, or Side-by-Side Dual Split -->
+    <main id="viewport-split" class="viewport-split mode-3d">
+      <!-- 3D Planetary Globe View (CesiumJS Mars Ellipsoid) -->
+      <section id="globe-pane" class="pane globe-pane" aria-label="3D Martian globe view">
+        <canvas id="cosmic-canvas" class="cosmic-canvas"></canvas>
+        <div id="globe" class="cesium-container"></div>
+        <aside class="orbiter-card" id="orbiter-card" aria-label="Orbiter details" hidden>
+          <header><h2></h2><button type="button" class="btn-ghost" aria-label="Close orbiter details">×</button></header>
+          <p class="orbiter-history"></p>
+          <dl></dl>
+          <a href="https://ssd.jpl.nasa.gov/horizons/" target="_blank" rel="noopener">JPL Horizons · illustrative orbit, archived elements</a>
+        </aside>
+
+        <!-- 3D Globe Exploration Site Banner -->
+        <div id="globe-site-banner" class="globe-site-banner" hidden>
+          <div class="globe-site-info">
+            <span class="globe-site-pulse"></span>
+            <div>
+              <div class="globe-site-title" id="globe-site-name">Jezero Crater</div>
+              <div class="globe-site-sub" id="globe-site-coords">18.44°N, 77.35°E</div>
+            </div>
+          </div>
+          <div class="globe-site-actions">
+            <button type="button" class="btn-enter-tactical" id="btn-enter-tactical">
+              Surface
+            </button>
+            <button type="button" class="btn-globe-orbit" id="btn-globe-orbit" title="Return to Planetary Space Orbit">
+              Orbit
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- 2D High-Resolution Tactical Surface Map View (Leaflet NASA Trek & HiRISE) -->
+      <section
+        id="detail-pane"
+        class="pane detail-pane"
+        aria-label="High-resolution surface exploration view"
+      >
+        <div class="detail-body">
+          <div id="detail-map-inner" class="detail-map-inner"></div>
+          <aside id="segment-drawer" class="segment-drawer" aria-label="Mission metrics and telemetry"></aside>
+        </div>
+      </section>
       <div class="mission-dock cockpit-bar" role="region" aria-label="Mission controls">
         <div class="select-badge" title="Select Martian Exploration Sector">
           <span class="select-badge-lbl">SECTOR</span>
@@ -176,85 +256,6 @@
           </div>
         </div>
       </div>
-
-      <div class="nav-actions">
-        <button type="button" class="btn-ghost" id="about-toggle" title="Scientific Data Citations">
-          ℹ About
-        </button>
-      </div>
-    </header>
-
-    <!-- Top Environmental & Mission Telemetry Bar -->
-    <div id="telemetry-bar" class="telemetry-bar cockpit-bar" aria-label="Martian environmental telemetry"></div>
-
-    <div id="about-panel" class="about-panel" hidden>
-      <div class="about-card">
-        <h3>MANGALNAUTS — Planetary Multi-Site Operations &amp; GNN Traversability</h3>
-        <p>
-          Designed for the <strong>NASA Space Apps Challenge 2026: Interplanetary Survival Guide (Martian Map)</strong>.
-          Pulls together data from NASA Mars missions into an operational cockpit for human Marswalk and rover mission routing.
-        </p>
-        <div class="citations-block">
-          <h4>VERIFIED SCIENTIFIC DATA CITATIONS</h4>
-          <ul>
-            <li><strong>NASA Mars Science Laboratory (MSL):</strong> Curiosity REMS live daily in-situ atmospheric telemetry (4,745 sols in Gale Crater) &amp; 33.28 km PDS Mount Sharp traverse.</li>
-            <li><strong>NASA Mars 2020:</strong> Perseverance MEDA live in-situ weather telemetry &amp; 42.71 km PDS Western Delta traverse.</li>
-            <li><strong>NASA Odyssey GRS:</strong> Global elemental concentration maps (Water-Equivalent Hydrogen, Fe, Si, K, Th, Cl) from Boynton et al. 2007 (PDS Geosciences Node).</li>
-            <li><strong>Topography:</strong> USGS HRSC-MOLA 200m Blended DEM (Fergason et al. 2018) &amp; MGS MOLA MEGDR elevation data.</li>
-            <li><strong>Orbital Spectroscopy &amp; Thermal:</strong> ASU THEMIS Day/Night IR &amp; Thermal Inertia (Edwards et al.) + CRISM hyperspectral phyllosilicate clays and carbonates (Murchie et al.).</li>
-            <li><strong>3D spacecraft models</strong> · NASA Science, JPL, Ames Research Center, and Brian E. Kumanchik. Models are enlarged for visibility.</li>
-            <li><strong>Space Weather:</strong> NOAA Space Weather Prediction Center (SWPC) live 1-minute GOES X-ray solar flare flux &amp; MSL RAD cosmic ray dosimetry.</li>
-            <li><strong>AI / Navigation Engine:</strong> Vectorized 2-Layer Graph Convolutional Network (GCN) running spatial topological message passing for multi-task traversability and biosignature ranking.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- Dual Viewport Engine: Supports 3D Globe, 2D Tactical, or Side-by-Side Dual Split -->
-    <main id="viewport-split" class="viewport-split mode-3d">
-      <!-- 3D Planetary Globe View (CesiumJS Mars Ellipsoid) -->
-      <section id="globe-pane" class="pane globe-pane" aria-label="3D Martian globe view">
-        <canvas id="cosmic-canvas" class="cosmic-canvas"></canvas>
-        <div id="globe" class="cesium-container"></div>
-        <aside class="orbiter-card" id="orbiter-card" aria-label="Orbiter details" hidden>
-          <header><h2></h2><button type="button" class="btn-ghost" aria-label="Close orbiter details">×</button></header>
-          <p class="orbiter-history"></p>
-          <dl></dl>
-          <a href="https://ssd.jpl.nasa.gov/horizons/" target="_blank" rel="noopener">JPL Horizons · illustrative orbit, archived elements</a>
-        </aside>
-
-        <!-- 3D Globe Exploration Site Banner -->
-        <div id="globe-site-banner" class="globe-site-banner" hidden>
-          <div class="globe-site-info">
-            <span class="globe-site-pulse"></span>
-            <div>
-              <div class="globe-site-title" id="globe-site-name">Jezero Crater</div>
-              <div class="globe-site-sub" id="globe-site-coords">18.44°N, 77.35°E</div>
-            </div>
-          </div>
-          <div class="globe-site-actions">
-            <button type="button" class="btn-enter-tactical" id="btn-enter-tactical">
-              Surface
-            </button>
-            <button type="button" class="btn-globe-orbit" id="btn-globe-orbit" title="Return to Planetary Space Orbit">
-              Orbit
-            </button>
-          </div>
-        </div>
-
-      </section>
-
-      <!-- 2D High-Resolution Tactical Surface Map View (Leaflet NASA Trek & HiRISE) -->
-      <section
-        id="detail-pane"
-        class="pane detail-pane"
-        aria-label="High-resolution surface exploration view"
-      >
-        <div class="detail-body">
-          <div id="detail-map-inner" class="detail-map-inner"></div>
-          <aside id="segment-drawer" class="segment-drawer" aria-label="Mission metrics and telemetry"></aside>
-        </div>
-      </section>
     </main>
 
     <footer class="footer">
@@ -297,7 +298,7 @@
     <script src="js/ui/icons.js?v=contour-slope-v3"></script>
     <script src="js/ui/audio.js"></script>
     <script src="js/ui/theme.js?v=deep-space-default"></script>
-    <script src="js/mission/telemetry.js?v=compact-cockpit"></script>
+    <script src="js/mission/telemetry.js?v=top-telemetry"></script>
     <script src="js/mission/elevation-profile.js?v=contour-slope-v3"></script>
     <script src="js/mission/drawer.js?v=contour-slope-v3"></script>
     <script src="js/mission/contingency.js?v=raster-1"></script>
