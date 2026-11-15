@@ -3619,3 +3619,57 @@ html[data-theme="deepspace"] .workspace-sidebar .segment-drawer {
   letter-spacing: 0.02em;
 }
 }
+
+/* Soft UI surfaces for the mission cockpit. */
+:root {
+  --soft-surface: color-mix(in srgb, var(--panel-solid) 75%, var(--panel-alt));
+  --soft-edge: color-mix(in srgb, var(--text-bright) 11%, transparent);
+  --soft-raised: inset 0 1px var(--soft-edge), 0 4px 12px #0005;
+  --soft-recessed: inset 0 2px 5px #0006, inset 0 -1px var(--soft-edge);
+}
+
+html .top-nav.cockpit-bar,
+html .mission-dock.cockpit-bar,
+html .workspace-sidebar,
+html .workspace-sidebar .segment-drawer {
+  background: var(--soft-surface);
+  border-color: var(--soft-edge);
+  backdrop-filter: none;
+  box-shadow: var(--soft-raised);
+}
+html .workspace-sidebar .segment-drawer {
+  background: transparent;
+  box-shadow: none;
+}
+html .mission-dock.cockpit-bar { border-radius: 16px; }
+html .workspace-sidebar-header { border-bottom-color: var(--soft-edge); }
+
+.cockpit-bar :is(.telemetry-pill, .select-badge select, .view-mode-group, .dropdown-trigger),
+.workspace-sidebar :is(select, .btn-ghost, .stat-card, .qm-card) {
+  background: var(--soft-surface);
+  border-color: var(--soft-edge);
+  border-radius: 9px;
+  box-shadow: var(--soft-raised);
+}
+.cockpit-bar :is(.select-badge select, .view-mode-group),
+.workspace-sidebar select {
+  background: var(--panel-solid);
+  box-shadow: var(--soft-recessed);
+}
+.cockpit-bar .view-mode-btn.active,
+.workspace-sidebar-header [aria-selected="true"] {
+  box-shadow: var(--soft-recessed);
+}
+.mission-dock .dock-btn-plan .btn-inner {
+  border-radius: 9px;
+  box-shadow: var(--soft-raised);
+}
+.globe-site-banner,
+.orbiter-card,
+.route-prompt {
+  background: var(--soft-surface);
+  border-color: var(--soft-edge);
+  border-radius: 12px;
+  backdrop-filter: none;
+  box-shadow: var(--soft-raised);
+}
