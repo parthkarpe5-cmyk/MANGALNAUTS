@@ -11,16 +11,16 @@ window.MarsDetailMap = (function () {
   const THEMIS_URL = TREK_BASE + "/THEMIS_DayIR_ControlledMosaics_100m_v2_oct2018/1.0.0/default/default028mm/{z}/{y}/{x}.png";
   const CTX_URL = "https://astro.arcgis.com/arcgis/rest/services/OnMars/CTX/MapServer/tile/{z}/{y}/{x}";
 
+  const MARS_BOUNDS = L.latLngBounds([-90, -180], [90, 180]);
+
   function init() {
     if (initialized) {
       return map;
     }
     initialized = true;
 
-    const MARS_BOUNDS = L.latLngBounds([-90, -180], [90, 180]);
     const activeMeta = window.MarsData?.getActiveSiteMetaSync ? window.MarsData.getActiveSiteMetaSync() : null;
     const initialCenter = activeMeta?.center ? [activeMeta.center.lat, activeMeta.center.lon] : [18.4447, 77.4509];
-
     map = L.map("detail-map-inner", {
       crs: L.CRS.EPSG4326,
       center: initialCenter,
@@ -29,9 +29,13 @@ window.MarsDetailMap = (function () {
       minZoom: 2,
       maxZoom: 15,
       maxBounds: MARS_BOUNDS,
-      maxBoundsViscosity: 1,
+      maxBoundsViscosity: 0.3,
       worldCopyJump: false,
       zoomControl: false,
+      dragging: true,
+      scrollWheelZoom: true,
+      touchZoom: true,
+      doubleClickZoom: true,
     });
 
     // Custom sleek zoom control in bottom-right
@@ -71,15 +75,14 @@ window.MarsDetailMap = (function () {
 
   function fitCoverageWhenVisible() {
     const container = map.getContainer();
-    if (!coverageBounds || !container.clientWidth || !container.clientHeight) return;
+    if (!container.clientWidth || !container.clientHeight) return;
 
+    // Maintain global Mars exploration freedom: unrestricted panning and zooming
+    map.setMaxBounds(MARS_BOUNDS);
     map.setMinZoom(2);
-    // Use the zoom at which the viewport fits inside the data, including on wide screens.
-    const coverageZoom = map.getBoundsZoom(coverageBounds, true);
-    map.setMaxBounds(coverageBounds);
-    map.setMinZoom(coverageZoom);
-    if (pendingCoverageFit) {
-      map.setView(coverageBounds.getCenter(), coverageZoom, { animate: false });
+
+    if (pendingCoverageFit && coverageBounds) {
+      map.fitBounds(coverageBounds, { padding: [32, 32], maxZoom: 12, animate: false });
       pendingCoverageFit = false;
     }
   }
@@ -93,12 +96,20 @@ window.MarsDetailMap = (function () {
       const graph = await MarsData.loadRegionalGraph();
       if (requestedSite !== currentSite) return;
       const b = graph?.bbox;
-      if (!b) return;
-      coverageBounds = L.latLngBounds([b.south, b.west], [b.north, b.east]);
+      if (b) {
+        coverageBounds = L.latLngBounds([b.south, b.west], [b.north, b.east]);
+      } else if (window.MarsPlaces && window.MarsPlaces[currentSite]?.bounds) {
+        coverageBounds = L.latLngBounds(window.MarsPlaces[currentSite].bounds);
+      }
       pendingCoverageFit = true;
       map.invalidateSize({ pan: false });
       fitCoverageWhenVisible();
     } catch (error) {
+      if (window.MarsPlaces && window.MarsPlaces[currentSite]?.bounds) {
+        coverageBounds = L.latLngBounds(window.MarsPlaces[currentSite].bounds);
+        pendingCoverageFit = true;
+        fitCoverageWhenVisible();
+      }
       console.warn("Could not load regional terrain coverage", error);
     }
   }
@@ -111,10 +122,17 @@ window.MarsDetailMap = (function () {
 
   function invalidateSize() {
     if (map) {
-      map.invalidateSize();
-      fitCoverageWhenVisible();
+      map.invalidateSize({ pan: false });
+      if (pendingCoverageFit) {
+        fitCoverageWhenVisible();
+      }
       setTimeout(function () {
-        if (map) map.invalidateSize();
+        if (map) {
+          map.invalidateSize({ pan: false });
+          if (pendingCoverageFit) {
+            fitCoverageWhenVisible();
+          }
+        }
       }, 100);
     }
   }

@@ -1,6 +1,7 @@
 /* global Cesium, window */
 window.MarsOrbiters = (() => {
   const radians = Math.PI / 180;
+  const modeledOrbiters = new Set(["mro", "odyssey", "maven"]);
 
   function position(elements, elapsed, result) {
     const { eccentricity: e, semiMajorAxisKm, inclinationDeg, nodeDeg,
@@ -71,16 +72,22 @@ window.MarsOrbiters = (() => {
       viewer.entities.add({
         polyline: { positions, width: 1, material: color.withAlpha(0.25), arcType: Cesium.ArcType.NONE },
       });
+      const hasModel = modeledOrbiters.has(item.id);
       viewer.entities.add({
         id: "mars-orbiter-" + item.id,
         position: new Cesium.CallbackProperty((_time, result) => {
           const elapsed = reducedMotion.matches ? 0 : (performance.now() - start) * 0.06;
           return position(elements, elapsed, result);
         }, false),
+        model: hasModel ? {
+          uri: "assets/spacecraft/" + item.id + ".glb",
+          minimumPixelSize: 24,
+          maximumScale: 250000,
+        } : undefined,
         point: { pixelSize: item.type === "moon" ? 8 : 9, color, outlineColor: Cesium.Color.BLACK, outlineWidth: 2 },
         label: {
           text: item.shortName, font: "600 12px sans-serif",
-          pixelOffset: new Cesium.Cartesian2(0, -16),
+          pixelOffset: new Cesium.Cartesian2(0, hasModel ? -28 : -16),
           style: Cesium.LabelStyle.FILL_AND_OUTLINE, outlineWidth: 3,
         },
       });

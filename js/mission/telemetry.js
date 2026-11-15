@@ -52,7 +52,7 @@ window.MarsTelemetry = (function () {
     opts = opts || {};
     const mode = (window.MarsTravelMode && window.MarsTravelMode.MODES && window.MarsTravelMode.MODES[modeKey])
       ? window.MarsTravelMode.MODES[modeKey]
-      : { type: (modeKey === "rover" || modeKey === "aggressive_rover") ? "rover" : "walk", speedBaseMs: 0.65, maxSlopeDeg: 15 };
+      : { type: modeKey === "rover" ? "rover" : "walk", speedBaseMs: modeKey === "rover" ? 0.12 : 0.65, maxSlopeDeg: modeKey === "rover" ? 20 : 15 };
 
     const isWalk = mode.type === "walk";
     const payloadKg = Number.isFinite(opts.payloadKg) ? opts.payloadKg : 20; // Default 20 kg carried equipment
@@ -173,7 +173,6 @@ window.MarsTelemetry = (function () {
         '<span class="alert-icon">' + ic("alertTriangle") + '</span>' +
         '<div class="alert-content">' +
         '  <span class="alert-title">' + title + '</span>' +
-        '  <span class="alert-sub">' + topAlert.message.substring(0, 48) + '...</span>' +
         '</div>' +
         '</div>';
     }
@@ -183,21 +182,21 @@ window.MarsTelemetry = (function () {
       '  <div class="telemetry-pill highlight" title="Current Martian Mission Sol">' +
       '    <span class="pill-icon">' + ic("rocket") + '</span>' +
       '    <div class="pill-text">' +
-      '      <span class="telemetry-label">MISSION SOL</span>' +
-      '      <span class="telemetry-value font-mono">Sol ' + sol + '</span>' +
+      '      <span class="telemetry-label">SOL</span>' +
+      '      <span class="telemetry-value font-mono">' + sol + '</span>' +
       '    </div>' +
       '  </div>' +
       '  <div class="telemetry-pill" title="Local Mars Solar Time (NASA Mars24)">' +
       '    <span class="pill-icon">' + ic("clock") + '</span>' +
       '    <div class="pill-text">' +
-      '      <span class="telemetry-label">LTST (SOLAR)</span>' +
+      '      <span class="telemetry-label">LOCAL TIME</span>' +
       '      <span class="telemetry-value font-mono neon-time" id="telemetry-ltst">' + getFormattedLTST() + '</span>' +
       '    </div>' +
       '  </div>' +
       '  <div class="telemetry-pill" title="In-situ surface temperature from rover sensors">' +
       '    <span class="pill-icon">' + ic("thermometer") + '</span>' +
       '    <div class="pill-text">' +
-      '      <span class="telemetry-label">SURFACE TEMP</span>' +
+      '      <span class="telemetry-label">TEMP</span>' +
       '      <span class="telemetry-value font-mono">' + temp + '°C</span>' +
       '    </div>' +
       '  </div>' +
@@ -211,19 +210,21 @@ window.MarsTelemetry = (function () {
       '  <div class="telemetry-pill" title="Surface wind velocity from rover anemometer">' +
       '    <span class="pill-icon">' + ic("wind") + '</span>' +
       '    <div class="pill-text">' +
-      '      <span class="telemetry-label">SURFACE WIND</span>' +
+      '      <span class="telemetry-label">WIND</span>' +
       '      <span class="telemetry-value font-mono">' + wind + ' m/s</span>' +
       '    </div>' +
       '  </div>' +
       '  <div class="telemetry-pill" title="NOAA GOES X-ray solar flare flux & MSL RAD surface dose rate">' +
       '    <span class="pill-icon">' + ic("shield") + '</span>' +
       '    <div class="pill-text">' +
-      '      <span class="telemetry-label">RADIATION (NOAA/RAD)</span>' +
+      '      <span class="telemetry-label">RAD EST.</span>' +
       '      <span class="telemetry-value font-mono">' + radVal + ' µSv/h · ' + flare + '</span>' +
       '    </div>' +
       '  </div>' +
-      '</div>' +
-      alertHtml;
+      '</div>';
+    const advisory = document.getElementById("telemetry-advisory");
+    if (advisory) advisory.innerHTML = alertHtml;
+    else el.insertAdjacentHTML("beforeend", alertHtml);
   }
 
   function getEnv() {

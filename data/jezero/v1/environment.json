@@ -8,12 +8,12 @@
   },
   "sol": 1133,
   "terrestrial_date": "2024-04-27",
-  "local_solar_time": "03:14 MTC",
-  "ltst": "03:14:24",
+  "local_solar_time": "03:21 MTC",
+  "ltst": "03:21:36",
   "is_daylight": false,
   "sunset_in_min": 0.0,
   "sunset_in_minutes": 0,
-  "sunset_utc": "2026-11-15T09:46:37Z",
+  "sunset_utc": "2026-11-15T09:53:39Z",
   "temp_C": -52.0,
   "temp_min_C": -79.3,
   "temp_max_C": -24.7,
@@ -23,7 +23,7 @@
   "ls_deg": 244.106,
   "rad_dose_proxy": 28.5,
   "rad_dose_unit": "uSv/hr",
-  "flare_level": "B7.9",
+  "flare_level": "B7.6",
   "atmosphere": {
     "air_temp_c": {
       "current": -52.0,
@@ -46,7 +46,7 @@
     "dose_rate_uSv_hr": 28.5,
     "daily_dose_uSv": 684.0,
     "spe_event_status": "NORMAL",
-    "flare_level": "B7.9",
+    "flare_level": "B7.6",
     "cumulative_mission_mSv": 164.7,
     "suit_shielding_factor": 0.65
   },
@@ -61,7 +61,7 @@
     }
   ],
   "metadata": {
-    "generated_at_utc": "2026-11-15T09:46:42.293862+00:00",
+    "generated_at_utc": "2026-11-15T09:53:43.483888+00:00",
     "weather_source": "NASA Mars 2020 Perseverance MEDA (Live API, Jezero Crater)",
     "space_weather_source": "NOAA Space Weather Prediction Center (GOES X-ray)",
     "rover": "Perseverance (Mars 2020)"

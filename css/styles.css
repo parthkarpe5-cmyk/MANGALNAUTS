@@ -8,6 +8,8 @@ html[data-theme="perseverance"] {
   --font-display: "Space Grotesk", system-ui, sans-serif;
   --font-body: "Space Grotesk", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --cockpit-header-height: 52px;
+  --cockpit-telemetry-height: 34px;
 
   /* Theme: Perseverance Recon (Electric Lime + Recon Cyan) */
   --bg: #07090d;
@@ -90,7 +92,6 @@ body {
   font-family: var(--font-body);
   background: var(--bg);
   color: var(--text);
-  overflow: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -135,8 +136,8 @@ body {
   justify-content: space-between;
   gap: 0.75rem 1rem;
   padding: 0 1.25rem;
-  height: 52px;
-  min-height: 52px;
+  height: var(--cockpit-header-height);
+  min-height: var(--cockpit-header-height);
   background: var(--panel);
   border-bottom: 1px solid var(--border-light);
   backdrop-filter: blur(16px);
@@ -605,8 +606,8 @@ body {
   justify-content: space-between;
   gap: 0.5rem 1rem;
   padding: 0 1.25rem;
-  height: 34px;
-  min-height: 34px;
+  height: var(--cockpit-telemetry-height);
+  min-height: var(--cockpit-telemetry-height);
   background: #05070a;
   border-bottom: 1px solid var(--border-light);
   font-size: 0.72rem;
@@ -738,8 +739,9 @@ body {
    ========================================================================== */
 .viewport-split {
   position: relative;
-  width: 100vw;
-  height: calc(100vh - 52px - 34px - 26px);
+  width: 100%;
+  height: calc(100vh - var(--cockpit-header-height) - var(--cockpit-telemetry-height));
+  height: calc(100dvh - var(--cockpit-header-height) - var(--cockpit-telemetry-height));
   min-height: 440px;
   display: flex;
   flex-direction: row;
@@ -825,106 +827,75 @@ body {
 /* Globe Site Exploration HUD Banner */
 .globe-site-banner {
   position: absolute;
-  bottom: 86px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1200;
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  background: rgba(10, 14, 23, 0.90);
-  border: 1px solid var(--accent);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  padding: 0.8rem 1.35rem;
-  border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.75), 0 0 20px var(--accent-glow);
-  animation: bannerFadeUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  max-width: 90vw;
-}
-
-@keyframes bannerFadeUp {
-  from { opacity: 0; transform: translate(-50%, 15px); }
-  to { opacity: 1; transform: translate(-50%, 0); }
+  top: 14px;
+  left: 14px;
+  z-index: 30;
+  width: min(180px, calc(100% - 28px));
+  padding: 10px;
+  background: var(--map-glass, var(--panel));
+  border: 1px solid var(--map-glass-border, var(--border-active));
+  border-radius: 8px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 5px 18px #0005;
 }
 
 .globe-site-info {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
+  align-items: flex-start;
+  gap: 7px;
 }
 
 .globe-site-pulse {
-  width: 10px;
-  height: 10px;
+  width: 6px;
+  height: 6px;
+  margin-top: 5px;
   border-radius: 50%;
   background: var(--accent);
-  box-shadow: 0 0 10px var(--accent);
-  animation: radar-pulse 1.8s infinite ease-in-out;
-  flex-shrink: 0;
+  flex: none;
 }
 
 .globe-site-title {
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  font-weight: 800;
+  font-size: .8rem;
+  font-weight: 700;
   color: var(--text-bright);
-  letter-spacing: 0.04em;
 }
 
 .globe-site-sub {
-  font-size: 0.72rem;
-  color: var(--muted);
   margin-top: 2px;
+  font: .64rem var(--font-mono);
+  color: var(--muted);
 }
 
 .globe-site-actions {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.btn-enter-tactical,
+.btn-globe-orbit {
+  padding: 5px 7px;
+  border-radius: 5px;
+  font: 700 .69rem var(--font-body);
+  cursor: pointer;
 }
 
 .btn-enter-tactical {
+  color: #071017;
   background: var(--accent);
-  color: #07090d;
-  font-family: var(--font-mono);
-  font-weight: 800;
-  font-size: 0.78rem;
-  padding: 0.55rem 1.15rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  letter-spacing: 0.03em;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  white-space: nowrap;
-  box-shadow: 0 0 16px var(--accent-glow);
-}
-
-.btn-enter-tactical:hover {
-  filter: brightness(1.15);
-  transform: translateY(-1px);
+  border: 1px solid transparent;
 }
 
 .btn-globe-orbit {
-  background: rgba(255, 255, 255, 0.08);
   color: var(--text-bright);
+  background: rgba(255, 255, 255, .06);
   border: 1px solid var(--border-light);
-  font-family: var(--font-mono);
-  font-weight: 600;
-  font-size: 0.75rem;
-  padding: 0.5rem 0.85rem;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.18s ease;
-  white-space: nowrap;
 }
 
+.btn-enter-tactical:hover,
 .btn-globe-orbit:hover {
-  background: rgba(255, 255, 255, 0.16);
-  border-color: var(--text-bright);
+  filter: brightness(1.15);
 }
 
 .cesium-viewer,
@@ -2117,6 +2088,8 @@ body {
 /* Footer */
 .footer {
   display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
   align-items: center;
   justify-content: space-between;
   padding: 0.4rem 1.25rem;
@@ -2734,10 +2707,6 @@ body {
 .mission-route-actions .dock-btn { text-align: left; }
 
 /* Shared Mars interface surfaces */
-html[data-theme="ares"] .top-nav {
-  background: linear-gradient(115deg, #2a1719, #130d10 70%);
-}
-html[data-theme="ares"] .telemetry-bar,
 html[data-theme="ares"] .footer {
   background: var(--bg);
 }
@@ -3142,3 +3111,147 @@ html[data-theme="deepspace"] .mission-dock .dock-btn-plan input:checked + .btn-i
   animation: navDockSlideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* Shared styling for the three cockpit bars and their readouts. */
+.cockpit-bar {
+  --cockpit-cell: color-mix(in srgb, var(--panel-solid) 64%, transparent);
+  --cockpit-stroke: var(--map-glass-border, var(--border-light));
+  background: var(--map-glass, var(--panel));
+  border-color: var(--cockpit-stroke);
+  backdrop-filter: blur(14px) saturate(.86);
+}
+.top-nav.cockpit-bar,
+.telemetry-bar.cockpit-bar {
+  padding-inline: clamp(10px, 2vw, 24px);
+}
+.telemetry-bar.cockpit-bar {
+  gap: 12px;
+  scrollbar-width: thin;
+}
+.telemetry-pill-group {
+  gap: 6px;
+}
+.cockpit-bar :is(.telemetry-pill, #about-toggle, .select-badge select, .view-mode-group, .dropdown-trigger) {
+  background: var(--cockpit-cell);
+  border: 1px solid var(--border-light);
+  border-radius: 7px;
+}
+.cockpit-bar :is(.telemetry-pill, #about-toggle) {
+  min-height: 26px;
+  padding: 3px 8px;
+}
+.cockpit-bar .pill-text {
+  flex-direction: row;
+  align-items: baseline;
+  gap: 5px;
+}
+.cockpit-bar .telemetry-alert-badge {
+  padding: 3px 8px;
+  flex-shrink: 0;
+  animation: none;
+}
+.cockpit-bar :is(.telemetry-label, .select-badge-lbl) {
+  color: var(--muted);
+  font: 700 .6rem/1.15 var(--font-body);
+  letter-spacing: .06em;
+}
+.telemetry-value {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.15;
+}
+.cockpit-bar .telemetry-pill.highlight,
+.cockpit-bar :is(#about-toggle, .select-badge select, .dropdown-trigger):hover {
+  border-color: var(--cockpit-stroke);
+}
+
+.top-nav .telemetry-bar.cockpit-bar {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding-inline: 0;
+  justify-content: center;
+  border: 0;
+  background: none;
+  backdrop-filter: none;
+}
+.telemetry-advisory {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: var(--cockpit-telemetry-height);
+  padding-inline: clamp(10px, 2vw, 24px);
+  border-bottom: 1px solid var(--border-light);
+  background: var(--panel);
+}
+.telemetry-advisory .telemetry-alert-badge {
+  padding: 3px 8px;
+  animation: none;
+}
+
+.top-nav .telemetry-bar.cockpit-bar {
+  height: auto;
+  min-height: 0;
+  overflow: visible;
+  white-space: normal;
+}
+.top-nav .telemetry-pill-group {
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+}
+.top-nav .telemetry-pill {
+  gap: 5px;
+  justify-content: center;
+  padding-inline: 8px;
+  white-space: nowrap;
+}
+@media (min-width: 1200px) {
+  .top-nav.cockpit-bar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 920px) minmax(0, 1fr);
+    gap: 12px;
+  }
+  .top-nav .nav-actions { justify-self: end; }
+  .top-nav .telemetry-pill-group { flex-wrap: nowrap; }
+  .top-nav.cockpit-bar .telemetry-pill { min-height: 30px; padding-inline: 9px; }
+  .top-nav.cockpit-bar .telemetry-label { font-size: .64rem; }
+  .top-nav .telemetry-value { font-size: .81rem; }
+}
+@media (max-width: 1199px) {
+  :root, html[data-theme="perseverance"] { --cockpit-header-height: 76px; }
+  .top-nav.cockpit-bar {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: 31px 1fr;
+    gap: 0 8px;
+  }
+  .top-nav .nav-actions { grid-column: 2; grid-row: 1; }
+  .top-nav .telemetry-bar { grid-column: 1 / -1; grid-row: 2; }
+}
+@media (max-width: 760px) {
+  :root, html[data-theme="perseverance"] { --cockpit-header-height: 100px; }
+}
+@media (max-width: 400px) {
+  :root, html[data-theme="perseverance"] { --cockpit-header-height: 128px; }
+}
+
+/* Frame the original emblem at its globe, orbit and pin. */
+.top-nav .nav-brand { gap: 7px; justify-self: start; }
+.nav-logo {
+  position: relative;
+  display: block;
+  width: 30px;
+  height: 30px;
+  flex: none;
+  overflow: hidden;
+  border-radius: 6px;
+}
+.nav-logo img {
+  position: absolute;
+  width: 218%;
+  height: auto;
+  max-width: none;
+  left: -60%;
+  top: -59%;
+}

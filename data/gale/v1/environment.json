@@ -8,11 +8,11 @@
   },
   "sol": 4995,
   "terrestrial_date": "2026-08-25",
-  "local_solar_time": "07:14 MTC",
-  "ltst": "07:14:24",
+  "local_solar_time": "07:21 MTC",
+  "ltst": "07:21:36",
   "is_daylight": true,
-  "sunset_in_min": 600.7,
-  "sunset_in_minutes": 600,
+  "sunset_in_min": 593.6,
+  "sunset_in_minutes": 593,
   "sunset_utc": "2026-11-15T19:47:21Z",
   "temp_C": -38.0,
   "temp_min_C": -71.0,
@@ -23,7 +23,7 @@
   "ls_deg": 180.0,
   "rad_dose_proxy": 26.7,
   "rad_dose_unit": "uSv/hr",
-  "flare_level": "B7.8",
+  "flare_level": "B7.6",
   "atmosphere": {
     "air_temp_c": {
       "current": -38.0,
@@ -46,7 +46,7 @@
     "dose_rate_uSv_hr": 26.7,
     "daily_dose_uSv": 640.8,
     "spe_event_status": "NORMAL",
-    "flare_level": "B7.8",
+    "flare_level": "B7.6",
     "cumulative_mission_mSv": 164.7,
     "suit_shielding_factor": 0.65
   },
@@ -57,11 +57,11 @@
       "title": "Cold Eva",
       "severity": "advisory",
       "message": "Diurnal low reaches -71.0\u00b0C. Maintain suit thermal circulation.",
-      "sunset_in_min": 600
+      "sunset_in_min": 593
     }
   ],
   "metadata": {
-    "generated_at_utc": "2026-11-15T09:46:51.437336+00:00",
+    "generated_at_utc": "2026-11-15T09:53:48.510251+00:00",
     "weather_source": "NASA Curiosity MSL REMS (Live API, Gale Crater)",
     "space_weather_source": "NOAA Space Weather Prediction Center (GOES X-ray)",
     "rover": "Curiosity (MSL)"

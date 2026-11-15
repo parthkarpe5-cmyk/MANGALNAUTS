@@ -21,14 +21,17 @@
       href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/styles.css?v=deep-space-default" />
+    <link rel="stylesheet" href="css/styles.css?v=left-brand" />
   </head>
   <body>
-    <header class="top-nav">
+    <header class="top-nav cockpit-bar">
       <!-- Left: Mission Identity & Live Telemetry Ping -->
       <div class="nav-brand">
+        <span class="nav-logo"><img src="assets/mangalnauts-logo.png" alt="" width="1024" height="1024"></span>
         <h1>MANGALNAUTS</h1>
       </div>
+
+      <div id="telemetry-bar" class="telemetry-bar cockpit-bar" aria-label="Martian environmental telemetry"></div>
 
       <div class="nav-actions">
         <button type="button" class="btn-ghost" id="about-toggle" title="Scientific Data Citations">
@@ -37,8 +40,7 @@
       </div>
     </header>
 
-    <!-- Top Environmental & Mission Telemetry Bar -->
-    <div id="telemetry-bar" class="telemetry-bar" aria-label="Martian environmental telemetry"></div>
+    <div id="telemetry-advisory" class="telemetry-advisory" aria-label="Mission advisory"></div>
 
     <div id="about-panel" class="about-panel" hidden>
       <div class="about-card">
@@ -55,6 +57,7 @@
             <li><strong>NASA Odyssey GRS:</strong> Global elemental concentration maps (Water-Equivalent Hydrogen, Fe, Si, K, Th, Cl) from Boynton et al. 2007 (PDS Geosciences Node).</li>
             <li><strong>Topography:</strong> USGS HRSC-MOLA 200m Blended DEM (Fergason et al. 2018) &amp; MGS MOLA MEGDR elevation data.</li>
             <li><strong>Orbital Spectroscopy &amp; Thermal:</strong> ASU THEMIS Day/Night IR &amp; Thermal Inertia (Edwards et al.) + CRISM hyperspectral phyllosilicate clays and carbonates (Murchie et al.).</li>
+            <li><strong>3D spacecraft models</strong> · NASA Science, JPL, Ames Research Center, and Brian E. Kumanchik. Models are enlarged for visibility.</li>
             <li><strong>Space Weather:</strong> NOAA Space Weather Prediction Center (SWPC) live 1-minute GOES X-ray solar flare flux &amp; MSL RAD cosmic ray dosimetry.</li>
             <li><strong>AI / Navigation Engine:</strong> Vectorized 2-Layer Graph Convolutional Network (GCN) running spatial topological message passing for multi-task traversability and biosignature ranking.</li>
           </ul>
@@ -80,16 +83,16 @@
           <div class="globe-site-info">
             <span class="globe-site-pulse"></span>
             <div>
-              <div class="globe-site-title" id="globe-site-name">JEZERO CRATER // PERSEVERANCE</div>
-              <div class="globe-site-sub" id="globe-site-coords">18.44°N, 77.35°E · High-Res Tactical Surface Ready</div>
+              <div class="globe-site-title" id="globe-site-name">Jezero Crater</div>
+              <div class="globe-site-sub" id="globe-site-coords">18.44°N, 77.35°E</div>
             </div>
           </div>
           <div class="globe-site-actions">
             <button type="button" class="btn-enter-tactical" id="btn-enter-tactical">
-              🗺️ EXPLORE SURFACE TACTICAL RADAR ➔
+              Surface
             </button>
             <button type="button" class="btn-globe-orbit" id="btn-globe-orbit" title="Return to Planetary Space Orbit">
-              🌐 Orbit View
+              Orbit
             </button>
           </div>
         </div>
@@ -107,7 +110,7 @@
           <aside id="segment-drawer" class="segment-drawer" aria-label="Mission metrics and telemetry"></aside>
         </div>
       </section>
-      <div class="mission-dock" role="region" aria-label="Mission controls">
+      <div class="mission-dock cockpit-bar" role="region" aria-label="Mission controls">
         <div class="select-badge" title="Select Martian Exploration Sector">
           <span class="select-badge-lbl">SECTOR</span>
           <select id="location" aria-label="Preset location">
@@ -128,11 +131,8 @@
         <div class="select-badge" title="Operational slope limits and traverse physics">
           <span class="select-badge-lbl">TRAVEL MODE</span>
           <select id="travel-mode" aria-label="Travel mode">
+            <option value="rover" selected>Rover AutoNav (≤20°)</option>
             <option value="walk">Marswalk (≤15°)</option>
-            <option value="conservative">Equipment Cart (≤10°)</option>
-            <option value="steep_walk">Steep Scramble (≤20°)</option>
-            <option value="rover">Rover AutoNav (≤20°)</option>
-            <option value="aggressive_rover">Rim Ascent Rover (≤26°)</option>
           </select>
         </div>
         <label class="dock-btn-plan" title="Click any two points on the site to compute an optimal GNN safe route">
@@ -282,20 +282,20 @@
     <script src="js/layers/grs-overlays.js"></script>
     <script src="js/map/historical-traverses.js"></script>
     <script src="js/visual/cosmic-galaxy.js"></script>
-    <script src="js/visual/orbiters.js"></script>
-    <script src="js/globe.js?v=orbiters"></script>
-    <script src="js/detail-map.js?v=coverage-view"></script>
+    <script src="js/visual/orbiters.js?v=spacecraft-models"></script>
+    <script src="js/globe.js?v=spacecraft-models"></script>
+    <script src="js/detail-map.js?v=olympus-pan-v4"></script>
     <script src="js/hybrid.js?v=regions-1"></script>
     <script src="js/map/geodesic.js"></script>
     <script src="js/api/manifest.js?v=regional-dem"></script>
-    <script src="js/routing/astar.js?v=contour-slope-v3"></script>
-    <script src="js/routing/worker-client.js?v=contour-slope-v3"></script>
-    <script src="js/mission/modes.js?v=contour-slope-v3"></script>
-    <script src="js/routing/routeBetween.js?v=contour-slope-v3"></script>
+    <script src="js/routing/astar.js?v=mode-physics-v5"></script>
+    <script src="js/routing/worker-client.js?v=mode-physics-v5"></script>
+    <script src="js/mission/modes.js?v=mode-physics-v5"></script>
+    <script src="js/routing/routeBetween.js?v=mode-physics-v5"></script>
     <script src="js/ui/icons.js?v=contour-slope-v3"></script>
     <script src="js/ui/audio.js"></script>
     <script src="js/ui/theme.js?v=deep-space-default"></script>
-    <script src="js/mission/telemetry.js?v=contour-slope-v3"></script>
+    <script src="js/mission/telemetry.js?v=top-telemetry"></script>
     <script src="js/mission/elevation-profile.js?v=contour-slope-v3"></script>
     <script src="js/mission/drawer.js?v=contour-slope-v3"></script>
     <script src="js/mission/contingency.js?v=raster-1"></script>
@@ -303,7 +303,7 @@
     <script src="js/map/route-renderer.js?v=contour-slope-v3"></script>
     <script src="js/map/preset-routes.js"></script>
     <script src="js/map/science-stops.js"></script>
-    <script src="js/map/pick.js?v=contour-slope-v3"></script>
+    <script src="js/map/pick.js?v=mode-physics-v5"></script>
     <script src="js/app.js?v=contour-slope-v3"></script>
   </body>
 </html>
