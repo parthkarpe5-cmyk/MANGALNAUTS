@@ -59,12 +59,19 @@ flowchart TD
 
 ## 3. Key Capabilities & Features
 
+### 🚀 3.0. 3D Cinematic Interplanetary Prologue (Three.js)
+- **Celestial Traversal**: Real-time WebGL flyby originating in deep cosmos at the Milky Way galaxy, navigating past the Sun, Mercury, Venus, Earth, and Moon with authentic NASA photometric textures.
+- **Mars Orbital Approach & Enlargement**: Smooth forward traversal to Mars, dynamically enlarging the planetary sphere to fill the cockpit scale.
+- **Seamless Cockpit Dissolution**: Dissolves smoothly into the interactive 3D Cesium globe while telemetry bars, navigation rails, and the radial warp starfield pop into view.
+
 ### 🌍 3.1. 3D Planetary Digital Twin (CesiumJS)
 - **True Mars Coordinate Ellipsoid**: Custom `Cesium.Ellipsoid.MARS` implementation using official IAU/IAG semi-major ($a = 3,396,190\text{ m}$) and polar ($c = 3,376,200\text{ m}$) axes, correcting for Mars’s polar flattening.
 - **USGS / Esri OnMars MDEM200M Mesh**: High-fidelity 3D terrain elevation representation across the global sphere.
 - **10 NASA Trek Scientific Basemaps**: Seamlessly switch between Viking Color (232 m), Viking B&W (MDIM 2.1), MOLA Color Hillshade, MOLA Grayscale (463 m), THEMIS Day IR (100 m), THEMIS Night IR, TES Albedo (7.4 km), TES Dust Cover Index (DCI), and TES Thermal Inertia.
 - **Solar Lighting & Terminator**: Real-time solar position rendering dynamic shadows across craters, rifts, and caldera rims.
 - **Exploration Landmarks & Flight Navigation**: Interactive 3D pins for major landing sites (Perseverance, Curiosity, InSight, Opportunity, Spirit) and geographic wonders (Olympus Mons, Valles Marineris). Smooth camera fly-to transitions and dedicated 3D zoom controls (+/-).
+- **Real-Time Mars Orbiters**: Orbital trajectories and real-time ephemeris positions for MRO, Mars Odyssey, MAVEN, Trace Gas Orbiter (TGO), Hope Probe, and Mars Express.
+- **Calibrated Color & Atmosphere**: Natural terracotta Martian ochre grading matching the intro model with atmospheric limb Rayleigh scattering and locked crescent terminator shadow.
 - **Cosmos Flyby Mode**: Cinematic orbital tour viewing Mars against a realistic starry cosmos.
 
 ### 🗺️ 3.2. Tactical Surface Detail & Multi-Site Operations
@@ -97,6 +104,7 @@ flowchart TD
 - **Two Specialized Exploration Modes**:
   - **Marswalk EVA Mode**: Enforces a strict slope limit $\le 15^\circ$ for astronaut spacesuit mobility. Renders an Apollo/Mars EVA bootprint trail along a clean glowing cyan lifeline. Calculates suit metabolic $O_2$ consumption (liters) and water drinking loops.
   - **Rover AutoNav Mode**: Enforces heavy rover chassis slope limits $\le 20^\circ$. Renders dual parallel cleated tire tracks in a dark regolith soil rut bed with animated amber pulse flow. Calculates rover battery power expenditure ($\text{Wh}$).
+- **Web Worker Asynchronous Pathfinder**: Offloads A* graph traversal calculations to a background Web Worker (search-worker.js), ensuring zero UI lag or dropped frames during multi-kilometer path solutions.
 - **Interactive A→B Segment Planner**:
   - Click any two points or pick science presets to solve the optimal traverse.
   - Calculates true geodesic distance (Martian Haversine), graph distance, elevation change ($\Delta z$), and maximum grade.
@@ -231,15 +239,21 @@ MANGALNAUTS/
 ├── index.html                       # Mission cockpit shell & HUD interface
 ├── css/
 │   └── styles.css                   # Sci-Fi theme, drawer layout, & HUD styles
+├── assets/textures/                 # Photometric planet, sun & galaxy textures
 ├── js/
 │   ├── app.js                       # Primary coordinator & bootstrap logic
 │   ├── globe.js                     # CesiumJS 3D Mars globe & orbital camera
 │   ├── detail-map.js                # Leaflet 2D CTX tactical surface map
 │   ├── hybrid.js                    # Viewport synchronizer & threshold watcher
+│   ├── visual/
+│   │   ├── cosmic-intro.js          # Three.js 3D cinematic opening prologue
+│   │   ├── mars-starfield.js        # Radial warp starfield backdrop
+│   │   └── orbiters.js              # Real-time Mars satellite constellation
 │   ├── api/
 │   │   └── nasa-api.js              # NASA Open API engine & live telemetry
 │   ├── config/
-│   │   └── mars-ellipsoid.js        # IAU/IAG Martian triaxial reference frame
+│   │   ├── mars-ellipsoid.js        # IAU/IAG Martian triaxial reference frame
+│   │   └── places.js                # Multi-site definitions (Jezero, Gale, Olympus)
 │   ├── layers/
 │   │   ├── trek-layers.js           # 10 NASA Mars Trek WMTS tile providers
 │   │   ├── grs-overlays.js          # Odyssey GRS 6-element mineral heatmaps
@@ -254,12 +268,14 @@ MANGALNAUTS/
 │   │   └── geodesic.js              # Haversine distance on Martian spheroid
 │   ├── routing/
 │   │   ├── astar.js                 # Slope-constrained A* graph pathfinder
-│   │   └── routeBetween.js          # Measured terrain router & elevation snap
+│   │   ├── routeBetween.js          # Measured terrain router & elevation snap
+│   │   └── search-worker.js         # Web Worker for non-blocking pathfinding
 │   ├── mission/
 │   │   ├── drawer.js                # Slide-out analytics, ISRU, & consumable cards
 │   │   ├── elevation-profile.js     # Responsive SVG cross-section & scrubber
 │   │   ├── telemetry.js             # Atmospheric HUD bar & radiation monitor
 │   │   ├── modes.js                 # Travel modes (Marswalk EVA vs Rover AutoNav)
+│   │   ├── mineral-swath.js         # Route mineral corridor analysis
 │   │   └── audio.js                 # Synthesized spatial sound FX engine
 │   └── ui/
 │       ├── workspace.js             # Drawer tab manager
