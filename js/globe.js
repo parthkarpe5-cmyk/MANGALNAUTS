@@ -14,6 +14,8 @@ window.MarsGlobe = (function () {
   let aoiEntity = null;
   let graticuleCollection = null;
 
+  const modeledLandmarks = new Set(["perseverance", "opportunity"]);
+
   const LANDMARKS = [
     {
       id: "perseverance",
@@ -234,9 +236,15 @@ window.MarsGlobe = (function () {
     // 1. Landmarks
     landmarksCollection = [];
     LANDMARKS.forEach(function (lm) {
+      const hasModel = modeledLandmarks.has(lm.id);
       const entity = viewer.entities.add({
         name: lm.name,
         position: Cesium.Cartesian3.fromDegrees(lm.lon, lm.lat, 500),
+        model: hasModel ? {
+          uri: "assets/spacecraft/" + lm.id + ".glb",
+          minimumPixelSize: 26,
+          maximumScale: 250000,
+        } : undefined,
         point: {
           pixelSize: 8,
           color: Cesium.Color.fromCssColorString(lm.color),
@@ -251,7 +259,7 @@ window.MarsGlobe = (function () {
           outlineColor: Cesium.Color.BLACK,
           outlineWidth: 3,
           verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-          pixelOffset: new Cesium.Cartesian2(0, -10),
+          pixelOffset: new Cesium.Cartesian2(0, hasModel ? -22 : -10),
           distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 5000000),
         },
       });
@@ -457,14 +465,11 @@ window.MarsGlobe = (function () {
     const coordsEl = document.getElementById("globe-site-coords");
     const enterBtn = document.getElementById("btn-enter-tactical");
 
-    if (nameEl) nameEl.textContent = (lm.name || "MARTIAN SITE").toUpperCase();
+    if (nameEl) nameEl.textContent = lm.name || "Martian site";
     if (coordsEl) {
       const latStr = Math.abs(lm.lat).toFixed(2) + (lm.lat >= 0 ? "°N" : "°S");
       const lonStr = Math.abs(lm.lon).toFixed(2) + (lm.lon >= 0 ? "°E" : "°W");
-      const sub = lm.siteKey
-        ? latStr + ", " + lonStr + " · High-Res Surface Tactical Radar Ready"
-        : latStr + ", " + lonStr + " · Planetary Orbital Observation";
-      coordsEl.textContent = sub;
+      coordsEl.textContent = latStr + ", " + lonStr;
     }
     if (enterBtn) {
       enterBtn.style.display = lm.siteKey ? "inline-flex" : "none";
