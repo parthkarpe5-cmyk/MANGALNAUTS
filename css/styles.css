@@ -4677,8 +4677,14 @@ html .workspace-sidebar-header { border-bottom-color: var(--soft-edge); }
 .view-mode-pill,
 .app-status-bar,
 #globe-hud-cluster {
-  transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.85s ease-out !important;
+  transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.75s ease-out !important;
   will-change: transform, opacity;
+  z-index: 1000005 !important;
+}
+
+#sky {
+  transition: opacity 0.85s ease-out, transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  will-change: opacity, transform;
 }
 
 body.cockpit-intro-active .app-left-rail {
@@ -4694,7 +4700,7 @@ body.cockpit-intro-active .top-nav.cockpit-bar {
 }
 
 body.cockpit-intro-active .view-mode-pill {
-  transform: translateY(-40px) !important;
+  transform: translateY(-40px) scale(0.9) !important;
   opacity: 0 !important;
   pointer-events: none !important;
 }
@@ -4706,8 +4712,30 @@ body.cockpit-intro-active .app-status-bar {
 }
 
 body.cockpit-intro-active #globe-hud-cluster {
-  transform: scale(0.8) !important;
+  transform: scale(0.75) !important;
   opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+body.cockpit-intro-active #sky {
+  opacity: 0 !important;
+  transform: scale(0.96) !important;
+  pointer-events: none !important;
+}
+
+body.cockpit-ready .app-left-rail,
+body.cockpit-ready .top-nav.cockpit-bar,
+body.cockpit-ready .view-mode-pill,
+body.cockpit-ready .app-status-bar,
+body.cockpit-ready #globe-hud-cluster {
+  transform: translate(0, 0) scale(1) !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+body.cockpit-ready #sky {
+  opacity: 1 !important;
+  transform: scale(1) !important;
   pointer-events: none !important;
 }
 

@@ -33,10 +33,11 @@ window.MarsCosmicIntro = (function () {
   let telemetryText = null;
   let progressBar = null;
 
-  const DURATION_MS = 7800; // Balanced 7.8-second cinematic traversal
+  const DURATION_MS = 8400; // Cinematic 8.4-second balanced interplanetary traversal
   let isRunning = false;
   let isFadingOut = false;
   let hasSkipped = false;
+  let hasPoppedCockpitUI = false;
 
   let lastTimestamp = 0;
   let virtualElapsed = 0;
@@ -469,17 +470,50 @@ window.MarsCosmicIntro = (function () {
     solarSystemGroup.add(earthGroup);
 
     // 5. Seamless Mars Model (100% matched to website Cesium model)
-    // Uses the restored seamless NASA Viking 2K map with matching Western crescent shadow.
-    // Sized to radius 18.5 at distance 80, occupying exactly 52% of the viewport height.
+    // Uses authentic NASA Viking 2K map with subtle crescent terminator shadow.
+    // Clamped strictly to max 1.0 brightness so it is NEVER overexposed or washed out.
+    // Sized to radius 18.5 at distance 80, smoothly enlarging to fill cockpit scale.
     // Oriented to Longitude 35.0°E, Latitude 10.0°N (matching Cesium exactly).
     const marsTex = textureLoader.load("assets/textures/mars.jpg");
     marsTex.generateMipmaps = true;
     const marsGeom = new THREE.SphereGeometry(18.5, 64, 64);
-    const marsMat = new THREE.MeshStandardMaterial({
-      map: marsTex,
-      roughness: 0.88,
-      metalness: 0.05,
+
+    // ShaderMaterial delivers authentic, rich NASA Viking texture colors (strictly max 1.0)
+    // while casting the elegant crescent terminator shadow matching the Cesium 3D cockpit
+    const marsMat = new THREE.ShaderMaterial({
+      uniforms: {
+        marsTexture: { value: marsTex },
+        // Sun vector matching Cesium's Sun orientation (JulianDate 2026-11-15T16:00:00Z)
+        // Light illuminates from the front-left, casting the crescent shadow along the upper-right limb
+        sunDir: { value: new THREE.Vector3(-0.65, 0.35, 0.68).normalize() },
+      },
+      vertexShader: [
+        "varying vec3 vNormal;",
+        "varying vec2 vUv;",
+        "void main() {",
+        "  vUv = uv;",
+        "  vNormal = normalize(normalMatrix * normal);",
+        "  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);",
+        "}",
+      ].join("\n"),
+      fragmentShader: [
+        "uniform sampler2D marsTexture;",
+        "uniform vec3 sunDir;",
+        "varying vec3 vNormal;",
+        "varying vec2 vUv;",
+        "void main() {",
+        "  vec4 texColor = texture2D(marsTexture, vUv);",
+        "  float nDotL = dot(vNormal, sunDir);",
+        "  // Soft planetary terminator gradient",
+        "  float terminator = smoothstep(-0.06, 0.22, nDotL);",
+        "  // Factor is strictly between 0.02 (deep dark shadow) and 1.0 (pure raw texture daylight)",
+        "  // NEVER exceeds 1.0 - preserves rich NASA Viking contrast with zero bleached highlights",
+        "  float factor = mix(0.02, 1.0, terminator);",
+        "  gl_FragColor = vec4(texColor.rgb * factor, 1.0);",
+        "}",
+      ].join("\n"),
     });
+
     marsMesh = new THREE.Mesh(marsGeom, marsMat);
     marsMesh.position.set(0, 0, 80);
     // Align face directly to Cesium target coordinates: 35.0°E, 10.0°N, North pointing UP
@@ -487,24 +521,16 @@ window.MarsCosmicIntro = (function () {
     marsMesh.rotation.x = -0.175;
     solarSystemGroup.add(marsMesh);
 
-    // Oblique solar illumination: casts dramatic crescent shadow on Western (left) limb
-    const marsSunLight = new THREE.DirectionalLight(0xffeedd, 2.2);
-    marsSunLight.position.set(120, 25, 40);
-    solarSystemGroup.add(marsSunLight);
-
-    const marsAmbient = new THREE.AmbientLight(0x0a0a14, 0.28);
-    solarSystemGroup.add(marsAmbient);
-
-    // Subtle atmospheric peach-orange limb glow
+    // Subtle atmospheric peach-orange limb haze
     const marsGlowMat = new THREE.SpriteMaterial({
       map: createCoronaGlowTexture(),
       color: 0xef7a5d,
       transparent: true,
-      opacity: 0.32,
+      opacity: 0.16,
       blending: THREE.AdditiveBlending,
     });
     marsAtmosphere = new THREE.Sprite(marsGlowMat);
-    marsAtmosphere.scale.set(42, 42, 1);
+    marsAtmosphere.scale.set(40, 40, 1);
     marsMesh.add(marsAtmosphere);
 
     scene.add(solarSystemGroup);
@@ -522,6 +548,7 @@ window.MarsCosmicIntro = (function () {
   function start() {
     if (isRunning) return;
     hasSkipped = false;
+    hasPoppedCockpitUI = false;
     isFadingOut = false;
     isRunning = true;
     lastTimestamp = 0;
@@ -581,10 +608,22 @@ window.MarsCosmicIntro = (function () {
     }
 
     // Mars orientation stays locked to Cesium coordinates
+    // Slowly enlarges as camera enters planetary orbit (scale 1.0 -> 1.48)
     if (marsMesh) {
       const approachDrift = Math.max(0, 1 - progress) * 0.008;
       marsMesh.rotation.y = 0.96 + Math.sin(virtualElapsed * 0.0005) * approachDrift;
       marsMesh.rotation.x = -0.175;
+
+      if (progress > 0.56) {
+        // Smooth enlargement progress from 0 to 1 between 0.56 and 0.86
+        const normEnlarge = Math.min(1.0, (progress - 0.56) / 0.30);
+        // Smooth cubic ease: slow start, gentle acceleration, seamless deceleration
+        const easeEnlarge = normEnlarge * normEnlarge * (3 - 2 * normEnlarge);
+        const currentScale = 1.0 + easeEnlarge * 0.48;
+        marsMesh.scale.set(currentScale, currentScale, currentScale);
+      } else {
+        marsMesh.scale.set(1.0, 1.0, 1.0);
+      }
     }
 
     // 2. Continuous Silky-Smooth Camera Traversal Spline
@@ -597,8 +636,14 @@ window.MarsCosmicIntro = (function () {
 
     renderer.render(scene, camera);
 
-    // At 72% progress (~5.6s), seamlessly initiate the Mars enlargement and cockpit bars entrance
-    if (progress >= 0.72 && !isFadingOut) {
+    // At 86% progress (~7.2s), Mars has finished enlarging: navigation bars and stars POP into view!
+    if (progress >= 0.86 && !hasPoppedCockpitUI) {
+      hasPoppedCockpitUI = true;
+      popCockpitUI();
+    }
+
+    // At 94% progress (~7.9s), seamlessly dissolve the intro overlay into the live Cesium globe
+    if (progress >= 0.94 && !isFadingOut) {
       completeIntro();
     }
 
@@ -635,38 +680,51 @@ window.MarsCosmicIntro = (function () {
     const pct = Math.round(Math.min(1.0, p) * 100);
     if (progressBar) progressBar.style.width = pct + "%";
 
-    if (p < 0.26) {
+    if (p < 0.24) {
       if (hudStage) hudStage.textContent = "DEEP COSMOS // INTERPLANETARY PROLOGUE";
       if (hudTitle) hudTitle.textContent = "MILKY WAY GALAXY";
       if (hudSub) hudSub.textContent = "APPROACHING SOLAR SYSTEM COORDINATES · WARP 0.92c";
       if (telemetryText) telemetryText.textContent = "SPECTRAL CLASS: SBb · 100,000 LIGHT-YEARS · 0.92c";
-    } else if (p < 0.49) {
+    } else if (p < 0.46) {
       if (hudStage) hudStage.textContent = "SOLAR CORE // 1.00 SOLAR RADIUS";
       if (hudTitle) hudTitle.textContent = "PASSING THE SUN";
       if (hudSub) hudSub.textContent = "NASA SDO OPTICAL/UV · CORONAL MASS EQUILIBRIUM";
       if (telemetryText) telemetryText.textContent = "SOLAR FLUX: 1361 W/m² · GRAVITY ASSIST LOCK";
-    } else if (p < 0.67) {
+    } else if (p < 0.62) {
       if (hudStage) hudStage.textContent = "INNER PLANETS // MERCURY & VENUS";
       if (hudTitle) hudTitle.textContent = "INNER SYSTEM CRUISE";
       if (hudSub) hudSub.textContent = "NASA MESSENGER & MAGELLAN DATA LOCK";
       if (telemetryText) telemetryText.textContent = "DIST: 0.72 AU · RAD DOSIMETRY: 22.4 uSv/hr";
-    } else if (p < 0.82) {
+    } else if (p < 0.76) {
       if (hudStage) hudStage.textContent = "TERRESTRIAL TRANSIT // 1.00 AU";
       if (hudTitle) hudTitle.textContent = "EARTH-MOON SYSTEM";
       if (hudSub) hudSub.textContent = "DSN GOLDSTONE 8.4 GHz · OUTBOUND TO MARS";
       if (telemetryText) telemetryText.textContent = "TRANS-MARS INJECTION NOMINAL · TARGET ACQUIRED";
+    } else if (p < 0.86) {
+      if (hudStage) hudStage.textContent = "MARS ORBITAL APPROACH // 1.52 AU";
+      if (hudTitle) hudTitle.textContent = "APPROACHING MARS";
+      if (hudSub) hudSub.textContent = "ENLARGING PLANETARY GLOBE · SYNCHRONIZING WITH COCKPIT";
+      if (telemetryText) telemetryText.textContent = "ALTITUDE DESCENT LOCKED · EXPANDING MARTIAN DISK";
     } else {
-      if (hudStage) hudStage.textContent = "MARS ORBITAL INSERTION // 1.52 AU";
-      if (hudTitle) hudTitle.textContent = "ARRIVING AT MARS";
-      if (hudSub) hudSub.textContent = "TRANSITIONING DIRECTLY TO 3D OPERATIONAL GLOBE";
-      if (telemetryText) telemetryText.textContent = "SYNCHRONIZING WITH CESIUM 3D COCKPIT · ENTERING ORBIT";
+      if (hudStage) hudStage.textContent = "MARS ORBITAL INSERTION // 11,500 KM";
+      if (hudTitle) hudTitle.textContent = "COCKPIT SYSTEMS ONLINE";
+      if (hudSub) hudSub.textContent = "NAVIGATION, TELEMETRY & RADIAL STARFIELD ENGAGED";
+      if (telemetryText) telemetryText.textContent = "CESIUM 3D COCKPIT ACTIVE · FULL MISSION CAPABILITY";
     }
   }
 
-  function completeIntro() {
-    if (isFadingOut) return;
-    isFadingOut = true;
+  function popCockpitUI() {
+    // 1. Reveal navigation and telemetry bars (slides in with smooth 0.75s transition)
+    document.body.classList.remove("cockpit-intro-active");
+    document.body.classList.add("cockpit-ready");
 
+    // 2. Resume radial warp starfield backdrop behind Mars globe so stars pop into view
+    if (window.MarsStarfield) {
+      window.MarsStarfield.resume();
+      window.MarsStarfield.resize();
+    }
+
+    // 3. Play audio chime
     if (window.MarsAudio && window.MarsAudio.playSuccess) {
       try {
         window.MarsAudio.playSuccess();
@@ -675,23 +733,19 @@ window.MarsCosmicIntro = (function () {
       }
     }
 
-    // 1. Reveal navigation and telemetry bars (slides in with 0.85s transition)
-    document.body.classList.remove("cockpit-intro-active");
-    document.body.classList.add("cockpit-ready");
-
-    // 2. Trigger smooth enlargement of Mars globe into cockpit view (26,000 km -> 11,500 km)
-    if (window.MarsGlobe && window.MarsGlobe.enlargeToCockpit) {
-      try {
-        window.MarsGlobe.enlargeToCockpit(2.2);
-      } catch (e) {
-        console.warn("MarsGlobe enlargeToCockpit error:", e);
-      }
+    // 4. Request Cesium render frame
+    if (window.MarsGlobe && window.MarsGlobe.requestRender) {
+      window.MarsGlobe.requestRender();
     }
+  }
 
-    // 3. Resume starfield backdrop
-    if (window.MarsStarfield) {
-      window.MarsStarfield.resume();
-      window.MarsStarfield.resize();
+  function completeIntro() {
+    if (isFadingOut) return;
+    isFadingOut = true;
+
+    if (!hasPoppedCockpitUI) {
+      hasPoppedCockpitUI = true;
+      popCockpitUI();
     }
 
     if (overlayEl) {
@@ -710,7 +764,7 @@ window.MarsCosmicIntro = (function () {
         if (window.MarsGlobe && window.MarsGlobe.requestRender) {
           window.MarsGlobe.requestRender();
         }
-      }, 950);
+      }, 850);
     }
   }
 
@@ -718,24 +772,21 @@ window.MarsCosmicIntro = (function () {
     if (hasSkipped) return;
     hasSkipped = true;
 
-    document.body.classList.remove("cockpit-intro-active");
-    document.body.classList.add("cockpit-ready");
+    if (!hasPoppedCockpitUI) {
+      hasPoppedCockpitUI = true;
+      popCockpitUI();
+    }
 
     if (window.MarsGlobe && window.MarsGlobe.flyTo) {
       try {
-        window.MarsGlobe.flyTo(10, 35, 11500000, 0.6);
+        window.MarsGlobe.flyTo(10, 35, 11500000, 0.4);
       } catch (e) {
         console.warn("MarsGlobe flyTo error:", e);
       }
     }
 
-    if (window.MarsStarfield) {
-      window.MarsStarfield.resume();
-      window.MarsStarfield.resize();
-    }
-
     if (overlayEl) {
-      overlayEl.style.transition = "opacity 0.35s ease-out";
+      overlayEl.style.transition = "opacity 0.3s ease-out";
       overlayEl.classList.add("fading-out");
       if (fadeTimeout) clearTimeout(fadeTimeout);
       fadeTimeout = setTimeout(() => {
@@ -746,7 +797,7 @@ window.MarsCosmicIntro = (function () {
         }
         overlayEl.style.display = "none";
         overlayEl.style.opacity = "0";
-      }, 350);
+      }, 300);
     }
   }
 
@@ -759,6 +810,7 @@ window.MarsCosmicIntro = (function () {
       clearTimeout(fadeTimeout);
       fadeTimeout = null;
     }
+    hasPoppedCockpitUI = false;
     isRunning = false;
     isFadingOut = false;
 

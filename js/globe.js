@@ -138,6 +138,19 @@ window.MarsGlobe = (function () {
     // Lock sun position to 2026-11-15T16:00:00Z to cast the iconic crescent terminator shadow on the Western limb
     viewer.clock.currentTime = Cesium.JulianDate.fromIso8601("2026-11-15T16:00:00Z");
     viewer.clock.shouldAnimate = false;
+
+    // Preload local authentic Viking 2K texture so Cesium immediately displays the exact same model
+    try {
+      const localProvider = new Cesium.SingleTileImageryProvider({
+        url: "assets/textures/mars.jpg",
+        rectangle: Cesium.Rectangle.fromDegrees(-180, -90, 180, 90),
+        ellipsoid: Cesium.Ellipsoid.MARS,
+      });
+      baseLayer = viewer.imageryLayers.addImageryProvider(localProvider);
+    } catch (e) {
+      console.warn("[MarsGlobe] Local Viking texture provider note:", e);
+    }
+
     // FXAA post-process forces alpha to 1.0 in WebGL; keep disabled for alpha pass-through
     if (viewer.scene.postProcessStages && viewer.scene.postProcessStages.fxaa) {
       viewer.scene.postProcessStages.fxaa.enabled = false;
@@ -704,10 +717,10 @@ window.MarsGlobe = (function () {
     const provider = TrekLayers.createProvider(key);
     baseLayer = viewer.imageryLayers.addImageryProvider(provider);
     if (key === "viking") {
-      // Grade the globe presentation without altering the elevation data.
-      baseLayer.brightness = 0.82;
-      baseLayer.contrast = 1.18;
-      baseLayer.saturation = 1.10;
+      // Natural 1.0 color grading matching authentic NASA Viking mosaic
+      baseLayer.brightness = 1.0;
+      baseLayer.contrast = 1.0;
+      baseLayer.saturation = 1.0;
     }
     if (overlayFilter) {
       applyOverlay(overlayFilter, overlayOpacity);
@@ -819,13 +832,14 @@ window.MarsGlobe = (function () {
 
   function prepareForCosmicIntro() {
     if (!viewer) return;
-    // Lock sun position to cast the iconic crescent terminator shadow on the Western limb
+    // Lock sun position to cast the iconic crescent terminator shadow on the Martian limb
     viewer.clock.currentTime = Cesium.JulianDate.fromIso8601("2026-11-15T16:00:00Z");
     viewer.clock.shouldAnimate = false;
     viewer.scene.globe.enableLighting = true;
 
+    // Direct alignment matching the enlarged Three.js Mars model: 35.0°E, 10.0°N at 11,500,000 m
     viewer.camera.setView({
-      destination: Cesium.Cartesian3.fromDegrees(35.0, 10.0, 26000000),
+      destination: Cesium.Cartesian3.fromDegrees(35.0, 10.0, 11500000),
       orientation: {
         heading: Cesium.Math.toRadians(0),
         pitch: Cesium.Math.toRadians(-90),
@@ -839,20 +853,9 @@ window.MarsGlobe = (function () {
 
   function enlargeToCockpit(duration) {
     if (!viewer) return;
-    setContinuousRender(true);
-    viewer.camera.flyTo({
-      destination: Cesium.Cartesian3.fromDegrees(35.0, 10.0, 11500000),
-      orientation: {
-        heading: Cesium.Math.toRadians(0),
-        pitch: Cesium.Math.toRadians(-90),
-        roll: 0,
-      },
-      duration: duration != null ? duration : 2.2,
-      easingFunction: Cesium.EasingFunction.QUADRATIC_OUT,
-      complete: function () {
-        setContinuousRender(false);
-      },
-    });
+    if (viewer.scene) {
+      viewer.scene.requestRender();
+    }
   }
 
   return {
