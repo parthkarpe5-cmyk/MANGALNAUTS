@@ -93,13 +93,15 @@ window.MarsGlobe = (function () {
     Cesium.Ellipsoid.default = Cesium.Ellipsoid.MARS;
 
     const marsGlobe = new Cesium.Globe(Cesium.Ellipsoid.MARS);
-    marsGlobe.baseColor = Cesium.Color.BLACK;
+    marsGlobe.baseColor = Cesium.Color.fromCssColorString("#1a0804");
     marsGlobe.enableLighting = true;
-    marsGlobe.showGroundAtmosphere = false;
     marsGlobe.depthTestAgainstTerrain = false;
 
     const marsSkyAtmosphere = new Cesium.SkyAtmosphere(Cesium.Ellipsoid.MARS);
-    marsSkyAtmosphere.show = false;
+    marsSkyAtmosphere.show = true;
+    marsSkyAtmosphere.hueShift = -0.55;
+    marsSkyAtmosphere.saturationShift = 0.4;
+    marsSkyAtmosphere.brightnessShift = -0.2;
 
     viewer = new Cesium.Viewer(containerId, {
       globe: marsGlobe,
@@ -137,16 +139,17 @@ window.MarsGlobe = (function () {
     viewer.clock.currentTime = Cesium.JulianDate.fromIso8601("2026-11-15T16:00:00Z");
     viewer.clock.shouldAnimate = false;
 
-    // Preload local authentic Viking 2K texture so Cesium immediately displays the exact same model
+    // Load authentic NASA Viking MDIM 2.1 232m multi-resolution tile pyramid
     try {
-      const localProvider = new Cesium.SingleTileImageryProvider({
-        url: "assets/textures/mars.jpg",
-        rectangle: Cesium.Rectangle.fromDegrees(-180, -90, 180, 90),
-        ellipsoid: Cesium.Ellipsoid.MARS,
-      });
-      baseLayer = viewer.imageryLayers.addImageryProvider(localProvider);
+      if (window.TrekLayers) {
+        const provider = TrekLayers.createProvider("viking");
+        baseLayer = viewer.imageryLayers.addImageryProvider(provider);
+        baseLayer.brightness = 0.82;
+        baseLayer.contrast = 1.18;
+        baseLayer.saturation = 1.10;
+      }
     } catch (e) {
-      console.warn("[MarsGlobe] Local Viking texture provider note:", e);
+      console.warn("[MarsGlobe] Viking tile provider init note:", e);
     }
 
     // FXAA post-process forces alpha to 1.0 in WebGL; keep disabled for alpha pass-through
@@ -715,10 +718,10 @@ window.MarsGlobe = (function () {
     const provider = TrekLayers.createProvider(key);
     baseLayer = viewer.imageryLayers.addImageryProvider(provider);
     if (key === "viking") {
-      // Natural 1.0 color grading matching authentic NASA Viking mosaic
-      baseLayer.brightness = 1.0;
-      baseLayer.contrast = 1.0;
-      baseLayer.saturation = 1.0;
+      // Grade the globe presentation without altering the elevation data.
+      baseLayer.brightness = 0.82;
+      baseLayer.contrast = 1.18;
+      baseLayer.saturation = 1.10;
     }
     if (overlayFilter) {
       applyOverlay(overlayFilter, overlayOpacity);

@@ -106,19 +106,6 @@ window.TrekLayers = (function () {
     if (cache[key]) {
       return cache[key];
     }
-    // Authentic NASA Viking 2K model: uses the local assets/textures/mars.jpg texture
-    // guaranteeing a 100% pixel-perfect match with the intro animation
-    if (key === "viking") {
-      const rect = getMarsRectangle();
-      const localProvider = new Cesium.SingleTileImageryProvider({
-        url: "assets/textures/mars.jpg",
-        rectangle: rect,
-        ellipsoid: Cesium.Ellipsoid.MARS,
-        credit: "NASA Viking 2K Color Mosaic",
-      });
-      cache[key] = localProvider;
-      return localProvider;
-    }
     const meta = CATALOG[key];
     if (!meta) {
       throw new Error("Unknown Trek layer: " + key);
