@@ -139,8 +139,8 @@
       </div>
     </nav>
 
-    <!-- Google Earth View Mode Tags (Replaces search bar at top-left, offset 84px right of the rail) -->
-    <nav id="view-mode-pill" class="view-mode-pill" role="group" aria-label="Martian Viewport Display Mode">
+    <!-- Google Earth View Mode & Travel Mode Tags (Top-Left, offset 84px right of the rail) -->
+    <nav id="view-mode-pill" class="view-mode-pill" role="group" aria-label="Martian Viewport and Travel Modes">
       <button type="button" class="view-mode-tag view-mode-btn" data-mode="2d" id="view-tag-2d" aria-pressed="false" title="2D Tactical Surface (Leaflet 6m HiRISE/CTX)">
         <span class="tag-dot"></span>
         <span>2D VIEW</span>
@@ -153,6 +153,17 @@
         <span class="tag-dot"></span>
         <span>3D VIEW</span>
       </button>
+
+      <span class="view-pill-divider" aria-hidden="true"></span>
+
+      <div class="view-mode-tag travel-mode-pill-tag" id="travel-mode-pill-tag" title="Expedition Travel Mode (Operational Slope Limits &amp; Terrain Physics)">
+        <span class="tag-dot travel-mode-dot"></span>
+        <label for="travel-mode-top" class="travel-mode-tag-label">TRAVEL MODE:</label>
+        <select id="travel-mode-top" class="travel-mode-select" aria-label="Expedition Travel Mode">
+          <option value="rover" selected>Rover Mode (≤20°)</option>
+          <option value="walk">Marswalk (≤15°)</option>
+        </select>
+      </div>
     </nav>
 
     <header class="top-nav cockpit-bar">
@@ -353,17 +364,6 @@
                 <div class="sector-coords">Planetary Overview · 1,200 km Alt</div>
                 <div class="sector-desc">Free camera navigation across all Martian hemispheres and polar ice caps.</div>
               </button>
-            </div>
-          </div>
-
-          <div class="dropdown-section">
-            <span class="dropdown-section-title">EXPEDITION TRAVEL MODE</span>
-            <div class="dock-select-group">
-              <span class="dock-lbl">MODE:</span>
-              <select id="travel-mode-panel" class="dropdown-select" aria-label="Travel mode panel">
-                <option value="rover" selected>Rover AutoNav (≤20° safe slope)</option>
-                <option value="walk">Marswalk EVA (≤15° safe slope)</option>
-              </select>
             </div>
           </div>
         </div>

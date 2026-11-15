@@ -5126,6 +5126,72 @@ html .workspace-sidebar-header { border-bottom-color: var(--soft-edge); }
   box-shadow: 0 0 8px var(--mars-orange, #FF6B00) !important;
 }
 
+.view-pill-divider {
+  display: inline-block;
+  width: 1px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  margin: 0 2px;
+}
+
+.travel-mode-pill-tag {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  height: 34px !important;
+  padding: 0 10px !important;
+  border-radius: 17px !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  cursor: pointer !important;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.travel-mode-pill-tag:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.travel-mode-dot {
+  background: var(--mars-orange, #FF6B00) !important;
+  box-shadow: 0 0 6px var(--mars-orange, #FF6B00) !important;
+}
+
+.travel-mode-tag-label {
+  font-family: var(--font-ui, "Space Grotesk", sans-serif) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.8px !important;
+  color: var(--muted-text, #A9A9B8) !important;
+  cursor: pointer !important;
+  user-select: none !important;
+}
+
+.travel-mode-select {
+  background: transparent !important;
+  border: none !important;
+  color: #fff !important;
+  font-family: var(--font-ui, "Space Grotesk", sans-serif) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.6px !important;
+  outline: none !important;
+  cursor: pointer !important;
+  padding: 0 4px !important;
+}
+
+.travel-mode-select option {
+  background: #15151C !important;
+  color: #fff !important;
+  font-size: 12px !important;
+  padding: 6px !important;
+}
+
+.travel-mode-select:focus-visible {
+  outline: 2px solid var(--mars-orange, #FF6B00) !important;
+  border-radius: 4px;
+}
+
 /* Suppress Cesium error panel dialog */
 .cesium-widget-errorPanel {
   display: none !important;

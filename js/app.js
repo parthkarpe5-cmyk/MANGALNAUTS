@@ -281,7 +281,8 @@
     const travelSelectors = [
       document.getElementById("travel-mode"),
       document.getElementById("travel-mode-panel"),
-      document.getElementById("travel-mode-measure")
+      document.getElementById("travel-mode-measure"),
+      document.getElementById("travel-mode-top")
     ].filter(Boolean);
 
     function syncTravelModeUI(modeObj) {
