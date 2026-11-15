@@ -1,14 +1,28 @@
 /* global Cesium, window */
 window.TrekLayers = (function () {
   const TREK_EQ = "https://trek.nasa.gov/tiles/Mars/EQ";
-  const marsRectangle = Cesium.Rectangle.fromDegrees(-180, -90, 180, 90);
+  let marsRectangle = null;
+  let tilingScheme = null;
 
-  const tilingScheme = new Cesium.GeographicTilingScheme({
-    ellipsoid: Cesium.Ellipsoid.MARS,
-    rectangle: marsRectangle,
-    numberOfLevelZeroTilesX: 2,
-    numberOfLevelZeroTilesY: 1,
-  });
+  function getMarsRectangle() {
+    if (!marsRectangle && typeof Cesium !== "undefined" && Cesium.Rectangle) {
+      marsRectangle = Cesium.Rectangle.fromDegrees(-180, -90, 180, 90);
+    }
+    return marsRectangle;
+  }
+
+  function getTilingScheme() {
+    if (!tilingScheme && typeof Cesium !== "undefined" && Cesium.GeographicTilingScheme) {
+      if (window.initMarsEllipsoid) window.initMarsEllipsoid();
+      tilingScheme = new Cesium.GeographicTilingScheme({
+        ellipsoid: Cesium.Ellipsoid.MARS,
+        rectangle: getMarsRectangle(),
+        numberOfLevelZeroTilesX: 2,
+        numberOfLevelZeroTilesY: 1,
+      });
+    }
+    return tilingScheme;
+  }
 
   const CATALOG = {
     viking: {
@@ -96,10 +110,12 @@ window.TrekLayers = (function () {
     if (!meta) {
       throw new Error("Unknown Trek layer: " + key);
     }
+    const scheme = getTilingScheme();
+    const rect = getMarsRectangle();
     const provider = new Cesium.UrlTemplateImageryProvider({
       url: tilePath(meta.layerId, meta.ext),
-      tilingScheme,
-      rectangle: marsRectangle,
+      tilingScheme: scheme,
+      rectangle: rect,
       maximumLevel: meta.maxLevel,
       credit: meta.credit,
       ellipsoid: Cesium.Ellipsoid.MARS,

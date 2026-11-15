@@ -54,6 +54,7 @@
   let detailLayersInitialized = false;
 
   function populateFilters() {
+    if (!filterSelect || !window.TrekLayers) return;
     TrekLayers.keys().forEach(function (key) {
       const opt = document.createElement("option");
       opt.value = key;
@@ -389,8 +390,10 @@
       planSegment.addEventListener("change", function () {
         if (window.MarsAudio) MarsAudio.playClick();
         if (planSegment.checked && !MarsHybrid.isInDetailMode()) {
-          const key = locationSelect ? locationSelect.value : "jezero";
-          flyToPlace(key || "jezero");
+          const key = locationSelect && locationSelect.value !== "global" ? locationSelect.value : "jezero";
+          if (locationSelect) locationSelect.value = key;
+          MarsHybrid.setViewMode("split");
+          flyToPlace(key);
         }
         if (planSegment.checked) {
           const map = MarsDetailMap.getMap();
