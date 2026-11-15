@@ -21,7 +21,8 @@
       href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/styles.css?v=pure-black-starfield-v2" />
+    <link rel="stylesheet" href="css/styles.css?v=sky-warp-v1" />
+    <link rel="stylesheet" href="css/sky-starfield.css?v=sky-warp-v1" />
   </head>
   <body>
     <!-- 3D Cosmic Prologue: Authentic NASA Planetary Traversal -->
@@ -203,8 +204,8 @@
       <div class="map-workspace" id="map-workspace">
       <!-- 3D Planetary Globe View (CesiumJS Mars Ellipsoid) -->
       <section id="globe-pane" class="pane globe-pane" aria-label="3D Martian globe view">
-        <!-- Deep Space Orbiting Starfield Backdrop (Jack Rugile Celestial Motion) -->
-        <canvas id="mars-starfield-canvas" class="mars-starfield-canvas"></canvas>
+        <!-- Radial Starfield Warp Backdrop -->
+        <div id="sky"></div>
         <div id="globe" class="cesium-container"></div>
         <aside class="orbiter-card" id="orbiter-card" aria-label="Orbiter details" hidden>
           <header><h2></h2><button type="button" class="btn-ghost" aria-label="Close orbiter details">×</button></header>
@@ -526,7 +527,7 @@
     <script src="js/layers/grs-overlays.js"></script>
     <script src="js/map/historical-traverses.js"></script>
     <script src="js/visual/orbiters.js?v=lazy-models-v1"></script>
-    <script src="js/visual/mars-starfield.js?v=pure-black-starfield-v2"></script>
+    <script src="js/visual/mars-starfield.js?v=sky-warp-v1"></script>
     <script src="js/globe.js?v=transparent-starfield-v1"></script>
     <script src="js/detail-map.js?v=olympus-pan-v4"></script>
     <script src="js/hybrid.js?v=starfield-lifecycle-v1"></script>
