@@ -4687,3 +4687,171 @@ html .workspace-sidebar-header { border-bottom-color: var(--soft-edge); }
   font-size: .75rem;
 }
 .mission-final-note { color: var(--text); }
+
+/* =======================================================
+   Cosmic Prologue: Authentic NASA Planetary Traversal
+   ======================================================= */
+.cosmic-intro-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000000;
+  background: #010103;
+  overflow: hidden;
+  transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: auto;
+}
+
+.cosmic-intro-overlay.fading-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#cosmic-intro-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.cosmic-intro-hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 36px 48px 32px 48px;
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
+.cosmic-hud-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.cosmic-hud-tag {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: var(--muted, #94a3b8);
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+.cosmic-hud-stage {
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--accent-sub, #38bdf8);
+  padding: 4px 12px;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 20px;
+  backdrop-filter: blur(8px);
+}
+
+.cosmic-hud-center {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transform: translateY(-20px);
+}
+
+.cosmic-hud-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: #fff;
+  margin: 0;
+  text-shadow: 0 0 24px rgba(192, 132, 252, 0.6), 0 0 40px rgba(56, 189, 248, 0.4);
+}
+
+.cosmic-hud-sub {
+  font-size: 0.82rem;
+  letter-spacing: 0.10em;
+  color: #cbd5e1;
+  margin: 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+}
+
+.cosmic-hud-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.cosmic-telemetry-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  font-size: 0.72rem;
+  color: #e2e8f0;
+  backdrop-filter: blur(10px);
+}
+
+.btn-skip-cosmic {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(239, 120, 93, 0.25));
+  border: 1px solid rgba(56, 189, 248, 0.5);
+  border-radius: 24px;
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.35);
+  backdrop-filter: blur(10px);
+}
+
+.btn-skip-cosmic:hover {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.45), rgba(239, 120, 93, 0.45));
+  border-color: #38bdf8;
+  transform: translateY(-2px);
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.6);
+}
+
+.cosmic-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.cosmic-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #a855f7, #38bdf8, #ef785d);
+  box-shadow: 0 0 10px #38bdf8;
+  transition: width 0.1s linear;
+}
+
+@media (max-width: 768px) {
+  .cosmic-intro-hud { padding: 20px; }
+  .cosmic-hud-title { font-size: 1.4rem; }
+  .cosmic-hud-sub { font-size: 0.68rem; }
+  .cosmic-hud-stage { display: none; }
+}
