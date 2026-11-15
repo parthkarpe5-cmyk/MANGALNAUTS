@@ -373,16 +373,8 @@ window.MarsSegmentDrawer = (function () {
           '      </div>' +
           '    </div>' +
           '  </div>' +
-          '  <div class="nasa-api-bar font-mono">' +
-          '    <div class="nasa-api-status">' +
-          '      <span class="live-dot">●</span>' +
-          '      <span class="api-name">NASA API: ' +
-          (isru.nasaApi?.isCustom ? 'Personal Key' : 'Connected (DEMO_KEY)') +
-          ' · Sol ' +
-          (isru.nasaApi?.liveSol || 4995) +
-          '</span>' +
-          '    </div>' +
-          '    <button type="button" class="btn-nasa-key" id="btn-configure-nasa-key" title="Configure personal API key from api.nasa.gov">🔑 API Key</button>' +
+          '  <div class="isru-citation-note font-mono">' +
+          '    <span>NASA MRO CRISM · THEMIS · PDS In-Situ Planetary Telemetry</span>' +
           '  </div>' +
           '</details>';
       } catch (e) {
@@ -575,17 +567,7 @@ window.MarsSegmentDrawer = (function () {
       });
     }
 
-    // NASA API Key Configuration Modal Trigger
-    const nasaKeyBtn = panel.querySelector("#btn-configure-nasa-key");
-    if (nasaKeyBtn) {
-      nasaKeyBtn.addEventListener("click", function (ev) {
-        ev.stopPropagation();
-        if (window.MarsAudio) MarsAudio.playClick();
-        if (window.MarsNasaApi && window.MarsNasaApi.showApiKeyModal) {
-          window.MarsNasaApi.showApiKeyModal();
-        }
-      });
-    }
+
   }
 
   function notifyArrival(segment, title) {

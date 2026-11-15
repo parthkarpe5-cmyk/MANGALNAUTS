@@ -6,18 +6,22 @@
  */
 window.MarsNasaApi = (function () {
   const STORAGE_KEY = "mangalnauts_nasa_api_key";
-  const DEFAULT_KEY = "DEMO_KEY";
+  // PRIMARY NASA API KEY: replace "DEMO_KEY" with your personal key from https://api.nasa.gov/
+  const NASA_API_KEY = "DEMO_KEY";
 
   let cachedTelemetry = null;
   let lastFetchTime = 0;
   let connectionStatus = "connected"; // "connected", "testing", "error", "offline"
 
   function getApiKey() {
+    if (NASA_API_KEY && NASA_API_KEY !== "DEMO_KEY") {
+      return NASA_API_KEY.trim();
+    }
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored && stored.trim().length > 0) return stored.trim();
     } catch (e) {}
-    return DEFAULT_KEY;
+    return "DEMO_KEY";
   }
 
   function setApiKey(key) {
