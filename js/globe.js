@@ -95,6 +95,7 @@ window.MarsGlobe = (function () {
     viewer = new Cesium.Viewer(containerId, {
       // Orbiters animate when visible, so cap the render rate instead of freezing the scene.
       targetFrameRate: 30,
+      skyBox: false,
       animation: false,
       timeline: false,
       baseLayer: false,
@@ -114,17 +115,12 @@ window.MarsGlobe = (function () {
       },
     });
 
-    viewer.scene.backgroundColor = Cesium.Color.TRANSPARENT;
+    viewer.scene.backgroundColor = Cesium.Color.fromCssColorString("#0B0B0F");
     viewer.scene.globe.ellipsoid = Cesium.Ellipsoid.MARS;
     viewer.scene.globe.baseColor = Cesium.Color.fromCssColorString("#1a0804");
     viewer.scene.globe.enableLighting = true;
     viewer.scene.postProcessStages.fxaa.enabled = true;
     viewer.scene.globe.depthTestAgainstTerrain = true;
-
-    // Start real-time cosmic galaxy backdrop
-    if (window.MarsCosmicGalaxy) {
-      window.MarsCosmicGalaxy.init("cosmic-canvas");
-    }
     if (viewer.scene.skyAtmosphere) {
       viewer.scene.skyAtmosphere.show = true;
       viewer.scene.skyAtmosphere.hueShift = -0.55;
@@ -231,7 +227,181 @@ window.MarsGlobe = (function () {
       }
     });
 
+    initGoogleEarthHud();
+
     return viewer;
+  }
+
+  function initGoogleEarthHud() {
+    if (!viewer) return;
+
+    const compassDial = document.getElementById("compass-dial");
+    const compassBtn = document.getElementById("globe-compass");
+    const tiltBtn = document.getElementById("globe-tilt-btn");
+    const tiltText = document.getElementById("globe-tilt-text");
+    const zoomInBtn = document.getElementById("globe-zoom-in");
+    const zoomOutBtn = document.getElementById("globe-zoom-out");
+    const chipCoords = document.getElementById("globe-chip-coords");
+    const chipAlt = document.getElementById("globe-chip-alt");
+    const chipHeading = document.getElementById("globe-chip-heading");
+
+    let isMouseOverGlobe = false;
+    let lastHoverCoords = null;
+
+    function updateHud() {
+      if (!viewer || !viewer.camera) return;
+      const camera = viewer.camera;
+      const headingRad = camera.heading;
+      const headingDeg = Cesium.Math.toDegrees(headingRad);
+      const pitchDeg = Cesium.Math.toDegrees(camera.pitch);
+      const carto = camera.positionCartographic;
+      const height = carto ? carto.height : 0;
+
+      // Update Compass dial rotation (rotate needle to point Martian North)
+      if (compassDial) {
+        compassDial.style.transform = "rotate(" + (-headingDeg) + "deg)";
+      }
+
+      // Update 3D/2D Tilt Button Text and state
+      if (tiltText && tiltBtn) {
+        tiltText.textContent = pitchDeg < -65 ? "3D" : "2D";
+        tiltBtn.classList.toggle("active-tilted", pitchDeg >= -65);
+      }
+
+      // Update Eye Altitude in chip
+      if (chipAlt) {
+        let altStr = "";
+        if (height >= 1000000) {
+          altStr = "EYE " + (height / 1000000).toFixed(1) + "M km";
+        } else if (height >= 1000) {
+          altStr = "EYE " + Math.round(height / 1000).toLocaleString() + " km";
+        } else {
+          altStr = "EYE " + Math.round(height) + " m";
+        }
+        chipAlt.textContent = altStr;
+      }
+
+      // Update Heading in chip
+      if (chipHeading) {
+        const normHdg = Math.round((headingDeg + 360) % 360);
+        chipHeading.textContent = "HDG " + String(normHdg).padStart(3, "0") + "°";
+      }
+
+      // Coords: display camera center when mouse is not hovering
+      if (chipCoords && (!lastHoverCoords || !isMouseOverGlobe)) {
+        if (carto) {
+          const lat = Cesium.Math.toDegrees(carto.latitude);
+          const lon = Cesium.Math.toDegrees(carto.longitude);
+          const ns = lat >= 0 ? "°N" : "°S";
+          const ew = lon >= 0 ? "°E" : "°W";
+          chipCoords.textContent = Math.abs(lat).toFixed(3) + ns + ", " + Math.abs(lon).toFixed(3) + ew;
+        }
+      }
+    }
+
+    viewer.camera.changed.addEventListener(updateHud);
+    updateHud();
+
+    // Snap to North
+    if (compassBtn) {
+      compassBtn.addEventListener("click", function () {
+        if (window.MarsAudio) window.MarsAudio.playClick();
+        const camera = viewer.camera;
+        viewer.camera.flyTo({
+          destination: camera.positionCartographic,
+          orientation: {
+            heading: 0,
+            pitch: camera.pitch,
+            roll: 0,
+          },
+          duration: 0.8,
+        });
+      });
+    }
+
+    // Toggle 3D Oblique / 2D Nadir Tilt
+    if (tiltBtn) {
+      tiltBtn.addEventListener("click", function () {
+        if (window.MarsAudio) window.MarsAudio.playClick();
+        const camera = viewer.camera;
+        const currentPitchDeg = Cesium.Math.toDegrees(camera.pitch);
+        const targetPitch = currentPitchDeg < -65 ? Cesium.Math.toRadians(-45) : Cesium.Math.toRadians(-90);
+        viewer.camera.flyTo({
+          destination: camera.positionCartographic,
+          orientation: {
+            heading: camera.heading,
+            pitch: targetPitch,
+            roll: 0,
+          },
+          duration: 0.8,
+        });
+      });
+    }
+
+    // Zoom buttons
+    if (zoomInBtn) {
+      zoomInBtn.addEventListener("click", function () {
+        if (window.MarsAudio) window.MarsAudio.playClick();
+        if (viewer.camera && viewer.camera.positionCartographic) {
+          const height = viewer.camera.positionCartographic.height;
+          viewer.camera.zoomIn(height * 0.35);
+          updateHud();
+        }
+      });
+    }
+
+    if (zoomOutBtn) {
+      zoomOutBtn.addEventListener("click", function () {
+        if (window.MarsAudio) window.MarsAudio.playClick();
+        if (viewer.camera && viewer.camera.positionCartographic) {
+          const height = viewer.camera.positionCartographic.height;
+          viewer.camera.zoomOut(height * 0.45);
+          updateHud();
+        }
+      });
+    }
+
+    // Mouse movement coordinate tracker on the 3D globe surface
+    const canvas = viewer.scene.canvas;
+    if (canvas) {
+      canvas.addEventListener("mouseenter", function () { isMouseOverGlobe = true; });
+      canvas.addEventListener("mouseleave", function () {
+        isMouseOverGlobe = false;
+        lastHoverCoords = null;
+        updateHud();
+      });
+
+      const moveHandler = new Cesium.ScreenSpaceEventHandler(canvas);
+      let rafPending = false;
+      let lastMovePos = null;
+
+      moveHandler.setInputAction(function (movement) {
+        lastMovePos = movement.endPosition;
+        if (rafPending) return;
+        rafPending = true;
+
+        requestAnimationFrame(function () {
+          rafPending = false;
+          if (!lastMovePos || !chipCoords || !viewer.scene || !isMouseOverGlobe) return;
+          const cartesian = viewer.camera.pickEllipsoid(
+            lastMovePos,
+            viewer.scene.globe.ellipsoid
+          );
+          if (cartesian) {
+            const carto = Cesium.Cartographic.fromCartesian(
+              cartesian,
+              Cesium.Ellipsoid.MARS
+            );
+            const lat = Cesium.Math.toDegrees(carto.latitude);
+            const lon = Cesium.Math.toDegrees(carto.longitude);
+            const ns = lat >= 0 ? "°N" : "°S";
+            const ew = lon >= 0 ? "°E" : "°W";
+            lastHoverCoords = Math.abs(lat).toFixed(3) + ns + ", " + Math.abs(lon).toFixed(3) + ew;
+            chipCoords.textContent = lastHoverCoords;
+          }
+        });
+      }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+    }
   }
 
   async function resolveDynamicLandmarks() {
@@ -335,6 +505,7 @@ window.MarsGlobe = (function () {
         },
       });
       entity.landmarkData = lm;
+      entity.show = false;
       landmarksCollection.push(entity);
     });
 
@@ -359,7 +530,7 @@ window.MarsGlobe = (function () {
         outlineWidth: 2,
         height: 100,
       },
-      show: true,
+      show: false,
     });
 
     // 3. Graticule

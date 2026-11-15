@@ -4,10 +4,12 @@
    ========================================================================== */
 
 :root,
-html[data-theme="perseverance"] {
-  --font-display: "Space Grotesk", system-ui, sans-serif;
-  --font-body: "Barlow Semi Condensed", "Space Grotesk", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+html[data-theme="perseverance"],
+html[data-theme="deepspace"],
+html[data-theme="ares"] {
+  --font-display: "Space Grotesk", system-ui, -apple-system, sans-serif;
+  --font-body: "Space Grotesk", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   --cockpit-header-height: 52px;
   --cockpit-telemetry-height: 34px;
 
@@ -18,26 +20,25 @@ html[data-theme="perseverance"] {
   --cosmic-gray: #1E1E24;
   --light-text: #F8F8F8;
   --accent-gold: #FFC107;
+  --accent-cyan: #38BDF8;
 
   --bg: var(--space-black);
   --bg-stage: var(--space-black);
-  --panel: color-mix(in srgb, var(--cosmic-gray) 94%, transparent);
+  --panel: rgba(18, 18, 24, 0.78);
   --panel-solid: var(--space-black);
   --panel-alt: var(--cosmic-gray);
-  --map-glass: linear-gradient(125deg,
-    color-mix(in srgb, var(--cosmic-gray) 87%, var(--deep-red)),
-    color-mix(in srgb, var(--space-black) 92%, transparent) 76%);
-  --mars-action-gradient: linear-gradient(115deg, var(--mars-orange), var(--accent-gold));
-  --map-glass-border: color-mix(in srgb, var(--light-text) 22%, transparent);
-  --border-light: color-mix(in srgb, var(--light-text) 14%, transparent);
-  --border-active: color-mix(in srgb, var(--mars-orange) 65%, transparent);
+  --map-glass: rgba(15, 15, 22, 0.82);
+  --mars-action-gradient: linear-gradient(115deg, #FF6B00, #FFC107);
+  --map-glass-border: rgba(255, 255, 255, 0.12);
+  --border-light: rgba(255, 255, 255, 0.12);
+  --border-active: rgba(255, 107, 0, 0.65);
   --text: var(--light-text);
-  --text-bright: var(--light-text);
-  --muted: color-mix(in srgb, var(--light-text) 73%, var(--cosmic-gray));
+  --text-bright: #FFFFFF;
+  --muted: rgba(248, 248, 248, 0.62);
   --accent: var(--mars-orange);
-  --accent-glow: color-mix(in srgb, var(--mars-orange) 22%, transparent);
+  --accent-glow: rgba(255, 107, 0, 0.28);
   --accent-sub: var(--accent-gold);
-  --accent-sub-glow: color-mix(in srgb, var(--accent-gold) 22%, transparent);
+  --accent-sub-glow: rgba(255, 193, 7, 0.25);
   --accent-warn: var(--accent-gold);
   --accent-danger: var(--deep-red);
 }
@@ -766,14 +767,8 @@ body {
   overflow: hidden;
 }
 
-.cosmic-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
+.globe-pane {
+  background: var(--space-black, #0B0B0F);
 }
 
 .cesium-container,
@@ -956,6 +951,142 @@ body {
   font-family: var(--font-mono);
   font-size: calc(0.7rem + .5px);
   font-weight: 700;
+}
+
+/* Google Earth-Style Globe Navigation HUD Cluster */
+.globe-hud-cluster {
+  position: absolute;
+  right: 16px;
+  bottom: 56px;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  background: var(--map-glass, rgba(11, 11, 15, 0.78));
+  border: 1px solid var(--border-light, rgba(255, 255, 255, 0.12));
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55);
+}
+
+.globe-hud-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-bright, #fff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font: 700 12px var(--font-mono, monospace);
+  padding: 0;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+
+.globe-hud-btn:hover {
+  background: rgba(255, 107, 0, 0.2);
+  border-color: rgba(255, 107, 0, 0.4);
+  color: var(--mars-orange, #FF6B00);
+  transform: scale(1.06);
+}
+
+.globe-hud-btn:active {
+  transform: scale(0.95);
+}
+
+.globe-hud-btn.active-tilted {
+  background: rgba(255, 107, 0, 0.25);
+  border-color: var(--mars-orange, #FF6B00);
+  color: var(--mars-orange, #FF6B00);
+  box-shadow: 0 0 8px rgba(255, 107, 0, 0.4);
+}
+
+.globe-hud-divider {
+  width: 18px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.12);
+  margin: 2px 0;
+}
+
+/* Compass Rose Dial */
+.compass-dial {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transform-origin: center center;
+  transition: transform 0.12s cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+.compass-needle-n {
+  font-size: 8px;
+  font-weight: 900;
+  font-family: var(--font-mono, monospace);
+  color: var(--mars-orange, #FF6B00);
+  line-height: 1;
+  text-shadow: 0 0 4px rgba(255, 107, 0, 0.6);
+  margin-bottom: -1px;
+}
+
+.compass-arrow-up {
+  font-size: 8px;
+  line-height: 1;
+  color: var(--mars-orange, #FF6B00);
+}
+
+.compass-needle-s {
+  width: 2px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 1px;
+  margin-top: 1px;
+}
+
+/* Google Earth-Style Coordinate & Telemetry Status Chip */
+.globe-status-chip {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  z-index: 30;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  background: rgba(11, 11, 15, 0.85);
+  border: 1px solid rgba(255, 107, 0, 0.3);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+  font: 600 calc(0.68rem + 0.5px) var(--font-mono, monospace);
+  color: var(--text-bright, #fff);
+  letter-spacing: 0.4px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.globe-status-chip .chip-sep {
+  color: var(--mars-orange, #FF6B00);
+  opacity: 0.75;
+  font-weight: 800;
+}
+
+.globe-status-chip .chip-alt {
+  color: var(--accent-gold, #FFC107);
+}
+
+.globe-status-chip .chip-heading {
+  color: #38bdf8;
 }
 
 /* Detail Tactical Surface Pane */
@@ -2604,43 +2735,90 @@ body {
   bottom: 18px;
   transform: translateX(-50%);
   display: flex;
-  align-items: end;
+  align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
   width: max-content;
   max-width: calc(100% - 24px);
-  padding: 10px 12px;
-  border: 1px solid rgba(104, 212, 235, .65);
-  border-radius: 13px;
-  background: linear-gradient(145deg, rgba(23, 30, 42, .97), rgba(8, 12, 19, .95));
-  box-shadow: 0 8px 30px #0008;
+  padding: 6px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 16px;
+  background: rgba(14, 14, 20, 0.85);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.65), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
   color: var(--text-bright);
 }
 .mission-dock .select-badge,
 .mission-view {
   display: grid;
   justify-items: start;
-  gap: 4px;
+  gap: 3px;
   min-width: 0;
 }
 .mission-dock select { max-width: 100%; }
-.mission-dock .view-mode-group { display: flex; }
-.mission-dock .view-mode-btn { padding: 8px; white-space: nowrap; }
+.mission-dock .view-mode-group {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px;
+  gap: 2px;
+  background: rgba(10, 10, 14, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  height: 38px;
+}
+.mission-dock .view-mode-btn {
+  height: 30px;
+  padding: 0 10px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--font-display);
+  font-size: 0.74rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+.mission-dock .view-mode-btn:hover {
+  color: var(--text-bright);
+  background: rgba(255, 255, 255, 0.08);
+}
+.mission-dock .view-mode-btn.active {
+  background: var(--mars-orange);
+  color: var(--space-black);
+  font-weight: 700;
+  box-shadow: 0 0 10px rgba(255, 107, 0, 0.35);
+}
 .mission-dock .dock-btn-plan { position: relative; margin: 0; }
 .mission-dock .dock-btn-plan input { display: block; position: absolute; opacity: 0; }
 .mission-dock .dock-btn-plan .btn-inner {
-  min-height: 34px;
-  border-radius: 7px;
-  color: #101921;
-  background: linear-gradient(105deg, #bcf76e, #52ccef);
+  height: 38px;
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 14px;
+  border-radius: 8px;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--space-black);
+  background: var(--mars-action-gradient);
+  cursor: pointer;
+  transition: all 0.18s ease;
 }
 .mission-dock .dock-btn-plan input:focus-visible + .btn-inner {
-  outline: 2px solid white;
-  outline-offset: 3px;
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 .mission-dock .dock-btn-plan input:checked + .btn-inner {
-  background: #0c2630;
-  color: #b8f1ff;
+  background: var(--deep-red);
+  color: #FFFFFF;
+  border-color: var(--mars-orange);
+  box-shadow: 0 0 12px rgba(255, 107, 0, 0.4);
 }
 .mission-dock .dropdown-menu {
   top: auto;
@@ -2677,19 +2855,11 @@ html[data-theme="ares"] .footer {
 html:is([data-theme="ares"], [data-theme="deepspace"]) :is(.mission-dock, .mission-dock .dropdown-menu, .segment-drawer, .orbiter-card) {
   background: var(--map-glass);
   border-color: var(--map-glass-border);
-  backdrop-filter: none;
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
 }
 html:is([data-theme="ares"], [data-theme="deepspace"]) :is(.mission-dock, .mission-dock .dropdown-menu, .orbiter-card) {
   box-shadow: 0 8px 24px rgba(10, 4, 7, .32), inset 0 1px rgba(255, 224, 207, .07);
-}
-html[data-theme="ares"] .mission-dock .dock-btn-plan .btn-inner {
-  background: linear-gradient(105deg, #ec785d, #efaf7a);
-  color: #230f10;
-}
-html[data-theme="ares"] .mission-dock .dock-btn-plan input:checked + .btn-inner {
-  background: #492321;
-  color: var(--text-bright);
-  border-color: var(--accent);
 }
 html[data-theme="ares"] .surface-warm {
   filter: sepia(.55) saturate(1.48) hue-rotate(-17deg) brightness(.94) contrast(1.08);
@@ -2699,8 +2869,8 @@ html[data-theme="ares"] .surface-warm {
   letter-spacing: .045em;
 }
 .mission-dock {
-  --dock-control-height: 38px;
-  --dock-control-surface: rgba(16, 9, 11, .32);
+  --dock-control-height: 36px;
+  --dock-control-surface: rgba(22, 22, 30, 0.65);
 }
 .mission-dock .select-badge {
   padding: 0;
@@ -2709,44 +2879,39 @@ html[data-theme="ares"] .surface-warm {
 }
 .mission-dock .select-badge-lbl {
   margin: 0;
-  color: var(--muted);
+  color: var(--accent-gold);
+  font-family: var(--font-display);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   line-height: 12px;
+  text-transform: uppercase;
 }
-.mission-dock .select-badge select,
-.mission-dock .view-mode-group,
-.mission-dock .dock-btn-plan .btn-inner,
-.mission-dock .dropdown-trigger {
+.mission-dock :is(.select-badge select, .dropdown-trigger) {
   height: var(--dock-control-height);
   min-height: var(--dock-control-height);
-  border: 1px solid var(--border-light);
-  border-radius: 7px;
-}
-.mission-dock .select-badge select,
-.mission-dock .view-mode-group,
-.mission-dock .dropdown-trigger {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
   background: var(--dock-control-surface);
+  color: var(--text-bright);
+  font-family: var(--font-display);
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: all 0.18s ease;
+}
+.mission-dock :is(.select-badge select:hover, .dropdown-trigger:hover) {
+  border-color: rgba(255, 107, 0, 0.5);
+  background: rgba(255, 107, 0, 0.14);
+  color: #FFFFFF;
 }
 .mission-dock .select-badge select {
   width: 100%;
   padding: 0 10px;
 }
-.mission-dock .view-mode-group {
-  align-items: stretch;
-  box-shadow: none;
-}
-.mission-dock .view-mode-btn {
-  flex: 1 0 0;
-  justify-content: center;
-  padding: 0 9px;
-  border-radius: 5px;
-}
-.mission-dock :is(.select-badge select, .view-mode-btn, .dropdown-trigger, .btn-inner) {
-  font: 700 calc(.75rem + .5px)/1 var(--font-body);
-  letter-spacing: 0;
-}
-.mission-dock .dropdown-trigger,
-.mission-dock .dock-btn-plan .btn-inner {
+.mission-dock .dropdown-trigger {
   padding: 0 12px;
+  white-space: nowrap;
 }
 .mission-dock :is(button, select):focus-visible {
   outline: 2px solid var(--accent);
@@ -3081,7 +3246,8 @@ html[data-theme="deepspace"] .mission-dock .dock-btn-plan input:checked + .btn-i
   --cockpit-stroke: var(--map-glass-border, var(--border-light));
   background: var(--map-glass, var(--panel));
   border-color: var(--cockpit-stroke);
-  backdrop-filter: none;
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
 }
 .top-nav.cockpit-bar,
 .telemetry-bar.cockpit-bar {
@@ -3351,12 +3517,46 @@ html[data-theme="deepspace"] .mission-dock .dock-btn-plan input:checked + .btn-i
   text-align: right;
 }
 
-/* Keep persistent controls translucent without sampling the moving map behind them. */
-html .cockpit-bar,
-html .segment-drawer,
-html .orbiter-card {
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
+/* =======================================================
+   Aerospace Martian Glassmorphism System
+   ======================================================= */
+.top-nav.cockpit-bar {
+  background: rgba(11, 11, 16, 0.85);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+}
+
+.top-nav .telemetry-pill {
+  background: rgba(22, 22, 30, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 7px;
+  transition: all 0.18s ease;
+}
+
+.top-nav .telemetry-pill:hover {
+  border-color: rgba(255, 107, 0, 0.45);
+  background: rgba(255, 107, 0, 0.12);
+}
+
+.workspace-sidebar {
+  background: rgba(14, 14, 20, 0.88);
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  backdrop-filter: blur(20px) saturate(150%);
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.6);
+}
+
+.orbiter-card,
+.globe-site-banner,
+.about-card {
+  background: rgba(14, 14, 20, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
 }
 
 /* Geometric display lettering with compact numerals for instrument readouts. */
@@ -3618,4 +3818,199 @@ html[data-theme="deepspace"] .workspace-sidebar .segment-drawer {
   text-align: right;
   letter-spacing: 0.02em;
 }
+
+/* ==========================================================================
+   BINARY ORBITS MISSION LOADER (GPU-ACCELERATED HUD SPLASH)
+   ========================================================================== */
+.mission-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background: var(--space-black, #0B0B0F);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.55s ease;
+  pointer-events: auto;
+  user-select: none;
+}
+
+.mission-loader.loaded {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.mission-loader .loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.2rem;
+  transform: translateY(-8px);
+}
+
+/* 3D Preserved Perspective Stage for Binary Orbits */
+.binary-orbits-rig {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  perspective: 800px;
+  transform-style: preserve-3d;
+}
+
+/* Central Martian Planetary Barycenter */
+.orbit-barycenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 22px;
+  height: 22px;
+  margin-top: -11px;
+  margin-left: -11px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff 0%, var(--mars-orange, #FF6B00) 55%, var(--deep-red, #B22222) 100%);
+  box-shadow: 0 0 20px var(--mars-orange, #FF6B00), 0 0 45px rgba(255, 107, 0, 0.4);
+  z-index: 10;
+  animation: barycenter-pulse 2.2s ease-in-out infinite alternate;
+}
+
+@keyframes barycenter-pulse {
+  from {
+    transform: scale(0.92);
+    box-shadow: 0 0 16px var(--mars-orange, #FF6B00), 0 0 35px rgba(255, 107, 0, 0.3);
+  }
+  to {
+    transform: scale(1.08);
+    box-shadow: 0 0 26px var(--mars-orange, #FF6B00), 0 0 55px rgba(255, 107, 0, 0.6);
+  }
+}
+
+/* Diffuse celestial glow aura behind orbits */
+.orbit-glow-disc {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 140px;
+  height: 140px;
+  margin-top: -70px;
+  margin-left: -70px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 107, 0, 0.12) 0%, rgba(178, 34, 34, 0.05) 50%, transparent 75%);
+  pointer-events: none;
+}
+
+/* Elliptical Orbits with 3D Angles */
+.orbit-ellipse {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+/* Orbit Alpha: Tilted Ellipse Revolving Clockwise */
+.orbit-alpha {
+  border: 1.5px solid color-mix(in srgb, var(--mars-orange, #FF6B00) 45%, transparent);
+  box-shadow: inset 0 0 12px rgba(255, 107, 0, 0.15), 0 0 8px rgba(255, 107, 0, 0.12);
+  transform: rotateX(68deg) rotateY(-24deg);
+  animation: orbit-spin-cw 2.8s linear infinite;
+}
+
+/* Orbit Beta: Intertwined Binary Counter-Orbit */
+.orbit-beta {
+  border: 1.5px solid color-mix(in srgb, var(--accent-gold, #FFC107) 45%, transparent);
+  box-shadow: inset 0 0 12px rgba(255, 193, 7, 0.15), 0 0 8px rgba(255, 193, 7, 0.12);
+  transform: rotateX(68deg) rotateY(32deg);
+  animation: orbit-spin-ccw 3.8s linear infinite;
+}
+
+/* Orbiting Satellites / Nodes with Radiant Halos */
+.orbit-satellite {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  margin-left: -6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.sat-primary {
+  background: radial-gradient(circle at 35% 35%, #ffffff 0%, var(--mars-orange, #FF6B00) 80%);
+  box-shadow: 0 0 14px var(--mars-orange, #FF6B00), 0 0 28px var(--mars-orange, #FF6B00);
+}
+
+.sat-secondary {
+  background: radial-gradient(circle at 35% 35%, #ffffff 0%, var(--accent-gold, #FFC107) 80%);
+  box-shadow: 0 0 14px var(--accent-gold, #FFC107), 0 0 28px var(--accent-gold, #FFC107);
+}
+
+@keyframes orbit-spin-cw {
+  from {
+    transform: rotateX(68deg) rotateY(-24deg) rotateZ(0deg);
+  }
+  to {
+    transform: rotateX(68deg) rotateY(-24deg) rotateZ(360deg);
+  }
+}
+
+@keyframes orbit-spin-ccw {
+  from {
+    transform: rotateX(68deg) rotateY(32deg) rotateZ(360deg);
+  }
+  to {
+    transform: rotateX(68deg) rotateY(32deg) rotateZ(0deg);
+  }
+}
+
+/* Cockpit Telemetry Status Readout */
+.loader-telemetry {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  text-align: center;
+}
+
+.loader-logo {
+  font-family: var(--font-display, "Space Grotesk", sans-serif);
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: var(--text-bright, #F8F8F8);
+  text-shadow: 0 0 18px rgba(255, 107, 0, 0.4);
+}
+
+.loader-sub {
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--muted, #c3a69a);
+  text-transform: uppercase;
+}
+
+.loader-bar {
+  width: 140px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.loader-bar-fill {
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--mars-orange, #FF6B00), var(--accent-gold, #FFC107));
+  border-radius: 2px;
+  animation: loader-sweep 1.4s ease-in-out infinite;
+}
+
+@keyframes loader-sweep {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(120%); }
+  100% { transform: translateX(250%); }
 }

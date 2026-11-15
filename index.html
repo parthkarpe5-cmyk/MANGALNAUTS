@@ -24,6 +24,27 @@
     <link rel="stylesheet" href="css/styles.css?v=mars-gradients" />
   </head>
   <body>
+    <!-- Binary Orbits Mission Loader -->
+    <div id="mission-loader" class="mission-loader" aria-label="Initializing MANGALNAUTS Mission Cockpit">
+      <div class="loader-content">
+        <div class="binary-orbits-rig">
+          <div class="orbit-barycenter"></div>
+          <div class="orbit-ellipse orbit-alpha">
+            <div class="orbit-satellite sat-primary"></div>
+          </div>
+          <div class="orbit-ellipse orbit-beta">
+            <div class="orbit-satellite sat-secondary"></div>
+          </div>
+          <div class="orbit-glow-disc"></div>
+        </div>
+        <div class="loader-telemetry">
+          <div class="loader-logo">MANGALNAUTS</div>
+          <div class="loader-sub">ORBITAL COCKPIT INITIALIZING...</div>
+          <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+        </div>
+      </div>
+    </div>
+
     <header class="top-nav cockpit-bar">
       <!-- Left: Mission Identity & Live Telemetry Ping -->
       <div class="nav-brand">
@@ -66,7 +87,6 @@
       <div class="map-workspace" id="map-workspace">
       <!-- 3D Planetary Globe View (CesiumJS Mars Ellipsoid) -->
       <section id="globe-pane" class="pane globe-pane" aria-label="3D Martian globe view">
-        <canvas id="cosmic-canvas" class="cosmic-canvas"></canvas>
         <div id="globe" class="cesium-container"></div>
         <aside class="orbiter-card" id="orbiter-card" aria-label="Orbiter details" hidden>
           <header><h2></h2><button type="button" class="btn-ghost" aria-label="Close orbiter details">×</button></header>
@@ -92,6 +112,33 @@
               Orbit
             </button>
           </div>
+        </div>
+
+        <!-- Google Earth-Style HUD Cluster: Compass Rose, 3D/2D Tilt, Zoom -->
+        <div id="globe-hud-cluster" class="globe-hud-cluster" role="toolbar" aria-label="Globe navigation controls">
+          <button type="button" class="globe-hud-btn globe-compass-btn" id="globe-compass" title="Click to Reset Heading to Martian North (N)" aria-label="Martian North Compass">
+            <div class="compass-dial" id="compass-dial">
+              <span class="compass-needle-n">N</span>
+              <span class="compass-arrow-up">▲</span>
+              <span class="compass-needle-s"></span>
+            </div>
+          </button>
+          <div class="globe-hud-divider"></div>
+          <button type="button" class="globe-hud-btn" id="globe-tilt-btn" title="Toggle 3D Oblique Perspective / 2D Nadir (45° / 90°)" aria-label="Toggle 3D Oblique Tilt">
+            <span class="hud-btn-text" id="globe-tilt-text">3D</span>
+          </button>
+          <div class="globe-hud-divider"></div>
+          <button type="button" class="globe-hud-btn" id="globe-zoom-in" title="Zoom In" aria-label="Zoom In">+</button>
+          <button type="button" class="globe-hud-btn" id="globe-zoom-out" title="Zoom Out" aria-label="Zoom Out">−</button>
+        </div>
+
+        <!-- Google Earth-Style Telemetry Status Chip -->
+        <div id="globe-status-chip" class="globe-status-chip" aria-live="polite">
+          <span class="chip-item chip-coords" id="globe-chip-coords">18.445°N, 77.451°E</span>
+          <span class="chip-sep">·</span>
+          <span class="chip-item chip-alt" id="globe-chip-alt">EYE 1,200 km</span>
+          <span class="chip-sep">·</span>
+          <span class="chip-item chip-heading" id="globe-chip-heading">HDG 000°</span>
         </div>
 
       </section>
@@ -160,51 +207,37 @@
         </div>
         <div id="segment-drawer" class="segment-drawer" role="tabpanel" aria-labelledby="workspace-route-tab"></div>
           <div class="workspace-settings" id="globe-layers-menu" role="tabpanel" aria-labelledby="workspace-controls-tab" hidden>
-            <div class="dropdown-title">MAP CONTROLS</div>
-            <label class="dropdown-section mission-orbiter-picker">
-              <span class="dropdown-section-title">MARS ORBITERS &amp; MOONS</span>
-              <select id="orbiter-picker" class="dropdown-select"><option value="">Select an object</option></select>
+            <div class="dropdown-section map-style-presets" style="margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--border);">
+              <span class="dropdown-section-title" style="color: var(--mars-orange, #FF6B00); font-weight: 700; letter-spacing: 0.8px;">MAP STYLE PRESET</span>
+              <select id="map-style-preset" class="dropdown-select">
+                <option value="clean" selected>Clean (Mars Globe Only)</option>
+                <option value="exploration">Exploration (Landmarks &amp; Traverses)</option>
+                <option value="orbital">Orbital Fleet (Moons &amp; Orbiters)</option>
+                <option value="custom">Custom (Manual Layers)</option>
+              </select>
+            </div>
+
+            <div class="dropdown-title">MARS ORBITERS &amp; MOONS</div>
+            <label class="dropdown-item">
+              <input type="checkbox" id="toggle-orbiters" />
+              <span>Mars Orbiters (MRO, MAVEN, Odyssey...)</span>
             </label>
-            <div class="dropdown-section mission-route-actions">
-              <span class="dropdown-section-title">SURFACE ACTIONS</span>
-              <button type="button" class="dock-btn" id="clear-segment" title="Clear active route">
-            ✕ Clear
-          </button>
-              <button type="button" class="dock-btn" id="try-measured-route">Try example route</button>
-              <button type="button" class="dock-btn" id="sync-globe-btn" title="Sync 3D Globe camera to surface map center">
-            ⟲ Sync Globe
-          </button>
-            </div>
-            <div class="dropdown-section mission-surface-settings">
-              <span class="dropdown-section-title">SURFACE LAYERS</span>
-          <!-- Heatmap Layer Selector -->
-          <div class="dock-select-group">
-            <span class="dock-lbl">HEATMAP:</span>
-            <select id="heatmap-mode" aria-label="Surface heatmap layer">
-              <option value="off">Off</option>
-              <option value="slope">Terrain slope (8° amber · 15° orange · 20° coral)</option>
-              <option value="radiation">Radiation Exposure (modeled)</option>
-            </select>
-          </div>
+            <label class="dropdown-item">
+              <input type="checkbox" id="toggle-moons" />
+              <span>Martian Moons (Phobos &amp; Deimos)</span>
+            </label>
+            <label class="dropdown-item">
+              <input type="checkbox" id="toggle-orbit-paths" />
+              <span>Orbital Trajectory Lines</span>
+            </label>
+            <label class="dropdown-section mission-orbiter-picker">
+              <span class="dropdown-section-title">INSPECT ORBITER OR MOON</span>
+              <select id="orbiter-picker" class="dropdown-select"><option value="">Select an object...</option></select>
+            </label>
 
-          <!-- Preset Corridors Toggle -->
-          <label class="dock-toggle" title="Toggle historical NASA landing route corridor">
-            <input type="checkbox" id="toggle-preset-routes" />
-            <span>Corridors</span>
-          </label>
-
-          <!-- Science Stops Toggle -->
-          <label class="dock-toggle" title="Toggle verified NASA science targets &amp; sample return depots">
-            <input type="checkbox" id="toggle-science-stops" checked />
-            <span>Targets</span>
-          </label>
-
-
-
-            </div>
             <div class="dropdown-title">PLANETARY &amp; SCIENCE OVERLAYS</div>
             <label class="dropdown-item">
-              <input type="checkbox" id="toggle-landmarks" checked />
+              <input type="checkbox" id="toggle-landmarks" />
               <span>Landing Sites &amp; Hero Landmarks</span>
             </label>
             <label class="dropdown-item">
@@ -212,7 +245,7 @@
               <span>NASA Rover Traverses (128.98 km)</span>
             </label>
             <label class="dropdown-item">
-              <input type="checkbox" id="toggle-aoi" checked />
+              <input type="checkbox" id="toggle-aoi" />
               <span>Active AOI Sector Footprint</span>
             </label>
             <label class="dropdown-item">
@@ -227,7 +260,7 @@
             <div class="dropdown-section">
               <span class="dropdown-section-title">ODYSSEY GRS ISRU RESOURCES</span>
               <select id="grs-element-select" class="dropdown-select">
-                <option value="none">GRS Minerals: Off</option>
+                <option value="none" selected>GRS Minerals: Off</option>
                 <option value="h2o">Subsurface Water Ice (H₂O wt%)</option>
                 <option value="fe">Elemental Iron (Fe wt%)</option>
                 <option value="si">Silicon (Si wt%)</option>
@@ -247,6 +280,42 @@
                 </label>
                 <input type="range" id="overlay-opacity" min="0.1" max="1" step="0.05" value="0.45" />
               </div>
+            </div>
+
+            <div class="dropdown-section mission-surface-settings">
+              <span class="dropdown-section-title">SURFACE TACTICAL LAYERS</span>
+              <!-- Heatmap Layer Selector -->
+              <div class="dock-select-group">
+                <span class="dock-lbl">HEATMAP:</span>
+                <select id="heatmap-mode" aria-label="Surface heatmap layer">
+                  <option value="off" selected>Off</option>
+                  <option value="slope">Terrain slope (8° amber · 15° orange · 20° coral)</option>
+                  <option value="radiation">Radiation Exposure (modeled)</option>
+                </select>
+              </div>
+
+              <!-- Preset Corridors Toggle -->
+              <label class="dock-toggle" title="Toggle historical NASA landing route corridor">
+                <input type="checkbox" id="toggle-preset-routes" />
+                <span>Corridors</span>
+              </label>
+
+              <!-- Science Stops Toggle -->
+              <label class="dock-toggle" title="Toggle verified NASA science targets &amp; sample return depots">
+                <input type="checkbox" id="toggle-science-stops" />
+                <span>Targets</span>
+              </label>
+            </div>
+
+            <div class="dropdown-section mission-route-actions">
+              <span class="dropdown-section-title">SURFACE ACTIONS</span>
+              <button type="button" class="dock-btn" id="clear-segment" title="Clear active route">
+                ✕ Clear
+              </button>
+              <button type="button" class="dock-btn" id="try-measured-route">Try example route</button>
+              <button type="button" class="dock-btn" id="sync-globe-btn" title="Sync 3D Globe camera to surface map center">
+                ⟲ Sync Globe
+              </button>
             </div>
 
             <div class="mission-sound"><button type="button" class="btn-ghost" id="audio-toggle" title="Toggle Tactical Audio Feedback">
@@ -285,7 +354,6 @@
     <script src="js/layers/trek-layers.js"></script>
     <script src="js/layers/grs-overlays.js"></script>
     <script src="js/map/historical-traverses.js"></script>
-    <script src="js/visual/cosmic-galaxy.js"></script>
     <script src="js/visual/orbiters.js?v=spacecraft-models"></script>
     <script src="js/globe.js?v=render-budget"></script>
     <script src="js/detail-map.js?v=olympus-pan-v4"></script>

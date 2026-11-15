@@ -25,6 +25,39 @@ window.MarsOrbiters = (() => {
     );
   }
 
+  let orbiterList = [];
+  let orbitersVisible = false;
+  let moonsVisible = false;
+  let trajectoriesVisible = false;
+  let activeSelectedId = null;
+
+  function applyVisibility() {
+    for (const entry of orbiterList) {
+      const isSelected = activeSelectedId && entry.item.id === activeSelectedId;
+      const isMoon = entry.item.type === "moon";
+      const showObj = isSelected || (isMoon ? moonsVisible : orbitersVisible);
+      const showPath = isSelected || trajectoriesVisible;
+
+      if (entry.entity) entry.entity.show = showObj;
+      if (entry.polyline) entry.polyline.show = showPath;
+    }
+  }
+
+  function setOrbitersVisible(vis) {
+    orbitersVisible = !!vis;
+    applyVisibility();
+  }
+
+  function setMoonsVisible(vis) {
+    moonsVisible = !!vis;
+    applyVisibility();
+  }
+
+  function setTrajectoriesVisible(vis) {
+    trajectoriesVisible = !!vis;
+    applyVisibility();
+  }
+
   async function init(viewer) {
     const panel = document.getElementById("orbiter-card");
     const select = document.getElementById("orbiter-picker");
@@ -36,6 +69,9 @@ window.MarsOrbiters = (() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     function show(id) {
+      activeSelectedId = id || null;
+      applyVisibility();
+
       const item = catalog.get(id);
       panel.hidden = !item;
       select.value = item ? id : "";
@@ -63,17 +99,20 @@ window.MarsOrbiters = (() => {
 
     select.addEventListener("change", () => show(select.value));
     panel.querySelector("button").addEventListener("click", () => show(""));
+
+    orbiterList = [];
     for (const item of orbiters) {
-      select.add(new Option(item.shortName, item.id));
+      select.add(new Option(item.shortName + (item.type === "moon" ? " (Moon)" : ""), item.id));
       const color = Cesium.Color.fromCssColorString(item.color);
       const elements = item.orbitalElements;
       const positions = Array.from({ length: 181 }, (_, i) =>
         position(elements, elements.periodSec * i / 180));
-      viewer.entities.add({
+      const polyline = viewer.entities.add({
         polyline: { positions, width: 1, material: color.withAlpha(0.25), arcType: Cesium.ArcType.NONE },
+        show: false,
       });
       const hasModel = modeledOrbiters.has(item.id);
-      viewer.entities.add({
+      const entity = viewer.entities.add({
         id: "mars-orbiter-" + item.id,
         position: new Cesium.CallbackProperty((_time, result) => {
           const elapsed = reducedMotion.matches ? 0 : (performance.now() - start) * 0.06;
@@ -90,7 +129,10 @@ window.MarsOrbiters = (() => {
           pixelOffset: new Cesium.Cartesian2(0, hasModel ? -28 : -16),
           style: Cesium.LabelStyle.FILL_AND_OUTLINE, outlineWidth: 3,
         },
+        show: false,
       });
+
+      orbiterList.push({ item, entity, polyline });
     }
 
     const click = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
@@ -98,7 +140,9 @@ window.MarsOrbiters = (() => {
       const id = viewer.scene.pick(pixel)?.id?.id;
       if (typeof id === "string" && id.startsWith("mars-orbiter-")) show(id.slice(13));
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+
+    applyVisibility();
   }
 
-  return { init };
+  return { init, setOrbitersVisible, setMoonsVisible, setTrajectoriesVisible };
 })();

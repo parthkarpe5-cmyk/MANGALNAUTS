@@ -66,10 +66,7 @@ window.MarsHybrid = (function () {
     const viewer = MarsGlobe.getViewer();
     if (viewer) viewer.useDefaultRenderLoop = showGlobe;
     if (showGlobe) {
-      window.MarsCosmicGalaxy?.start();
       viewer?.resize();
-    } else {
-      window.MarsCosmicGalaxy?.stop();
     }
     if (showSurface) MarsDetailMap.invalidateSize();
 
