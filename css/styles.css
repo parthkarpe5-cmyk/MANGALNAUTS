@@ -7,6 +7,17 @@
 html[data-theme="perseverance"],
 html[data-theme="deepspace"],
 html[data-theme="ares"] {
+  /* Target Google Earth Palette */
+  --obsidian: #0B0B0F;
+  --panel-bg: #1E1E26;
+  --rail-bg: #15151C;
+  --mars-orange: #FF6B00;
+  --gold: #FFC107;
+  --teal: #2DD4BF;
+  --muted-text: #A9A9B8;
+  --font-ui: "Space Grotesk", system-ui, -apple-system, sans-serif;
+  --font-data: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
   --font-display: "Space Grotesk", system-ui, -apple-system, sans-serif;
   --font-body: "Space Grotesk", system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -14,7 +25,6 @@ html[data-theme="ares"] {
   --cockpit-telemetry-height: 34px;
 
   color-scheme: dark;
-  --mars-orange: #FF6B00;
   --deep-red: #B22222;
   --space-black: #0B0B0F;
   --cosmic-gray: #1E1E24;
@@ -4650,4 +4660,558 @@ html .workspace-sidebar-header { border-bottom-color: var(--soft-edge); }
   border-top: 1px solid var(--border-light);
   font-size: .76rem;
   color: var(--text-bright);
+}
+
+/* ==========================================================================
+   GOOGLE EARTH REDESIGN (Full-Bleed Globe, Left Rail, Floating Controls)
+   ========================================================================== */
+
+/* 1. Full-Bleed Mars Globe Stage */
+.viewport-split {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  background: var(--obsidian, #0B0B0F) !important;
+  z-index: 0 !important;
+}
+
+#map-workspace {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.globe-pane {
+  background: var(--obsidian, #0B0B0F) !important;
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.cesium-container,
+#globe {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 1 !important;
+}
+
+/* 2. Floating Top Right Telemetry Cluster */
+.top-nav.cockpit-bar {
+  position: fixed !important;
+  top: 16px !important;
+  right: 16px !important;
+  left: auto !important;
+  width: auto !important;
+  height: auto !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  z-index: 950 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 0 !important;
+  pointer-events: none !important;
+}
+
+.top-nav .nav-brand,
+.top-nav .nav-actions {
+  display: none !important;
+}
+
+.top-nav .telemetry-bar.cockpit-bar {
+  pointer-events: auto !important;
+  background: rgba(30, 30, 38, 0.88) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 24px !important;
+  backdrop-filter: blur(12px) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6) !important;
+  padding: 4px 12px !important;
+}
+
+/* 3. Google Earth Left Rail (72px wide, full height - 26px status bar) */
+.app-left-rail {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  bottom: 26px !important;
+  width: 72px !important;
+  background: var(--rail-bg, #15151C) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  padding: 12px 0 8px !important;
+  z-index: 1000 !important;
+  box-sizing: border-box !important;
+  user-select: none !important;
+}
+
+.rail-top-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.rail-top-logo:hover {
+  transform: scale(1.08);
+}
+
+.rail-top-logo img {
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(255, 107, 0, 0.35);
+}
+
+.rail-items {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  flex: 1;
+}
+
+.rail-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 56px;
+  padding: 6px 2px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted-text, #A9A9B8);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-sizing: border-box;
+}
+
+.rail-btn .rail-icon {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  transition: stroke 0.15s ease, transform 0.15s ease;
+}
+
+.rail-btn .rail-label {
+  font-family: var(--font-ui, "Space Grotesk", sans-serif);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  margin-top: 4px;
+  line-height: 1;
+}
+
+.rail-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+}
+
+.rail-btn:hover .rail-icon {
+  transform: scale(1.06);
+}
+
+.rail-btn.active {
+  background: rgba(255, 107, 0, 0.14) !important;
+  border-color: rgba(255, 107, 0, 0.4) !important;
+  color: #fff !important;
+}
+
+.rail-btn.active .rail-icon {
+  stroke: var(--mars-orange, #FF6B00) !important;
+}
+
+.rail-btn:focus-visible {
+  outline: 2px solid var(--mars-orange, #FF6B00) !important;
+  outline-offset: 2px;
+}
+
+.rail-bottom {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rail-btn-sub {
+  height: 48px;
+}
+
+/* 4. Google Earth Search Pill (400x52px, Top-Left) */
+.search-pill {
+  position: fixed !important;
+  top: 16px !important;
+  left: 88px !important;
+  width: 400px !important;
+  height: 52px !important;
+  background: var(--panel-bg, #1E1E26) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 26px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65), 0 0 1px rgba(255, 255, 255, 0.1) !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 18px !important;
+  gap: 12px !important;
+  z-index: 1000 !important;
+  box-sizing: border-box !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+.search-pill-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted-text, #A9A9B8);
+  flex-shrink: 0;
+}
+
+.search-pill-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-family: var(--font-ui, "Space Grotesk", sans-serif);
+  font-size: 14px;
+  font-weight: 500;
+  outline: none;
+}
+
+.search-pill-input::placeholder {
+  color: var(--muted-text, #A9A9B8);
+  font-size: 13px;
+}
+
+.search-clear-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--muted-text, #A9A9B8);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.search-clear-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.search-clear-btn:focus-visible {
+  outline: 2px solid var(--mars-orange, #FF6B00);
+}
+
+.search-results-menu {
+  position: absolute;
+  top: 58px;
+  left: 0;
+  right: 0;
+  background: var(--panel-bg, #1E1E26);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.85);
+  padding: 8px 0;
+  overflow: hidden;
+  z-index: 1010;
+}
+
+.search-result-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px;
+  font-family: var(--font-ui, "Space Grotesk", sans-serif);
+  font-size: 13px;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+
+.search-result-item:hover,
+.search-result-item:focus-visible {
+  background: rgba(255, 107, 0, 0.15);
+  outline: none;
+}
+
+.search-result-sub {
+  font-family: var(--font-data, "JetBrains Mono", monospace);
+  font-size: 11px;
+  color: var(--muted-text, #A9A9B8);
+}
+
+/* 5. Google Earth Bottom Status Bar (26px height) */
+.app-status-bar {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 26px !important;
+  background: var(--obsidian, #0B0B0F) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 0 16px !important;
+  z-index: 1000 !important;
+  font-family: var(--font-data, "JetBrains Mono", monospace) !important;
+  font-size: 11px !important;
+  color: var(--muted-text, #A9A9B8) !important;
+  box-sizing: border-box !important;
+  user-select: none !important;
+}
+
+.status-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.status-mission-tag {
+  color: var(--mars-orange, #FF6B00);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  font-size: 10px;
+}
+
+.status-sep {
+  opacity: 0.35;
+}
+
+.status-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-right: 140px; /* Room for Cesium credits on right */
+}
+
+.status-attribution {
+  font-size: 10px;
+  opacity: 0.75;
+}
+
+/* Embed chip into status bar */
+.globe-status-chip-embedded {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #fff;
+  font-family: var(--font-data, "JetBrains Mono", monospace);
+  font-size: 11px;
+}
+
+.globe-status-chip-embedded .chip-item {
+  color: #e2e8f0;
+}
+
+.globe-status-chip-embedded .chip-alt {
+  color: var(--gold, #FFC107);
+}
+
+/* Cesium Widget Credit styling override for 26px status bar */
+.cesium-widget-credits {
+  bottom: 2px !important;
+  right: 8px !important;
+  font-size: 10px !important;
+  line-height: 22px !important;
+  z-index: 1001 !important;
+  background: transparent !important;
+}
+
+/* 6. Floating Workspace Sidebar Flyout (Offset from left rail) */
+.workspace-sidebar {
+  position: fixed !important;
+  top: 76px !important;
+  left: 88px !important;
+  bottom: 38px !important;
+  width: 380px !important;
+  max-width: calc(100vw - 100px) !important;
+  background: var(--panel-bg, #1E1E26) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75) !important;
+  z-index: 990 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+}
+
+.workspace-sidebar[hidden] {
+  display: none !important;
+}
+
+/* 7. Hide legacy bottom dock; functionality lives in Left Rail */
+.mission-dock {
+  display: none !important;
+}
+
+/* 8. Position HUD cluster (Compass, 3D Tilt, Zoom) floating on right */
+.globe-hud-cluster {
+  right: 20px !important;
+  bottom: 42px !important;
+  z-index: 900 !important;
+}
+
+/* 9. Sidebar Panels Typography & Component Styling */
+.sidebar-panel-title {
+  font-family: var(--font-ui, "Space Grotesk", sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--mars-orange, #FF6B00);
+}
+
+.mission-sector-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.mission-sector-card {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.mission-sector-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.mission-sector-card.active {
+  background: rgba(255, 107, 0, 0.12) !important;
+  border-color: rgba(255, 107, 0, 0.5) !important;
+  box-shadow: 0 4px 18px rgba(255, 107, 0, 0.2);
+}
+
+.sector-card-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sector-badge {
+  font-family: var(--font-data, "JetBrains Mono", monospace);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--muted-text, #A9A9B8);
+  letter-spacing: 0.05em;
+}
+
+.mission-sector-card.active .sector-badge {
+  background: rgba(255, 107, 0, 0.25);
+  color: var(--mars-orange, #FF6B00);
+}
+
+.sector-status-live {
+  font-family: var(--font-data, "JetBrains Mono", monospace);
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--teal, #2DD4BF);
+  letter-spacing: 0.04em;
+}
+
+.sector-name {
+  font-family: var(--font-ui, "Space Grotesk", sans-serif);
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  margin-top: 2px;
+}
+
+.sector-coords {
+  font-family: var(--font-data, "JetBrains Mono", monospace);
+  font-size: 11px;
+  color: var(--gold, #FFC107);
+}
+
+.sector-desc {
+  font-family: var(--font-ui, "Space Grotesk", sans-serif);
+  font-size: 12px;
+  color: var(--muted-text, #A9A9B8);
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
+.view-mode-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.view-mode-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.view-mode-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.view-mode-card.active {
+  background: rgba(255, 107, 0, 0.12) !important;
+  border-color: rgba(255, 107, 0, 0.5) !important;
+  box-shadow: 0 4px 18px rgba(255, 107, 0, 0.2);
+}
+
+.view-mode-name {
+  font-family: var(--font-ui, "Space Grotesk", sans-serif);
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.view-mode-sub {
+  font-family: var(--font-ui, "Space Grotesk", sans-serif);
+  font-size: 12px;
+  color: var(--muted-text, #A9A9B8);
+  line-height: 1.4;
 }

@@ -161,6 +161,244 @@
     }
   }
 
+  function initGoogleEarthControls() {
+    const railBtnMissions = document.getElementById("rail-btn-missions");
+    const railBtnProjects = document.getElementById("rail-btn-projects");
+    const railBtnLayers = document.getElementById("rail-btn-layers");
+    const railBtnMeasure = document.getElementById("rail-btn-measure");
+    const railBtnRoute = document.getElementById("rail-btn-route");
+    const railBtnSplit = document.getElementById("rail-btn-split");
+    const railBtnAbout = document.getElementById("rail-btn-about");
+
+    const searchInput = document.getElementById("mars-search-input");
+    const searchClear = document.getElementById("search-clear-btn");
+    const searchResults = document.getElementById("search-results-menu");
+
+    function setRailActive(btn) {
+      document.querySelectorAll(".rail-btn").forEach(b => b.classList.remove("active"));
+      if (btn) btn.classList.add("active");
+    }
+
+    if (railBtnMissions) {
+      railBtnMissions.addEventListener("click", function () {
+        if (window.MarsAudio) MarsAudio.playClick();
+        if (window.MarsWorkspace) MarsWorkspace.show("missions");
+      });
+    }
+
+    if (railBtnProjects) {
+      railBtnProjects.addEventListener("click", function () {
+        if (window.MarsAudio) MarsAudio.playClick();
+        if (window.MarsWorkspace) MarsWorkspace.show("projects");
+      });
+    }
+
+    if (railBtnLayers) {
+      railBtnLayers.addEventListener("click", function () {
+        if (window.MarsAudio) MarsAudio.playClick();
+        if (window.MarsWorkspace) MarsWorkspace.show("layers");
+      });
+    }
+
+    if (railBtnMeasure) {
+      railBtnMeasure.addEventListener("click", function () {
+        if (window.MarsAudio) MarsAudio.playClick();
+        if (window.MarsWorkspace) MarsWorkspace.show("measure");
+      });
+    }
+
+    if (railBtnRoute) {
+      railBtnRoute.addEventListener("click", function () {
+        if (window.MarsAudio) MarsAudio.playClick();
+        if (window.MarsWorkspace) MarsWorkspace.show("route");
+      });
+    }
+
+    if (railBtnSplit) {
+      railBtnSplit.addEventListener("click", function () {
+        if (window.MarsAudio) MarsAudio.playClick();
+        if (window.MarsWorkspace) MarsWorkspace.show("split");
+      });
+    }
+
+    if (railBtnAbout) {
+      railBtnAbout.addEventListener("click", function () {
+        if (window.MarsAudio) MarsAudio.playClick();
+        if (aboutPanel) {
+          aboutPanel.hidden = !aboutPanel.hidden;
+        }
+      });
+    }
+
+    // Sync sector cards in Missions panel
+    function syncSectorCards(sec) {
+      document.querySelectorAll(".mission-sector-card").forEach(c => {
+        const isMatch = c.dataset.sector === sec;
+        c.classList.toggle("active", isMatch);
+        const st = c.querySelector(".sector-status-live");
+        if (st) st.remove();
+        if (isMatch) {
+          const hdr = c.querySelector(".sector-card-hdr");
+          if (hdr) {
+            const span = document.createElement("span");
+            span.className = "sector-status-live";
+            span.textContent = "ACTIVE";
+            hdr.appendChild(span);
+          }
+        }
+      });
+    }
+
+    document.querySelectorAll(".mission-sector-card").forEach(card => {
+      card.addEventListener("click", function () {
+        if (window.MarsAudio) MarsAudio.playClick();
+        const sec = card.dataset.sector;
+        syncSectorCards(sec);
+        if (locationSelect) {
+          locationSelect.value = sec;
+          locationSelect.dispatchEvent(new Event("change"));
+        } else {
+          flyToPlace(sec);
+        }
+      });
+    });
+
+    if (locationSelect) {
+      locationSelect.addEventListener("change", function () {
+        syncSectorCards(locationSelect.value);
+      });
+    }
+
+    // Sync travel mode in panel
+    const travelModePanel = document.getElementById("travel-mode-panel");
+    if (travelModePanel && travelMode) {
+      travelModePanel.value = travelMode.value;
+      travelModePanel.addEventListener("change", function () {
+        travelMode.value = travelModePanel.value;
+        travelMode.dispatchEvent(new Event("change"));
+      });
+      travelMode.addEventListener("change", function () {
+        travelModePanel.value = travelMode.value;
+      });
+    }
+
+    // Sync Projects checkboxes
+    function linkCheckbox(panelId, origEl) {
+      const pEl = document.getElementById(panelId);
+      if (pEl && origEl) {
+        pEl.checked = origEl.checked;
+        pEl.addEventListener("change", function () {
+          origEl.checked = pEl.checked;
+          origEl.dispatchEvent(new Event("change"));
+        });
+        origEl.addEventListener("change", function () {
+          pEl.checked = origEl.checked;
+        });
+      }
+    }
+    linkCheckbox("panel-toggle-traverses", toggleTraverses);
+    linkCheckbox("panel-toggle-science-stops", toggleScienceStops);
+    linkCheckbox("panel-toggle-landmarks", toggleLandmarks);
+    linkCheckbox("panel-toggle-aoi", toggleAoi);
+    linkCheckbox("panel-toggle-graticule", toggleGraticule);
+
+    // Sync Measure buttons
+    const panelBtnMeasure = document.getElementById("panel-btn-measured-route");
+    if (panelBtnMeasure) {
+      panelBtnMeasure.addEventListener("click", () => {
+        const tryBtn = document.getElementById("try-measured-route");
+        if (tryBtn) tryBtn.click();
+      });
+    }
+    const panelBtnClear = document.getElementById("panel-btn-clear-route");
+    if (panelBtnClear) {
+      panelBtnClear.addEventListener("click", () => {
+        if (clearSegment) clearSegment.click();
+      });
+    }
+    const panelBtnSync = document.getElementById("panel-btn-sync-globe");
+    if (panelBtnSync) {
+      panelBtnSync.addEventListener("click", () => {
+        if (syncDetailBtn) syncDetailBtn.click();
+      });
+    }
+
+    // Search Pill logic
+    if (searchInput && searchResults) {
+      const SEARCH_TARGETS = [
+        { name: "Jezero Crater", sub: "18.45°N, 77.42°E · Delta Fan · Perseverance", key: "jezero" },
+        { name: "Gale Crater", sub: "4.59°S, 137.44°E · Mount Sharp · Curiosity", key: "gale" },
+        { name: "Olympus Mons", sub: "18.65°N, 133.80°W · Solar System's Tallest Volcano", key: "olympus" },
+        { name: "Global Mars Orbit", sub: "Equatorial Satellite Orbit · Planetary Overview", key: "global" }
+      ];
+
+      function renderResults(query) {
+        const q = (query || "").toLowerCase().trim();
+        if (!q) {
+          searchResults.hidden = true;
+          if (searchClear) searchClear.hidden = true;
+          return;
+        }
+        if (searchClear) searchClear.hidden = false;
+        const matches = SEARCH_TARGETS.filter(t => t.name.toLowerCase().includes(q) || t.sub.toLowerCase().includes(q));
+        if (matches.length === 0) {
+          searchResults.innerHTML = '<div style="padding:10px 18px;color:#94a3b8;font-size:12px;">No matching Martian landmarks found.</div>';
+          searchResults.hidden = false;
+          return;
+        }
+        searchResults.innerHTML = matches.map(m =>
+          `<div class="search-result-item" data-key="${m.key}" tabindex="0">` +
+          `  <span>${m.name}</span>` +
+          `  <span class="search-result-sub">${m.sub}</span>` +
+          `</div>`
+        ).join("");
+        searchResults.hidden = false;
+
+        searchResults.querySelectorAll(".search-result-item").forEach(item => {
+          item.addEventListener("click", function () {
+            const k = item.dataset.key;
+            if (locationSelect) {
+              locationSelect.value = k;
+              locationSelect.dispatchEvent(new Event("change"));
+            } else {
+              flyToPlace(k);
+            }
+            searchResults.hidden = true;
+            searchInput.value = item.querySelector("span").textContent;
+          });
+        });
+      }
+
+      searchInput.addEventListener("input", function () {
+        renderResults(searchInput.value);
+      });
+
+      searchInput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+          const first = searchResults.querySelector(".search-result-item");
+          if (first) first.click();
+        } else if (e.key === "Escape") {
+          searchResults.hidden = true;
+        }
+      });
+
+      if (searchClear) {
+        searchClear.addEventListener("click", function () {
+          searchInput.value = "";
+          searchResults.hidden = true;
+          searchClear.hidden = true;
+          searchInput.focus();
+        });
+      }
+
+      document.addEventListener("click", function (e) {
+        if (!document.getElementById("search-pill")?.contains(e.target)) {
+          searchResults.hidden = true;
+        }
+      });
+    }
+  }
+
   async function bootstrap() {
     if (window.MarsCosmicIntro) {
       try {
@@ -554,6 +792,8 @@
     if (filterLabel) {
       filterLabel.textContent = TrekLayers.labelFor("viking");
     }
+
+    initGoogleEarthControls();
 
     // Dismiss the Binary Orbits mission loader with a smooth reveal
     const loader = document.getElementById("mission-loader");

@@ -74,6 +74,105 @@
       </div>
     </div>
 
+    <!-- Google Earth Left Rail Navigation (72px wide, full height - 26px status bar) -->
+    <nav id="app-left-rail" class="app-left-rail" aria-label="Main Navigation">
+      <div class="rail-top-logo" id="rail-logo-btn" title="MANGALNAUTS Mars Mission Cockpit">
+        <img src="assets/mangalnauts-logo.png" alt="MANGALNAUTS Logo" width="34" height="34" />
+      </div>
+
+      <div class="rail-items" role="group" aria-label="Navigation Actions">
+        <button type="button" class="rail-btn active" id="rail-btn-missions" data-rail-action="missions" aria-label="Missions" title="Switch Martian Exploration Sectors">
+          <svg class="rail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <circle cx="12" cy="12" r="6"></circle>
+            <circle cx="12" cy="12" r="2"></circle>
+          </svg>
+          <span class="rail-label">Missions</span>
+        </button>
+
+        <button type="button" class="rail-btn" id="rail-btn-projects" data-rail-action="projects" aria-label="Projects" title="NASA Traverses & Exploration Waypoints">
+          <svg class="rail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+            <polygon points="12 11 12 17 17 14"></polygon>
+          </svg>
+          <span class="rail-label">Projects</span>
+        </button>
+
+        <button type="button" class="rail-btn" id="rail-btn-layers" data-rail-action="layers" aria-label="Layers" title="Map Controls, Planetary Overlays, and GRS Minerals">
+          <svg class="rail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+          <span class="rail-label">Layers</span>
+        </button>
+
+        <button type="button" class="rail-btn" id="rail-btn-measure" data-rail-action="measure" aria-label="Measure" title="Measure Distance & Safe Return Corridors">
+          <svg class="rail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m21.5 8.5-7-7a2.12 2.12 0 0 0-3 0l-9 9a2.12 2.12 0 0 0 0 3l7 7a2.12 2.12 0 0 0 3 0l9-9a2.12 2.12 0 0 0 0-3Z"></path>
+            <line x1="7" y1="13" x2="8" y2="14"></line>
+            <line x1="10" y1="10" x2="11" y2="11"></line>
+            <line x1="13" y1="7" x2="14" y2="8"></line>
+          </svg>
+          <span class="rail-label">Measure</span>
+        </button>
+
+        <button type="button" class="rail-btn" id="rail-btn-route" data-rail-action="route" aria-label="Route" title="GNN Safe Route Planner & Consumables">
+          <svg class="rail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="6" cy="19" r="3"></circle>
+            <path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"></path>
+            <circle cx="18" cy="5" r="3"></circle>
+          </svg>
+          <span class="rail-label">Route</span>
+        </button>
+
+        <button type="button" class="rail-btn" id="rail-btn-split" data-rail-action="split" aria-label="Split view" title="Toggle 3D Globe, Dual Split, or 2D Surface View">
+          <svg class="rail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="12" y1="3" x2="12" y2="21"></line>
+          </svg>
+          <span class="rail-label">Split view</span>
+        </button>
+      </div>
+
+      <div class="rail-bottom" role="group" aria-label="Secondary Controls">
+        <button type="button" class="rail-btn rail-btn-sub" id="rail-btn-about" aria-label="Mission Citations and About" title="Verified Scientific Data Citations">
+          <svg class="rail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+          <span class="rail-label">About</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Google Earth Search Pill (400x52px, Top-Left, offset right of the rail) -->
+    <div id="search-pill" class="search-pill" role="search" aria-label="Search Martian Sites">
+      <span class="search-pill-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </span>
+      <input
+        type="text"
+        id="mars-search-input"
+        class="search-pill-input"
+        placeholder="Search Mars (Jezero, Gale, Olympus...)"
+        aria-label="Search Martian sites and landmarks"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <button type="button" id="search-clear-btn" class="search-clear-btn" aria-label="Clear Search" hidden>
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <div id="search-results-menu" class="search-results-menu" hidden></div>
+    </div>
+
     <header class="top-nav cockpit-bar">
       <!-- Left: Mission Identity & Live Telemetry Ping -->
       <div class="nav-brand">
@@ -150,15 +249,6 @@
           <button type="button" class="globe-hud-btn" id="globe-zoom-out" title="Zoom Out" aria-label="Zoom Out">−</button>
         </div>
 
-        <!-- Google Earth-Style Telemetry Status Chip -->
-        <div id="globe-status-chip" class="globe-status-chip" aria-live="polite">
-          <span class="chip-item chip-coords" id="globe-chip-coords">18.445°N, 77.451°E</span>
-          <span class="chip-sep">·</span>
-          <span class="chip-item chip-alt" id="globe-chip-alt">EYE 1,200 km</span>
-          <span class="chip-sep">·</span>
-          <span class="chip-item chip-heading" id="globe-chip-heading">HDG 000°</span>
-        </div>
-
       </section>
 
       <div id="map-divider" role="separator" tabindex="0" aria-label="Resize globe and surface maps" aria-orientation="vertical" aria-controls="globe-pane detail-pane" aria-valuemin="25" aria-valuemax="75" aria-valuenow="50"></div>
@@ -217,14 +307,151 @@
       </div>
       <aside id="workspace-sidebar" class="workspace-sidebar" aria-label="Mission sidebar" hidden>
         <div class="workspace-sidebar-header">
-          <div role="tablist" aria-label="Sidebar panels">
+          <div class="sidebar-header-left">
+            <span class="sidebar-panel-title" id="workspace-sidebar-title">NAVIGATION</span>
+          </div>
+          <!-- Retain legacy role tabs for backward compatibility -->
+          <div role="tablist" aria-label="Sidebar panels" style="display:none;">
             <button type="button" class="btn-ghost" role="tab" id="workspace-route-tab" aria-controls="segment-drawer" aria-selected="true">Route</button>
             <button type="button" class="btn-ghost" role="tab" id="workspace-controls-tab" aria-controls="globe-layers-menu" aria-selected="false" tabindex="-1">Map Controls</button>
           </div>
-          <button type="button" class="btn-ghost" id="workspace-close" aria-label="Close sidebar">×</button>
+          <button type="button" class="btn-ghost" id="workspace-close" aria-label="Close sidebar">✕</button>
         </div>
-        <div id="segment-drawer" class="segment-drawer" role="tabpanel" aria-labelledby="workspace-route-tab"></div>
-          <div class="workspace-settings" id="globe-layers-menu" role="tabpanel" aria-labelledby="workspace-controls-tab" hidden>
+
+        <!-- 1. Missions Panel -->
+        <div class="workspace-settings" id="workspace-missions-menu" role="tabpanel" hidden>
+          <div class="dropdown-section">
+            <span class="dropdown-section-title">MARTIAN EXPLORATION SECTORS</span>
+            <div class="mission-sector-grid">
+              <button type="button" class="mission-sector-card active" data-sector="jezero" aria-label="Jezero Crater">
+                <div class="sector-card-hdr">
+                  <span class="sector-badge">DELTA FAN</span>
+                  <span class="sector-status-live">ACTIVE</span>
+                </div>
+                <div class="sector-name">Jezero Crater</div>
+                <div class="sector-coords">18.45°N, 77.42°E · Elev -2,530 m</div>
+                <div class="sector-desc">Perseverance Rover &amp; Ingenuity. Ancient lacustrine delta fan rich in clay smectites.</div>
+              </button>
+
+              <button type="button" class="mission-sector-card" data-sector="gale" aria-label="Gale Crater">
+                <div class="sector-card-hdr">
+                  <span class="sector-badge">CENTRAL MOUND</span>
+                </div>
+                <div class="sector-name">Gale Crater</div>
+                <div class="sector-coords">4.59°S, 137.44°E · Elev -4,500 m</div>
+                <div class="sector-desc">Curiosity MSL. 5 km layered Aeolis Mons with 33.3 km verified PDS traverse.</div>
+              </button>
+
+              <button type="button" class="mission-sector-card" data-sector="olympus" aria-label="Olympus Mons">
+                <div class="sector-card-hdr">
+                  <span class="sector-badge">SHIELD VOLCANO</span>
+                </div>
+                <div class="sector-name">Olympus Mons</div>
+                <div class="sector-coords">18.65°N, 133.80°W · Elev +21,287 m</div>
+                <div class="sector-desc">Summit Caldera with massive 80 km crater depression and 100-300 Pa micro-atmosphere.</div>
+              </button>
+
+              <button type="button" class="mission-sector-card" data-sector="global" aria-label="Global Mars Orbit">
+                <div class="sector-card-hdr">
+                  <span class="sector-badge">ORBITAL RECON</span>
+                </div>
+                <div class="sector-name">Global Mars Orbit</div>
+                <div class="sector-coords">Planetary Overview · 1,200 km Alt</div>
+                <div class="sector-desc">Free camera navigation across all Martian hemispheres and polar ice caps.</div>
+              </button>
+            </div>
+          </div>
+
+          <div class="dropdown-section">
+            <span class="dropdown-section-title">EXPEDITION TRAVEL MODE</span>
+            <div class="dock-select-group">
+              <span class="dock-lbl">MODE:</span>
+              <select id="travel-mode-panel" class="dropdown-select" aria-label="Travel mode panel">
+                <option value="rover" selected>Rover AutoNav (≤20° safe slope)</option>
+                <option value="walk">Marswalk EVA (≤15° safe slope)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Projects Panel -->
+        <div class="workspace-settings" id="workspace-projects-menu" role="tabpanel" hidden>
+          <div class="dropdown-section">
+            <span class="dropdown-section-title">VERIFIED NASA DATASETS &amp; TRAVERSES</span>
+            <label class="dropdown-item">
+              <input type="checkbox" id="panel-toggle-traverses" checked />
+              <span>NASA Rover Traverses (128.98 km PDS Data)</span>
+            </label>
+            <label class="dropdown-item">
+              <input type="checkbox" id="panel-toggle-science-stops" checked />
+              <span>NASA Science Targets &amp; Sample Depots</span>
+            </label>
+            <label class="dropdown-item">
+              <input type="checkbox" id="panel-toggle-landmarks" checked />
+              <span>Landing Sites &amp; Hero Landmarks</span>
+            </label>
+            <label class="dropdown-item">
+              <input type="checkbox" id="panel-toggle-aoi" />
+              <span>Active AOI Sector Footprint</span>
+            </label>
+            <label class="dropdown-item">
+              <input type="checkbox" id="panel-toggle-graticule" />
+              <span>Coordinate Graticule (Lat/Lon)</span>
+            </label>
+          </div>
+          <div class="dropdown-section">
+            <span class="dropdown-section-title">PROJECT SPECIFICATIONS</span>
+            <p style="color:var(--muted-text); font-size:12px; line-height:1.5; margin:4px 0 8px;">
+              Includes official NASA Mars 2020 Perseverance Western Delta path, MSL Curiosity Mount Sharp path, Opportunity Meridiani Planum traverse, and USGS Cushing cave skylight candidates.
+            </p>
+          </div>
+        </div>
+
+        <!-- 3. Measure Panel -->
+        <div class="workspace-settings" id="workspace-measure-menu" role="tabpanel" hidden>
+          <div class="dropdown-section">
+            <span class="dropdown-section-title">DISTANCE &amp; TRAVERSAL MEASUREMENT</span>
+            <p style="color:var(--muted-text); font-size:12px; line-height:1.5; margin-bottom:12px;">
+              Compute safe topological traversal corridors between any two Martian points, verify slopes, and evaluate terrain obstacles.
+            </p>
+            <button type="button" class="dock-btn" id="panel-btn-measured-route" style="width:100%; margin-bottom:8px;">
+              🚀 Try Verified Benchmark Route
+            </button>
+            <button type="button" class="dock-btn" id="panel-btn-clear-route" style="width:100%; margin-bottom:8px;">
+              ✕ Clear Active Route / Measurement
+            </button>
+            <button type="button" class="dock-btn" id="panel-btn-sync-globe" title="Sync 3D Globe camera to surface map center" style="width:100%;">
+              ⟲ Sync Globe to Surface View
+            </button>
+          </div>
+        </div>
+
+        <!-- 4. Split Viewport Panel -->
+        <div class="workspace-settings" id="workspace-split-menu" role="tabpanel" hidden>
+          <div class="dropdown-section">
+            <span class="dropdown-section-title">VIEWPORT DISPLAY MODES</span>
+            <div class="view-mode-stack">
+              <button type="button" class="view-mode-card active view-mode-btn" data-mode="3d">
+                <div class="view-mode-name">🪐 3D Planetary Globe</div>
+                <div class="view-mode-sub">Full-bleed CesiumJS Mars ellipsoid with atmospheric scattering &amp; orbiters</div>
+              </button>
+              <button type="button" class="view-mode-card view-mode-btn" data-mode="split">
+                <div class="view-mode-name">⚡ Dual Mission Split</div>
+                <div class="view-mode-sub">Synchronized 3D global context and 2D high-resolution surface radar side-by-side</div>
+              </button>
+              <button type="button" class="view-mode-card view-mode-btn" data-mode="2d">
+                <div class="view-mode-name">🗺️ 2D Tactical Surface</div>
+                <div class="view-mode-sub">Full-screen Leaflet map with 6-meter Esri CTX and HiRISE scientific layers</div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Route Drawer (Segment Drawer) -->
+        <div id="segment-drawer" class="segment-drawer" role="tabpanel" hidden></div>
+
+        <!-- 6. Layers Menu (Globe Layers Menu) -->
+        <div class="workspace-settings" id="globe-layers-menu" role="tabpanel" hidden>
             <div class="dropdown-section map-style-presets" style="margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--border);">
               <span class="dropdown-section-title" style="color: var(--mars-orange, #FF6B00); font-weight: 700; letter-spacing: 0.8px;">MAP STYLE PRESET</span>
               <select id="map-style-preset" class="dropdown-select">
@@ -347,6 +574,24 @@
           </div>
       </aside>
     </main>
+
+    <!-- Google Earth Bottom Status Bar (26px height) -->
+    <footer id="app-status-bar" class="app-status-bar" aria-label="Mission Telemetry & Status Bar">
+      <div class="status-bar-left">
+        <span class="status-mission-tag">MANGALNAUTS</span>
+        <span class="status-sep">·</span>
+        <div id="globe-status-chip" class="globe-status-chip-embedded" aria-live="polite">
+          <span class="chip-item chip-coords" id="globe-chip-coords">18.445°N, 77.451°E</span>
+          <span class="chip-sep">·</span>
+          <span class="chip-item chip-alt" id="globe-chip-alt">EYE 1,200 km</span>
+          <span class="chip-sep">·</span>
+          <span class="chip-item chip-heading" id="globe-chip-heading">HDG 000°</span>
+        </div>
+      </div>
+      <div class="status-bar-right">
+        <span class="status-attribution">USGS / MGS MOLA / NASA PDS / Esri OnMars</span>
+      </div>
+    </footer>
 
     <!-- Scripts -->
     <script src="https://cesium.com/downloads/cesiumjs/releases/1.123/Build/Cesium/Cesium.js"></script>
