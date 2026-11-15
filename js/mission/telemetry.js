@@ -21,6 +21,35 @@ window.MarsTelemetry = (function () {
       if (ltstEl && envData) {
         ltstEl.textContent = getFormattedLTST();
       }
+
+      // Non-static live telemetry updates
+      if (envData) {
+        const windEl = document.getElementById("telemetry-wind");
+        if (windEl) {
+          const baseWind = envData.wind_m_s != null ? envData.wind_m_s : (envData.atmosphere ? envData.atmosphere.wind_speed_ms : 5.2);
+          const dir = (envData.atmosphere && envData.atmosphere.wind_dir_compass) ? " " + envData.atmosphere.wind_dir_compass : "";
+          // Micro-gust boundary layer fluctuations modeled on Mars atmospheric turbulence
+          const gust = Math.sin(simulatedSeconds * 0.4) * 0.45 + Math.sin(simulatedSeconds * 1.1) * 0.25;
+          const liveWind = Math.max(0.2, baseWind + gust).toFixed(1);
+          windEl.textContent = liveWind + " m/s" + dir;
+        }
+
+        const pressEl = document.getElementById("telemetry-pressure");
+        if (pressEl && simulatedSeconds % 3 === 0) {
+          const basePress = envData.pressure_pa != null ? envData.pressure_pa : (envData.atmosphere ? envData.atmosphere.pressure_pa : 775.0);
+          const pressVar = Math.sin(simulatedSeconds * 0.2) * 1.2;
+          pressEl.textContent = Math.round(basePress + pressVar) + " Pa";
+        }
+      }
+
+      // Periodic environment background sync every 60s
+      if (simulatedSeconds > 0 && simulatedSeconds % 60 === 0 && window.MarsData && window.MarsData.loadEnvironment) {
+        window.MarsData.loadEnvironment().then(function (data) {
+          if (data) {
+            envData = data;
+          }
+        }).catch(function () {});
+      }
     }, 1000);
   }
 
@@ -218,6 +247,7 @@ window.MarsTelemetry = (function () {
     const temp = envData.temp_C != null ? envData.temp_C : (envData.atmosphere ? envData.atmosphere.air_temp_c.current : -45.0);
     const press = envData.pressure_pa != null ? envData.pressure_pa : (envData.atmosphere ? envData.atmosphere.pressure_pa : 775.0);
     const wind = envData.wind_m_s != null ? envData.wind_m_s : (envData.atmosphere ? envData.atmosphere.wind_speed_ms : 5.0);
+    const dir = (envData.atmosphere && envData.atmosphere.wind_dir_compass) ? " " + envData.atmosphere.wind_dir_compass : "";
     const radVal = envData.rad_dose_proxy != null ? envData.rad_dose_proxy : (envData.radiation ? envData.radiation.dose_rate_uSv_hr : 28.5);
     const flare = envData.flare_level || "A (Quiet)";
     const sol = envData.sol != null ? envData.sol : 1133;
@@ -244,21 +274,21 @@ window.MarsTelemetry = (function () {
       '    <span class="pill-icon">' + ic("thermometer") + '</span>' +
       '    <div class="pill-text">' +
       '      <span class="telemetry-label">TEMP</span>' +
-      '      <span class="telemetry-value font-mono">' + temp + '°C</span>' +
+      '      <span class="telemetry-value font-mono" id="telemetry-temp">' + temp + '°C</span>' +
       '    </div>' +
       '  </div>' +
       '  <div class="telemetry-pill" title="Atmospheric surface pressure">' +
       '    <span class="pill-icon">' + ic("gauge") + '</span>' +
       '    <div class="pill-text">' +
       '      <span class="telemetry-label">PRESSURE</span>' +
-      '      <span class="telemetry-value font-mono">' + Math.round(press) + ' Pa</span>' +
+      '      <span class="telemetry-value font-mono" id="telemetry-pressure">' + Math.round(press) + ' Pa</span>' +
       '    </div>' +
       '  </div>' +
       '  <div class="telemetry-pill" title="Surface wind velocity from rover anemometer">' +
       '    <span class="pill-icon">' + ic("wind") + '</span>' +
       '    <div class="pill-text">' +
       '      <span class="telemetry-label">WIND</span>' +
-      '      <span class="telemetry-value font-mono">' + wind + ' m/s</span>' +
+      '      <span class="telemetry-value font-mono" id="telemetry-wind">' + wind + ' m/s' + dir + '</span>' +
       '    </div>' +
       '  </div>' +
       '  <div class="telemetry-pill" title="NOAA GOES X-ray solar flare flux & MSL RAD surface dose rate">' +
