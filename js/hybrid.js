@@ -1,35 +1,103 @@
 /* global MarsGlobe, MarsDetailMap, window */
 window.MarsHybrid = (function () {
-  const DETAIL_THRESHOLD_M = 400000;
-  const GLOBE_FADE_IN_DETAIL = 0.35;
-
-  let inDetailMode = false;
+  let currentMode = "2d"; // "3d" | "2d" | "split"
+  let container = null;
+  let globePane = null;
   let detailPane = null;
   let modeEl = null;
   let heightEl = null;
   let onDetailChange = null;
 
   function init(elements) {
-    detailPane = elements.detailPane;
+    container = document.getElementById("viewport-split");
+    globePane = document.getElementById("globe-pane");
+    detailPane = elements.detailPane || document.getElementById("detail-pane");
     modeEl = elements.modeEl;
     heightEl = elements.heightEl;
     onDetailChange = elements.onDetailChange;
 
-    const viewer = MarsGlobe.getViewer();
-    if (!viewer) return;
+    // Ensure 2D detail map is ready
+    if (!MarsDetailMap.isReady()) {
+      MarsDetailMap.init();
+    }
 
-    viewer.scene.postRender.addEventListener(function () {
-      updateMode();
+    const viewer = MarsGlobe.getViewer();
+    if (viewer) {
+      viewer.scene.postRender.addEventListener(updateAltitude);
+      viewer.camera.changed.addEventListener(updateAltitude);
+    }
+
+    // Bind segmented view mode buttons
+    document.querySelectorAll(".view-mode-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        if (window.MarsAudio) MarsAudio.playClick();
+        setViewMode(btn.dataset.mode);
+      });
     });
-    viewer.camera.changed.addEventListener(function () {
-      updateMode();
-    });
+
+    // Default startup in 3D Planetary Globe Orbit with Cosmic Galaxy
+    const initialMode = "3d";
+    setViewMode(initialMode);
   }
 
-  function updateMode() {
+  function setViewMode(mode) {
+    currentMode = ["3d", "2d", "split"].includes(mode) ? mode : "2d";
+
+    if (!container) container = document.getElementById("viewport-split");
+    if (!globePane) globePane = document.getElementById("globe-pane");
+    if (!detailPane) detailPane = document.getElementById("detail-pane");
+
+    // Update active button state
+    document.querySelectorAll(".view-mode-btn").forEach(function (btn) {
+      btn.classList.toggle("active", btn.dataset.mode === currentMode);
+      btn.setAttribute("aria-pressed", String(btn.dataset.mode === currentMode));
+    });
+
+    if (container) {
+      container.classList.remove("mode-3d", "mode-2d", "mode-split");
+      container.classList.add("mode-" + currentMode);
+    }
+
+    if (currentMode === "3d") {
+      if (globePane) globePane.style.display = "block";
+      if (detailPane) detailPane.style.display = "none";
+      const viewer = MarsGlobe.getViewer();
+      if (viewer && viewer.resize) {
+        viewer.resize();
+      }
+    } else if (currentMode === "2d") {
+      if (globePane) globePane.style.display = "none";
+      if (detailPane) detailPane.style.display = "block";
+      MarsDetailMap.invalidateSize();
+    } else {
+      // Split: side-by-side 50/50
+      if (globePane) globePane.style.display = "block";
+      if (detailPane) detailPane.style.display = "block";
+      const viewer = MarsGlobe.getViewer();
+      if (viewer && viewer.resize) {
+        viewer.resize();
+      }
+      MarsDetailMap.invalidateSize();
+    }
+
+    if (modeEl) {
+      const modeLabels = {
+        "3d": "3D Planetary Orbit",
+        "2d": "2D Tactical Surface",
+        "split": "Dual Mission Cockpit",
+      };
+      modeEl.textContent = modeLabels[currentMode] || currentMode.toUpperCase();
+    }
+
+    if (currentMode !== "3d") MarsDetailMap.setSite(window.MarsData.getActiveSiteKey());
+    if (onDetailChange) {
+      onDetailChange(currentMode !== "3d");
+    }
+  }
+
+  function updateAltitude() {
     const state = MarsGlobe.getCameraState();
     if (!state) return;
-
     if (heightEl) {
       const km =
         state.heightM >= 1000
@@ -37,61 +105,14 @@ window.MarsHybrid = (function () {
           : Math.round(state.heightM) + " m";
       heightEl.textContent = km;
     }
-
-    const shouldDetail = state.heightM < DETAIL_THRESHOLD_M;
-
-    if (shouldDetail && !inDetailMode) {
-      enterDetail(state);
-    } else if (!shouldDetail && inDetailMode) {
-      exitDetail();
-    }
   }
 
-  function enterDetail(state) {
-    inDetailMode = true;
-    detailPane.classList.add("open");
-    MarsGlobe.setGlobeOpacity(GLOBE_FADE_IN_DETAIL);
-
-    if (!MarsDetailMap.isReady()) {
-      MarsDetailMap.init();
-    }
-    MarsDetailMap.invalidateSize();
-    if (window.MarsSegmentPick && window.MarsSegmentPick.isActive()) {
-      window.MarsSegmentPick.reset();
-    }
-    MarsDetailMap.flyTo(
-      state.lat,
-      state.lon,
-      state.heightM < 80000 ? 11 : 10
-    );
-
-    if (modeEl && window.MarsTravelMode) {
-      modeEl.textContent = MarsTravelMode.get().label + " · Surface";
-    } else if (modeEl) {
-      modeEl.textContent = "Surface detail";
-    }
-    if (onDetailChange) {
-      onDetailChange(true, state);
-    }
-  }
-
-  function exitDetail() {
-    inDetailMode = false;
-    detailPane.classList.remove("open");
-    MarsGlobe.setGlobeOpacity(1);
-
-    if (modeEl && window.MarsTravelMode) {
-      modeEl.textContent = MarsTravelMode.get().label + " · Planet";
-    } else if (modeEl) {
-      modeEl.textContent = "Planet";
-    }
-    if (onDetailChange) {
-      onDetailChange(false, null);
-    }
+  function getViewMode() {
+    return currentMode;
   }
 
   function isInDetailMode() {
-    return inDetailMode;
+    return currentMode !== "3d";
   }
 
   function syncFromDetail() {
@@ -103,8 +124,9 @@ window.MarsHybrid = (function () {
 
   return {
     init,
+    setViewMode,
+    getViewMode,
     isInDetailMode,
     syncFromDetail,
-    DETAIL_THRESHOLD_M,
   };
 })();

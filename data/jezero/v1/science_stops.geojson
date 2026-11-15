@@ -1,0 +1,213 @@
+{
+  "type": "FeatureCollection",
+  "name": "Jezero_Science_Stops",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.4509,
+          18.4447
+        ]
+      },
+      "properties": {
+        "id": "stop_butler_landing",
+        "name": "Octavia E. Butler Landing",
+        "badge": "\ud83d\ude80",
+        "type": "Landing Site",
+        "sol": 0,
+        "elev_m": -2570,
+        "science_priority": "High",
+        "primary_target": "Perseverance Touchdown Datum",
+        "description": "Historic touchdown site of the Mars 2020 Perseverance rover and Ingenuity helicopter in western Isidis Planitia.",
+        "geology": "Volcanic/impact floor unit, mafic olivine-rich sand and bedrock regolith.",
+        "image_url": "https://mars.nasa.gov/system/resources/detail_files/25695_PIA24428-web.jpg",
+        "image_caption": "First high-resolution color view from Perseverance landing site"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.4082,
+          18.4553
+        ]
+      },
+      "properties": {
+        "id": "stop_delta_front",
+        "name": "Western Delta Scarp (Three Forks)",
+        "badge": "\ud83c\udf0a",
+        "type": "Fluvial Delta Deposit",
+        "sol": 415,
+        "elev_m": -2530,
+        "science_priority": "Critical",
+        "primary_target": "Clay-bearing sedimentary mudstones",
+        "description": "Ancient river delta front where Jezero's river entered the crater lake ~3.7 billion years ago, preserving fine-grained biosignature targets.",
+        "geology": "Layered smectite clays, carbonate minerals, and silica siltstones with high biosignature preservation potential.",
+        "image_url": "https://mars.nasa.gov/system/resources/detail_files/26653_PIA25178-web.jpg",
+        "image_caption": "Perseverance Mastcam-Z mosaic of the Western Delta scarp"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.4372,
+          18.4234
+        ]
+      },
+      "properties": {
+        "id": "stop_kodiak_butte",
+        "name": "Kodiak Butte",
+        "badge": "\u26f0\ufe0f",
+        "type": "Erosional Remnant",
+        "sol": 92,
+        "elev_m": -2480,
+        "science_priority": "High",
+        "primary_target": "Delta Architecture Bottomsets & Foresets",
+        "description": "Isolated mesa remnant of the delta proving lake depth and multi-stage flooding in Jezero's ancient lacustrine system.",
+        "geology": "Steep-dipping delta foreset beds overlain by horizontal topset conglomerate layers with rounded boulders.",
+        "image_url": "https://mars.nasa.gov/system/resources/detail_files/26322_PIA24925-web.jpg",
+        "image_caption": "SuperCam long-distance view of Kodiak mesa cross-bedding"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.4785,
+          18.4021
+        ]
+      },
+      "properties": {
+        "id": "stop_belva_crater",
+        "name": "Belva Impact Crater",
+        "badge": "\u2604\ufe0f",
+        "type": "Impact Structure",
+        "sol": 772,
+        "elev_m": -2640,
+        "science_priority": "Medium",
+        "primary_target": "Deep Subsurface Megabreccia",
+        "description": "Large ~1 km wide impact crater penetrating the delta deposit, excavating pre-existing crater floor strata and hydrothermal rocks.",
+        "geology": "Hydrothermally altered megabreccia, tilted fault blocks, and deep-seated Isidis basin crustal units.",
+        "image_url": "https://mars.nasa.gov/system/resources/detail_files/27447_PIA25867-web.jpg",
+        "image_caption": "Mastcam-Z 360-degree panorama from Belva crater rim"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.3621,
+          18.4982
+        ]
+      },
+      "properties": {
+        "id": "stop_neretva_vallis",
+        "name": "Neretva Vallis Inlet",
+        "badge": "\ud83c\udfde\ufe0f",
+        "type": "Inflow River Canyon",
+        "sol": 1150,
+        "elev_m": -2420,
+        "science_priority": "Critical",
+        "primary_target": "Upstream Crustal Sieve & Boulder Fields",
+        "description": "The deep fluvial channel carved through the western rim of Jezero Crater by catastrophic torrents sourcing materials from hundreds of kilometers away.",
+        "geology": "Conglomerates with exotic volcanic clasts, quartz-bearing igneous rocks, and noachian basement terranes.",
+        "image_url": "https://mars.nasa.gov/system/resources/detail_files/28224_PIA26300-web.jpg",
+        "image_caption": "Neretva Vallis canyon breach looking upstream into Noachian highlands"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.4444,
+          18.4307
+        ]
+      },
+      "properties": {
+        "id": "msr_tube_montdenier",
+        "name": "MSR Sample #2: Montdenier Core (ST20-003)",
+        "badge": "\ud83e\uddea",
+        "type": "MSR Rock Core Tube",
+        "sol": 194,
+        "elev_m": -2560,
+        "science_priority": "Critical",
+        "primary_target": "Rochette vesicular basalt",
+        "description": "Official NASA Mars Sample Return core tube #2. First igneous core successfully cached by Perseverance. Deposited at the Three Forks off-world depot on Sol 653 for recovery by the Sample Retrieval Lander.",
+        "geology": "Vesicular pyroxene-plagioclase basalt with secondary carbonate and sulfate mineral coatings.",
+        "core_length_mm": 59.8,
+        "core_mass_g": 10.2,
+        "depot_status": "Deposited at Three Forks Depot",
+        "image_url": "https://mars.nasa.gov/system/resources/detail_files/26200_PIA24836.jpg",
+        "image_caption": "Montdenier rock core inside Perseverance sample tube #003"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.4105,
+          18.4518
+        ]
+      },
+      "properties": {
+        "id": "msr_tube_malay",
+        "name": "MSR Sample #7: Malay Delta Mudstone (ST20-008)",
+        "badge": "\ud83e\uddea",
+        "type": "MSR Rock Core Tube",
+        "sol": 423,
+        "elev_m": -2535,
+        "science_priority": "Highest",
+        "primary_target": "Amalik delta front mudstone",
+        "description": "Official NASA Mars Sample Return core tube #7. Fine-grained delta mudstone rich in phyllosilicate smectite clays with exceptional biosignature preservation potential. Secured inside the Rover Belly Cache.",
+        "geology": "Fine-grained smectite clay mudstone preserving high organic carbon concentrations (SHERLOC / SuperCam).",
+        "core_length_mm": 61.2,
+        "core_mass_g": 11.5,
+        "depot_status": "Secured in Onboard Rover Belly Cache",
+        "image_url": "https://mars.nasa.gov/system/resources/detail_files/26700_malay_core.jpg",
+        "image_caption": "Malay delta front rock core inside Perseverance sample tube #008"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.382,
+          18.471
+        ]
+      },
+      "properties": {
+        "id": "msr_tube_bearwallow",
+        "name": "MSR Sample #13: Bearwallow Delta Top (ST20-014)",
+        "badge": "\ud83e\uddea",
+        "type": "MSR Rock Core Tube",
+        "sol": 653,
+        "elev_m": -2490,
+        "science_priority": "Critical",
+        "primary_target": "Kukaklek delta top sandstone",
+        "description": "Official NASA Mars Sample Return core tube #13. Coarse-grained sandstone from the delta top fluvial flood deposits, deposited at the Three Forks Depot on Sol 680.",
+        "geology": "Feldspathic lithic sandstone with cross-bedding and iron-magnesium phyllosilicates.",
+        "core_length_mm": 62.4,
+        "core_mass_g": 12.8,
+        "depot_status": "Deposited at Three Forks Depot",
+        "image_url": "https://mars.nasa.gov/system/resources/detail_files/27200_bearwallow_core.jpg",
+        "image_caption": "Bearwallow rock core sample tube"
+      }
+    }
+  ]
+}

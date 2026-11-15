@@ -1,0 +1,28 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gale Crater Mount Sharp AOI",
+        "type": "AOI_BOUNDARY",
+        "target_body": "Mars",
+        "datum": "IAU2000:49900",
+        "site_id": "gale",
+        "color": "#f59e0b"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [137.300, -4.850],
+            [137.480, -4.850],
+            [137.480, -4.550],
+            [137.300, -4.550],
+            [137.300, -4.850]
+          ]
+        ]
+      }
+    }
+  ]
+}

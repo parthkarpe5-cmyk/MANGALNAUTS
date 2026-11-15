@@ -1,503 +1,2293 @@
 {
+  "graph_id": "jezero_delta_v1",
+  "site_id": "jezero",
   "model_meta": {
     "architecture": "2-Layer Graph Convolutional Network (GCN) with Multi-Task Residual Heads",
     "features_used": [
       "elev_m",
       "slope_deg",
+      "themis_ti_val",
+      "traction_risk",
+      "crism_science_score",
       "surface_temp_C",
       "rad_dose_proxy_uSv_hr",
-      "pressure_pa",
-      "dust_optical_depth_tau"
+      "pressure_pa"
     ],
-    "environmental_source": "data/jezero/v1/environment.json (Member 4)",
-    "inference_time_ms": 62.84,
-    "num_nodes": 121,
-    "generated_at_utc": "2026-11-14T03:29:25.972273+00:00"
+    "graph_id": "jezero_delta_v1",
+    "environmental_source": "data/jezero/v1/environment.json",
+    "geospatial_source": "data/jezero/v1/terrain_graph.json",
+    "inference_time_ms": 35.68,
+    "num_nodes": 324,
+    "generated_at_utc": "2026-11-14T13:52:20.167635+00:00"
   },
   "nodes": {
     "n_0_0": {
-      "risk_0_1": 0.914,
-      "science_0_100": 76.7
+      "risk_0_1": 0.428,
+      "science_0_100": 35.1,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_0_1": {
-      "risk_0_1": 0.904,
-      "science_0_100": 76.7
+      "risk_0_1": 0.429,
+      "science_0_100": 35.0,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_0_2": {
-      "risk_0_1": 0.894,
-      "science_0_100": 76.8
+      "risk_0_1": 0.429,
+      "science_0_100": 35.0,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_0_3": {
-      "risk_0_1": 0.886,
-      "science_0_100": 76.8
+      "risk_0_1": 0.429,
+      "science_0_100": 35.0,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_0_4": {
-      "risk_0_1": 0.881,
-      "science_0_100": 76.8
+      "risk_0_1": 0.429,
+      "science_0_100": 35.0,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_0_5": {
-      "risk_0_1": 0.88,
-      "science_0_100": 76.9
+      "risk_0_1": 0.429,
+      "science_0_100": 35.0,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_0_6": {
-      "risk_0_1": 0.881,
-      "science_0_100": 76.9
+      "risk_0_1": 0.429,
+      "science_0_100": 35.0,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_0_7": {
-      "risk_0_1": 0.886,
-      "science_0_100": 76.9
+      "risk_0_1": 0.43,
+      "science_0_100": 35.1,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_0_8": {
-      "risk_0_1": 0.894,
-      "science_0_100": 77.0
+      "risk_0_1": 0.52,
+      "science_0_100": 37.5,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_0_9": {
-      "risk_0_1": 0.904,
-      "science_0_100": 77.0
+      "risk_0_1": 0.521,
+      "science_0_100": 40.6,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_0_10": {
-      "risk_0_1": 0.914,
-      "science_0_100": 77.1
+      "risk_0_1": 0.522,
+      "science_0_100": 41.2,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_0_11": {
+      "risk_0_1": 0.522,
+      "science_0_100": 41.2,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_0_12": {
+      "risk_0_1": 0.522,
+      "science_0_100": 41.2,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_0_13": {
+      "risk_0_1": 0.521,
+      "science_0_100": 41.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_0_14": {
+      "risk_0_1": 0.519,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_0_15": {
+      "risk_0_1": 0.518,
+      "science_0_100": 93.2,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "HYDROTHERMAL_MEGABRECCIA"
+    },
+    "n_0_16": {
+      "risk_0_1": 0.71,
+      "science_0_100": 93.5,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "HYDROTHERMAL_MEGABRECCIA"
+    },
+    "n_0_17": {
+      "risk_0_1": 0.709,
+      "science_0_100": 93.3,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "HYDROTHERMAL_MEGABRECCIA"
     },
     "n_1_0": {
-      "risk_0_1": 0.904,
-      "science_0_100": 76.6
+      "risk_0_1": 0.429,
+      "science_0_100": 34.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_1_1": {
-      "risk_0_1": 0.891,
-      "science_0_100": 76.6
+      "risk_0_1": 0.43,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_1_2": {
-      "risk_0_1": 0.88,
-      "science_0_100": 76.7
+      "risk_0_1": 0.43,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_1_3": {
-      "risk_0_1": 0.869,
-      "science_0_100": 76.7
+      "risk_0_1": 0.43,
+      "science_0_100": 34.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_1_4": {
-      "risk_0_1": 0.863,
-      "science_0_100": 76.7
+      "risk_0_1": 0.43,
+      "science_0_100": 34.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_1_5": {
-      "risk_0_1": 0.86,
-      "science_0_100": 76.7
+      "risk_0_1": 0.43,
+      "science_0_100": 34.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_1_6": {
-      "risk_0_1": 0.863,
-      "science_0_100": 76.8
+      "risk_0_1": 0.43,
+      "science_0_100": 34.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_1_7": {
-      "risk_0_1": 0.869,
-      "science_0_100": 76.8
+      "risk_0_1": 0.431,
+      "science_0_100": 35.0,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_1_8": {
-      "risk_0_1": 0.88,
-      "science_0_100": 76.9
+      "risk_0_1": 0.522,
+      "science_0_100": 37.5,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_1_9": {
-      "risk_0_1": 0.891,
-      "science_0_100": 76.9
+      "risk_0_1": 0.523,
+      "science_0_100": 40.6,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_1_10": {
-      "risk_0_1": 0.904,
-      "science_0_100": 77.0
+      "risk_0_1": 0.524,
+      "science_0_100": 41.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_1_11": {
+      "risk_0_1": 0.524,
+      "science_0_100": 41.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_1_12": {
+      "risk_0_1": 0.524,
+      "science_0_100": 41.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_1_13": {
+      "risk_0_1": 0.523,
+      "science_0_100": 41.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_1_14": {
+      "risk_0_1": 0.521,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_1_15": {
+      "risk_0_1": 0.71,
+      "science_0_100": 93.4,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "HYDROTHERMAL_MEGABRECCIA"
+    },
+    "n_1_16": {
+      "risk_0_1": 0.711,
+      "science_0_100": 93.6,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "HYDROTHERMAL_MEGABRECCIA"
+    },
+    "n_1_17": {
+      "risk_0_1": 0.71,
+      "science_0_100": 93.5,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "HYDROTHERMAL_MEGABRECCIA"
     },
     "n_2_0": {
-      "risk_0_1": 0.894,
-      "science_0_100": 76.6
+      "risk_0_1": 0.429,
+      "science_0_100": 34.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_2_1": {
-      "risk_0_1": 0.88,
-      "science_0_100": 76.6
+      "risk_0_1": 0.43,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_2_2": {
-      "risk_0_1": 0.864,
-      "science_0_100": 76.6
+      "risk_0_1": 0.43,
+      "science_0_100": 34.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_2_3": {
-      "risk_0_1": 0.851,
-      "science_0_100": 76.6
+      "risk_0_1": 0.43,
+      "science_0_100": 34.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_2_4": {
-      "risk_0_1": 0.841,
-      "science_0_100": 76.7
+      "risk_0_1": 0.43,
+      "science_0_100": 34.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_2_5": {
-      "risk_0_1": 0.837,
-      "science_0_100": 76.7
+      "risk_0_1": 0.43,
+      "science_0_100": 34.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_2_6": {
-      "risk_0_1": 0.841,
-      "science_0_100": 76.7
+      "risk_0_1": 0.43,
+      "science_0_100": 34.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_2_7": {
-      "risk_0_1": 0.851,
-      "science_0_100": 76.8
+      "risk_0_1": 0.431,
+      "science_0_100": 35.0,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_2_8": {
-      "risk_0_1": 0.864,
-      "science_0_100": 76.8
+      "risk_0_1": 0.521,
+      "science_0_100": 37.4,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_2_9": {
-      "risk_0_1": 0.88,
-      "science_0_100": 76.9
+      "risk_0_1": 0.522,
+      "science_0_100": 40.5,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_2_10": {
-      "risk_0_1": 0.894,
-      "science_0_100": 76.9
+      "risk_0_1": 0.523,
+      "science_0_100": 41.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_2_11": {
+      "risk_0_1": 0.523,
+      "science_0_100": 41.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_2_12": {
+      "risk_0_1": 0.523,
+      "science_0_100": 41.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_2_13": {
+      "risk_0_1": 0.523,
+      "science_0_100": 41.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_2_14": {
+      "risk_0_1": 0.521,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_2_15": {
+      "risk_0_1": 0.519,
+      "science_0_100": 93.2,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "HYDROTHERMAL_MEGABRECCIA"
+    },
+    "n_2_16": {
+      "risk_0_1": 0.71,
+      "science_0_100": 93.5,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "HYDROTHERMAL_MEGABRECCIA"
+    },
+    "n_2_17": {
+      "risk_0_1": 0.709,
+      "science_0_100": 93.4,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "HYDROTHERMAL_MEGABRECCIA"
     },
     "n_3_0": {
-      "risk_0_1": 0.886,
-      "science_0_100": 76.6
+      "risk_0_1": 0.429,
+      "science_0_100": 34.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_3_1": {
-      "risk_0_1": 0.869,
-      "science_0_100": 76.5
+      "risk_0_1": 0.43,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_3_2": {
-      "risk_0_1": 0.851,
-      "science_0_100": 76.6
+      "risk_0_1": 0.43,
+      "science_0_100": 34.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_3_3": {
-      "risk_0_1": 0.832,
-      "science_0_100": 76.6
+      "risk_0_1": 0.43,
+      "science_0_100": 34.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_3_4": {
-      "risk_0_1": 0.817,
-      "science_0_100": 76.6
+      "risk_0_1": 0.43,
+      "science_0_100": 34.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_3_5": {
-      "risk_0_1": 0.811,
-      "science_0_100": 76.6
+      "risk_0_1": 0.43,
+      "science_0_100": 34.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_3_6": {
-      "risk_0_1": 0.817,
-      "science_0_100": 76.7
+      "risk_0_1": 0.43,
+      "science_0_100": 34.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_3_7": {
-      "risk_0_1": 0.832,
-      "science_0_100": 76.7
+      "risk_0_1": 0.43,
+      "science_0_100": 35.0,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_3_8": {
-      "risk_0_1": 0.851,
-      "science_0_100": 76.8
+      "risk_0_1": 0.521,
+      "science_0_100": 37.4,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_3_9": {
-      "risk_0_1": 0.869,
-      "science_0_100": 76.8
+      "risk_0_1": 0.765,
+      "science_0_100": 40.4,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_3_10": {
-      "risk_0_1": 0.886,
-      "science_0_100": 76.9
+      "risk_0_1": 0.522,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_3_11": {
+      "risk_0_1": 0.522,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_3_12": {
+      "risk_0_1": 0.522,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_3_13": {
+      "risk_0_1": 0.523,
+      "science_0_100": 41.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_3_14": {
+      "risk_0_1": 0.522,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_3_15": {
+      "risk_0_1": 0.521,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_3_16": {
+      "risk_0_1": 0.52,
+      "science_0_100": 41.7,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_3_17": {
+      "risk_0_1": 0.518,
+      "science_0_100": 41.2,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_4_0": {
-      "risk_0_1": 0.881,
-      "science_0_100": 76.5
+      "risk_0_1": 0.429,
+      "science_0_100": 34.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_4_1": {
-      "risk_0_1": 0.863,
-      "science_0_100": 76.5
+      "risk_0_1": 0.43,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_4_2": {
-      "risk_0_1": 0.841,
-      "science_0_100": 76.5
+      "risk_0_1": 0.43,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_4_3": {
-      "risk_0_1": 0.817,
-      "science_0_100": 76.5
+      "risk_0_1": 0.43,
+      "science_0_100": 34.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_4_4": {
-      "risk_0_1": 0.795,
-      "science_0_100": 76.5
+      "risk_0_1": 0.43,
+      "science_0_100": 34.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_4_5": {
-      "risk_0_1": 0.783,
-      "science_0_100": 76.5
+      "risk_0_1": 0.429,
+      "science_0_100": 34.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_4_6": {
-      "risk_0_1": 0.795,
-      "science_0_100": 76.6
+      "risk_0_1": 0.43,
+      "science_0_100": 34.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_4_7": {
-      "risk_0_1": 0.817,
-      "science_0_100": 76.7
+      "risk_0_1": 0.43,
+      "science_0_100": 34.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_4_8": {
-      "risk_0_1": 0.841,
-      "science_0_100": 76.7
+      "risk_0_1": 0.52,
+      "science_0_100": 37.3,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_4_9": {
-      "risk_0_1": 0.863,
-      "science_0_100": 76.7
+      "risk_0_1": 0.764,
+      "science_0_100": 40.4,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_4_10": {
-      "risk_0_1": 0.881,
-      "science_0_100": 76.9
+      "risk_0_1": 0.522,
+      "science_0_100": 40.5,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_4_11": {
+      "risk_0_1": 0.803,
+      "science_0_100": 59.5,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "MAFIC_BEDROCK"
+    },
+    "n_4_12": {
+      "risk_0_1": 0.522,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_4_13": {
+      "risk_0_1": 0.523,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_4_14": {
+      "risk_0_1": 0.523,
+      "science_0_100": 41.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_4_15": {
+      "risk_0_1": 0.523,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_4_16": {
+      "risk_0_1": 0.523,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_4_17": {
+      "risk_0_1": 0.521,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_5_0": {
-      "risk_0_1": 0.88,
-      "science_0_100": 76.5
+      "risk_0_1": 0.429,
+      "science_0_100": 34.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_5_1": {
-      "risk_0_1": 0.86,
-      "science_0_100": 76.4
+      "risk_0_1": 0.43,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_5_2": {
-      "risk_0_1": 0.837,
-      "science_0_100": 76.5
+      "risk_0_1": 0.43,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_5_3": {
-      "risk_0_1": 0.811,
-      "science_0_100": 76.5
+      "risk_0_1": 0.43,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_5_4": {
-      "risk_0_1": 0.783,
-      "science_0_100": 76.5
+      "risk_0_1": 0.43,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_5_5": {
-      "risk_0_1": 0.751,
-      "science_0_100": 76.5
+      "risk_0_1": 0.429,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_5_6": {
-      "risk_0_1": 0.783,
-      "science_0_100": 76.5
+      "risk_0_1": 0.429,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_5_7": {
-      "risk_0_1": 0.811,
-      "science_0_100": 76.6
+      "risk_0_1": 0.429,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_5_8": {
-      "risk_0_1": 0.837,
-      "science_0_100": 76.7
+      "risk_0_1": 0.52,
+      "science_0_100": 95.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "CARBONATE_MARGIN"
     },
     "n_5_9": {
-      "risk_0_1": 0.86,
-      "science_0_100": 76.7
+      "risk_0_1": 0.764,
+      "science_0_100": 40.3,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_5_10": {
-      "risk_0_1": 0.88,
-      "science_0_100": 76.8
+      "risk_0_1": 0.521,
+      "science_0_100": 40.7,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_5_11": {
+      "risk_0_1": 0.804,
+      "science_0_100": 60.4,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "MAFIC_BEDROCK"
+    },
+    "n_5_12": {
+      "risk_0_1": 0.522,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_5_13": {
+      "risk_0_1": 0.523,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_5_14": {
+      "risk_0_1": 0.523,
+      "science_0_100": 41.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_5_15": {
+      "risk_0_1": 0.523,
+      "science_0_100": 41.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_5_16": {
+      "risk_0_1": 0.524,
+      "science_0_100": 41.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_5_17": {
+      "risk_0_1": 0.522,
+      "science_0_100": 41.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_6_0": {
-      "risk_0_1": 0.881,
-      "science_0_100": 76.4
+      "risk_0_1": 0.429,
+      "science_0_100": 34.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_6_1": {
-      "risk_0_1": 0.863,
-      "science_0_100": 76.4
+      "risk_0_1": 0.43,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_6_2": {
-      "risk_0_1": 0.841,
-      "science_0_100": 76.4
+      "risk_0_1": 0.43,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_6_3": {
-      "risk_0_1": 0.817,
-      "science_0_100": 76.4
+      "risk_0_1": 0.43,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_6_4": {
-      "risk_0_1": 0.795,
-      "science_0_100": 76.4
+      "risk_0_1": 0.43,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_6_5": {
-      "risk_0_1": 0.783,
-      "science_0_100": 76.5
+      "risk_0_1": 0.429,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_6_6": {
-      "risk_0_1": 0.795,
-      "science_0_100": 76.5
+      "risk_0_1": 0.429,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_6_7": {
-      "risk_0_1": 0.817,
-      "science_0_100": 76.6
+      "risk_0_1": 0.429,
+      "science_0_100": 94.6,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "CARBONATE_MARGIN"
     },
     "n_6_8": {
-      "risk_0_1": 0.841,
-      "science_0_100": 76.6
+      "risk_0_1": 0.519,
+      "science_0_100": 95.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "CARBONATE_MARGIN"
     },
     "n_6_9": {
-      "risk_0_1": 0.863,
-      "science_0_100": 76.7
+      "risk_0_1": 0.764,
+      "science_0_100": 40.3,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_6_10": {
-      "risk_0_1": 0.881,
-      "science_0_100": 76.8
+      "risk_0_1": 0.522,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_6_11": {
+      "risk_0_1": 0.523,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_6_12": {
+      "risk_0_1": 0.523,
+      "science_0_100": 41.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_6_13": {
+      "risk_0_1": 0.523,
+      "science_0_100": 41.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_6_14": {
+      "risk_0_1": 0.523,
+      "science_0_100": 41.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_6_15": {
+      "risk_0_1": 0.523,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_6_16": {
+      "risk_0_1": 0.524,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_6_17": {
+      "risk_0_1": 0.522,
+      "science_0_100": 41.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_7_0": {
-      "risk_0_1": 0.886,
-      "science_0_100": 76.4
+      "risk_0_1": 0.429,
+      "science_0_100": 34.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_7_1": {
-      "risk_0_1": 0.869,
-      "science_0_100": 76.3
+      "risk_0_1": 0.43,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_7_2": {
-      "risk_0_1": 0.851,
-      "science_0_100": 76.4
+      "risk_0_1": 0.43,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_7_3": {
-      "risk_0_1": 0.833,
-      "science_0_100": 76.4
+      "risk_0_1": 0.43,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_7_4": {
-      "risk_0_1": 0.817,
-      "science_0_100": 76.4
+      "risk_0_1": 0.43,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_7_5": {
-      "risk_0_1": 0.811,
-      "science_0_100": 76.4
+      "risk_0_1": 0.429,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_7_6": {
-      "risk_0_1": 0.817,
-      "science_0_100": 76.5
+      "risk_0_1": 0.429,
+      "science_0_100": 34.7,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_7_7": {
-      "risk_0_1": 0.833,
-      "science_0_100": 76.5
+      "risk_0_1": 0.429,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_7_8": {
-      "risk_0_1": 0.851,
-      "science_0_100": 76.6
+      "risk_0_1": 0.519,
+      "science_0_100": 95.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "CARBONATE_MARGIN"
     },
     "n_7_9": {
-      "risk_0_1": 0.869,
-      "science_0_100": 76.6
+      "risk_0_1": 0.764,
+      "science_0_100": 40.3,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_7_10": {
-      "risk_0_1": 0.886,
-      "science_0_100": 76.7
+      "risk_0_1": 0.523,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_7_11": {
+      "risk_0_1": 0.524,
+      "science_0_100": 41.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_7_12": {
+      "risk_0_1": 0.731,
+      "science_0_100": 41.2,
+      "traction_risk": 0.85,
+      "themis_ti_val": 160,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_7_13": {
+      "risk_0_1": 0.524,
+      "science_0_100": 41.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_7_14": {
+      "risk_0_1": 0.524,
+      "science_0_100": 41.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_7_15": {
+      "risk_0_1": 0.523,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_7_16": {
+      "risk_0_1": 0.524,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_7_17": {
+      "risk_0_1": 0.522,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_8_0": {
-      "risk_0_1": 0.894,
-      "science_0_100": 76.3
+      "risk_0_1": 0.429,
+      "science_0_100": 34.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_8_1": {
-      "risk_0_1": 0.88,
-      "science_0_100": 76.3
+      "risk_0_1": 0.43,
+      "science_0_100": 34.7,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_8_2": {
-      "risk_0_1": 0.864,
-      "science_0_100": 76.3
+      "risk_0_1": 0.43,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_8_3": {
-      "risk_0_1": 0.851,
-      "science_0_100": 76.4
+      "risk_0_1": 0.43,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_8_4": {
-      "risk_0_1": 0.841,
-      "science_0_100": 76.4
+      "risk_0_1": 0.429,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_8_5": {
-      "risk_0_1": 0.837,
-      "science_0_100": 76.4
+      "risk_0_1": 0.429,
+      "science_0_100": 34.7,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_8_6": {
-      "risk_0_1": 0.841,
-      "science_0_100": 76.5
+      "risk_0_1": 0.429,
+      "science_0_100": 34.7,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_8_7": {
-      "risk_0_1": 0.851,
-      "science_0_100": 76.5
+      "risk_0_1": 0.429,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_8_8": {
-      "risk_0_1": 0.864,
-      "science_0_100": 76.5
+      "risk_0_1": 0.52,
+      "science_0_100": 37.2,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_8_9": {
-      "risk_0_1": 0.88,
-      "science_0_100": 76.6
+      "risk_0_1": 0.765,
+      "science_0_100": 40.3,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_8_10": {
-      "risk_0_1": 0.894,
-      "science_0_100": 76.7
+      "risk_0_1": 0.524,
+      "science_0_100": 41.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_8_11": {
+      "risk_0_1": 0.731,
+      "science_0_100": 41.2,
+      "traction_risk": 0.85,
+      "themis_ti_val": 160,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_8_12": {
+      "risk_0_1": 0.732,
+      "science_0_100": 41.2,
+      "traction_risk": 0.85,
+      "themis_ti_val": 160,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_8_13": {
+      "risk_0_1": 0.525,
+      "science_0_100": 41.2,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_8_14": {
+      "risk_0_1": 0.524,
+      "science_0_100": 41.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_8_15": {
+      "risk_0_1": 0.523,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_8_16": {
+      "risk_0_1": 0.524,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_8_17": {
+      "risk_0_1": 0.522,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_9_0": {
-      "risk_0_1": 0.904,
-      "science_0_100": 76.2
+      "risk_0_1": 0.429,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_9_1": {
-      "risk_0_1": 0.891,
-      "science_0_100": 76.2
+      "risk_0_1": 0.43,
+      "science_0_100": 34.7,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_9_2": {
-      "risk_0_1": 0.88,
-      "science_0_100": 76.3
+      "risk_0_1": 0.43,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_9_3": {
-      "risk_0_1": 0.869,
-      "science_0_100": 76.3
+      "risk_0_1": 0.43,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_9_4": {
-      "risk_0_1": 0.863,
-      "science_0_100": 76.3
+      "risk_0_1": 0.429,
+      "science_0_100": 34.7,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_9_5": {
-      "risk_0_1": 0.86,
-      "science_0_100": 76.4
+      "risk_0_1": 0.429,
+      "science_0_100": 34.7,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_9_6": {
-      "risk_0_1": 0.863,
-      "science_0_100": 76.4
+      "risk_0_1": 0.429,
+      "science_0_100": 96.3,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "FE_MG_SMECTITE_CLAY"
     },
     "n_9_7": {
-      "risk_0_1": 0.869,
-      "science_0_100": 76.4
+      "risk_0_1": 0.429,
+      "science_0_100": 96.4,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "FE_MG_SMECTITE_CLAY"
     },
     "n_9_8": {
-      "risk_0_1": 0.88,
-      "science_0_100": 76.5
+      "risk_0_1": 0.52,
+      "science_0_100": 37.2,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_9_9": {
-      "risk_0_1": 0.891,
-      "science_0_100": 76.5
+      "risk_0_1": 0.765,
+      "science_0_100": 40.3,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_9_10": {
-      "risk_0_1": 0.904,
-      "science_0_100": 76.6
+      "risk_0_1": 0.524,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_9_11": {
+      "risk_0_1": 0.731,
+      "science_0_100": 41.2,
+      "traction_risk": 0.85,
+      "themis_ti_val": 160,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_9_12": {
+      "risk_0_1": 0.731,
+      "science_0_100": 41.2,
+      "traction_risk": 0.85,
+      "themis_ti_val": 160,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_9_13": {
+      "risk_0_1": 0.524,
+      "science_0_100": 41.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_9_14": {
+      "risk_0_1": 0.524,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_9_15": {
+      "risk_0_1": 0.523,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_9_16": {
+      "risk_0_1": 0.524,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_9_17": {
+      "risk_0_1": 0.522,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_10_0": {
-      "risk_0_1": 0.914,
-      "science_0_100": 76.3
+      "risk_0_1": 0.429,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_10_1": {
-      "risk_0_1": 0.904,
-      "science_0_100": 76.2
+      "risk_0_1": 0.43,
+      "science_0_100": 34.7,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_10_2": {
-      "risk_0_1": 0.894,
-      "science_0_100": 76.3
+      "risk_0_1": 0.43,
+      "science_0_100": 34.7,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_10_3": {
-      "risk_0_1": 0.886,
-      "science_0_100": 76.3
+      "risk_0_1": 0.43,
+      "science_0_100": 34.7,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_10_4": {
-      "risk_0_1": 0.881,
-      "science_0_100": 76.4
+      "risk_0_1": 0.43,
+      "science_0_100": 34.7,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_10_5": {
-      "risk_0_1": 0.88,
-      "science_0_100": 76.4
+      "risk_0_1": 0.429,
+      "science_0_100": 34.7,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_10_6": {
-      "risk_0_1": 0.881,
-      "science_0_100": 76.4
+      "risk_0_1": 0.429,
+      "science_0_100": 34.7,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_10_7": {
-      "risk_0_1": 0.886,
-      "science_0_100": 76.5
+      "risk_0_1": 0.43,
+      "science_0_100": 96.4,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "FE_MG_SMECTITE_CLAY"
     },
     "n_10_8": {
-      "risk_0_1": 0.894,
-      "science_0_100": 76.5
+      "risk_0_1": 0.52,
+      "science_0_100": 37.2,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_10_9": {
-      "risk_0_1": 0.904,
-      "science_0_100": 76.5
+      "risk_0_1": 0.765,
+      "science_0_100": 40.3,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
     },
     "n_10_10": {
-      "risk_0_1": 0.914,
-      "science_0_100": 76.6
+      "risk_0_1": 0.524,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_10_11": {
+      "risk_0_1": 0.524,
+      "science_0_100": 41.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_10_12": {
+      "risk_0_1": 0.524,
+      "science_0_100": 41.1,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_10_13": {
+      "risk_0_1": 0.524,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_10_14": {
+      "risk_0_1": 0.523,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_10_15": {
+      "risk_0_1": 0.523,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_10_16": {
+      "risk_0_1": 0.524,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_10_17": {
+      "risk_0_1": 0.522,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_11_0": {
+      "risk_0_1": 0.429,
+      "science_0_100": 34.3,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_11_1": {
+      "risk_0_1": 0.431,
+      "science_0_100": 34.0,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_11_2": {
+      "risk_0_1": 0.43,
+      "science_0_100": 34.2,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_11_3": {
+      "risk_0_1": 0.43,
+      "science_0_100": 34.7,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_11_4": {
+      "risk_0_1": 0.43,
+      "science_0_100": 34.7,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_11_5": {
+      "risk_0_1": 0.429,
+      "science_0_100": 34.7,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_11_6": {
+      "risk_0_1": 0.429,
+      "science_0_100": 34.7,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_11_7": {
+      "risk_0_1": 0.43,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_11_8": {
+      "risk_0_1": 0.521,
+      "science_0_100": 37.2,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_11_9": {
+      "risk_0_1": 0.765,
+      "science_0_100": 40.3,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_11_10": {
+      "risk_0_1": 0.523,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_11_11": {
+      "risk_0_1": 0.523,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_11_12": {
+      "risk_0_1": 0.524,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_11_13": {
+      "risk_0_1": 0.523,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_11_14": {
+      "risk_0_1": 0.523,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_11_15": {
+      "risk_0_1": 0.523,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_11_16": {
+      "risk_0_1": 0.524,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_11_17": {
+      "risk_0_1": 0.522,
+      "science_0_100": 41.0,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_12_0": {
+      "risk_0_1": 0.43,
+      "science_0_100": 32.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_12_1": {
+      "risk_0_1": 0.431,
+      "science_0_100": 32.4,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_12_2": {
+      "risk_0_1": 0.431,
+      "science_0_100": 32.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_12_3": {
+      "risk_0_1": 0.43,
+      "science_0_100": 33.5,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_12_4": {
+      "risk_0_1": 0.43,
+      "science_0_100": 34.6,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_12_5": {
+      "risk_0_1": 0.43,
+      "science_0_100": 34.7,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_12_6": {
+      "risk_0_1": 0.43,
+      "science_0_100": 34.7,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_12_7": {
+      "risk_0_1": 0.43,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_12_8": {
+      "risk_0_1": 0.521,
+      "science_0_100": 37.3,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_12_9": {
+      "risk_0_1": 0.765,
+      "science_0_100": 40.3,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_12_10": {
+      "risk_0_1": 0.523,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_12_11": {
+      "risk_0_1": 0.523,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_12_12": {
+      "risk_0_1": 0.523,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_12_13": {
+      "risk_0_1": 0.523,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_12_14": {
+      "risk_0_1": 0.523,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_12_15": {
+      "risk_0_1": 0.523,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_12_16": {
+      "risk_0_1": 0.524,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_12_17": {
+      "risk_0_1": 0.522,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_13_0": {
+      "risk_0_1": 0.43,
+      "science_0_100": 31.3,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_13_1": {
+      "risk_0_1": 0.432,
+      "science_0_100": 30.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_13_2": {
+      "risk_0_1": 0.431,
+      "science_0_100": 31.3,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_13_3": {
+      "risk_0_1": 0.431,
+      "science_0_100": 32.3,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_13_4": {
+      "risk_0_1": 0.43,
+      "science_0_100": 33.6,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_13_5": {
+      "risk_0_1": 0.43,
+      "science_0_100": 34.7,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_13_6": {
+      "risk_0_1": 0.43,
+      "science_0_100": 34.7,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_13_7": {
+      "risk_0_1": 0.431,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_13_8": {
+      "risk_0_1": 0.521,
+      "science_0_100": 37.3,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_13_9": {
+      "risk_0_1": 0.765,
+      "science_0_100": 40.3,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_13_10": {
+      "risk_0_1": 0.523,
+      "science_0_100": 40.8,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_13_11": {
+      "risk_0_1": 0.523,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_13_12": {
+      "risk_0_1": 0.523,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_13_13": {
+      "risk_0_1": 0.523,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_13_14": {
+      "risk_0_1": 0.523,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_13_15": {
+      "risk_0_1": 0.523,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_13_16": {
+      "risk_0_1": 0.524,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_13_17": {
+      "risk_0_1": 0.522,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_14_0": {
+      "risk_0_1": 0.73,
+      "science_0_100": 91.6,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "FLUVIAL_CONGLOMERATE"
+    },
+    "n_14_1": {
+      "risk_0_1": 0.732,
+      "science_0_100": 91.4,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "FLUVIAL_CONGLOMERATE"
+    },
+    "n_14_2": {
+      "risk_0_1": 0.432,
+      "science_0_100": 30.0,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_14_3": {
+      "risk_0_1": 0.431,
+      "science_0_100": 31.2,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_14_4": {
+      "risk_0_1": 0.431,
+      "science_0_100": 32.7,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_14_5": {
+      "risk_0_1": 0.43,
+      "science_0_100": 34.3,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_14_6": {
+      "risk_0_1": 0.43,
+      "science_0_100": 34.7,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_14_7": {
+      "risk_0_1": 0.431,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_14_8": {
+      "risk_0_1": 0.521,
+      "science_0_100": 37.2,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_14_9": {
+      "risk_0_1": 0.765,
+      "science_0_100": 40.3,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_14_10": {
+      "risk_0_1": 0.523,
+      "science_0_100": 40.8,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_14_11": {
+      "risk_0_1": 0.523,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_14_12": {
+      "risk_0_1": 0.523,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_14_13": {
+      "risk_0_1": 0.523,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_14_14": {
+      "risk_0_1": 0.523,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_14_15": {
+      "risk_0_1": 0.523,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_14_16": {
+      "risk_0_1": 0.524,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_14_17": {
+      "risk_0_1": 0.522,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_15_0": {
+      "risk_0_1": 0.731,
+      "science_0_100": 91.1,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "FLUVIAL_CONGLOMERATE"
+    },
+    "n_15_1": {
+      "risk_0_1": 0.733,
+      "science_0_100": 90.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "FLUVIAL_CONGLOMERATE"
+    },
+    "n_15_2": {
+      "risk_0_1": 0.732,
+      "science_0_100": 91.2,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "FLUVIAL_CONGLOMERATE"
+    },
+    "n_15_3": {
+      "risk_0_1": 0.432,
+      "science_0_100": 30.4,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_15_4": {
+      "risk_0_1": 0.431,
+      "science_0_100": 32.1,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_15_5": {
+      "risk_0_1": 0.43,
+      "science_0_100": 33.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_15_6": {
+      "risk_0_1": 0.43,
+      "science_0_100": 34.7,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_15_7": {
+      "risk_0_1": 0.431,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_15_8": {
+      "risk_0_1": 0.522,
+      "science_0_100": 37.2,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_15_9": {
+      "risk_0_1": 0.765,
+      "science_0_100": 40.2,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_15_10": {
+      "risk_0_1": 0.523,
+      "science_0_100": 40.8,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_15_11": {
+      "risk_0_1": 0.523,
+      "science_0_100": 40.8,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_15_12": {
+      "risk_0_1": 0.523,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_15_13": {
+      "risk_0_1": 0.523,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_15_14": {
+      "risk_0_1": 0.523,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_15_15": {
+      "risk_0_1": 0.524,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_15_16": {
+      "risk_0_1": 0.524,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_15_17": {
+      "risk_0_1": 0.522,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_16_0": {
+      "risk_0_1": 0.732,
+      "science_0_100": 90.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "FLUVIAL_CONGLOMERATE"
+    },
+    "n_16_1": {
+      "risk_0_1": 0.733,
+      "science_0_100": 90.3,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "FLUVIAL_CONGLOMERATE"
+    },
+    "n_16_2": {
+      "risk_0_1": 0.732,
+      "science_0_100": 91.0,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "FLUVIAL_CONGLOMERATE"
+    },
+    "n_16_3": {
+      "risk_0_1": 0.432,
+      "science_0_100": 30.1,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_16_4": {
+      "risk_0_1": 0.432,
+      "science_0_100": 31.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_16_5": {
+      "risk_0_1": 0.431,
+      "science_0_100": 33.7,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_16_6": {
+      "risk_0_1": 0.431,
+      "science_0_100": 34.6,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_16_7": {
+      "risk_0_1": 0.431,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_16_8": {
+      "risk_0_1": 0.522,
+      "science_0_100": 37.2,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_16_9": {
+      "risk_0_1": 0.765,
+      "science_0_100": 40.2,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_16_10": {
+      "risk_0_1": 0.524,
+      "science_0_100": 40.8,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_16_11": {
+      "risk_0_1": 0.524,
+      "science_0_100": 40.8,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_16_12": {
+      "risk_0_1": 0.524,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_16_13": {
+      "risk_0_1": 0.524,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_16_14": {
+      "risk_0_1": 0.524,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_16_15": {
+      "risk_0_1": 0.524,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_16_16": {
+      "risk_0_1": 0.525,
+      "science_0_100": 40.8,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_16_17": {
+      "risk_0_1": 0.523,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_17_0": {
+      "risk_0_1": 0.731,
+      "science_0_100": 91.2,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "FLUVIAL_CONGLOMERATE"
+    },
+    "n_17_1": {
+      "risk_0_1": 0.732,
+      "science_0_100": 90.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "FLUVIAL_CONGLOMERATE"
+    },
+    "n_17_2": {
+      "risk_0_1": 0.731,
+      "science_0_100": 91.2,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "FLUVIAL_CONGLOMERATE"
+    },
+    "n_17_3": {
+      "risk_0_1": 0.431,
+      "science_0_100": 30.6,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_17_4": {
+      "risk_0_1": 0.43,
+      "science_0_100": 32.2,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_17_5": {
+      "risk_0_1": 0.43,
+      "science_0_100": 33.9,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_17_6": {
+      "risk_0_1": 0.429,
+      "science_0_100": 34.7,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_17_7": {
+      "risk_0_1": 0.43,
+      "science_0_100": 34.8,
+      "traction_risk": 0.15,
+      "themis_ti_val": 510,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_17_8": {
+      "risk_0_1": 0.52,
+      "science_0_100": 37.2,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_17_9": {
+      "risk_0_1": 0.764,
+      "science_0_100": 40.2,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_17_10": {
+      "risk_0_1": 0.522,
+      "science_0_100": 40.8,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_17_11": {
+      "risk_0_1": 0.522,
+      "science_0_100": 40.8,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_17_12": {
+      "risk_0_1": 0.522,
+      "science_0_100": 40.8,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_17_13": {
+      "risk_0_1": 0.522,
+      "science_0_100": 40.8,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_17_14": {
+      "risk_0_1": 0.522,
+      "science_0_100": 40.8,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_17_15": {
+      "risk_0_1": 0.522,
+      "science_0_100": 40.8,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_17_16": {
+      "risk_0_1": 0.523,
+      "science_0_100": 40.8,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
+    },
+    "n_17_17": {
+      "risk_0_1": 0.521,
+      "science_0_100": 40.9,
+      "traction_risk": 0.35,
+      "themis_ti_val": 310,
+      "crism_class": "UNALTERED_DUST"
     }
   }
 }

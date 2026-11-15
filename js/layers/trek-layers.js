@@ -1,14 +1,28 @@
 /* global Cesium, window */
 window.TrekLayers = (function () {
   const TREK_EQ = "https://trek.nasa.gov/tiles/Mars/EQ";
-  const marsRectangle = Cesium.Rectangle.fromDegrees(-180, -90, 180, 90);
+  let marsRectangle = null;
+  let tilingScheme = null;
 
-  const tilingScheme = new Cesium.GeographicTilingScheme({
-    ellipsoid: Cesium.Ellipsoid.MARS,
-    rectangle: marsRectangle,
-    numberOfLevelZeroTilesX: 2,
-    numberOfLevelZeroTilesY: 1,
-  });
+  function getMarsRectangle() {
+    if (!marsRectangle && typeof Cesium !== "undefined" && Cesium.Rectangle) {
+      marsRectangle = Cesium.Rectangle.fromDegrees(-180, -90, 180, 90);
+    }
+    return marsRectangle;
+  }
+
+  function getTilingScheme() {
+    if (!tilingScheme && typeof Cesium !== "undefined" && Cesium.GeographicTilingScheme) {
+      if (window.initMarsEllipsoid) window.initMarsEllipsoid();
+      tilingScheme = new Cesium.GeographicTilingScheme({
+        ellipsoid: Cesium.Ellipsoid.MARS,
+        rectangle: getMarsRectangle(),
+        numberOfLevelZeroTilesX: 2,
+        numberOfLevelZeroTilesY: 1,
+      });
+    }
+    return tilingScheme;
+  }
 
   const CATALOG = {
     viking: {
@@ -18,11 +32,25 @@ window.TrekLayers = (function () {
       label: "Viking color",
       credit: "NASA Viking MDIM · Mars Trek / USGS",
     },
+    vikingBw: {
+      layerId: "Mars_Viking_MDIM21_mosaic_global_232m",
+      ext: "jpg",
+      maxLevel: 7,
+      label: "Viking B&W (USGS)",
+      credit: "USGS Astrogeology · Viking MDIM 2.1",
+    },
     mola: {
       layerId: "Mars_MGS_MOLA_ClrShade_merge_global_463m",
       ext: "jpg",
       maxLevel: 10,
-      label: "MOLA hillshade",
+      label: "MOLA hillshade (color)",
+      credit: "NASA MGS MOLA · Mars Trek",
+    },
+    molaRelief: {
+      layerId: "Mars_MGS_MOLA_Shade_merge_global_463m",
+      ext: "jpg",
+      maxLevel: 10,
+      label: "MOLA relief (grayscale)",
       credit: "NASA MGS MOLA · Mars Trek",
     },
     themisDay: {
@@ -44,6 +72,20 @@ window.TrekLayers = (function () {
       ext: "png",
       maxLevel: 6,
       label: "TES albedo",
+      credit: "NASA MGS TES · Mars Trek",
+    },
+    tesDust: {
+      layerId: "Mars_MGS_TES_Dust_Cover_Index_mosaic_global_7410m",
+      ext: "png",
+      maxLevel: 6,
+      label: "TES dust cover index",
+      credit: "NASA MGS TES · Mars Trek",
+    },
+    tesThermal: {
+      layerId: "Mars_MGS_TES_Thermal_Inertia_mosaic_global_7410m",
+      ext: "png",
+      maxLevel: 6,
+      label: "TES thermal inertia",
       credit: "NASA MGS TES · Mars Trek",
     },
   };
@@ -68,10 +110,12 @@ window.TrekLayers = (function () {
     if (!meta) {
       throw new Error("Unknown Trek layer: " + key);
     }
+    const scheme = getTilingScheme();
+    const rect = getMarsRectangle();
     const provider = new Cesium.UrlTemplateImageryProvider({
       url: tilePath(meta.layerId, meta.ext),
-      tilingScheme,
-      rectangle: marsRectangle,
+      tilingScheme: scheme,
+      rectangle: rect,
       maximumLevel: meta.maxLevel,
       credit: meta.credit,
       ellipsoid: Cesium.Ellipsoid.MARS,

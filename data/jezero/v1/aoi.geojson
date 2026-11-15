@@ -1,0 +1,115 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Jezero Crater Western Delta AOI",
+        "type": "AOI_BOUNDARY",
+        "target_body": "Mars",
+        "datum": "IAU2000:49900"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.200,
+              18.380
+            ],
+            [
+              77.500,
+              18.380
+            ],
+            [
+              77.500,
+              18.520
+            ],
+            [
+              77.200,
+              18.520
+            ],
+            [
+              77.200,
+              18.380
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "PDS ODE HiRISE Footprint: ESP_068294_1985",
+        "type": "HIRISE_INDEX",
+        "product_id": "ESP_068294_1985",
+        "resolution_m_px": 0.25,
+        "ode_url": "https://ode.rsl.wustl.edu/mars/indexproductsearch.aspx?product_id=ESP_068294_1985"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.405,
+              18.405
+            ],
+            [
+              77.458,
+              18.41
+            ],
+            [
+              77.452,
+              18.475
+            ],
+            [
+              77.398,
+              18.47
+            ],
+            [
+              77.405,
+              18.405
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "PDS ODE HiRISE Footprint: ESP_072051_1985",
+        "type": "HIRISE_INDEX",
+        "product_id": "ESP_072051_1985",
+        "resolution_m_px": 0.25,
+        "ode_url": "https://ode.rsl.wustl.edu/mars/indexproductsearch.aspx?product_id=ESP_072051_1985"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.388,
+              18.42
+            ],
+            [
+              77.442,
+              18.424
+            ],
+            [
+              77.436,
+              18.485
+            ],
+            [
+              77.382,
+              18.48
+            ],
+            [
+              77.388,
+              18.42
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

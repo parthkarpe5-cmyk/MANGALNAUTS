@@ -1,15 +1,258 @@
 {
-  "version": "1",
+  "version": "3.0",
+  "active_site": "jezero",
+  "default_site": "jezero",
   "aoi": "jezero",
-  "title": "Jezero Crater pilot patch (mock graph for demo)",
-  "center": { "lat": 18.44, "lon": 77.58 },
-  "bbox": { "west": 77.53, "east": 77.63, "south": 18.39, "north": 18.49 },
+  "graph_id": "jezero_delta_v1",
+  "title": "MANGALNAUTS — Planetary Multi-Site Operations & GNN Traversability",
+  "center": {
+    "lat": 18.450030884932012,
+    "lon": 77.42466700791792
+  },
+  "bbox": {
+    "west": 77.355,
+    "east": 77.485,
+    "north": 18.505,
+    "south": 18.395
+  },
   "citations": [
-    "NASA Mars Trek / OnMars CTX & MOLA",
-    "Mock terrain_graph for hackathon integration — replace with P3 pipeline output"
+    "NASA Mars 2020 Perseverance Science Team / PDS Geosciences Node",
+    "NASA Mars Science Laboratory (MSL) Curiosity Science Team / PDS",
+    "NASA MGS MOLA & HRSC Blended Digital Elevation Models (MDEM 200m)",
+    "THEMIS Thermal Inertia & CRISM Hyperspectral Mineralogy (Smectite Clays, Sulfates & Carbonates)",
+    "NASA Curiosity REMS, Perseverance MEDA & NOAA SWPC Space Weather Live Feeds",
+    "NASA Mars Odyssey Gamma Ray Spectrometer (GRS) Global Elemental Concentration Maps (Boynton et al. 2007)",
+    "2-Layer Graph Convolutional Network (GCN) Multi-Task Traversability & Science Engine"
   ],
+  "sites": {
+    "jezero": {
+      "id": "jezero",
+      "name": "Jezero Crater (Western Delta)",
+      "rover": "Perseverance (Mars 2020)",
+      "graph_id": "jezero_delta_v1",
+      "boundary_color": "#c9f31d",
+      "center": {
+        "lat": 18.450030884932012,
+        "lon": 77.42466700791792
+      },
+      "bbox": {
+        "west": 77.355,
+        "east": 77.485,
+        "north": 18.505,
+        "south": 18.395
+      },
+      "datum_elev_m": -2530.0,
+      "globe_camera": {
+        "lat": 18.450030884932012,
+        "lon": 77.42466700791792,
+        "height": 75000
+      },
+      "detail_zoom": 10,
+      "files": {
+        "aoi": "data/jezero/v1/aoi.geojson",
+        "terrain_graph": "data/jezero/v1/terrain_graph.json",
+        "regional_graph": "data/jezero/regional_graph.json",
+        "gnn_scores": "data/jezero/v1/gnn_scores.json",
+        "science_stops": "data/jezero/v1/science_stops.geojson",
+        "routes": "data/jezero/v1/routes.geojson",
+        "environment": "data/jezero/v1/environment.json",
+        "slope": "data/jezero/measured/slope.png"
+      },
+      "quick_missions": [
+        {
+          "id": "landing_to_delta",
+          "title": "Landing Site → Western Delta Scarp",
+          "desc": "Primary traverse from Octavia E. Butler Landing to the Three Forks delta front.",
+          "from": {
+            "lat": 18.4447,
+            "lon": 77.4509
+          },
+          "to": {
+            "lat": 18.4312,
+            "lon": 77.4128
+          }
+        },
+        {
+          "id": "delta_to_kodiak",
+          "title": "Western Delta → Kodiak Butte",
+          "desc": "Reconnaissance of the ancient delta erosional remnant.",
+          "from": {
+            "lat": 18.4312,
+            "lon": 77.4128
+          },
+          "to": {
+            "lat": 18.4185,
+            "lon": 77.4352
+          }
+        },
+        {
+          "id": "kodiak_to_belva",
+          "title": "Kodiak Butte → Belva Crater",
+          "desc": "Sample caching traverse near the Belva impact ejecta rim.",
+          "from": {
+            "lat": 18.4185,
+            "lon": 77.4352
+          },
+          "to": {
+            "lat": 18.4055,
+            "lon": 77.462
+          }
+        }
+      ],
+      "example_route": {
+        "from": {
+          "lat": 18.450537,
+          "lon": 77.41346156
+        },
+        "to": {
+          "lat": 18.44851253,
+          "lon": 77.42804643
+        }
+      }
+    },
+    "gale": {
+      "id": "gale",
+      "name": "Gale Crater (Mount Sharp / Aeolis Mons)",
+      "rover": "Curiosity (MSL)",
+      "graph_id": "gale_mount_sharp_v1",
+      "boundary_color": "#f59e0b",
+      "center": {
+        "lat": -4.650837541141328,
+        "lon": 137.39511123632226
+      },
+      "bbox": {
+        "west": 137.32931588012477,
+        "east": 137.46090659251976,
+        "north": -4.579981003697868,
+        "south": -4.72169407858479
+      },
+      "datum_elev_m": -4450.0,
+      "globe_camera": {
+        "lat": -4.650837541141328,
+        "lon": 137.39511123632226,
+        "height": 95000
+      },
+      "detail_zoom": 10,
+      "files": {
+        "aoi": "data/gale/v1/aoi.geojson",
+        "terrain_graph": "data/gale/v1/terrain_graph.json",
+        "regional_graph": "data/gale/regional_graph.json",
+        "gnn_scores": "data/gale/v1/gnn_scores.json",
+        "science_stops": "data/gale/v1/science_stops.geojson",
+        "routes": "data/gale/v1/routes.geojson",
+        "environment": "data/gale/v1/environment.json",
+        "slope": "data/gale/measured/slope.png"
+      },
+      "quick_missions": [
+        {
+          "id": "bradbury_to_yellowknife",
+          "title": "Bradbury Landing → Yellowknife Bay",
+          "desc": "Initial mudstone sampling campaign at Sheepbed member.",
+          "from": {
+            "lat": -4.5895,
+            "lon": 137.4417
+          },
+          "to": {
+            "lat": -4.5925,
+            "lon": 137.4485
+          }
+        },
+        {
+          "id": "yellowknife_to_kimberley",
+          "title": "Yellowknife Bay → The Kimberley",
+          "desc": "Traverse to triple-sandstone outcrop intersection.",
+          "from": {
+            "lat": -4.5925,
+            "lon": 137.4485
+          },
+          "to": {
+            "lat": -4.6148,
+            "lon": 137.3982
+          }
+        },
+        {
+          "id": "kimberley_to_verarubin",
+          "title": "The Kimberley → Vera Rubin Ridge",
+          "desc": "Ascent into hematite-rich ridge along Mount Sharp lower foothills.",
+          "from": {
+            "lat": -4.6148,
+            "lon": 137.3982
+          },
+          "to": {
+            "lat": -4.685,
+            "lon": 137.378
+          }
+        }
+      ],
+      "example_route": {
+        "from": {
+          "lat": -4.64915048,
+          "lon": 137.35124767
+        },
+        "to": {
+          "lat": -4.65927284,
+          "lon": 137.3411253
+        }
+      }
+    },
+    "olympus": {
+      "id": "olympus",
+      "name": "Olympus Mons (Summit Caldera)",
+      "rover": "Orbital survey",
+      "graph_id": "olympus_measured_dem_v1",
+      "center": {
+        "lat": 18.640718552773496,
+        "lon": -133.84877527849238
+      },
+      "bbox": {
+        "west": -134.00061071587123,
+        "east": -133.69693984111353,
+        "north": 18.78243162766042,
+        "south": 18.499005477886573
+      },
+      "files": {
+        "terrain_graph": "data/olympus/measured/terrain_graph.json",
+        "regional_graph": "data/olympus/regional_graph.json",
+        "gnn_scores": "data/olympus/measured/gnn_scores.json",
+        "science_stops": "data/olympus/v1/science_stops.geojson",
+        "routes": "data/olympus/v1/routes.geojson",
+        "environment": "data/olympus/v1/environment.json",
+        "slope": "data/olympus/measured/slope.png"
+      },
+      "example_route": {
+        "from": {
+          "lat": 18.64577973,
+          "lon": -133.90444827
+        },
+        "to": {
+          "lat": 18.62553501,
+          "lon": -133.93818948
+        }
+      },
+      "globe_camera": {
+        "lat": 18.640718552773496,
+        "lon": -133.84877527849238,
+        "height": 95000
+      }
+    }
+  },
+  "global_datasets": {
+    "traverses": "data/traverses.json",
+    "caves": "data/caves.json",
+    "grs_water": "data/grs/h2o.json",
+    "grs_iron": "data/grs/fe.json",
+    "grs_silicon": "data/grs/si.json",
+    "grs_potassium": "data/grs/k.json",
+    "grs_thorium": "data/grs/th.json",
+    "grs_chlorine": "data/grs/cl.json"
+  },
   "files": {
+    "aoi": "data/jezero/v1/aoi.geojson",
     "terrain_graph": "data/jezero/v1/terrain_graph.json",
-    "gnn_scores": "data/jezero/v1/gnn_scores.json"
+    "gnn_scores": "data/jezero/v1/gnn_scores.json",
+    "science_stops": "data/jezero/v1/science_stops.geojson",
+    "routes": "data/jezero/v1/routes.geojson",
+    "environment": "data/jezero/v1/environment.json",
+    "slope": "data/jezero/measured/slope.png"
   }
 }
