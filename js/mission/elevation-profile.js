@@ -1,5 +1,27 @@
 /* global window */
 window.MarsElevationProfile = (function () {
+  function buildSmoothSvgPath(pts) {
+    if (pts.length < 2) return "";
+    if (pts.length === 2) {
+      return "M " + pts[0].x.toFixed(1) + " " + pts[0].y.toFixed(1) + " L " + pts[1].x.toFixed(1) + " " + pts[1].y.toFixed(1);
+    }
+    let d = "M " + pts[0].x.toFixed(1) + " " + pts[0].y.toFixed(1);
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p0 = pts[Math.max(0, i - 1)];
+      const p1 = pts[i];
+      const p2 = pts[i + 1];
+      const p3 = pts[Math.min(pts.length - 1, i + 2)];
+
+      const cp1x = p1.x + (p2.x - p0.x) / 6;
+      const cp1y = p1.y + (p2.y - p0.y) / 6;
+      const cp2x = p2.x - (p3.x - p1.x) / 6;
+      const cp2y = p2.y - (p3.y - p1.y) / 6;
+
+      d += " C " + cp1x.toFixed(1) + " " + cp1y.toFixed(1) + ", " + cp2x.toFixed(1) + " " + cp2y.toFixed(1) + ", " + p2.x.toFixed(1) + " " + p2.y.toFixed(1);
+    }
+    return d;
+  }
+
   function renderSvg(nodes, width, height) {
     if (!nodes || nodes.length < 2) {
       return '<div class="profile-empty">Not enough elevation points</div>';
@@ -33,21 +55,18 @@ window.MarsElevationProfile = (function () {
       return padding.top + chartH - ((elev - minElev) / elevRange) * chartH;
     }
 
-    let polyPoints = "";
-    let areaPoints = padding.left + "," + (padding.top + chartH) + " ";
-
-    nodes.forEach(function (n) {
-      const x = getX(n.dist_m).toFixed(1);
-      const y = getY(n.elev_m).toFixed(1);
-      polyPoints += x + "," + y + " ";
-      areaPoints += x + "," + y + " ";
+    const pts = nodes.map(function (n) {
+      return { x: getX(n.dist_m), y: getY(n.elev_m) };
     });
-    areaPoints += (padding.left + chartW) + "," + (padding.top + chartH);
 
-    const startX = getX(0);
-    const startY = getY(nodes[0].elev_m);
-    const endX = getX(totalDist);
-    const endY = getY(nodes[nodes.length - 1].elev_m);
+    const linePathD = buildSmoothSvgPath(pts);
+    const bottomY = (padding.top + chartH).toFixed(1);
+    const startX = pts[0].x.toFixed(1);
+    const endX = pts[pts.length - 1].x.toFixed(1);
+    const areaD = linePathD + " L " + endX + " " + bottomY + " L " + startX + " " + bottomY + " Z";
+
+    const startY = pts[0].y;
+    const endY = pts[pts.length - 1].y;
 
     const midElev = (minElev + maxElev) / 2;
     const midY = getY(midElev);
@@ -77,8 +96,8 @@ window.MarsElevationProfile = (function () {
       '<line x1="' + padding.left + '" y1="' + midY + '" x2="' + (padding.left + chartW) + '" y2="' + midY + '" stroke="rgba(255,255,255,0.05)" stroke-dasharray="3,3"/>' +
       '<line x1="' + padding.left + '" y1="' + (padding.top + chartH) + '" x2="' + (padding.left + chartW) + '" y2="' + (padding.top + chartH) + '" stroke="rgba(255,255,255,0.18)"/>' +
       // Shaded Area & Line
-      '<polygon points="' + areaPoints + '" fill="url(#elevGrad)"/>' +
-      '<polyline points="' + polyPoints + '" fill="none" stroke="#c9f31d" stroke-width="2.5" filter="url(#neonGlow)" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<path d="' + areaD + '" fill="url(#elevGrad)"/>' +
+      '<path d="' + linePathD + '" fill="none" stroke="#c9f31d" stroke-width="2.5" filter="url(#neonGlow)" stroke-linecap="round" stroke-linejoin="round"/>' +
       // Start Marker (A)
       '<circle cx="' + startX + '" cy="' + startY + '" r="5" fill="#c9f31d" stroke="#0c0e12" stroke-width="2"/>' +
       '<text x="' + startX + '" y="' + (startY - 7) + '" font-size="8.5" fill="#c9f31d" text-anchor="middle" font-weight="bold">A</text>' +

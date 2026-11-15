@@ -1,4 +1,4 @@
-importScripts("../map/geodesic.js?v=terrain2", "astar.js?v=raster-32grid");
+importScripts("../map/geodesic.js?v=terrain2", "astar.js?v=contour-slope-v3");
 let graph, nodes, scale;
 function distance(a, b) {
   return MarsGeodesic.haversineMeters(a.lat, a.lon, b.lat, b.lon);
@@ -25,7 +25,12 @@ self.onmessage = ({ data }) => {
     const result = MarsAstar.findPath(graph, start, goal, {
       maxSlopeDeg: limit,
       heuristic: node => scale * distance(nodes.get(node), nodes.get(goal)),
-      edgeCostFn: (from, to, length) => length * (1 + risk(from) + risk(to)),
+      edgeCostFn: (from, to, length, slopeDeg) => {
+        const slopeFactor = slopeDeg != null && Number.isFinite(slopeDeg) && limit > 0
+          ? Math.pow(slopeDeg / limit, 2) * 3.8
+          : 0;
+        return length * (1 + slopeFactor + (risk(from) + risk(to)) * 1.5);
+      },
     });
     self.postMessage({ id, result });
   } catch (error) {

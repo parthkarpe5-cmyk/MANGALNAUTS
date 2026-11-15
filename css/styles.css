@@ -1517,17 +1517,18 @@ body {
 /* Consumables Grid */
 .consumables-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.4rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.45rem;
 }
 
 .consumable-item {
   display: flex;
   align-items: center;
   gap: 0.45rem;
-  padding: 0.35rem 0.45rem;
-  border-radius: 5px;
-  background: rgba(255, 255, 255, 0.02);
+  padding: 0.4rem 0.5rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .c-icon {
@@ -1560,6 +1561,57 @@ body {
   margin-top: 1px;
 }
 
+/* Payload mass selector */
+.payload-selector-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.45rem;
+  padding: 0.35rem 0.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.payload-lbl {
+  font-size: 0.58rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--muted);
+  letter-spacing: 0.03em;
+}
+
+.payload-chips {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.payload-chip {
+  padding: 0.18rem 0.45rem;
+  font-size: 0.58rem;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.payload-chip:hover {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.4);
+  color: #fff;
+}
+
+.payload-chip.active {
+  background: rgba(56, 189, 248, 0.22);
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.25);
+}
+
 .stat-sub {
   font-size: 0.58rem;
   color: var(--muted);
@@ -1569,8 +1621,8 @@ body {
 
 .metric-explainer-box {
   margin-top: 0.65rem;
-  padding: 0.5rem 0.75rem;
-  background: rgba(56, 189, 248, 0.06);
+  padding: 0.55rem 0.75rem;
+  background: rgba(56, 189, 248, 0.05);
   border: 1px solid rgba(56, 189, 248, 0.22);
   border-radius: 6px;
   font-size: 0.65rem;
@@ -1578,11 +1630,39 @@ body {
   line-height: 1.45;
 }
 
-.metric-explainer-box strong {
+.explainer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.3rem;
+}
+
+.explainer-header strong {
   color: var(--accent-sub);
   font-family: var(--font-mono);
   font-size: 0.66rem;
   letter-spacing: 0.03em;
+}
+
+.explainer-text {
+  margin: 0 0 0.4rem 0;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.63rem;
+}
+
+.explainer-bio {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.60rem;
+  font-family: var(--font-mono);
+  color: #94a3b8;
+  border-top: 1px dashed rgba(255, 255, 255, 0.08);
+  padding-top: 0.35rem;
+}
+
+.explainer-bio strong {
+  color: #38bdf8;
 }
 
 /* Science Stop Card */

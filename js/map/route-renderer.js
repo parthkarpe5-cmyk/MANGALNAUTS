@@ -7,6 +7,90 @@
  */
 window.MarsRouteRenderer = (function () {
   /**
+   * Smooths discrete A* lattice coordinates into a flowing, natural aerodynamic curve
+   * using a centripetal Catmull-Rom spline.
+   */
+  function smoothSpline(points, subdivisions) {
+    if (!points || points.length < 3) return points;
+    subdivisions = subdivisions || 3;
+    const result = [];
+    for (let i = 0; i < points.length - 1; i++) {
+      const p0 = points[Math.max(0, i - 1)];
+      const p1 = points[i];
+      const p2 = points[i + 1];
+      const p3 = points[Math.min(points.length - 1, i + 2)];
+
+      for (let t = 0; t < 1; t += 1 / subdivisions) {
+        const t2 = t * t;
+        const t3 = t2 * t;
+        const lat = 0.5 * (
+          (2 * p1[0]) +
+          (-p0[0] + p2[0]) * t +
+          (2 * p0[0] - 5 * p1[0] + 4 * p2[0] - p3[0]) * t2 +
+          (-p0[0] + 3 * p1[0] - 3 * p2[0] + p3[0]) * t3
+        );
+        const lon = 0.5 * (
+          (2 * p1[1]) +
+          (-p0[1] + p2[1]) * t +
+          (2 * p0[1] - 5 * p1[1] + 4 * p2[1] - p3[1]) * t2 +
+          (-p0[1] + 3 * p1[1] - 3 * p2[1] + p3[1]) * t3
+        );
+        result.push([lat, lon]);
+      }
+    }
+    result.push(points[points.length - 1]);
+    return result;
+  }
+
+  /**
+   * Decimates dense internal raster nodes into 3-6 strategic tactical checkpoints (NAV-01, NAV-02...)
+   * placed at significant terrain heading inflections and distance intervals.
+   */
+  function selectStrategicCheckpoints(pathNodes) {
+    if (!pathNodes || pathNodes.length <= 2) return [];
+    if (pathNodes.length <= 5) return pathNodes.slice(1, -1);
+
+    const totalDist = pathNodes[pathNodes.length - 1].dist_m || 1000;
+    const targetCount = Math.min(6, Math.max(3, Math.floor(totalDist / 600)));
+    const stepDist = totalDist / (targetCount + 1);
+
+    const selected = [];
+    let nextTargetDist = stepDist;
+    let lastChosenIdx = 0;
+
+    for (let i = 1; i < pathNodes.length - 1; i++) {
+      const node = pathNodes[i];
+      const prev = pathNodes[i - 1];
+      const next = pathNodes[i + 1];
+
+      // Calculate heading change angle
+      const b1 = Math.atan2(node.lon - prev.lon, node.lat - prev.lat);
+      const b2 = Math.atan2(next.lon - node.lon, next.lat - node.lat);
+      let angleDiff = Math.abs(b2 - b1) * 180 / Math.PI;
+      if (angleDiff > 180) angleDiff = 360 - angleDiff;
+
+      const isHighRisk = (node.risk || 0) > 0.55;
+      const isNearTargetDist = Math.abs((node.dist_m || 0) - nextTargetDist) < stepDist * 0.45;
+      const isSignificantTurn = angleDiff > 25 && (i - lastChosenIdx) >= 4;
+
+      if ((isNearTargetDist || isSignificantTurn || isHighRisk) && (i - lastChosenIdx) >= 3 && selected.length < targetCount) {
+        selected.push(node);
+        lastChosenIdx = i;
+        nextTargetDist += stepDist;
+      }
+    }
+
+    if (selected.length === 0) {
+      const step = Math.floor(pathNodes.length / 4);
+      for (let i = step; i < pathNodes.length - 1; i += step) {
+        selected.push(pathNodes[i]);
+      }
+    }
+
+    return selected;
+  }
+
+  /**
    * Generates distance milestone ticks along a latlng route
    */
   function buildKmTicks(latlngs) {
@@ -66,21 +150,24 @@ window.MarsRouteRenderer = (function () {
   }
 
   /**
-   * Builds an advanced multi-layered sci-fi traverse corridor:
-   * 1. Dark high-contrast casing (11px, #05070a)
-   * 2. Soft glowing halo (7px, 35% opacity)
+   * Builds an advanced multi-layered aerospace traverse corridor:
+   * 1. Dark high-contrast casing (10px, #05070a)
+   * 2. Soft glowing halo (7px, 38% opacity)
    * 3. Core high-visibility track (3.5px solid)
    * 4. Animated directional marching dashes (2px, white neon, .route-flow)
-   * 5. Optional milestone km ticks along the route
-   * 6. Optional risk-colored waypoint beads
+   * 5. Distance milestone km ticks along the route
+   * 6. Strategic tactical navigation checkpoints (NAV-01, NAV-02...)
    */
   function createCorridorLayer(latlngs, opts) {
     opts = opts || {};
     const group = L.layerGroup();
     const color = opts.color || "#38bdf8";
 
+    // Smooth discrete lattice points into an aerodynamic spline curve
+    const smoothPoints = smoothSpline(latlngs, 4);
+
     // 1. Outer Dark Contrast Casing
-    const casing = L.polyline(latlngs, {
+    const casing = L.polyline(smoothPoints, {
       color: "#05070a",
       weight: 10,
       opacity: 0.72,
@@ -91,7 +178,7 @@ window.MarsRouteRenderer = (function () {
     group.addLayer(casing);
 
     // 2. Soft Glowing Halo Aura
-    const halo = L.polyline(latlngs, {
+    const halo = L.polyline(smoothPoints, {
       color: color,
       weight: 7,
       opacity: 0.38,
@@ -102,7 +189,7 @@ window.MarsRouteRenderer = (function () {
     group.addLayer(halo);
 
     // 3. Core Solid High-Contrast Track
-    const core = L.polyline(latlngs, {
+    const core = L.polyline(smoothPoints, {
       color: color,
       weight: 3.5,
       opacity: 0.98,
@@ -117,7 +204,7 @@ window.MarsRouteRenderer = (function () {
 
     // 4. Directional Marching Pulse Flow Animation
     if (opts.animated !== false) {
-      const flow = L.polyline(latlngs, {
+      const flow = L.polyline(smoothPoints, {
         color: "#ffffff",
         weight: 2,
         opacity: 0.92,
@@ -131,7 +218,7 @@ window.MarsRouteRenderer = (function () {
 
     // 5. Draw-in dynamic path animation on load
     if (opts.drawIn) {
-      const drawIn = L.polyline(latlngs, {
+      const drawIn = L.polyline(smoothPoints, {
         color: "#ffffff",
         weight: 4.5,
         opacity: 0.85,
@@ -145,39 +232,45 @@ window.MarsRouteRenderer = (function () {
 
     // 6. Floating Kilometric Distance Ticks
     if (opts.ticks !== false) {
-      const ticks = buildKmTicks(latlngs);
+      const ticks = buildKmTicks(smoothPoints);
       ticks.forEach(function (t) {
         group.addLayer(t);
       });
     }
 
-    // 7. Intermediate Waypoint Beads (Colored by GNN Risk)
+    // 7. Strategic Tactical Navigation Checkpoints (NAV-01, NAV-02...)
     if (opts.pathNodes && opts.pathNodes.length > 2) {
-      opts.pathNodes.forEach(function (n, idx) {
-        if (idx === 0 || idx === opts.pathNodes.length - 1) return;
+      const checkpoints = selectStrategicCheckpoints(opts.pathNodes);
+      checkpoints.forEach(function (n, cpIdx) {
         const risk = Number.isFinite(n.risk) ? n.risk : 0.35;
         const beadColor =
           risk < 0.45 ? "#22c55e" : risk < 0.65 ? "#eab308" : "#ef4444";
+        const cpName = "NAV-" + String(cpIdx + 1).padStart(2, "0");
+        const distKm = n.dist_m != null ? (n.dist_m / 1000).toFixed(2) + " km" : "";
 
         const bead = L.circleMarker([n.lat, n.lon], {
-          radius: 4,
+          radius: 5,
           color: "#ffffff",
           fillColor: beadColor,
           fillOpacity: 0.95,
-          weight: 1.5,
+          weight: 2,
         });
 
         bead.bindTooltip(
           '<div class="hud-tooltip font-mono text-xs">' +
-            "<strong>Waypoint #" +
-            idx +
-            "</strong><br/>" +
+            '<div style="color:var(--accent); font-weight:700; margin-bottom:2px;">' +
+            cpName +
+            (distKm ? " · " + distKm : "") +
+            "</div>" +
             "Elev: " +
             (n.elev_m != null ? n.elev_m.toFixed(1) + "m" : "—") +
             " · Slope: " +
             (n.slope_deg != null ? n.slope_deg.toFixed(1) + "°" : "—") +
-            "<br/>GNN Risk: " +
+            "<br/>GNN Risk: <strong style='color:" +
+            beadColor +
+            ";'>" +
             risk.toFixed(2) +
+            "</strong>" +
             "</div>",
           { className: "hud-tooltip", direction: "top" }
         );
@@ -222,5 +315,6 @@ window.MarsRouteRenderer = (function () {
     buildKmTicks,
     createCorridorLayer,
     createWaypointPin,
+    smoothSpline,
   };
 })();

@@ -167,9 +167,11 @@ self.MarsAstar = (function () {
 
       const neighbors = neighborsOf(current);
       neighbors.forEach(function (edge) {
-        if (edge.crossingGrade > maxSlope || !slopeOk(current, edge.to, edge.length_m)) return;
+        const edgeSlope = edgeSlopeDeg(current, edge.to, edge.length_m);
+        const slope = Math.max(edge.crossingGrade || 0, Number.isFinite(edgeSlope) ? edgeSlope : 0);
+        if (slope > maxSlope) return;
         const tentative =
-          (gScore[current] || 0) + edgeCost(current, edge.to, edge.length_m);
+          (gScore[current] || 0) + edgeCost(current, edge.to, edge.length_m, slope);
         if (gScore[edge.to] == null || tentative < gScore[edge.to]) {
           cameFrom[edge.to] = current;
           gScore[edge.to] = tentative;

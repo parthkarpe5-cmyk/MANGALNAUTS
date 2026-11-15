@@ -125,11 +125,14 @@
             <button type="button" class="view-mode-btn" data-mode="2d" aria-pressed="false">2D Surface</button>
           </div>
         </div>
-        <div class="select-badge" title="Rover or Marswalk slope limits">
+        <div class="select-badge" title="Operational slope limits and traverse physics">
           <span class="select-badge-lbl">TRAVEL MODE</span>
           <select id="travel-mode" aria-label="Travel mode">
             <option value="walk">Marswalk (≤15°)</option>
-            <option value="rover">Rover (≤20°)</option>
+            <option value="conservative">Equipment Cart (≤10°)</option>
+            <option value="steep_walk">Steep Scramble (≤20°)</option>
+            <option value="rover">Rover AutoNav (≤20°)</option>
+            <option value="aggressive_rover">Rim Ascent Rover (≤26°)</option>
           </select>
         </div>
         <label class="dock-btn-plan" title="Click any two points on the site to compute an optimal GNN safe route">
@@ -285,22 +288,22 @@
     <script src="js/hybrid.js?v=regions-1"></script>
     <script src="js/map/geodesic.js"></script>
     <script src="js/api/manifest.js?v=regional-dem"></script>
-    <script src="js/routing/astar.js?v=raster-32grid"></script>
-    <script src="js/routing/worker-client.js?v=raster-32grid"></script>
-    <script src="js/mission/modes.js"></script>
-    <script src="js/routing/routeBetween.js?v=regional-dem"></script>
-    <script src="js/ui/icons.js"></script>
+    <script src="js/routing/astar.js?v=contour-slope-v3"></script>
+    <script src="js/routing/worker-client.js?v=contour-slope-v3"></script>
+    <script src="js/mission/modes.js?v=contour-slope-v3"></script>
+    <script src="js/routing/routeBetween.js?v=contour-slope-v3"></script>
+    <script src="js/ui/icons.js?v=contour-slope-v3"></script>
     <script src="js/ui/audio.js"></script>
     <script src="js/ui/theme.js?v=deep-space-default"></script>
-    <script src="js/mission/telemetry.js"></script>
-    <script src="js/mission/elevation-profile.js"></script>
-    <script src="js/mission/drawer.js?v=regional-dem"></script>
+    <script src="js/mission/telemetry.js?v=contour-slope-v3"></script>
+    <script src="js/mission/elevation-profile.js?v=contour-slope-v3"></script>
+    <script src="js/mission/drawer.js?v=contour-slope-v3"></script>
     <script src="js/mission/contingency.js?v=raster-1"></script>
     <script src="js/map/heatmap.js?v=radiation-proxy"></script>
-    <script src="js/map/route-renderer.js?v=radar-pins"></script>
+    <script src="js/map/route-renderer.js?v=contour-slope-v3"></script>
     <script src="js/map/preset-routes.js"></script>
     <script src="js/map/science-stops.js"></script>
-    <script src="js/map/pick.js?v=regional-dem"></script>
-    <script src="js/app.js?v=mission-dock"></script>
+    <script src="js/map/pick.js?v=contour-slope-v3"></script>
+    <script src="js/app.js?v=contour-slope-v3"></script>
   </body>
 </html>

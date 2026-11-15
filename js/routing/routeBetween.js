@@ -88,10 +88,13 @@ window.MarsRouteBetween = (function () {
     const geodesic_m = MarsGeodesic.haversineMeters(latA, lonA, latB, lonB);
 
     const scoreNodes = scores?.nodes || {};
-    const edgeCostFn = function (fromId, toId, lengthM) {
+    const edgeCostFn = function (fromId, toId, lengthM, slopeDeg) {
       const fromRisk = nodeRisk(scoreNodes, fromId) ?? 0;
       const toRisk = nodeRisk(scoreNodes, toId) ?? 0;
-      return lengthM * (1 + fromRisk + toRisk);
+      const slopeFactor = slopeDeg != null && Number.isFinite(slopeDeg) && maxSlope > 0
+        ? Math.pow(slopeDeg / maxSlope, 2) * 3.8
+        : 0;
+      return lengthM * (1 + slopeFactor + (fromRisk + toRisk) * 1.5);
     };
 
     let pathResult;

@@ -48,26 +48,101 @@ window.MarsTelemetry = (function () {
     );
   }
 
-  function calculateConsumables(distanceMeters, modeKey) {
-    const isWalk = modeKey === "walk";
-    const speedMs = isWalk ? 1.2 : 0.14;
-    const durationSec = distanceMeters / speedMs;
-    const durationMin = durationSec / 60;
+  function calculateConsumables(distanceMeters, modeKey, pathNodes, opts) {
+    opts = opts || {};
+    const mode = (window.MarsTravelMode && window.MarsTravelMode.MODES && window.MarsTravelMode.MODES[modeKey])
+      ? window.MarsTravelMode.MODES[modeKey]
+      : { type: (modeKey === "rover" || modeKey === "aggressive_rover") ? "rover" : "walk", speedBaseMs: 0.65, maxSlopeDeg: 15 };
+
+    const isWalk = mode.type === "walk";
+    const payloadKg = Number.isFinite(opts.payloadKg) ? opts.payloadKg : 20; // Default 20 kg carried equipment
+    const crewCount = opts.crewCount || 2; // NASA EVA Flight Rule EVA-01 Buddy Pair
+
+    let totalDurationSec = 0;
+    let meanSlopeDeg = 0;
+    let elevationGainM = 0;
+
+    if (pathNodes && pathNodes.length > 1) {
+      let slopeSum = 0;
+      for (let i = 1; i < pathNodes.length; i++) {
+        const p1 = pathNodes[i - 1];
+        const p2 = pathNodes[i];
+        const segDist = Math.max(1, (p2.dist_m || 0) - (p1.dist_m || 0));
+        const elevDiff = (p2.elev_m || 0) - (p1.elev_m || 0);
+        if (elevDiff > 0) elevationGainM += elevDiff;
+
+        const slopeRad = Math.atan(Math.abs(elevDiff) / segDist);
+        const slopeDeg = (slopeRad * 180) / Math.PI;
+        slopeSum += slopeDeg;
+
+        let segSpeed = mode.speedBaseMs || 0.65;
+        if (isWalk) {
+          // Tobler's hiking velocity model adapted for Mars 0.38g & carried payload mass
+          const slopeFactor = Math.exp(-3.5 * Math.abs(Math.tan(slopeRad) + 0.05));
+          const payloadFactor = Math.max(0.75, 1.0 - (payloadKg - 10) * 0.007);
+          segSpeed = Math.max(0.25, Math.min(0.85, segSpeed * slopeFactor * payloadFactor));
+        } else {
+          // Rover speed reduction on slopes > 8° due to wheel slip & visual odometry stops
+          const slipReduction = slopeDeg > 8 ? Math.max(0.45, 1.0 - (slopeDeg / (mode.maxSlopeDeg || 20)) * 0.5) : 1.0;
+          segSpeed = Math.max(0.04, segSpeed * slipReduction);
+        }
+        totalDurationSec += segDist / segSpeed;
+      }
+      meanSlopeDeg = slopeSum / (pathNodes.length - 1);
+    } else {
+      const baseSpeed = mode.speedBaseMs || (isWalk ? 0.65 : 0.12);
+      totalDurationSec = distanceMeters / baseSpeed;
+    }
+
+    const durationMin = totalDurationSec / 60;
     const durationHours = durationMin / 60;
+    const avgSpeedMs = totalDurationSec > 0 ? distanceMeters / totalDurationSec : (mode.speedBaseMs || 0.65);
 
-    const o2RatePerMin = isWalk ? 0.8 : 0.25;
-    const powerWatts = isWalk ? 220 : 450;
+    let o2Liters = 0;
+    let batteryWh = 0;
+    let waterCoolingL = 0;
 
-    const o2Liters = durationMin * o2RatePerMin;
-    const batteryWh = durationHours * powerWatts;
+    if (isWalk) {
+      // Bio-energetics: NASA EVA Metabolic Rate
+      // Basal: ~0.45 L/min per astronaut
+      // Incline workload: +0.035 L/min per degree of slope
+      // Payload burden: +0.012 L/min per 10 kg carried mass
+      const o2PerAstronautPerMin = 0.45 + (0.012 * (payloadKg / 10)) + (0.035 * Math.min(15, meanSlopeDeg));
+      // Total for buddy pair with 20% emergency safety margin (NASA Flight Rule EVA-01)
+      o2Liters = crewCount * o2PerAstronautPerMin * durationMin * 1.20;
+
+      // Power: NASA xEMU PLSS avionics (55W) + sublimation fan/pump (95W) + thermal suit heaters at -60°C (90W)
+      const suitWattsPerPerson = 240;
+      batteryWh = crewCount * suitWattsPerPerson * durationHours;
+
+      // Water sublimation for astronaut metabolic body heat rejection: ~0.35 L/hr per astronaut
+      waterCoolingL = crewCount * 0.35 * durationHours;
+    } else {
+      // Rover pressurized cabin / remote avionics
+      const o2RateCabinPerMin = 0.22 * crewCount;
+      o2Liters = o2RateCabinPerMin * durationMin * 1.15;
+
+      // Rover traction motors + avionics + RTG/battery draw: 420W nominal, up to 700W on slopes
+      const roverWatts = 420 + (meanSlopeDeg / (mode.maxSlopeDeg || 20)) * 220;
+      batteryWh = roverWatts * durationHours;
+      waterCoolingL = 0;
+    }
 
     return {
-      durationSec: Math.round(durationSec),
+      durationSec: Math.round(totalDurationSec),
       durationMin: Math.round(durationMin),
       durationHours: durationHours.toFixed(1),
+      avgSpeedMs: avgSpeedMs.toFixed(2),
       o2Liters: Math.round(o2Liters),
       batteryWh: Math.round(batteryWh),
-      speedMs: speedMs,
+      waterCoolingL: waterCoolingL.toFixed(1),
+      payloadKg: payloadKg,
+      crewCount: crewCount,
+      meanSlopeDeg: meanSlopeDeg.toFixed(1),
+      elevationGainM: Math.round(elevationGainM),
+      modeLabel: mode.label,
+      nasaStandard: mode.nasaStandard || "NASA EVA Flight Rule EVA-01",
+      rationale: mode.rationale,
     };
   }
 
@@ -156,11 +231,15 @@ window.MarsTelemetry = (function () {
   }
 
   // React to site changes across the application
-  window.addEventListener("mars:site-changed", async function () {
-    envData = await MarsData.loadEnvironment();
-    simulatedSeconds = 0;
-    renderBar(currentContainerId);
-  });
+  if (typeof window !== "undefined" && window.addEventListener) {
+    window.addEventListener("mars:site-changed", async function () {
+      if (window.MarsData && window.MarsData.loadEnvironment) {
+        envData = await MarsData.loadEnvironment();
+      }
+      simulatedSeconds = 0;
+      renderBar(currentContainerId);
+    });
+  }
 
   return { init, calculateConsumables, getEnv };
 })();

@@ -3,6 +3,7 @@ window.MarsSegmentPick = (function () {
   let active = false;
   let step = 0;
   let pointA = null;
+  let pointB = null;
   let markerA = null;
   let markerB = null;
   let lineLayer = null;
@@ -43,6 +44,7 @@ window.MarsSegmentPick = (function () {
     hideScrubber();
     lastSolvedSegment = null;
     pointA = null;
+    pointB = null;
     step = 0;
   }
 
@@ -52,6 +54,8 @@ window.MarsSegmentPick = (function () {
   async function planRoute(latA, lonA, latB, lonB) {
     ensureMap();
     clearMarkers();
+    pointA = { lat: latA, lon: lonA };
+    pointB = { lat: latB, lon: lonB };
 
     // Enable planner checkbox in UI if present
     const planCheckbox = document.getElementById("plan-segment");
@@ -236,6 +240,18 @@ window.MarsSegmentPick = (function () {
 
   function getLastSolvedSegment() {
     return lastSolvedSegment;
+  }
+
+  if (typeof window !== "undefined") {
+    window.addEventListener("DOMContentLoaded", function () {
+      if (window.MarsTravelMode && window.MarsTravelMode.onChange) {
+        window.MarsTravelMode.onChange(function () {
+          if (pointA && pointB && !solving) {
+            planRoute(pointA.lat, pointA.lon, pointB.lat, pointB.lon);
+          }
+        });
+      }
+    });
   }
 
   return {

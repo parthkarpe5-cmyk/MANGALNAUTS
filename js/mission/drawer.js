@@ -3,6 +3,7 @@ window.MarsSegmentDrawer = (function () {
   let panel = null;
   let lastSegment = null;
   let renderId = 0;
+  let currentPayloadKg = 20;
 
   function ic(name) {
     return window.MarsIcons ? window.MarsIcons.get(name) : "";
@@ -122,18 +123,22 @@ window.MarsSegmentDrawer = (function () {
       segment.path_m != null
         ? MarsGeodesic.formatDistance(segment.path_m)
         : "—";
+    const modeObj = (window.MarsTravelMode && window.MarsTravelMode.get)
+      ? window.MarsTravelMode.get()
+      : { id: segment.mode, label: segment.mode, maxSlopeDeg: 15, nasaStandard: "NASA Flight Rule EVA-01", type: "walk" };
+    const maxAllowedSlope = modeObj.maxSlopeDeg || (segment.mode === "walk" ? 15 : 20);
+
     const feasible = segment.path_found && segment.feasible;
     const feasClass = feasible ? "ok" : "bad";
     const feasText = segment.path_found
       ? feasible
-        ? "FEASIBLE (" + (segment.mode === "walk" ? "WALK ≤15°" : "ROVER ≤20°") + ")"
+        ? "FEASIBLE (" + (modeObj.shortLabel || modeObj.label) + " ≤" + maxAllowedSlope + "°)"
         : "EXCEEDS SLOPE LIMIT"
       : "NO PATH FOUND";
 
     const riskVal = segment.mean_risk != null ? segment.mean_risk : 0.3;
     const riskPercent = Math.round(riskVal * 100);
     const slopeVal = segment.max_slope_deg != null ? segment.max_slope_deg : 0;
-    const maxAllowedSlope = segment.mode === "walk" ? 15 : 20;
     const slopePercent = Math.min(
       100,
       Math.round((slopeVal / maxAllowedSlope) * 100)
@@ -141,7 +146,23 @@ window.MarsSegmentDrawer = (function () {
 
     let consumablesHtml = "";
     if (segment.path_found && segment.path_m && window.MarsTelemetry) {
-      const c = MarsTelemetry.calculateConsumables(segment.path_m, segment.mode);
+      const c = MarsTelemetry.calculateConsumables(segment.path_m, segment.mode, segment.path_nodes, {
+        payloadKg: currentPayloadKg,
+        crewCount: 2,
+      });
+
+      const isWalk = (modeObj.type || "walk") === "walk";
+      const payloadSelectorHtml = isWalk
+        ? '<div class="payload-selector-row">' +
+          '  <span class="payload-lbl">CARRIED PAYLOAD:</span>' +
+          '  <div class="payload-chips">' +
+          '    <button type="button" class="payload-chip ' + (currentPayloadKg === 5 ? "active" : "") + '" data-kg="5">5 kg (Light)</button>' +
+          '    <button type="button" class="payload-chip ' + (currentPayloadKg === 20 ? "active" : "") + '" data-kg="20">20 kg (Nominal)</button>' +
+          '    <button type="button" class="payload-chip ' + (currentPayloadKg === 40 ? "active" : "") + '" data-kg="40">40 kg (Heavy)</button>' +
+          '  </div>' +
+          '</div>'
+        : "";
+
       consumablesHtml =
         '<div class="drawer-section drawer-consumables">' +
         '  <div class="section-title-row">' +
@@ -149,9 +170,10 @@ window.MarsSegmentDrawer = (function () {
         ic("zap") +
         " Consumables Projection</h4>" +
         '    <span class="badge-mini">' +
-        (segment.mode === "walk" ? "EVA SUIT" : "ROVER CABIN") +
+        (isWalk ? "EVA SUIT (2 CREW)" : "ROVER CABIN") +
         "</span>" +
         "  </div>" +
+        payloadSelectorHtml +
         '  <div class="consumables-grid">' +
         '    <div class="consumable-item">' +
         '      <span class="c-icon">' +
@@ -162,7 +184,7 @@ window.MarsSegmentDrawer = (function () {
         '        <span class="c-val font-mono">' +
         (c.durationMin < 60 ? c.durationMin + " min" : c.durationHours + " hrs") +
         "</span>" +
-        '        <span class="c-sub">Tobler slope speed</span>' +
+        '        <span class="c-sub">Tobler 0.38g slope speed</span>' +
         "      </div>" +
         "    </div>" +
         '    <div class="consumable-item">' +
@@ -174,7 +196,7 @@ window.MarsSegmentDrawer = (function () {
         '        <span class="c-val font-mono">' +
         c.o2Liters +
         " L</span>" +
-        '        <span class="c-sub">PLSS 40 L/hr rate</span>' +
+        '        <span class="c-sub">' + (isWalk ? "2 Crew · 20% margin" : "Cabin Life Support") + '</span>' +
         "      </div>" +
         "    </div>" +
         '    <div class="consumable-item">' +
@@ -186,12 +208,33 @@ window.MarsSegmentDrawer = (function () {
         '        <span class="c-val font-mono">' +
         c.batteryWh +
         " Wh</span>" +
-        '        <span class="c-sub">Thermal &amp; avionics 220W</span>' +
+        '        <span class="c-sub">' + (isWalk ? "Dual PLSS &amp; -60°C thermal" : "Drive motors &amp; sensors") + '</span>' +
+        "      </div>" +
+        "    </div>" +
+        '    <div class="consumable-item">' +
+        '      <span class="c-icon">' +
+        (isWalk ? ic("droplet") : ic("gauge")) +
+        "</span>" +
+        '      <div class="c-info">' +
+        '        <span class="c-label">' + (isWalk ? "Cooling H₂O" : "Mean Speed") + '</span>' +
+        '        <span class="c-val font-mono">' +
+        (isWalk ? c.waterCoolingL + " L" : c.avgSpeedMs + " m/s") +
+        "</span>" +
+        '        <span class="c-sub">' + (isWalk ? "Sublimator heat rejection" : "AutoNav traverse pace") + '</span>' +
         "      </div>" +
         "    </div>" +
         "  </div>" +
         '  <div class="metric-explainer-box">' +
-        '    <strong>ℹ WHY THESE METRICS:</strong> Astronaut EVA missions on Mars require verified oxygen, battery power, and slope limits prior to departure. O₂ calculated at 40 L/h human metabolic consumption; power at 220 W suit heating.' +
+        '    <div class="explainer-header">' +
+        '      <strong>ℹ ' + (isWalk ? "NASA FLIGHT RULE EVA-01 &amp; TERRAIN PHYSICS" : "JPL AUTONAV WHEEL MOBILITY RULE") + '</strong>' +
+        '      <span class="badge-mini">' + (modeObj.nasaStandard || "NASA Standard") + '</span>' +
+        '    </div>' +
+        '    <p class="explainer-text">' + (modeObj.rationale || "Operational limit set to maintain traction safety and metabolic thermal equilibrium.") + '</p>' +
+        '    <div class="explainer-bio">' +
+        '      <span>• <strong>Crew Buddy Pair:</strong> ' + (isWalk ? "2 Astronauts mandatory under NASA EVA Flight Rules (never solo)." : "Autonomous robotic rover or 2-astronaut pressurized cabin.") + '</span>' +
+        '      <span>• <strong>Payload Effect:</strong> ' + c.payloadKg + ' kg equipment carried under 0.38g gravity (' + (c.payloadKg * 0.38).toFixed(1) + ' kg apparent weight).</span>' +
+        '      <span>• <strong>Incline Drag:</strong> Avg slope ' + c.meanSlopeDeg + '° slows pace to ' + c.avgSpeedMs + ' m/s and increases metabolic work.</span>' +
+        '    </div>' +
         '  </div>' +
         "</div>";
     }
@@ -289,6 +332,14 @@ window.MarsSegmentDrawer = (function () {
       panel.prepend(label);
     }
     if (segment.path_found && !segment.regional) window.MarsContingency?.attach(panel, segment);
+
+    // Payload chip listeners
+    panel.querySelectorAll(".payload-chip").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        currentPayloadKg = parseInt(btn.dataset.kg, 10);
+        render(lastSegment);
+      });
+    });
 
     // Action buttons
 
