@@ -413,6 +413,18 @@
             <p style="color:var(--muted-text); font-size:12px; line-height:1.5; margin-bottom:12px;">
               Compute safe topological traversal corridors between any two Martian points, verify slopes, and evaluate terrain obstacles.
             </p>
+
+            <div class="dock-select-group" style="margin-bottom:12px; padding:10px 12px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:8px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <span class="dock-lbl" style="font-weight:700; color:var(--text-muted, #A9A9B8); font-size:11px; letter-spacing:0.8px;">EXPEDITION TRAVEL MODE</span>
+                <span class="badge-mini font-mono" id="measure-travel-mode-badge" style="color:var(--mars-orange, #FF6B00); background:rgba(255,107,0,0.12); padding:2px 6px; border-radius:4px; font-size:10px;">≤20° SLOPE</span>
+              </div>
+              <select id="travel-mode-measure" class="dropdown-select" style="width:100%; padding:6px 10px; background:#15151C; color:#fff; border:1px solid rgba(255,255,255,0.15); border-radius:6px; font-size:12px;" aria-label="Expedition travel mode">
+                <option value="rover" selected>Rover AutoNav (≤20° safe slope)</option>
+                <option value="walk">Marswalk EVA (≤15° safe slope)</option>
+              </select>
+            </div>
+
             <button type="button" class="dock-btn" id="panel-btn-plan-custom-route" style="width:100%; margin-bottom:8px; background:linear-gradient(135deg, #FF6B00, #EA580C); color:#fff; font-weight:700;">
               📍 Plan Route (Click Point A &amp; B)
             </button>

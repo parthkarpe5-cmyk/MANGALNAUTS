@@ -71,6 +71,11 @@ window.MarsSegmentDrawer = (function () {
         qmHtml += '</div>';
       }
 
+      const activeMode = (window.MarsTravelMode && window.MarsTravelMode.get)
+        ? window.MarsTravelMode.get()
+        : { id: "rover", label: "Rover AutoNav (≤20°)" };
+      const isRover = activeMode.id === "rover";
+
       panel.innerHTML =
         '<div class="drawer-overview">' +
         '  <div class="sector-status-card" style="border-left: 3px solid ' + color + ';">' +
@@ -81,6 +86,21 @@ window.MarsSegmentDrawer = (function () {
         '    <div class="sector-meta-line">' +
         '      <span>ROVER: <strong>' + rover + '</strong></span> · ' +
         '      <span>BOUNDARY: <strong style="color: ' + color + ';">ACTIVE</strong></span>' +
+        '    </div>' +
+        '  </div>' +
+        '  <div class="drawer-travel-mode-section" style="margin: 12px 0; padding: 10px 12px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 10px;">' +
+        '    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">' +
+        '      <span style="font-size:11px; font-weight:700; color:var(--text-muted, #A9A9B8); letter-spacing:0.8px; text-transform:uppercase;">EXPEDITION TRAVEL MODE</span>' +
+        '      <span class="badge-mini font-mono" id="drawer-travel-mode-badge" style="color:var(--mars-orange, #FF6B00); background:rgba(255,107,0,0.12); padding:2px 6px; border-radius:4px; font-size:10px;">' +
+        (isRover ? '≤20° SLOPE' : '≤15° SLOPE') +
+        '      </span>' +
+        '    </div>' +
+        '    <select id="drawer-travel-mode-select" class="dropdown-select" style="width:100%; padding:8px 10px; background:#15151C; color:#fff; border:1px solid rgba(255,255,255,0.15); border-radius:8px; font-size:12px; font-family:var(--font-ui, sans-serif); cursor:pointer;" aria-label="Expedition travel mode">' +
+        '      <option value="rover"' + (isRover ? ' selected' : '') + '>Rover AutoNav (≤20° safe slope)</option>' +
+        '      <option value="walk"' + (!isRover ? ' selected' : '') + '>Marswalk EVA (≤15° safe slope)</option>' +
+        '    </select>' +
+        '    <div id="drawer-travel-mode-desc" style="font-size:11px; color:#71717A; margin-top:6px; line-height:1.35;">' +
+        (isRover ? 'Autonomous navigation standard for rocker-bogie rovers. Rigorously avoids loose sand ripples and steep walls.' : 'Astronaut EVA on foot. Enforces Liquid Cooling Garment (LCVG max 450 kcal/hr) metabolic limits.') +
         '    </div>' +
         '  </div>' +
         '  <div class="drawer-action-hero" style="margin: 12px 0;">' +
@@ -94,6 +114,16 @@ window.MarsSegmentDrawer = (function () {
         '  </div>' +
         qmHtml +
         '</div>';
+
+      const drawerModeSel = panel.querySelector("#drawer-travel-mode-select");
+      if (drawerModeSel) {
+        drawerModeSel.addEventListener("change", function () {
+          if (window.MarsAudio) MarsAudio.playClick();
+          if (window.MarsTravelMode && window.MarsTravelMode.set) {
+            window.MarsTravelMode.set(drawerModeSel.value);
+          }
+        });
+      }
 
       const planBtn = panel.querySelector("#drawer-start-plan-btn");
       if (planBtn) {
@@ -121,13 +151,42 @@ window.MarsSegmentDrawer = (function () {
     }
 
     if (segment.error || segment.status === "no_route") {
+      const activeMode = (window.MarsTravelMode && window.MarsTravelMode.get)
+        ? window.MarsTravelMode.get()
+        : { id: "rover", label: "Rover AutoNav (≤20°)" };
+      const isRover = activeMode.id === "rover";
+
       panel.innerHTML =
         '<div class="drawer-error-box">' +
-        '  <span class="error-badge">ERROR</span>' +
-        '  <p class="drawer-error"></p>'
-        '  <button type="button" class="btn-ghost" id="drawer-retry-btn">Reset Route</button> <button type="button" class="btn-ghost" id="drawer-fit-terrain">Center on measured terrain</button>' +
+        '  <span class="error-badge">TRAVERSAL BLOCKED</span>' +
+        '  <p class="drawer-error"></p>' +
+        '  <div class="drawer-travel-mode-section" style="margin: 10px 0; padding: 10px 12px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; text-align: left;">' +
+        '    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">' +
+        '      <span style="font-size: 11px; font-weight: 700; color: #A9A9B8; letter-spacing: 0.8px;">SWITCH EXPEDITION MODE</span>' +
+        '      <span class="badge-mini font-mono" style="color: #FF6B00; background: rgba(255,107,0,0.12); padding: 2px 6px; border-radius: 4px; font-size: 10px;">' +
+        (isRover ? '≤20° LIMIT' : '≤15° LIMIT') +
+        '      </span>' +
+        '    </div>' +
+        '    <select id="drawer-error-travel-mode" class="dropdown-select" style="width: 100%; padding: 6px 8px; background: #15151C; color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; font-size: 12px;" aria-label="Switch expedition travel mode">' +
+        '      <option value="rover"' + (isRover ? ' selected' : '') + '>Rover AutoNav (≤20° safe slope)</option>' +
+        '      <option value="walk"' + (!isRover ? ' selected' : '') + '>Marswalk EVA (≤15° safe slope)</option>' +
+        '    </select>' +
+        '  </div>' +
+        '  <div style="display: flex; gap: 8px; margin-top: 10px;">' +
+        '    <button type="button" class="btn-ghost" id="drawer-retry-btn" style="flex: 1;">Reset Route</button>' +
+        '    <button type="button" class="btn-ghost" id="drawer-fit-terrain" style="flex: 1;">Center Terrain</button>' +
+        '  </div>' +
         "</div>";
-      panel.querySelector(".drawer-error").textContent = segment.error || "No path meets the selected slope limit." ;
+      panel.querySelector(".drawer-error").textContent = segment.error || "No path meets the selected slope limit.";
+      const errModeSel = panel.querySelector("#drawer-error-travel-mode");
+      if (errModeSel) {
+        errModeSel.addEventListener("change", function () {
+          if (window.MarsAudio) MarsAudio.playClick();
+          if (window.MarsTravelMode && window.MarsTravelMode.set) {
+            window.MarsTravelMode.set(errModeSel.value);
+          }
+        });
+      }
       panel.querySelector("#drawer-retry-btn").onclick = () => MarsSegmentPick.reset();
       panel.querySelector("#drawer-fit-terrain").onclick = () => MarsDetailMap.setSite(MarsData.getActiveSiteKey());
       return;
@@ -325,6 +384,16 @@ window.MarsSegmentDrawer = (function () {
       '    <span class="drawer-feasible ' + feasClass + '">' + feasText + '</span>' +
       '  </div>' +
       '</div>' +
+      '<div class="drawer-travel-mode-section" style="margin-bottom:12px; padding:8px 12px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:8px; display:flex; align-items:center; justify-content:space-between; gap:10px;">' +
+      '  <div style="display:flex; flex-direction:column; gap:2px;">' +
+      '    <span style="font-size:10px; font-weight:700; color:var(--text-muted, #A9A9B8); letter-spacing:0.8px; text-transform:uppercase;">EXPEDITION TRAVEL MODE</span>' +
+      '    <span style="font-size:11px; font-family:var(--font-mono, monospace); color:var(--mars-orange, #FF6B00); font-weight:600;">' + (modeObj.shortLabel || modeObj.label) + ' (≤' + maxAllowedSlope + '°)</span>' +
+      '  </div>' +
+      '  <select id="drawer-active-travel-mode" class="dropdown-select" style="max-width:200px; padding:5px 8px; background:#15151C; color:#fff; border:1px solid rgba(255,255,255,0.15); border-radius:6px; font-size:12px; cursor:pointer;" aria-label="Switch expedition travel mode">' +
+      '    <option value="rover"' + (modeObj.id === "rover" ? ' selected' : '') + '>Rover AutoNav (≤20°)</option>' +
+      '    <option value="walk"' + (modeObj.id === "walk" ? ' selected' : '') + '>Marswalk EVA (≤15°)</option>' +
+      '  </select>' +
+      '</div>' +
       '<p class="mission-endpoints">A · ' + coordinates(segment.from) + '<br>B · ' + coordinates(segment.to) + '</p>' +
       '<div class="drawer-stats-grid">' +
       '  <div class="stat-card">' +
@@ -356,6 +425,16 @@ window.MarsSegmentDrawer = (function () {
       '  <button type="button" class="btn-ghost btn-sm" id="btn-reverse-route">Reverse</button>' +
       '  <button type="button" class="btn-ghost btn-sm btn-exit-nav-drawer" id="btn-exit-navigation" style="border-color: rgba(239, 68, 68, 0.45); color: #f87171; background: rgba(239, 68, 68, 0.08);">Exit navigation</button>' +
       '</div>';
+
+    const activeModeSelect = panel.querySelector("#drawer-active-travel-mode");
+    if (activeModeSelect) {
+      activeModeSelect.addEventListener("change", function () {
+        if (window.MarsAudio) MarsAudio.playClick();
+        if (window.MarsTravelMode && window.MarsTravelMode.set) {
+          window.MarsTravelMode.set(activeModeSelect.value);
+        }
+      });
+    }
 
     // Hook up elevation scrubber
     const svgEl = panel.querySelector(".elevation-profile-svg");

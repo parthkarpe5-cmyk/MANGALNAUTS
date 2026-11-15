@@ -272,17 +272,58 @@
       });
     }
 
-    // Sync travel mode in panel
-    const travelModePanel = document.getElementById("travel-mode-panel");
-    if (travelModePanel && travelMode) {
-      travelModePanel.value = travelMode.value;
-      travelModePanel.addEventListener("change", function () {
-        travelMode.value = travelModePanel.value;
-        travelMode.dispatchEvent(new Event("change"));
+    // Unified synchronization for all Expedition Travel Mode controls across UI
+    const travelSelectors = [
+      document.getElementById("travel-mode"),
+      document.getElementById("travel-mode-panel"),
+      document.getElementById("travel-mode-measure")
+    ].filter(Boolean);
+
+    function syncTravelModeUI(modeObj) {
+      if (!modeObj) return;
+      const modeId = modeObj.id || modeObj;
+      const isRover = modeId === "rover";
+
+      travelSelectors.forEach(sel => {
+        if (sel.value !== modeId) sel.value = modeId;
       });
-      travelMode.addEventListener("change", function () {
-        travelModePanel.value = travelMode.value;
+
+      const drawerSelect = document.getElementById("drawer-travel-mode-select");
+      if (drawerSelect && drawerSelect.value !== modeId) drawerSelect.value = modeId;
+
+      const activeDrawerSelect = document.getElementById("drawer-active-travel-mode");
+      if (activeDrawerSelect && activeDrawerSelect.value !== modeId) activeDrawerSelect.value = modeId;
+
+      const errDrawerSelect = document.getElementById("drawer-error-travel-mode");
+      if (errDrawerSelect && errDrawerSelect.value !== modeId) errDrawerSelect.value = modeId;
+
+      // Update badges and descriptions
+      const measureBadge = document.getElementById("measure-travel-mode-badge");
+      if (measureBadge) measureBadge.textContent = isRover ? "≤20° SLOPE" : "≤15° SLOPE";
+
+      const drawerBadge = document.getElementById("drawer-travel-mode-badge");
+      if (drawerBadge) drawerBadge.textContent = isRover ? "≤20° SLOPE" : "≤15° SLOPE";
+
+      const drawerDesc = document.getElementById("drawer-travel-mode-desc");
+      if (drawerDesc) {
+        drawerDesc.textContent = isRover
+          ? "Autonomous navigation standard for rocker-bogie rovers. Rigorously avoids loose sand ripples and steep walls."
+          : "Astronaut EVA on foot. Enforces Liquid Cooling Garment (LCVG max 450 kcal/hr) metabolic limits.";
+      }
+    }
+
+    travelSelectors.forEach(sel => {
+      sel.addEventListener("change", function () {
+        if (window.MarsAudio) MarsAudio.playClick();
+        if (window.MarsTravelMode && window.MarsTravelMode.set) {
+          window.MarsTravelMode.set(sel.value);
+        }
       });
+    });
+
+    if (window.MarsTravelMode && window.MarsTravelMode.onChange) {
+      window.MarsTravelMode.onChange(syncTravelModeUI);
+      syncTravelModeUI(window.MarsTravelMode.get());
     }
 
     // Sync Projects checkboxes
