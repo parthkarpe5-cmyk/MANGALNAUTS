@@ -18,10 +18,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/styles.css?v=centered-divider" />
+    <link rel="stylesheet" href="css/styles.css?v=mars-gradients" />
   </head>
   <body>
     <header class="top-nav cockpit-bar">
@@ -249,14 +249,6 @@
               </div>
             </div>
 
-            <div class="dropdown-section">
-              <span class="dropdown-section-title">MISSION COCKPIT THEME</span>
-              <select id="theme-selector" class="dropdown-select">
-                <option value="perseverance">Perseverance Lime</option>
-                <option value="ares">Martian Red</option>
-                <option value="deepspace" selected>Deep Space Cyan</option>
-              </select>
-            </div>
             <div class="mission-sound"><button type="button" class="btn-ghost" id="audio-toggle" title="Toggle Tactical Audio Feedback">
           <span id="audio-label">🔊 AUDIO: ON</span>
         </button>
@@ -295,9 +287,9 @@
     <script src="js/map/historical-traverses.js"></script>
     <script src="js/visual/cosmic-galaxy.js"></script>
     <script src="js/visual/orbiters.js?v=spacecraft-models"></script>
-    <script src="js/globe.js?v=spacecraft-models"></script>
+    <script src="js/globe.js?v=render-budget"></script>
     <script src="js/detail-map.js?v=olympus-pan-v4"></script>
-    <script src="js/hybrid.js?v=regions-1"></script>
+    <script src="js/hybrid.js?v=render-budget"></script>
     <script src="js/map/geodesic.js"></script>
     <script src="js/api/manifest.js?v=regional-dem"></script>
     <script src="js/routing/astar.js?v=mode-physics-v5"></script>
@@ -306,7 +298,6 @@
     <script src="js/routing/routeBetween.js?v=mode-physics-v5"></script>
     <script src="js/ui/icons.js?v=contour-slope-v3"></script>
     <script src="js/ui/audio.js"></script>
-    <script src="js/ui/theme.js?v=deep-space-default"></script>
     <script src="js/mission/telemetry.js?v=challenge-label"></script>
     <script src="js/mission/elevation-profile.js?v=contour-slope-v3"></script>
     <script src="js/mission/drawer.js?v=split-workspace"></script>

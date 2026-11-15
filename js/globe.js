@@ -93,6 +93,8 @@ window.MarsGlobe = (function () {
     Cesium.Ellipsoid.default = Cesium.Ellipsoid.MARS;
 
     viewer = new Cesium.Viewer(containerId, {
+      // Orbiters animate when visible, so cap the render rate instead of freezing the scene.
+      targetFrameRate: 30,
       animation: false,
       timeline: false,
       baseLayer: false,
