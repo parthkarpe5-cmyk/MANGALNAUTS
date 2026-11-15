@@ -3782,10 +3782,14 @@ html[data-theme="deepspace"] .telemetry-value.neon-time {
 
 .select-badge select option,
 .workspace-settings select,
-.detail-map-inner .leaflet-control-zoom,
-.detail-map-inner .leaflet-control-attribution {
+.detail-map-inner .leaflet-control-zoom {
   background: var(--panel-solid) !important;
   color: var(--text);
+}
+.detail-map-inner .leaflet-control-attribution,
+.leaflet-control-attribution,
+.footer {
+  display: none !important;
 }
 .workspace-sidebar .sector-status-card {
   border-color: var(--border-light) !important;
