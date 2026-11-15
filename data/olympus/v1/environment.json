@@ -1,0 +1,69 @@
+{
+  "site": "Olympus Mons (Summit Caldera)",
+  "site_id": "olympus",
+  "coordinates": {
+    "lat": 18.65,
+    "lon": -133.8,
+    "elevation_m": 18500.0
+  },
+  "sol": 1200,
+  "terrestrial_date": "2026-11-15",
+  "local_solar_time": "09:16 MTC",
+  "ltst": "09:16:12",
+  "is_daylight": true,
+  "sunset_in_min": 478.7,
+  "sunset_in_minutes": 478,
+  "sunset_utc": "2026-11-15T13:12:33Z",
+  "temp_C": -82.0,
+  "temp_min_C": -115.0,
+  "temp_max_C": -45.0,
+  "pressure_pa": 115.2,
+  "wind_m_s": 8.5,
+  "season": "caldera dry winter",
+  "ls_deg": 240.0,
+  "rad_dose_proxy": 42.0,
+  "rad_dose_unit": "uSv/hr",
+  "flare_level": "B5.4",
+  "atmosphere": {
+    "air_temp_c": {
+      "current": -82.0,
+      "min": -115.0,
+      "max": -45.0
+    },
+    "ground_temp_c": {
+      "current": -76.0,
+      "min": -123.0,
+      "max": -35.0
+    },
+    "pressure_pa": 115.2,
+    "wind_speed_ms": 8.5,
+    "wind_dir_deg": 315,
+    "wind_dir_compass": "NW",
+    "dust_opacity_tau": 0.45,
+    "uv_flux_index": 5.8
+  },
+  "radiation": {
+    "dose_rate_uSv_hr": 42.0,
+    "daily_dose_uSv": 1008.0,
+    "spe_event_status": "NORMAL",
+    "flare_level": "B5.4",
+    "cumulative_mission_mSv": 164.7,
+    "suit_shielding_factor": 0.65
+  },
+  "alerts": [
+    {
+      "id": "alt_cold_eva_0",
+      "code": "COLD_EVA",
+      "title": "Cold Eva",
+      "severity": "advisory",
+      "message": "Diurnal low reaches -115.0\u00b0C. Maintain suit thermal circulation.",
+      "sunset_in_min": 478
+    }
+  ],
+  "metadata": {
+    "generated_at_utc": "2026-11-15T05:13:53.761443+00:00",
+    "weather_source": "NASA Mars Atmosphere Scale-Height Model (Olympus Caldera)",
+    "space_weather_source": "NOAA Space Weather Prediction Center (GOES X-ray)",
+    "rover": "Orbital Synthetic Datum"
+  }
+}

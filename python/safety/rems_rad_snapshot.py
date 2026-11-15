@@ -402,7 +402,7 @@ def main():
     print(f"NASA API Key: {'Authenticated' if NASA_API_KEY != 'DEMO_KEY' else 'DEMO_KEY'}")
     print("=======================================================")
 
-    sites_to_run = ["jezero", "gale"] if args.site == "all" else [args.site]
+    sites_to_run = ["jezero", "gale", "olympus"] if args.site == "all" else [args.site]
     for s in sites_to_run:
         export_site(s)
 

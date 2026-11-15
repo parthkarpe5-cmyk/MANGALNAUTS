@@ -1,0 +1,46 @@
+{
+  "type": "FeatureCollection",
+  "name": "Olympus Mons Caldera Science Stops",
+  "crs": {
+    "type": "name",
+    "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-134.2000, 18.2500] },
+      "properties": {
+        "id": "stop_olympus_camp",
+        "name": "Olympus Mons Summit Base Camp",
+        "type": "HABITAT_BASE",
+        "elevation_m": 20041,
+        "description": "High-altitude expedition base camp at the southwestern summit plateau rim.",
+        "sample_target": "Logistics & Solar Array Battery Bank"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-134.0500, 18.3800] },
+      "properties": {
+        "id": "stop_caldera_scarp",
+        "name": "Caldera Collapse Scarp Observation Point",
+        "type": "STRUCTURAL_GEOLOGY",
+        "elevation_m": 20227,
+        "description": "Perched overlook of the multi-ring caldera collapse scarp wall dropping 3 km down.",
+        "sample_target": "High-Ti Basalt and Tiered Fault Slickensides"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-134.1250, 18.3150] },
+      "properties": {
+        "id": "stop_volcanic_vent",
+        "name": "Central Caldera Volcanic Vent Floor",
+        "type": "VOLCANOLOGY",
+        "elevation_m": 18500,
+        "description": "Interior nested collapse crater displaying young pahoehoe-like lava flow textures.",
+        "sample_target": "Fresh Unweathered Tholeiitic Shield Basalt"
+      }
+    }
+  ]
+}

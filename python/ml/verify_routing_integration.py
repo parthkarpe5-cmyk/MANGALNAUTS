@@ -24,7 +24,7 @@ def main():
     with open(stops_path, "r", encoding="utf-8") as f:
         stops_geo = json.load(f)
 
-    bounds = manifest["bbox"]
+    bounds = graph.get("bbox") or manifest.get("bbox")
     def in_coverage(lat, lon):
         return (
             bounds is None or

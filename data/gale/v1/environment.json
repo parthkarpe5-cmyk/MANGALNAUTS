@@ -8,12 +8,12 @@
   },
   "sol": 4995,
   "terrestrial_date": "2026-08-25",
-  "local_solar_time": "02:11 MTC",
-  "ltst": "02:10:48",
+  "local_solar_time": "02:41 MTC",
+  "ltst": "02:41:24",
   "is_daylight": false,
   "sunset_in_min": 0.0,
   "sunset_in_minutes": 0,
-  "sunset_utc": "2026-11-15T04:43:21Z",
+  "sunset_utc": "2026-11-15T05:13:41Z",
   "temp_C": -38.0,
   "temp_min_C": -71.0,
   "temp_max_C": -5.0,
@@ -23,7 +23,7 @@
   "ls_deg": 180.0,
   "rad_dose_proxy": 26.7,
   "rad_dose_unit": "uSv/hr",
-  "flare_level": "B6.4",
+  "flare_level": "B5.4",
   "atmosphere": {
     "air_temp_c": {
       "current": -38.0,
@@ -46,7 +46,7 @@
     "dose_rate_uSv_hr": 26.7,
     "daily_dose_uSv": 640.8,
     "spe_event_status": "NORMAL",
-    "flare_level": "B6.4",
+    "flare_level": "B5.4",
     "cumulative_mission_mSv": 164.7,
     "suit_shielding_factor": 0.65
   },
@@ -61,7 +61,7 @@
     }
   ],
   "metadata": {
-    "generated_at_utc": "2026-11-15T04:43:27.408281+00:00",
+    "generated_at_utc": "2026-11-15T05:13:49.804331+00:00",
     "weather_source": "NASA Curiosity MSL REMS (Live API, Gale Crater)",
     "space_weather_source": "NOAA Space Weather Prediction Center (GOES X-ray)",
     "rover": "Curiosity (MSL)"

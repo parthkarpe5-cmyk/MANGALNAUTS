@@ -3,17 +3,17 @@
   "active_site": "jezero",
   "default_site": "jezero",
   "aoi": "jezero",
-  "graph_id": "jezero_measured_dem_v1",
+  "graph_id": "jezero_delta_v1",
   "title": "MANGALNAUTS — Planetary Multi-Site Operations & GNN Traversability",
   "center": {
     "lat": 18.450030884932012,
     "lon": 77.42466700791792
   },
   "bbox": {
-    "west": 77.4083034962301,
-    "east": 77.44103051960573,
-    "north": 18.465551841401478,
-    "south": 18.434509928462546
+    "west": 77.355,
+    "east": 77.485,
+    "north": 18.505,
+    "south": 18.395
   },
   "citations": [
     "NASA Mars 2020 Perseverance Science Team / PDS Geosciences Node",
@@ -29,17 +29,17 @@
       "id": "jezero",
       "name": "Jezero Crater (Western Delta)",
       "rover": "Perseverance (Mars 2020)",
-      "graph_id": "jezero_measured_dem_v1",
+      "graph_id": "jezero_delta_v1",
       "boundary_color": "#c9f31d",
       "center": {
         "lat": 18.450030884932012,
         "lon": 77.42466700791792
       },
       "bbox": {
-        "west": 77.4083034962301,
-        "east": 77.44103051960573,
-        "north": 18.465551841401478,
-        "south": 18.434509928462546
+        "west": 77.355,
+        "east": 77.485,
+        "north": 18.505,
+        "south": 18.395
       },
       "datum_elev_m": -2530.0,
       "globe_camera": {
@@ -49,12 +49,12 @@
       },
       "detail_zoom": 10,
       "files": {
-        "aoi": "data/jezero/measured/aoi.geojson",
-        "terrain_graph": "data/jezero/measured/terrain_graph.json",
+        "aoi": "data/jezero/v1/aoi.geojson",
+        "terrain_graph": "data/jezero/v1/terrain_graph.json",
         "regional_graph": "data/jezero/regional_graph.json",
-        "gnn_scores": "data/jezero/measured/gnn_scores.json",
+        "gnn_scores": "data/jezero/v1/gnn_scores.json",
         "science_stops": "data/jezero/v1/science_stops.geojson",
-        "routes": "data/jezero/measured/routes.geojson",
+        "routes": "data/jezero/v1/routes.geojson",
         "environment": "data/jezero/v1/environment.json",
         "slope": "data/jezero/measured/slope.png"
       },
@@ -114,7 +114,7 @@
       "id": "gale",
       "name": "Gale Crater (Mount Sharp / Aeolis Mons)",
       "rover": "Curiosity (MSL)",
-      "graph_id": "gale_measured_dem_v1",
+      "graph_id": "gale_mount_sharp_v1",
       "boundary_color": "#f59e0b",
       "center": {
         "lat": -4.650837541141328,
@@ -134,12 +134,12 @@
       },
       "detail_zoom": 10,
       "files": {
-        "aoi": "data/gale/measured/aoi.geojson",
-        "terrain_graph": "data/gale/measured/terrain_graph.json",
+        "aoi": "data/gale/v1/aoi.geojson",
+        "terrain_graph": "data/gale/v1/terrain_graph.json",
         "regional_graph": "data/gale/regional_graph.json",
-        "gnn_scores": "data/gale/measured/gnn_scores.json",
+        "gnn_scores": "data/gale/v1/gnn_scores.json",
         "science_stops": "data/gale/v1/science_stops.geojson",
-        "routes": "data/gale/measured/routes.geojson",
+        "routes": "data/gale/v1/routes.geojson",
         "environment": "data/gale/v1/environment.json",
         "slope": "data/gale/measured/slope.png"
       },
@@ -214,7 +214,9 @@
         "terrain_graph": "data/olympus/measured/terrain_graph.json",
         "regional_graph": "data/olympus/regional_graph.json",
         "gnn_scores": "data/olympus/measured/gnn_scores.json",
-        "routes": "data/olympus/measured/routes.geojson",
+        "science_stops": "data/olympus/v1/science_stops.geojson",
+        "routes": "data/olympus/v1/routes.geojson",
+        "environment": "data/olympus/v1/environment.json",
         "slope": "data/olympus/measured/slope.png"
       },
       "example_route": {
@@ -245,11 +247,11 @@
     "grs_chlorine": "data/grs/cl.json"
   },
   "files": {
-    "aoi": "data/jezero/measured/aoi.geojson",
-    "terrain_graph": "data/jezero/measured/terrain_graph.json",
-    "gnn_scores": "data/jezero/measured/gnn_scores.json",
+    "aoi": "data/jezero/v1/aoi.geojson",
+    "terrain_graph": "data/jezero/v1/terrain_graph.json",
+    "gnn_scores": "data/jezero/v1/gnn_scores.json",
     "science_stops": "data/jezero/v1/science_stops.geojson",
-    "routes": "data/jezero/measured/routes.geojson",
+    "routes": "data/jezero/v1/routes.geojson",
     "environment": "data/jezero/v1/environment.json",
     "slope": "data/jezero/measured/slope.png"
   }

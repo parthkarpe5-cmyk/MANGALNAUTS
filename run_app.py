@@ -5,7 +5,10 @@ Starts a local HTTP server and opens the 3D Mars Globe & Mission Cockpit.
 
 import os
 import sys
+import time
 import socket
+import threading
+import subprocess
 import webbrowser
 import http.server
 import socketserver
@@ -31,9 +34,29 @@ def find_available_port():
         s.bind(("127.0.0.1", 0))
         return s.getsockname()[1]
 
+def start_telemetry_daemon():
+    """Background daemon thread to keep NASA & NOAA planetary telemetry fresh."""
+    def loop():
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        script = os.path.join(base_dir, "python", "safety", "rems_rad_snapshot.py")
+        if not os.path.exists(script):
+            return
+        while True:
+            try:
+                subprocess.run([sys.executable, script], check=False, capture_output=True)
+            except Exception:
+                pass
+            time.sleep(120)
+
+    t = threading.Thread(target=loop, daemon=True, name="TelemetryUpdater")
+    t.start()
+
+
 def main():
     base_dir = os.path.dirname(os.path.abspath(__file__))
     os.chdir(base_dir)
+
+    start_telemetry_daemon()
 
     port = find_available_port()
     url = f"http://localhost:{port}"
