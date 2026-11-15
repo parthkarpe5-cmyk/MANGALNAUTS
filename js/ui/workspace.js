@@ -17,7 +17,7 @@ window.MarsWorkspace = (() => {
   const titles = {
     missions: "MARTIAN MISSIONS & SECTORS",
     projects: "EXPLORATION PROJECTS & PDS",
-    layers: "MAP CONTROLS & OVERLAYS",
+    layers: "MAP CONTROLS & OVERLAYS FOR 3D VIEW",
     route: "EXPEDITION ROUTE & CONSUMABLES",
     split: "VIEWPORT DISPLAY ENGINE",
   };
