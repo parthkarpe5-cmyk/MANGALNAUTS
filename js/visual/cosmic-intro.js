@@ -8,8 +8,8 @@ window.MarsCosmicIntro = (function () {
   let animId = null;
   let fadeTimeout = null;
 
+  let skyDome = null;
   let galaxyPlane = null;
-  let galaxyStars = null;
   let solarSystemGroup = null;
 
   let sunMesh = null;
@@ -75,14 +75,14 @@ window.MarsCosmicIntro = (function () {
     renderer.setClearColor(0x010103, 1);
 
     scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x010103, 0.0004);
+    scene.fog = new THREE.FogExp2(0x010103, 0.0003);
 
-    camera = new THREE.PerspectiveCamera(54, width / height, 0.1, 5000);
+    camera = new THREE.PerspectiveCamera(54, width / height, 0.1, 6000);
 
-    // 1. Build Photorealistic Spiral Galaxy Disc & Starfield
+    // 1. Build Photorealistic NASA/Gaia Celestial Sky Dome
     buildRealisticGalaxy();
 
-    // 2. Build Authentic Planetary System with NASA Texture Maps
+    // 2. Build Authentic Planetary System with NASA Maps (Mars matched to Cesium Viking MDIM)
     buildRealisticSolarSystem();
 
     window.addEventListener("resize", onWindowResize);
@@ -104,68 +104,35 @@ window.MarsCosmicIntro = (function () {
   }
 
   function buildRealisticGalaxy() {
-    // A. User's Real Spiral Galaxy Image as a Cinematic Backdrop Disc
+    // A. Official NASA/Gaia Astronomical Celestial Starfield Sphere (No tacky dots)
+    const starsTex = textureLoader.load("assets/textures/stars_milky_way.jpg");
+    starsTex.generateMipmaps = true;
+
+    const skyGeom = new THREE.SphereGeometry(3400, 64, 40);
+    const skyMat = new THREE.MeshBasicMaterial({
+      map: starsTex,
+      side: THREE.BackSide, // Inverted sky dome wrapping the cosmos
+    });
+    skyDome = new THREE.Mesh(skyGeom, skyMat);
+    scene.add(skyDome);
+
+    // B. Distant High-Definition Spiral Galaxy View
     const galaxyTex = textureLoader.load("assets/textures/galaxy.jpg");
     galaxyTex.generateMipmaps = true;
 
-    const galaxyGeom = new THREE.PlaneGeometry(1600, 1000);
+    const galaxyGeom = new THREE.PlaneGeometry(1300, 800);
     const galaxyMat = new THREE.MeshBasicMaterial({
       map: galaxyTex,
       transparent: true,
-      opacity: 0.96,
+      opacity: 0.90,
       blending: THREE.AdditiveBlending,
       side: THREE.DoubleSide,
       depthWrite: false,
     });
     galaxyPlane = new THREE.Mesh(galaxyGeom, galaxyMat);
     galaxyPlane.position.set(0, 10, -960);
-    galaxyPlane.rotation.x = -0.32; // Slight natural elevation tilt
+    galaxyPlane.rotation.x = -0.28;
     scene.add(galaxyPlane);
-
-    // B. Surrounding 3D Deep Starfield
-    const starCount = 20000;
-    const starGeom = new THREE.BufferGeometry();
-    const starPos = new Float32Array(starCount * 3);
-    const starColors = new Float32Array(starCount * 3);
-
-    for (let i = 0; i < starCount; i++) {
-      const i3 = i * 3;
-      const radius = 600 + Math.random() * 2600;
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.acos(Math.random() * 2 - 1);
-
-      starPos[i3] = radius * Math.sin(phi) * Math.cos(theta);
-      starPos[i3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
-      starPos[i3 + 2] = radius * Math.cos(phi) - 600;
-
-      // Realistic stellar spectral classification colors (O, B, A, G, K, M)
-      const rVal = Math.random();
-      if (rVal < 0.25) {
-        // Hot blue-white
-        starColors[i3] = 0.8; starColors[i3 + 1] = 0.9; starColors[i3 + 2] = 1.0;
-      } else if (rVal < 0.7) {
-        // Pure brilliant white
-        starColors[i3] = 1.0; starColors[i3 + 1] = 1.0; starColors[i3 + 2] = 1.0;
-      } else if (rVal < 0.9) {
-        // Yellow/Warm (Sol-type)
-        starColors[i3] = 1.0; starColors[i3 + 1] = 0.95; starColors[i3 + 2] = 0.8;
-      } else {
-        // Red/Orange Giant
-        starColors[i3] = 1.0; starColors[i3 + 1] = 0.6; starColors[i3 + 2] = 0.4;
-      }
-    }
-
-    starGeom.setAttribute("position", new THREE.BufferAttribute(starPos, 3));
-    starGeom.setAttribute("color", new THREE.BufferAttribute(starColors, 3));
-
-    const starMat = new THREE.PointsMaterial({
-      size: 2.2,
-      vertexColors: true,
-      transparent: true,
-      opacity: 0.88,
-    });
-    galaxyStars = new THREE.Points(starGeom, starMat);
-    scene.add(galaxyStars);
   }
 
   function buildRealisticSolarSystem() {
@@ -194,7 +161,7 @@ window.MarsCosmicIntro = (function () {
     sunMesh.add(sunCorona);
 
     // Sun Point Light
-    const sunLight = new THREE.PointLight(0xfff8ee, 3.5, 3000);
+    const sunLight = new THREE.PointLight(0xfff8ee, 3.5, 3200);
     sunMesh.add(sunLight);
 
     // Ambient Starlight
@@ -270,17 +237,22 @@ window.MarsCosmicIntro = (function () {
 
     solarSystemGroup.add(earthGroup);
 
-    // 5. Mars Destination (NASA Viking MDIM 2K Map)
+    // 5. Mars Destination (NASA Viking MDIM 2.1 Mosaic - 100% matched to website Cesium globe)
     const marsTex = textureLoader.load("assets/textures/mars.jpg");
     const marsGeom = new THREE.SphereGeometry(22, 64, 64);
     const marsMat = new THREE.MeshStandardMaterial({
       map: marsTex,
-      roughness: 0.82,
-      metalness: 0.04,
+      roughness: 0.88,
+      metalness: 0.02,
     });
     marsMesh = new THREE.Mesh(marsGeom, marsMat);
-    marsMesh.position.set(0, 0, 85); // Direct target in front of camera
-    marsMesh.rotation.y = -1.2; // Face Olympus Mons and Valles Marineris towards camera
+    marsMesh.position.set(0, 0, 85);
+
+    // Precise Alignment to Cesium Globe View:
+    // Cesium camera setView: Longitude 35.0°E, Latitude 10.0°N, North pointing UP
+    // rot_y = 55.0° (0.96 rad), rot_x = -10.0° (-0.175 rad)
+    marsMesh.rotation.y = 0.96;
+    marsMesh.rotation.x = -0.175;
     solarSystemGroup.add(marsMesh);
 
     // Martian Atmospheric Limb Glow
@@ -288,11 +260,11 @@ window.MarsCosmicIntro = (function () {
       map: createGlowTexture("rgba(239, 140, 100, 0.7)"),
       color: 0xef7a5d,
       transparent: true,
-      opacity: 0.42,
+      opacity: 0.40,
       blending: THREE.AdditiveBlending,
     });
     marsAtmosphere = new THREE.Sprite(marsAtmoMat);
-    marsAtmosphere.scale.set(52, 52, 1);
+    marsAtmosphere.scale.set(50, 50, 1);
     marsMesh.add(marsAtmosphere);
 
     scene.add(solarSystemGroup);
@@ -327,11 +299,11 @@ window.MarsCosmicIntro = (function () {
     const progress = Math.min(1.0, elapsed / DURATION_MS);
 
     // 1. Slow, majestic celestial rotations
-    if (galaxyPlane) {
-      galaxyPlane.rotation.z += 0.0006;
+    if (skyDome) {
+      skyDome.rotation.y += 0.00015;
     }
-    if (galaxyStars) {
-      galaxyStars.rotation.y += 0.0003;
+    if (galaxyPlane) {
+      galaxyPlane.rotation.z += 0.0004;
     }
 
     if (sunMesh) sunMesh.rotation.y += 0.0015;
@@ -342,7 +314,13 @@ window.MarsCosmicIntro = (function () {
       moonMesh.position.x = Math.cos(now * 0.0016) * 18;
       moonMesh.position.z = Math.sin(now * 0.0016) * 18;
     }
-    if (marsMesh) marsMesh.rotation.y += 0.004;
+
+    // Mars orientation locks smoothly into the exact Cesium target coordinates (35°E, 10°N, North UP)
+    if (marsMesh) {
+      const approachDrift = Math.max(0, 1 - progress) * 0.03;
+      marsMesh.rotation.y = 0.96 + Math.sin(now * 0.0008) * approachDrift;
+      marsMesh.rotation.x = -0.175;
+    }
 
     // 2. Cinematic Camera Traversal Spline
     updateCameraPath(progress);
@@ -366,20 +344,20 @@ window.MarsCosmicIntro = (function () {
     // Smooth cubic ease-in-out curve
     const ease = p < 0.5 ? 2 * p * p : -1 + (4 - 2 * p) * p;
 
-    // Camera travels smoothly along Z axis from galaxy overview to Mars approach
+    // Camera travels smoothly along Z axis from deep galaxy overview to Mars insertion
     const startZ = -1180;
     const endZ = 38; // Right above Mars orbital horizon
     const curZ = startZ + (endZ - startZ) * ease;
 
-    // Subtle natural cinematic camera drifting on X and Y
-    const curX = Math.sin(p * Math.PI * 1.5) * 16;
-    const curY = Math.cos(p * Math.PI) * 10 + 4;
+    // Natural camera drifting on X and Y, centering to (0, 0) as it arrives at Mars
+    const centering = 1 - ease;
+    const curX = Math.sin(p * Math.PI * 1.5) * 16 * centering;
+    const curY = (Math.cos(p * Math.PI) * 10 + 4) * centering;
 
     camera.position.set(curX, curY, curZ);
 
-    // Look forward along trajectory, locking firmly onto Mars
-    const targetZ = curZ + 95;
-    camera.lookAt(0, 0, targetZ);
+    // Look directly at Mars center (0, 0, 85)
+    camera.lookAt(0, 0, 85);
   }
 
   function updateHud(p) {
@@ -409,8 +387,8 @@ window.MarsCosmicIntro = (function () {
     } else {
       if (hudStage) hudStage.textContent = "TARGET ACQUIRED // 1.52 AU";
       if (hudTitle) hudTitle.textContent = "MARS ORBITAL INSERTION";
-      if (hudSub) hudSub.textContent = "NASA VIKING GLOBAL MOSAIC · COMMENCING DESCENT";
-      if (telemetryText) telemetryText.textContent = "MARS GRAVITY: 0.38g · ESCAPE VELOCITY: 5.03 km/s";
+      if (hudSub) hudSub.textContent = "NASA VIKING MDIM 2.1 · COMMENCING TACTICAL DESCENT";
+      if (telemetryText) telemetryText.textContent = "MARS GRAVITY: 0.38g · COORDINATES: 35.0°E, 10.0°N";
     }
   }
 
