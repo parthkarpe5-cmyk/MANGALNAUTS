@@ -33,8 +33,6 @@
   const themeSelector = document.getElementById("theme-selector");
   const audioToggle = document.getElementById("audio-toggle");
   const audioLabel = document.getElementById("audio-label");
-  const windToggle = document.getElementById("ambient-wind-toggle");
-  const windLabel = document.getElementById("wind-label");
 
   // Google Earth-Style Map Presets & Globe Layers
   const mapStylePreset = document.getElementById("map-style-preset");
@@ -486,17 +484,6 @@
         MarsAudio.setMuted(!MarsAudio.isMuted());
         syncAudioButton();
         if (!MarsAudio.isMuted()) MarsAudio.playClick();
-      });
-    }
-
-    // Init ambient Martian wind button
-    if (windToggle && window.MarsAudio) {
-      windToggle.addEventListener("click", function () {
-        const active = MarsAudio.toggleAmbientWind();
-        if (windLabel) {
-          windLabel.textContent = active ? "WIND: ON" : "WIND: OFF";
-        }
-        windToggle.classList.toggle("active-wind", active);
       });
     }
 
