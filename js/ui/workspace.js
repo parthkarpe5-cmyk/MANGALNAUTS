@@ -10,7 +10,6 @@ window.MarsWorkspace = (() => {
     missions: document.getElementById("workspace-missions-menu"),
     projects: document.getElementById("workspace-projects-menu"),
     layers: document.getElementById("globe-layers-menu"),
-    controls: document.getElementById("globe-layers-menu"),
     measure: document.getElementById("workspace-measure-menu"),
     route: document.getElementById("segment-drawer"),
     split: document.getElementById("workspace-split-menu"),
@@ -20,7 +19,6 @@ window.MarsWorkspace = (() => {
     missions: "MARTIAN MISSIONS & SECTORS",
     projects: "EXPLORATION PROJECTS & PDS",
     layers: "MAP CONTROLS & OVERLAYS",
-    controls: "MAP CONTROLS & OVERLAYS",
     measure: "TRAVERSAL MEASUREMENT",
     route: "EXPEDITION ROUTE & CONSUMABLES",
     split: "VIEWPORT DISPLAY ENGINE",
@@ -31,39 +29,94 @@ window.MarsWorkspace = (() => {
   let share = defaultShare;
 
   function show(name) {
-    if (panel === name && name !== null) {
+    if (!name) {
       close();
       return;
     }
-    panel = name;
-    if (sidebar) sidebar.hidden = !panel;
+    const targetName = (name === "controls") ? "layers" : name;
+    if (panel === targetName) {
+      close();
+      return;
+    }
+    panel = targetName;
+    if (sidebar) sidebar.hidden = false;
 
     if (sidebarTitle && titles[panel]) {
       sidebarTitle.textContent = titles[panel];
     }
 
-    for (const key of Object.keys(panels)) {
-      if (panels[key]) {
-        panels[key].hidden = key !== panel;
+    for (const [key, el] of Object.entries(panels)) {
+      if (el) {
+        el.hidden = (key !== panel);
       }
     }
 
     // Update active class on left rail buttons
     document.querySelectorAll(".rail-btn").forEach(btn => {
       const action = btn.dataset.railAction;
-      const isActive = action === panel || (panel === "controls" && action === "layers");
+      const isActive = (action === panel);
       btn.classList.toggle("active", isActive);
       btn.setAttribute("aria-expanded", String(isActive));
     });
+
+    // Sync legacy tabs and toggles
+    const routeTab = document.getElementById("workspace-route-tab");
+    const controlsTab = document.getElementById("workspace-controls-tab");
+    if (routeTab) {
+      routeTab.setAttribute("aria-selected", String(panel === "route"));
+      routeTab.tabIndex = panel === "route" ? 0 : -1;
+    }
+    if (controlsTab) {
+      controlsTab.setAttribute("aria-selected", String(panel === "layers"));
+      controlsTab.tabIndex = panel === "layers" ? 0 : -1;
+    }
+    const routeToggle = document.getElementById("workspace-route-toggle");
+    const layersToggle = document.getElementById("globe-layers-toggle");
+    if (routeToggle) routeToggle.setAttribute("aria-expanded", String(panel === "route"));
+    if (layersToggle) layersToggle.setAttribute("aria-expanded", String(panel === "layers"));
   }
 
   function close() {
     panel = null;
     if (sidebar) sidebar.hidden = true;
+    for (const el of Object.values(panels)) {
+      if (el) el.hidden = true;
+    }
     document.querySelectorAll(".rail-btn").forEach(btn => {
       btn.classList.remove("active");
       btn.setAttribute("aria-expanded", "false");
     });
+    const routeToggle = document.getElementById("workspace-route-toggle");
+    const layersToggle = document.getElementById("globe-layers-toggle");
+    if (routeToggle) routeToggle.setAttribute("aria-expanded", "false");
+    if (layersToggle) layersToggle.setAttribute("aria-expanded", "false");
+  }
+
+  // Hook legacy triggers & tabs
+  const routeToggle = document.getElementById("workspace-route-toggle");
+  const layersToggle = document.getElementById("globe-layers-toggle");
+  const routeTab = document.getElementById("workspace-route-tab");
+  const controlsTab = document.getElementById("workspace-controls-tab");
+
+  if (routeToggle) {
+    routeToggle.addEventListener("click", () => {
+      window.MarsAudio?.playClick();
+      if (panel === "route") close();
+      else show("route");
+    });
+  }
+  if (layersToggle) {
+    layersToggle.addEventListener("click", () => {
+      window.MarsAudio?.playClick();
+      if (panel === "layers") close();
+      else show("layers");
+    });
+  }
+  if (routeTab) {
+    routeTab.addEventListener("click", () => show("route"));
+  }
+  if (controlsTab) {
+    controlsTab.addEventListener("click", () => show("layers"));
   }
 
   if (closeButton) {
