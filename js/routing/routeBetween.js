@@ -9,15 +9,41 @@ window.MarsRouteBetween = (function () {
   }
 
   function snapNearest(graph, lat, lon) {
+    if (!graph || !graph.nodes || !graph.nodes.length) return null;
+
+    // Fast path: O(1) direct mathematical lookup for regular raster grids (e.g. regional graphs)
+    if (graph.raster && graph.bbox) {
+      const { rows, cols } = graph.raster;
+      const { north, south, west, east } = graph.bbox;
+      if (lat >= south && lat <= north && lon >= west && lon <= east) {
+        const r = Math.max(0, Math.min(rows - 1, Math.round(((north - lat) / (north - south)) * (rows - 1))));
+        const c = Math.max(0, Math.min(cols - 1, Math.round(((lon - west) / (east - west)) * (cols - 1))));
+        const index = r * cols + c;
+        if (index >= 0 && index < graph.nodes.length) {
+          const directNode = graph.nodes[index];
+          if (directNode && (directNode.id === `n_${r}_${c}` || directNode.id === `node_${r}_${c}`)) {
+            return directNode;
+          }
+        }
+      }
+    }
+
+    // Fast equirectangular distance squared: avoids 40k trigonometric calls inside the loop
+    const cosLat = Math.cos((lat * Math.PI) / 180);
     let best = null;
-    let bestD = Infinity;
-    graph.nodes.forEach(function (n) {
-      const d = MarsGeodesic.haversineMeters(lat, lon, n.lat, n.lon);
-      if (d < bestD) {
-        bestD = d;
+    let bestD2 = Infinity;
+    const nodes = graph.nodes;
+    const len = nodes.length;
+    for (let i = 0; i < len; i++) {
+      const n = nodes[i];
+      const dLat = n.lat - lat;
+      const dLon = (n.lon - lon) * cosLat;
+      const d2 = dLat * dLat + dLon * dLon;
+      if (d2 < bestD2) {
+        bestD2 = d2;
         best = n;
       }
-    });
+    }
     return best;
   }
 

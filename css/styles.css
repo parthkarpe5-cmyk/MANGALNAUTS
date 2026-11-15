@@ -3800,3 +3800,281 @@ html[data-theme="deepspace"] .telemetry-value.neon-time {
 html[data-theme="deepspace"] .workspace-sidebar .segment-drawer {
   background: transparent;
 }
+
+/* ============================================================
+   ODYSSEY GRS ISRU & MINERALS — FLOATING HUD & DRAWER CARDS
+   NASA 2001 Mars Odyssey GRS (Boynton et al. 2007)
+   ============================================================ */
+
+/* Task 1: Floating Colorbar & Legend HUD */
+.grs-legend-hud {
+  position: fixed;
+  bottom: 84px;
+  right: 24px;
+  width: 360px;
+  max-width: calc(100vw - 48px);
+  background: rgba(10, 15, 26, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(56, 189, 248, 0.32);
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65), 0 0 20px rgba(56, 189, 248, 0.15);
+  z-index: 1500;
+  padding: 12px 14px;
+  color: var(--text-bright, #f8fafc);
+  font-family: var(--font-body, system-ui, sans-serif);
+  animation: hudFadeSlideIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes hudFadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.grs-legend-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.grs-legend-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.grs-legend-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.grs-legend-symbol {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  padding: 1px 5px;
+  border-radius: 4px;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  letter-spacing: 0.05em;
+}
+
+.grs-legend-name {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn-grs-close {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 2px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.btn-grs-close:hover {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.15);
+}
+
+.grs-legend-bar-container {
+  margin: 6px 0 8px;
+}
+
+.grs-legend-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.68rem;
+  color: #cbd5e1;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.grs-legend-center-label {
+  font-size: 0.58rem;
+  color: #64748b;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.grs-legend-gradient-bar {
+  height: 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.grs-legend-tagline {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 0.69rem;
+  line-height: 1.35;
+  color: #93c5fd;
+  background: rgba(56, 189, 248, 0.07);
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  border-radius: 6px;
+  padding: 6px 8px;
+  margin-bottom: 6px;
+}
+
+.grs-legend-tagline .tagline-icon {
+  color: #f59e0b;
+  font-size: 0.78rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.grs-legend-citation {
+  font-size: 0.58rem;
+  color: #64748b;
+  line-height: 1.3;
+  text-align: right;
+  letter-spacing: 0.02em;
+}
+
+/* Task 3: Mission Drawer ISRU Card */
+.drawer-isru {
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-top: 12px;
+}
+
+.isru-hazard-alert {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  border-radius: 6px;
+  padding: 7px 10px;
+  margin-bottom: 10px;
+  color: #fef3c7;
+  font-size: 0.72rem;
+  line-height: 1.3;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.15);
+}
+
+.isru-hazard-alert .hazard-icon {
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+
+.isru-hazard-alert strong {
+  color: #f59e0b;
+  letter-spacing: 0.03em;
+}
+
+.isru-hazard-safe {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(34, 197, 94, 0.08);
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  border-radius: 6px;
+  padding: 5px 9px;
+  margin-bottom: 10px;
+  color: #86efac;
+  font-size: 0.71rem;
+}
+
+.isru-hazard-safe .safe-icon {
+  color: #22c55e;
+  font-weight: 700;
+}
+
+.isru-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.c-sub-inline {
+  font-size: 0.68rem;
+  color: #94a3b8;
+  margin-left: 3px;
+  font-weight: normal;
+}
+
+.isru-citation-note {
+  font-size: 0.6rem;
+  color: #64748b;
+  margin-top: 8px;
+  text-align: right;
+  letter-spacing: 0.02em;
+}
+}
+
+/* Soft UI surfaces for the mission cockpit. */
+:root {
+  --soft-surface: color-mix(in srgb, var(--panel-solid) 75%, var(--panel-alt));
+  --soft-edge: color-mix(in srgb, var(--text-bright) 11%, transparent);
+  --soft-raised: inset 0 1px var(--soft-edge), 0 4px 12px #0005;
+  --soft-recessed: inset 0 2px 5px #0006, inset 0 -1px var(--soft-edge);
+}
+
+html .top-nav.cockpit-bar,
+html .mission-dock.cockpit-bar,
+html .workspace-sidebar,
+html .workspace-sidebar .segment-drawer {
+  background: var(--soft-surface);
+  border-color: var(--soft-edge);
+  backdrop-filter: none;
+  box-shadow: var(--soft-raised);
+}
+html .workspace-sidebar .segment-drawer {
+  background: transparent;
+  box-shadow: none;
+}
+html .mission-dock.cockpit-bar { border-radius: 16px; }
+html .workspace-sidebar-header { border-bottom-color: var(--soft-edge); }
+
+.cockpit-bar :is(.telemetry-pill, .select-badge select, .view-mode-group, .dropdown-trigger),
+.workspace-sidebar :is(select, .btn-ghost, .stat-card, .qm-card) {
+  background: var(--soft-surface);
+  border-color: var(--soft-edge);
+  border-radius: 9px;
+  box-shadow: var(--soft-raised);
+}
+.cockpit-bar :is(.select-badge select, .view-mode-group),
+.workspace-sidebar select {
+  background: var(--panel-solid);
+  box-shadow: var(--soft-recessed);
+}
+.cockpit-bar .view-mode-btn.active,
+.workspace-sidebar-header [aria-selected="true"] {
+  box-shadow: var(--soft-recessed);
+}
+.mission-dock .dock-btn-plan .btn-inner {
+  border-radius: 9px;
+  box-shadow: var(--soft-raised);
+}
+.globe-site-banner,
+.orbiter-card,
+.route-prompt {
+  background: var(--soft-surface);
+  border-color: var(--soft-edge);
+  border-radius: 12px;
+  backdrop-filter: none;
+  box-shadow: var(--soft-raised);
+}

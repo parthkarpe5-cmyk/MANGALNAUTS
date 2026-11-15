@@ -327,6 +327,72 @@ window.MarsSegmentDrawer = (function () {
         '</div>';
     }
 
+    let isruHtml = "";
+    if (segment.path_found && window.MarsGrsOverlays && segment.from) {
+      try {
+        const isru = await MarsGrsOverlays.calculateIsruMetrics(segment.from.lat, segment.from.lon);
+        isruHtml =
+          '<div class="drawer-section drawer-isru">' +
+          '  <div class="section-title-row">' +
+          '    <h4><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> ISRU &amp; Regolith Telemetry</h4>' +
+          '    <span class="badge-mini font-mono" style="color:var(--pl-cyan,#38bdf8); border-color:rgba(56,189,248,0.4);">ODYSSEY GRS</span>' +
+          '  </div>' +
+          (isru.chlorineAlert
+            ? '  <div class="isru-hazard-alert">' +
+              '    <span class="hazard-icon">⚠️</span>' +
+              '    <div class="hazard-text">' +
+              '      <strong>HIGH PERCHLORATES (Cl: ' + isru.chlorineWtPct + ' wt%)</strong><br/>' +
+              '      <span>Airlock Electrostatic De-dusting Required</span>' +
+              '    </div>' +
+              '  </div>'
+            : '  <div class="isru-hazard-safe">' +
+              '    <span class="safe-icon">✓</span>' +
+              '    <span>Perchlorates Nominal (' + isru.chlorineWtPct + ' wt% Cl) · Standard EVA Protocols</span>' +
+              '  </div>'
+          ) +
+          '  <div class="consumables-grid isru-grid">' +
+          '    <div class="consumable-item">' +
+          '      <span class="c-icon">💧</span>' +
+          '      <div class="c-info">' +
+          '        <span class="c-label">Local Water Abundance</span>' +
+          '        <span class="c-val font-mono">' + isru.waterWtPct + ' wt% <span class="c-sub-inline">' + isru.waterUncertainty + '</span></span>' +
+          '        <span class="c-sub">Subsurface H₂O equivalent</span>' +
+          '      </div>' +
+          '    </div>' +
+          '    <div class="consumable-item">' +
+          '      <span class="c-icon">⛏️</span>' +
+          '      <div class="c-info">' +
+          '        <span class="c-label">Extractable Water</span>' +
+          '        <span class="c-val font-mono">~' + isru.waterKgPerM3 + ' kg / m³</span>' +
+          '        <span class="c-sub">From surface regolith (1m)</span>' +
+          '      </div>' +
+          '    </div>' +
+          '    <div class="consumable-item">' +
+          '      <span class="c-icon">🚀</span>' +
+          '      <div class="c-info">' +
+          '        <span class="c-label">Sabatier CH₄ Yield</span>' +
+          '        <span class="c-val font-mono">~' + isru.methaneYieldKgPerM3 + ' kg CH₄ / m³</span>' +
+          '        <span class="c-sub">Ascent rocket propellant</span>' +
+          '      </div>' +
+          '    </div>' +
+          '    <div class="consumable-item">' +
+          '      <span class="c-icon">🧪</span>' +
+          '      <div class="c-info">' +
+          '        <span class="c-label">Regolith Composition</span>' +
+          '        <span class="c-val font-mono">Fe: ' + isru.ironWtPct + '% · Si: ' + isru.siliconWtPct + '%</span>' +
+          '        <span class="c-sub">Sintering &amp; solar array base</span>' +
+          '      </div>' +
+          '    </div>' +
+          '  </div>' +
+          '  <div class="isru-citation-note font-mono">' +
+          '    <span>NASA 2001 Mars Odyssey GRS (Boynton et al. 2007) · PDS Geosciences</span>' +
+          '  </div>' +
+          '</div>';
+      } catch (e) {
+        console.warn("[ISRU] Calculation error:", e);
+      }
+    }
+
     let profileHtml = "";
     if (segment.path_found && segment.path_nodes && window.MarsElevationProfile) {
       profileHtml =
@@ -382,10 +448,9 @@ window.MarsSegmentDrawer = (function () {
       '  </div>' +
       '</div>' +
       consumablesHtml +
+      isruHtml +
       profileHtml +
       '<div class="route-action-bar">' +
-      '  <button type="button" class="btn-ghost btn-sm" id="btn-toggle-traversal">⏸ Pause Traverse</button>' +
-      '  <button type="button" class="btn-ghost btn-sm" id="btn-replay-traversal">⏮ Replay</button>' +
       '  <button type="button" class="btn-ghost btn-sm" id="btn-reverse-route">🔄 Reverse Path</button>' +
       '  <button type="button" class="btn-ghost btn-sm btn-exit-nav-drawer" id="btn-exit-navigation" style="border-color: rgba(239, 68, 68, 0.45); color: #f87171; background: rgba(239, 68, 68, 0.08);">✕ Exit Nav (Unlock)</button>' +
       '</div>';
@@ -459,25 +524,6 @@ window.MarsSegmentDrawer = (function () {
     });
 
     // Action buttons
-
-    const toggleTravBtn = document.getElementById("btn-toggle-traversal");
-    if (toggleTravBtn) {
-      toggleTravBtn.onclick = function () {
-        if (window.MarsSegmentPick) {
-          const paused = window.MarsSegmentPick.togglePauseTraversal();
-          toggleTravBtn.textContent = paused ? "▶ Resume Traverse" : "⏸ Pause Traverse";
-        }
-      };
-    }
-    const replayTravBtn = document.getElementById("btn-replay-traversal");
-    if (replayTravBtn) {
-      replayTravBtn.onclick = function () {
-        if (window.MarsSegmentPick) {
-          window.MarsSegmentPick.replayAutoTraversal();
-          if (toggleTravBtn) toggleTravBtn.textContent = "⏸ Pause Traverse";
-        }
-      };
-    }
     const clearBtn = document.getElementById("btn-clear-active-route");
     if (clearBtn) {
       clearBtn.onclick = () => {

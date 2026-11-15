@@ -143,6 +143,9 @@
     if (toggleTraverses && window.MarsHistoricalTraverses) {
       MarsHistoricalTraverses.setVisible(toggleTraverses.checked, map, MarsGlobe.getViewer());
     }
+    if (grsSelect && grsSelect.value !== "none" && window.MarsGrsOverlays) {
+      MarsGrsOverlays.applyLeaflet(map, grsSelect.value, 0.65);
+    }
   }
 
   function syncAudioButton() {
@@ -227,18 +230,28 @@
     const viewer = MarsGlobe.getViewer();
     if (viewer && viewer.scene && viewer.scene.canvas) {
       const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+      let mouseMovePending = false;
+      let lastEndPosition = null;
+
       handler.setInputAction(function (movement) {
-        const cartesian = viewer.camera.pickEllipsoid(
-          movement.endPosition,
-          viewer.scene.globe.ellipsoid
-        );
-        if (cartesian && coordsEl) {
-          const carto = Cesium.Cartographic.fromCartesian(cartesian);
-          coordsEl.textContent = formatCoord(
-            Cesium.Math.toDegrees(carto.latitude),
-            Cesium.Math.toDegrees(carto.longitude)
+        lastEndPosition = movement.endPosition;
+        if (mouseMovePending) return;
+        mouseMovePending = true;
+
+        requestAnimationFrame(function () {
+          mouseMovePending = false;
+          if (!lastEndPosition || !coordsEl || !viewer.scene) return;
+          const cartesian = viewer.camera.pickEllipsoid(
+            lastEndPosition,
+            viewer.scene.globe.ellipsoid
           );
-        }
+          if (cartesian) {
+            const carto = Cesium.Cartographic.fromCartesian(cartesian);
+            const lat = Cesium.Math.toDegrees(carto.latitude);
+            const lon = Cesium.Math.toDegrees(carto.longitude);
+            coordsEl.textContent = formatCoord(lat, lon);
+          }
+        });
       }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
     }
 
@@ -304,9 +317,10 @@
         if (window.MarsAudio) MarsAudio.playClick();
         const val = grsSelect.value;
         const elemKey = val === "none" ? null : val;
+        const curViewer = (window.MarsGlobe && window.MarsGlobe.getViewer) ? MarsGlobe.getViewer() : viewer;
         const map = MarsDetailMap.isReady() ? MarsDetailMap.getMap() : null;
         if (window.MarsGrsOverlays) {
-          MarsGrsOverlays.applyCesium(viewer, elemKey, 0.65);
+          MarsGrsOverlays.applyCesium(curViewer, elemKey, 0.65);
           if (map) {
             MarsGrsOverlays.applyLeaflet(map, elemKey, 0.65);
           }

@@ -124,6 +124,8 @@ window.MarsSegmentPick = (function () {
     const isWalk = segment && segment.mode === "walk";
     const displayTitle = title || currentRouteTitle || (segment && segment.routeTitle) || "Mission Waypoint A ➔ Waypoint B";
     const container = map.getContainer();
+    const totalDistM = segment && segment.path_m ? segment.path_m : traversalTotalDistM;
+    const totalDistKm = (totalDistM / 1000).toFixed(2);
     navDockEl = document.createElement("div");
     navDockEl.className = "mars-active-nav-dock";
 
@@ -139,30 +141,17 @@ window.MarsSegmentPick = (function () {
       '  <span class="nav-dock-route-title font-mono" title="' + displayTitle + '">' + displayTitle + '</span>' +
       '</div>' +
       '<div class="nav-dock-center font-mono">' +
-      '  <span id="nav-dock-dist" class="nav-metric-bold">' + (traversalTotalDistM / 1000).toFixed(2) + ' km</span>' +
+      '  <span id="nav-dock-dist" class="nav-metric-bold">' + totalDistKm + ' km</span>' +
       '  <span class="nav-divider">·</span>' +
       '  <span id="nav-dock-eta" class="nav-metric-eta" title="Estimated Time of Arrival">ETA ' + initEtaStr + '</span>' +
       '  <span class="nav-divider">·</span>' +
-      '  <span id="nav-dock-elev" class="nav-metric-elev">Elev: -- m</span>' +
-      '  <span class="nav-divider">·</span>' +
-      '  <span id="nav-dock-consumables" class="nav-metric-consumables" title="NASA 120% Contingency Safe Return Reserve"><span style="color:#22c55e;">O₂ 98%</span> · <span style="color:#38bdf8;">⚡ Safe</span></span>' +
+      '  <span id="nav-dock-consumables" class="nav-metric-consumables" title="NASA 120% Contingency Safe Return Reserve"><span style="color:#22c55e;">O₂ Nominal</span> · <span style="color:#38bdf8;">⚡ Safe</span></span>' +
       '</div>' +
       '<div class="nav-dock-right">' +
-      '  <button type="button" class="btn-dock-hud-ghost" id="btn-dock-pause" title="Pause or Resume Traversal">⏸ Pause</button>' +
       '  <button type="button" class="btn-dock-hud-exit" id="btn-dock-exit" title="Exit Navigation and Unlock Map">✕ Exit Nav</button>' +
       '</div>';
     container.appendChild(navDockEl);
 
-    const pauseBtn = navDockEl.querySelector("#btn-dock-pause");
-    if (pauseBtn) {
-      pauseBtn.onclick = function (ev) {
-        ev.stopPropagation();
-        const paused = togglePauseTraversal();
-        pauseBtn.textContent = paused ? "▶ Resume" : "⏸ Pause";
-        const toggleTravBtn = document.getElementById("btn-toggle-traversal");
-        if (toggleTravBtn) toggleTravBtn.textContent = paused ? "▶ Resume Traverse" : "⏸ Pause Traverse";
-      };
-    }
     const exitBtn = navDockEl.querySelector("#btn-dock-exit");
     if (exitBtn) {
       exitBtn.onclick = function (ev) {
@@ -347,8 +336,8 @@ window.MarsSegmentPick = (function () {
         // Zoom map to encompass the route
         map.fitBounds(L.latLngBounds(latlngs), { padding: [40, 40], animate: true });
 
-        // Launch automated traversal rover pointer along the path & show HUD dock
-        startAutoTraversal(segment.path_nodes, segment.mode);
+        // Show locked route HUD dock (no moving yellow traversal marker)
+        stopAutoTraversal();
         showNavDock(segment, currentRouteTitle);
       } else {
         navState = NAV_STATE.IDLE;
@@ -501,77 +490,7 @@ window.MarsSegmentPick = (function () {
 
   function startAutoTraversal(pathNodes, mode) {
     stopAutoTraversal();
-    if (!pathNodes || pathNodes.length < 2 || !map) return;
-
-    const isWalk = mode === "walk";
-    const pointerFill = isWalk ? "#00f0ff" : "#f59e0b";
-    const tagText = isWalk ? "EVA MARSWALK // EN ROUTE" : "ROVER AUTONAV // TRAVERSING";
-
-    const nodes = pathNodes.map(function (n) {
-      return {
-        lat: n.lat,
-        lon: n.lon,
-        elev_m: n.elev_m != null ? n.elev_m : 0,
-        slope_deg: n.slope_deg != null ? n.slope_deg : 0,
-        risk: n.risk != null ? n.risk : 0.35,
-        dist_m: n.dist_m != null ? n.dist_m : 0,
-      };
-    });
-
-    if (nodes[nodes.length - 1].dist_m <= 0) {
-      nodes[0].dist_m = 0;
-      for (let i = 1; i < nodes.length; i++) {
-        const d = MarsGeodesic.haversineMeters(
-          nodes[i - 1].lat,
-          nodes[i - 1].lon,
-          nodes[i].lat,
-          nodes[i].lon
-        );
-        nodes[i].dist_m = nodes[i - 1].dist_m + d;
-      }
-    }
-
-    traversalTotalDistM = nodes[nodes.length - 1].dist_m;
-    if (traversalTotalDistM <= 0) return;
-
-    traversalNodes = nodes;
-    traversalDurationMs = Math.max(5500, Math.min(14000, (traversalTotalDistM / 250) * 1000));
-    traversalStartTime = performance.now();
-    traversalElapsedOffset = 0;
-    traversalPaused = false;
-    traversalWaitingRestart = false;
-
-    const icon = L.divIcon({
-      className: "mars-traversal-pointer-container",
-      html:
-        '<div class="mars-traversal-pointer" id="rover-pointer" title="' + (isWalk ? "Astronaut EVA" : "Rover AutoNav") + ' (Click to Pause/Resume)">' +
-        '  <div class="traversal-beacon-pulse" style="border-color: ' + pointerFill + '; box-shadow: 0 0 12px ' + pointerFill + ';"></div>' +
-        '  <div class="traversal-pointer-core" id="rover-pointer-core" style="border-color: ' + pointerFill + ';">' +
-        '    <svg viewBox="0 0 24 24" class="traversal-rover-svg" width="22" height="22">' +
-        '      <polygon points="12,2 22,20 12,16 2,20" fill="' + pointerFill + '" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round"/>' +
-        '    </svg>' +
-        '  </div>' +
-        '  <div class="traversal-hud-tag" id="rover-hud-tag" style="border-color: ' + pointerFill + ';">' +
-        '    <span class="traversal-tag-dot" style="background: ' + pointerFill + ';"></span>' +
-        '    <span class="traversal-tag-text" id="rover-tag-text">' + tagText + '</span>' +
-        '  </div>' +
-        '</div>',
-      iconSize: [0, 0],
-      iconAnchor: [0, 0],
-    });
-
-    traversalMarker = L.marker([nodes[0].lat, nodes[0].lon], {
-      icon: icon,
-      interactive: true,
-      zIndexOffset: 3000,
-    }).addTo(map);
-
-    traversalMarker.on("click", function () {
-      togglePauseTraversal();
-    });
-
-    updatePointerAtDistance(0, false);
-    traversalAnimId = requestAnimationFrame(traversalLoop);
+    // Moving yellow dot traversal removed per flight deck specification
   }
 
   function traversalLoop(now) {

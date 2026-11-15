@@ -8,6 +8,7 @@ window.MarsCosmicGalaxy = (function () {
   let stars = [];
   let meteors = [];
   let nebulae = [];
+  let bgGrad = null;
   let rotation = 0;
   let isRunning = false;
 
@@ -32,6 +33,7 @@ window.MarsCosmicGalaxy = (function () {
   }
 
   function onResize() {
+    bgGrad = null;
     resize();
     createCosmos();
   }
@@ -43,21 +45,33 @@ window.MarsCosmicGalaxy = (function () {
       : { width: window.innerWidth, height: window.innerHeight };
     width = canvas.width = Math.max(300, Math.floor(rect.width));
     height = canvas.height = Math.max(300, Math.floor(rect.height));
+    bgGrad = null;
   }
 
   function createCosmos() {
     stars = [];
     nebulae = [];
 
-    // 1. Generate 850 Deep-Space Stars with varied magnitudes and spectral classes
-    const starCount = Math.floor((width * height) / 1600);
-    const count = Math.min(1000, Math.max(450, starCount));
+    if (!ctx) return;
+
+    // Cache the radial background void gradient
+    bgGrad = ctx.createRadialGradient(
+      width * 0.5, height * 0.5, 50,
+      width * 0.5, height * 0.5, Math.max(width, height) * 0.8
+    );
+    bgGrad.addColorStop(0, "#05060b");
+    bgGrad.addColorStop(0.6, "#030408");
+    bgGrad.addColorStop(1, "#010204");
+
+    // 1. Generate Deep-Space Stars with varied magnitudes (capped at 420 for optimal performance)
+    const starCount = Math.floor((width * height) / 2400);
+    const count = Math.min(420, Math.max(200, starCount));
 
     for (let i = 0; i < count; i++) {
       stars.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        radius: Math.random() < 0.85 ? Math.random() * 1.2 + 0.3 : Math.random() * 2.0 + 1.2,
+        radius: Math.random() < 0.85 ? Math.random() * 1.1 + 0.3 : Math.random() * 1.9 + 1.1,
         color: STAR_COLORS[Math.floor(Math.random() * STAR_COLORS.length)],
         baseAlpha: Math.random() * 0.7 + 0.25,
         twinkleSpeed: Math.random() * 0.035 + 0.008,
@@ -65,7 +79,7 @@ window.MarsCosmicGalaxy = (function () {
       });
     }
 
-    // 2. Generate Layered Galactic Nebulae (Milky Way / Deep Space gas clouds)
+    // 2. Generate Layered Galactic Nebulae and precompute their radial gradients
     const nebulaCount = 5;
     const nebulaColors = [
       { r: 109, g: 40, b: 217, a: 0.12 },  // Deep Purple
@@ -76,12 +90,17 @@ window.MarsCosmicGalaxy = (function () {
     ];
 
     for (let i = 0; i < nebulaCount; i++) {
-      nebulae.push({
-        x: (width * (i + 1)) / (nebulaCount + 1) + (Math.random() - 0.5) * 150,
-        y: (height * (i % 2 === 0 ? 0.35 : 0.65)) + (Math.random() - 0.5) * 120,
-        radius: Math.max(180, Math.min(width, height) * (0.35 + Math.random() * 0.25)),
-        color: nebulaColors[i % nebulaColors.length],
-      });
+      const x = (width * (i + 1)) / (nebulaCount + 1) + (Math.random() - 0.5) * 150;
+      const y = (height * (i % 2 === 0 ? 0.35 : 0.65)) + (Math.random() - 0.5) * 120;
+      const radius = Math.max(180, Math.min(width, height) * (0.35 + Math.random() * 0.25));
+      const col = nebulaColors[i % nebulaColors.length];
+
+      const g = ctx.createRadialGradient(x, y, 10, x, y, radius);
+      g.addColorStop(0, `rgba(${col.r}, ${col.g}, ${col.b}, ${col.a * 1.5})`);
+      g.addColorStop(0.5, `rgba(${col.r}, ${col.g}, ${col.b}, ${col.a * 0.6})`);
+      g.addColorStop(1, "rgba(0, 0, 0, 0)");
+
+      nebulae.push({ x, y, radius, gradient: g });
     }
   }
 
@@ -103,40 +122,30 @@ window.MarsCosmicGalaxy = (function () {
   function draw(time) {
     if (!ctx || !isRunning) return;
 
-    ctx.clearRect(0, 0, width, height);
+    // Draw cached deep space dark void background
+    if (bgGrad) {
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, width, height);
+    } else {
+      ctx.clearRect(0, 0, width, height);
+    }
 
-    // Deep space dark void background
-    const bgGrad = ctx.createRadialGradient(
-      width * 0.5, height * 0.5, 50,
-      width * 0.5, height * 0.5, Math.max(width, height) * 0.8
-    );
-    bgGrad.addColorStop(0, "#05060b");
-    bgGrad.addColorStop(0.6, "#030408");
-    bgGrad.addColorStop(1, "#010204");
-    ctx.fillStyle = bgGrad;
-    ctx.fillRect(0, 0, width, height);
-
-    // Draw Glowing Cosmic Nebulae
-    ctx.save();
-    nebulae.forEach(function (neb) {
-      const g = ctx.createRadialGradient(neb.x, neb.y, 10, neb.x, neb.y, neb.radius);
-      g.addColorStop(0, `rgba(${neb.color.r}, ${neb.color.g}, ${neb.color.b}, ${neb.color.a * 1.5})`);
-      g.addColorStop(0.5, `rgba(${neb.color.r}, ${neb.color.g}, ${neb.color.b}, ${neb.color.a * 0.6})`);
-      g.addColorStop(1, "rgba(0, 0, 0, 0)");
-      ctx.fillStyle = g;
+    // Draw Glowing Cosmic Nebulae with zero per-frame gradient allocation
+    for (let i = 0; i < nebulae.length; i++) {
+      const neb = nebulae[i];
+      ctx.fillStyle = neb.gradient;
       ctx.beginPath();
       ctx.arc(neb.x, neb.y, neb.radius, 0, Math.PI * 2);
       ctx.fill();
-    });
-    ctx.restore();
+    }
 
-    // Draw Twinkling Stars
+    // Draw Twinkling Stars without per-star context save/restore overhead
     const t = time * 0.001;
-    stars.forEach(function (star) {
+    for (let i = 0; i < stars.length; i++) {
+      const star = stars[i];
       const twinkle = Math.sin(t * star.twinkleSpeed * 100 + star.twinklePhase) * 0.35;
       const alpha = Math.max(0.12, Math.min(1.0, star.baseAlpha + twinkle));
 
-      ctx.save();
       ctx.globalAlpha = alpha;
       ctx.fillStyle = star.color;
       ctx.beginPath();
@@ -150,8 +159,8 @@ window.MarsCosmicGalaxy = (function () {
         ctx.arc(star.x, star.y, star.radius * 2.8, 0, Math.PI * 2);
         ctx.fill();
       }
-      ctx.restore();
-    });
+    }
+    ctx.globalAlpha = 1.0;
 
     // Update & Draw Shooting Meteors
     spawnMeteor();
