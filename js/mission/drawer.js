@@ -287,6 +287,8 @@ window.MarsSegmentDrawer = (function () {
       consumablesHtml +
       profileHtml +
       '<div class="route-action-bar">' +
+      '  <button type="button" class="btn-ghost btn-sm" id="btn-toggle-traversal">⏸ Pause Traverse</button>' +
+      '  <button type="button" class="btn-ghost btn-sm" id="btn-replay-traversal">⏮ Replay</button>' +
       '  <button type="button" class="btn-ghost btn-sm" id="btn-reverse-route">🔄 Reverse Path</button>' +
       '  <button type="button" class="btn-ghost btn-sm" id="btn-clear-active-route">✕ Clear Route</button>' +
       '</div>';
@@ -343,6 +345,24 @@ window.MarsSegmentDrawer = (function () {
 
     // Action buttons
 
+    const toggleTravBtn = document.getElementById("btn-toggle-traversal");
+    if (toggleTravBtn) {
+      toggleTravBtn.onclick = function () {
+        if (window.MarsSegmentPick) {
+          const paused = window.MarsSegmentPick.togglePauseTraversal();
+          toggleTravBtn.textContent = paused ? "▶ Resume Traverse" : "⏸ Pause Traverse";
+        }
+      };
+    }
+    const replayTravBtn = document.getElementById("btn-replay-traversal");
+    if (replayTravBtn) {
+      replayTravBtn.onclick = function () {
+        if (window.MarsSegmentPick) {
+          window.MarsSegmentPick.replayAutoTraversal();
+          if (toggleTravBtn) toggleTravBtn.textContent = "⏸ Pause Traverse";
+        }
+      };
+    }
     const clearBtn = document.getElementById("btn-clear-active-route");
     if (clearBtn) clearBtn.onclick = () => MarsSegmentPick.reset();
     const revBtn = document.getElementById("btn-reverse-route");

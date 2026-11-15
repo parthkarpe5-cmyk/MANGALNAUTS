@@ -2246,6 +2246,106 @@ body {
   }
 }
 
+/* 5b. Automated Route Traversal Rover Pointer & Beacon */
+.mars-traversal-pointer-container {
+  background: transparent !important;
+  border: none !important;
+}
+
+.mars-traversal-pointer {
+  position: relative;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.traversal-beacon-pulse {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--accent-sub, #00f0ff);
+  background: rgba(0, 240, 255, 0.16);
+  transform: translate(-50%, -50%);
+  animation: traversal-beacon-ping 1.5s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes traversal-beacon-ping {
+  0% {
+    transform: translate(-50%, -50%) scale(0.35);
+    opacity: 1;
+  }
+  75% {
+    transform: translate(-50%, -50%) scale(1.45);
+    opacity: 0.22;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.85);
+    opacity: 0;
+  }
+}
+
+.traversal-pointer-core {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(14, 22, 38, 0.98) 60%, rgba(0, 240, 255, 0.35));
+  border: 2px solid var(--accent-sub, #00f0ff);
+  box-shadow: 0 0 14px rgba(0, 240, 255, 0.85), inset 0 0 8px rgba(0, 240, 255, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(-50%, -50%);
+  transition: transform 0.06s linear;
+  z-index: 10;
+}
+
+.traversal-rover-svg {
+  filter: drop-shadow(0 0 4px #00f0ff);
+}
+
+.traversal-hud-tag {
+  position: absolute;
+  top: -26px;
+  left: 0;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(6, 10, 18, 0.94);
+  border: 1px solid rgba(0, 240, 255, 0.5);
+  border-radius: 999px;
+  padding: 2px 8px;
+  white-space: nowrap;
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.04em;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 240, 255, 0.3);
+  pointer-events: none;
+  z-index: 12;
+}
+
+.traversal-tag-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-sub, #00f0ff);
+  box-shadow: 0 0 6px var(--accent-sub, #00f0ff);
+  animation: tag-dot-blink 1s ease-in-out infinite alternate;
+}
+
+@keyframes tag-dot-blink {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
+}
+
 /* 6. Tactical Operational Boundary Tooltip */
 .tactical-boundary-tooltip {
   background: rgba(10, 13, 20, 0.94) !important;

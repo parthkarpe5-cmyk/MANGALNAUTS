@@ -1,5 +1,7 @@
 /* global window */
 window.MarsElevationProfile = (function () {
+  let lastChartInfo = null;
+
   function buildSmoothSvgPath(pts) {
     if (pts.length < 2) return "";
     if (pts.length === 2) {
@@ -72,6 +74,8 @@ window.MarsElevationProfile = (function () {
     const midY = getY(midElev);
     const kmText = (totalDist / 1000).toFixed(2) + " km";
 
+    lastChartInfo = { padding, chartW, chartH, minElev, elevRange, totalDist };
+
     return (
       '<svg class="elevation-profile-svg" viewBox="0 0 ' +
       width +
@@ -98,6 +102,11 @@ window.MarsElevationProfile = (function () {
       // Shaded Area & Line
       '<path d="' + areaD + '" fill="url(#elevGrad)"/>' +
       '<path d="' + linePathD + '" fill="none" stroke="#c9f31d" stroke-width="2.5" filter="url(#neonGlow)" stroke-linecap="round" stroke-linejoin="round"/>' +
+      // Active Rover Traversal Indicator
+      '<g id="profile-rover-indicator" style="display:none;">' +
+      '  <line id="profile-rover-line" x1="0" y1="' + padding.top + '" x2="0" y2="' + (padding.top + chartH) + '" stroke="#00f0ff" stroke-width="1.5" stroke-dasharray="2,2"/>' +
+      '  <circle id="profile-rover-dot" cx="0" cy="0" r="4.5" fill="#00f0ff" stroke="#ffffff" stroke-width="1.5" filter="url(#neonGlow)"/>' +
+      '</g>' +
       // Start Marker (A)
       '<circle cx="' + startX + '" cy="' + startY + '" r="5" fill="#c9f31d" stroke="#0c0e12" stroke-width="2"/>' +
       '<text x="' + startX + '" y="' + (startY - 7) + '" font-size="8.5" fill="#c9f31d" text-anchor="middle" font-weight="bold">A</text>' +
@@ -113,5 +122,31 @@ window.MarsElevationProfile = (function () {
     );
   }
 
-  return { renderSvg };
+  function updateProgress(distM, elev) {
+    if (!lastChartInfo) return;
+    const group = document.getElementById("profile-rover-indicator");
+    const line = document.getElementById("profile-rover-line");
+    const dot = document.getElementById("profile-rover-dot");
+    if (!group || !line || !dot) return;
+
+    group.style.display = "block";
+    const { padding, chartW, chartH, minElev, elevRange, totalDist } = lastChartInfo;
+    const f = Math.min(1, Math.max(0, distM / Math.max(1, totalDist)));
+    const x = padding.left + f * chartW;
+    const y = elev != null
+      ? padding.top + chartH - ((elev - minElev) / Math.max(1, elevRange)) * chartH
+      : padding.top + chartH / 2;
+
+    line.setAttribute("x1", x.toFixed(1));
+    line.setAttribute("x2", x.toFixed(1));
+    dot.setAttribute("cx", x.toFixed(1));
+    dot.setAttribute("cy", y.toFixed(1));
+  }
+
+  function hideProgress() {
+    const group = document.getElementById("profile-rover-indicator");
+    if (group) group.style.display = "none";
+  }
+
+  return { renderSvg, updateProgress, hideProgress };
 })();

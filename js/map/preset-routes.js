@@ -41,6 +41,17 @@ window.MarsPresetRoutes = (function () {
         (p.elevation_gain_m ? "<li><strong>Elev Gain:</strong> " + p.elevation_gain_m + " m</li>" : "") +
         (p.sol_span ? "<li><strong>Sol Span:</strong> " + p.sol_span + "</li>" : "") +
         "</ul>" +
+        '<button type="button" class="btn-ghost btn-sm btn-run-preset-traverse" style="margin-top:8px; width:100%; border-color:var(--accent-sub, #38bdf8); color:var(--accent-sub, #38bdf8);" data-flat="' +
+        latlngs[0][0] +
+        '" data-flon="' +
+        latlngs[0][1] +
+        '" data-tlat="' +
+        latlngs[latlngs.length - 1][0] +
+        '" data-tlon="' +
+        latlngs[latlngs.length - 1][1] +
+        '">' +
+        "▶ Run Automated Traversal" +
+        "</button>" +
         "</div>";
 
       // Render advanced multi-layered corridor with glowing halo, directional pulse flow, and km ticks
@@ -52,6 +63,23 @@ window.MarsPresetRoutes = (function () {
       });
 
       layerGroup.addLayer(corridor);
+    });
+
+    layerGroup.on("popupopen", function (e) {
+      const popupNode = e.popup.getElement();
+      if (!popupNode) return;
+      const btn = popupNode.querySelector(".btn-run-preset-traverse");
+      if (btn) {
+        btn.onclick = function () {
+          const flat = parseFloat(btn.dataset.flat);
+          const flon = parseFloat(btn.dataset.flon);
+          const tlat = parseFloat(btn.dataset.tlat);
+          const tlon = parseFloat(btn.dataset.tlon);
+          if (window.MarsSegmentPick) {
+            MarsSegmentPick.planRoute(flat, flon, tlat, tlon);
+          }
+        };
+      }
     });
 
     if (visible && !map.hasLayer(layerGroup)) {
