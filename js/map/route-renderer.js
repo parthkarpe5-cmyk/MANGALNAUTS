@@ -122,7 +122,7 @@ window.MarsRouteRenderer = (function () {
    * Generates alternating astronaut footsteps / bootprints for Marswalk Mode (Photo 0 reference)
    * Ribbed cross-treads on ball of foot and chevrons on heel in Martian regolith
    */
-  function buildFootstepMarkers(smoothPoints, mineralKey) {
+  function buildFootstepMarkers(smoothPoints) {
     if (!smoothPoints || smoothPoints.length < 2) return [];
     const cum = [0];
     for (let i = 1; i < smoothPoints.length; i++) {
@@ -164,18 +164,7 @@ window.MarsRouteRenderer = (function () {
 
       const footClass = isRight ? "mars-foot-right" : "mars-foot-left";
       const svgTransform = isRight ? 'transform="scale(-1, 1) translate(-20, 0)"' : "";
-
-      let footStroke = "#00f0ff";
-      if (mineralKey && window.MarsGrsOverlays && window.MarsGrsOverlays.sampleSmooth) {
-        const val = MarsGrsOverlays.sampleSmooth(mineralKey, stepLat, stepLon);
-        const isDep = window.MarsGrsOverlays.isDepositPresent
-          ? window.MarsGrsOverlays.isDepositPresent(mineralKey, val)
-          : false;
-        // ONLY color bootprint with mineral stroke where an actual deposit is present!
-        if (isDep) {
-          footStroke = MarsGrsOverlays.getMineralColor(mineralKey, val);
-        }
-      }
+      const footStroke = "#00f0ff";
 
       const footIcon = L.divIcon({
         className: "mars-footstep-icon",
@@ -358,146 +347,43 @@ window.MarsRouteRenderer = (function () {
     // Smooth discrete lattice points into an aerodynamic spline curve
     const smoothPoints = smoothSpline(latlngs, 4);
 
-    // Mineral distribution sampling along the corridor
-    const activeMineral =
-      (window.MarsGrsOverlays &&
-        window.MarsGrsOverlays.getActiveElement &&
-        window.MarsGrsOverlays.getActiveElement()) ||
-      "none";
-    const mineralKey =
-      opts.mineral && opts.mineral !== "none"
-        ? opts.mineral
-        : activeMineral !== "none"
-        ? activeMineral
-        : "k";
-
-    let mineralStats = null;
-    if (window.MarsGrsOverlays && window.MarsGrsOverlays.sampleAlongPath) {
-      mineralStats = window.MarsGrsOverlays.sampleAlongPath(
-        mineralKey,
-        opts.pathNodes || smoothPoints
-      );
-    }
-
-    // Pre-calculate per-point mineral values and colors along smoothPoints
-    const smoothMineralSamples = [];
-    if (
-      window.MarsGrsOverlays &&
-      window.MarsGrsOverlays.sampleSmooth &&
-      window.MarsGrsOverlays.getMineralColor
-    ) {
-      for (let i = 0; i < smoothPoints.length; i++) {
-        const pt = smoothPoints[i];
-        const val = window.MarsGrsOverlays.sampleSmooth(mineralKey, pt[0], pt[1]);
-        const segCol = window.MarsGrsOverlays.getMineralColor(mineralKey, val);
-        const isDep = window.MarsGrsOverlays.isDepositPresent
-          ? window.MarsGrsOverlays.isDepositPresent(mineralKey, val)
-          : false;
-        smoothMineralSamples.push({ val: val, color: segCol, isDeposit: isDep });
-      }
-    }
-
-    // 0. WIDE TRANSLUCENT MINERAL SWATH BUFFER
-    // ONLY renders along segments where an elevated mineral deposit is ACTUALLY present!
-    if (smoothMineralSamples.length >= 2) {
-      for (let i = 0; i < smoothPoints.length - 1; i++) {
-        const hasDeposit =
-          smoothMineralSamples[i]?.isDeposit ||
-          smoothMineralSamples[i + 1]?.isDeposit;
-        if (!hasDeposit) continue; // DO NOT color or swath areas where mineral deposit is absent!
-
-        const segColor = smoothMineralSamples[i].color;
-        // Outer subtle dispersion glow
-        const outerSwath = L.polyline([smoothPoints[i], smoothPoints[i + 1]], {
-          color: segColor,
-          weight: isWalk ? 28 : 36,
-          opacity: 0.16,
-          lineCap: "round",
-          lineJoin: "round",
-          interactive: false,
-        });
-        group.addLayer(outerSwath);
-
-        // Core mineral distribution swath
-        const innerSwath = L.polyline([smoothPoints[i], smoothPoints[i + 1]], {
-          color: segColor,
-          weight: isWalk ? 16 : 22,
-          opacity: 0.32,
-          lineCap: "round",
-          lineJoin: "round",
-          interactive: false,
-        });
-        group.addLayer(innerSwath);
-      }
-    }
-
     if (isWalk) {
-      // 1. MARSWALK MODE (Photo 0 Astronaut Bootprints):
-      // Glowing lifeline: mineral color ONLY where deposit is present; otherwise clean cyan (#00f0ff)!
-      for (let i = 0; i < smoothPoints.length - 1; i++) {
-        const hasDeposit =
-          smoothMineralSamples[i]?.isDeposit ||
-          smoothMineralSamples[i + 1]?.isDeposit;
-        const segColor = hasDeposit ? smoothMineralSamples[i].color : "#00f0ff";
-        const segLine = L.polyline([smoothPoints[i], smoothPoints[i + 1]], {
-          color: segColor,
-          weight: hasDeposit ? 2.5 : 1.6,
-          opacity: hasDeposit ? 0.92 : 0.55,
-          dashArray: hasDeposit ? "3, 5" : "3, 8",
-          lineCap: "round",
-          lineJoin: "round",
-          interactive: false,
-        });
-        group.addLayer(segLine);
-      }
+      // 1. MARSWALK MODE (Apollo / Mars EVA Bootprints):
+      // Clean glowing cyan lifeline
+      const lifeline = L.polyline(smoothPoints, {
+        color: "#00f0ff",
+        weight: 2.0,
+        opacity: 0.85,
+        dashArray: "3, 8",
+        lineCap: "round",
+        lineJoin: "round",
+        interactive: false,
+      });
+      group.addLayer(lifeline);
 
-      // Distinct astronaut footstep markers along the route (Photo 0) tinted by local mineral ONLY if present
-      const footMarkers = buildFootstepMarkers(smoothPoints, mineralKey);
+      // Distinct astronaut footstep markers along the route
+      const footMarkers = buildFootstepMarkers(smoothPoints);
       footMarkers.forEach(function (m) {
         group.addLayer(m);
       });
     } else {
-      // 2. ROVER MODE (Photo 1 Dual Parallel Cleated Wheel Tracks):
+      // 2. ROVER MODE (Dual Parallel Cleated Wheel Tracks):
       // Martian Regolith Soil Depression Bed
       const rutBed = L.polyline(smoothPoints, {
         color: "#1d0804",
-        weight: 12,
-        opacity: 0.72,
+        weight: 10,
+        opacity: 0.6,
         lineCap: "round",
         lineJoin: "round",
         interactive: false,
       });
       group.addLayer(rutBed);
 
-      // Regolith mineral ground tint bed: ONLY where mineral deposit is present!
-      if (smoothMineralSamples.length >= 2) {
-        for (let i = 0; i < smoothPoints.length - 1; i++) {
-          const hasDeposit =
-            smoothMineralSamples[i]?.isDeposit ||
-            smoothMineralSamples[i + 1]?.isDeposit;
-          if (!hasDeposit) continue;
-
-          const segColor = smoothMineralSamples[i].color;
-          const regolithMineralBed = L.polyline(
-            [smoothPoints[i], smoothPoints[i + 1]],
-            {
-              color: segColor,
-              weight: 8,
-              opacity: 0.4,
-              lineCap: "round",
-              lineJoin: "round",
-              interactive: false,
-            }
-          );
-          group.addLayer(regolithMineralBed);
-        }
-      }
-
       // Dual parallel cleated wheel tracks (separated by 4.0m track gauge)
       const tracks = buildParallelTracks(smoothPoints, 2.0);
       const leftWheelTrack = L.polyline(tracks.left, {
         color: "#d96b27",
-        weight: 3.2,
+        weight: 2.8,
         opacity: 0.95,
         dashArray: "3, 5",
         lineCap: "butt",
@@ -508,7 +394,7 @@ window.MarsRouteRenderer = (function () {
 
       const rightWheelTrack = L.polyline(tracks.right, {
         color: "#d96b27",
-        weight: 3.2,
+        weight: 2.8,
         opacity: 0.95,
         dashArray: "3, 5",
         lineCap: "butt",
@@ -563,63 +449,6 @@ window.MarsRouteRenderer = (function () {
       const ticks = buildKmTicks(smoothPoints);
       ticks.forEach(function (t) {
         group.addLayer(t);
-      });
-    }
-
-    // Interactive Mineral Peak Badges along the path
-    if (mineralStats && mineralStats.depositPeaks && mineralStats.depositPeaks.length > 0) {
-      mineralStats.depositPeaks.forEach(function (peak) {
-        const peakIcon = L.divIcon({
-          className: "mineral-peak-callout-marker",
-          html:
-            '<div class="mineral-peak-callout" style="--mineral-color:' +
-            peak.color +
-            ';">' +
-            '  <span class="mineral-peak-dot"></span>' +
-            '  <span class="mineral-peak-badge">' +
-            '    <span class="mineral-sym font-mono">' +
-            peak.symbol +
-            "</span>" +
-            '    <span class="mineral-val font-mono">' +
-            peak.val.toFixed(2) +
-            " " +
-            peak.unit +
-            "</span>" +
-            "  </span>" +
-            "</div>",
-          iconSize: [0, 0],
-          iconAnchor: [0, 0],
-        });
-
-        const peakMarker = L.marker([peak.lat, peak.lon], {
-          icon: peakIcon,
-          interactive: true,
-        });
-
-        peakMarker.bindTooltip(
-          '<div class="hud-tooltip font-mono text-xs">' +
-            '<div style="color:' +
-            peak.color +
-            '; font-weight:700; margin-bottom:2px;">' +
-            "⚗️ " +
-            peak.name +
-            " (" +
-            peak.symbol +
-            ") DEPOSIT PEAK" +
-            "</div>" +
-            "Abundance: <strong>" +
-            peak.val.toFixed(2) +
-            " " +
-            peak.unit +
-            "</strong><br/>" +
-            '<span style="opacity:0.85; font-size:10px;">' +
-            (peak.tagline || "In-Situ Resource Utilization target") +
-            "</span>" +
-            "</div>",
-          { className: "hud-tooltip", direction: "top" }
-        );
-
-        group.addLayer(peakMarker);
       });
     }
 

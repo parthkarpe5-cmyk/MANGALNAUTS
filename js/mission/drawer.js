@@ -287,95 +287,31 @@ window.MarsSegmentDrawer = (function () {
     }
 
     let isruHtml = "";
-    if (segment.path_found && window.MarsGrsOverlays && segment.from) {
+    if (segment.path_found && window.MarsGrsOverlays && (segment.path_nodes || segment.from)) {
       try {
-        const isru = await MarsGrsOverlays.calculateIsruMetrics(segment.from.lat, segment.from.lon);
+        const isru = await MarsGrsOverlays.calculateIsruMetrics(
+          segment.path_nodes || [segment.from, segment.to]
+        );
         const hasChlorine = Number.isFinite(isru?.chlorineWtPct);
         if (id !== renderId) return;
 
-        const rawElem =
-          window.MarsGrsOverlays && window.MarsGrsOverlays.getActiveElement
-            ? window.MarsGrsOverlays.getActiveElement()
-            : null;
-        const curElem = rawElem && rawElem !== "none" ? rawElem : "k";
-
-        let pathMineralStats = null;
-        if (window.MarsGrsOverlays.sampleAlongPath && segment.path_nodes) {
-          pathMineralStats = window.MarsGrsOverlays.sampleAlongPath(curElem, segment.path_nodes);
-        }
-
-        const hasDeposits = pathMineralStats && pathMineralStats.highYieldFraction > 0;
-        const summaryMetricsHtml = pathMineralStats
-          ? '  <div class="isru-path-mineral-summary font-mono">' +
-            '    <div class="path-mineral-metric">' +
-            '      <span class="pm-label">Corridor Avg:</span>' +
-            '      <span class="pm-val" style="color:var(--accent);">' +
-            pathMineralStats.avgVal.toFixed(2) +
-            ' ' +
-            pathMineralStats.meta.unit +
-            '</span>' +
-            '    </div>' +
-            '    <div class="path-mineral-metric">' +
-            '      <span class="pm-label">Peak Encounter:</span>' +
-            '      <span class="pm-val" style="color:' +
-            (pathMineralStats.depositPeaks[0]?.color || '#94a3b8') +
-            ';">' +
-            (pathMineralStats.depositPeaks.length > 0
-              ? pathMineralStats.maxVal.toFixed(2) + ' ' + pathMineralStats.meta.unit
-              : 'Nominal Baseline') +
-            '</span>' +
-            '    </div>' +
-            '    <div class="path-mineral-metric">' +
-            '      <span class="pm-label">Deposit Zone:</span>' +
-            '      <span class="pm-val" style="color:' +
-            (hasDeposits ? '#22c55e' : '#94a3b8') +
-            ';">' +
-            (hasDeposits
-              ? Math.round(pathMineralStats.highYieldFraction * 100) + '% path'
-              : '0% (Nominal)') +
-            '</span>' +
-            '    </div>' +
-            '  </div>' +
-            (hasDeposits
-              ? '  <p class="drawer-hint" style="color:var(--accent); font-size:11px; margin: 0 0 8px 0;">✨ Elevated ' +
-                pathMineralStats.meta.symbol +
-                ' deposit detected along ' +
-                Math.round(pathMineralStats.highYieldFraction * 100) +
-                '% of route (highlighted on map).</p>'
-              : '  <p class="drawer-hint" style="color:#94a3b8; font-size:11px; margin: 0 0 8px 0;">ℹ️ No elevated ' +
-                pathMineralStats.meta.symbol +
-                ' deposit along this corridor (standard terrain).</p>')
-          : '';
-
         isruHtml =
-          '<details class="drawer-section drawer-isru mission-details" open><summary>Surface resources · Odyssey GRS</summary>' +
-          '  <div class="isru-track-header">' +
-          '    <span class="isru-track-title">Route Mineral Swath Track</span>' +
-          '    <span class="isru-track-active font-mono">' +
-          curElem.toUpperCase() +
-          ' Active</span>' +
+          '<details class="drawer-section drawer-isru mission-details" open>' +
+          '  <summary>' +
+          '    <span>Surface resources · In-Situ Science</span>' +
+          '    <span class="live-pulse-badge font-mono">● LIVE IN-SITU</span>' +
+          '  </summary>' +
+          '  <div class="isru-geology-banner">' +
+          '    <div class="geo-unit-title font-mono">' +
+          '      <span class="geo-icon">' + (isru.mineralIcon || '🔬') + '</span>' +
+          '      <span class="geo-name">' + (isru.geologyUnitName || 'Martian Regolith') + '</span>' +
+          '    </div>' +
+          '    <div class="geo-instruments font-mono">' +
+          '      <span class="instr-badge">CRISM Hyperspectral</span>' +
+          '      <span class="instr-badge">THEMIS TI: ' + (isru.themisTiAvg || 340) + '</span>' +
+          '      <span class="instr-badge">PDS Calibrated</span>' +
+          '    </div>' +
           '  </div>' +
-          '  <div class="isru-mineral-track-bar">' +
-          '    <button type="button" class="btn-mineral-track ' +
-          (curElem === 'k' ? 'active' : '') +
-          '" data-elem="k" title="Potassium (K) Feldspar & Sanidine">⚗️ K</button>' +
-          '    <button type="button" class="btn-mineral-track ' +
-          (curElem === 'h2o' ? 'active' : '') +
-          '" data-elem="h2o" title="Subsurface Water Ice (H₂O)">💧 H₂O</button>' +
-          '    <button type="button" class="btn-mineral-track ' +
-          (curElem === 'fe' ? 'active' : '') +
-          '" data-elem="fe" title="Hematite & Elemental Iron (Fe)">🧱 Fe</button>' +
-          '    <button type="button" class="btn-mineral-track ' +
-          (curElem === 'si' ? 'active' : '') +
-          '" data-elem="si" title="Silica & Quartz (Si)">🔬 Si</button>' +
-          '    <button type="button" class="btn-mineral-track ' +
-          (curElem === 'cl' ? 'active' : '') +
-          '" data-elem="cl" title="Chlorine & Soil Halogens (Cl)">⚠️ Cl</button>' +
-          '    <button type="button" class="btn-mineral-track ' +
-          (curElem === 'th' ? 'active' : '') +
-          '" data-elem="th" title="Thorium Geothermal Radiogenic (Th)">☢️ Th</button>' +
-          '  </div>' +
-          summaryMetricsHtml +
           (!hasChlorine
             ? '<p class="drawer-hint">Perchlorates · Data unavailable</p>'
             : isru.chlorineAlert
@@ -392,7 +328,7 @@ window.MarsSegmentDrawer = (function () {
               '    <span class="safe-icon">✓</span>' +
               '    <span>Chlorine estimate · ' +
               isru.chlorineWtPct +
-              ' wt% Cl</span>' +
+              ' wt% Cl (Nominal)</span>' +
               '  </div>'
           ) +
           '  <div class="consumables-grid isru-grid">' +
@@ -437,8 +373,16 @@ window.MarsSegmentDrawer = (function () {
           '      </div>' +
           '    </div>' +
           '  </div>' +
-          '  <div class="isru-citation-note font-mono">' +
-          '    <span>NASA 2001 Mars Odyssey GRS (Boynton et al. 2007) · PDS Geosciences</span>' +
+          '  <div class="nasa-api-bar font-mono">' +
+          '    <div class="nasa-api-status">' +
+          '      <span class="live-dot">●</span>' +
+          '      <span class="api-name">NASA API: ' +
+          (isru.nasaApi?.isCustom ? 'Personal Key' : 'Connected (DEMO_KEY)') +
+          ' · Sol ' +
+          (isru.nasaApi?.liveSol || 4995) +
+          '</span>' +
+          '    </div>' +
+          '    <button type="button" class="btn-nasa-key" id="btn-configure-nasa-key" title="Configure personal API key from api.nasa.gov">🔑 API Key</button>' +
           '  </div>' +
           '</details>';
       } catch (e) {
@@ -631,70 +575,17 @@ window.MarsSegmentDrawer = (function () {
       });
     }
 
-    // Corridor Mineral Track Selector Buttons
-    const mineralBtns = panel.querySelectorAll(".btn-mineral-track");
-    mineralBtns.forEach(function (btn) {
-      btn.addEventListener("click", function (ev) {
+    // NASA API Key Configuration Modal Trigger
+    const nasaKeyBtn = panel.querySelector("#btn-configure-nasa-key");
+    if (nasaKeyBtn) {
+      nasaKeyBtn.addEventListener("click", function (ev) {
         ev.stopPropagation();
         if (window.MarsAudio) MarsAudio.playClick();
-        const elemKey = btn.getAttribute("data-elem");
-        if (window.MarsGrsOverlays && window.MarsGrsOverlays.setActiveElement) {
-          window.MarsGrsOverlays.setActiveElement(elemKey);
-        }
-        mineralBtns.forEach((b) =>
-          b.classList.toggle("active", b.getAttribute("data-elem") === elemKey)
-        );
-        const titleBadge = panel.querySelector(".isru-track-active");
-        if (titleBadge) {
-          titleBadge.textContent = elemKey.toUpperCase() + " Active";
-        }
-        if (
-          window.MarsGrsOverlays &&
-          window.MarsGrsOverlays.sampleAlongPath &&
-          segment.path_nodes
-        ) {
-          const newStats = window.MarsGrsOverlays.sampleAlongPath(
-            elemKey,
-            segment.path_nodes
-          );
-          if (newStats) {
-            const hasNewDeposits = newStats.highYieldFraction > 0;
-            const summaryEl = panel.querySelector(".isru-path-mineral-summary");
-            if (summaryEl) {
-              summaryEl.innerHTML =
-                '<div class="path-mineral-metric">' +
-                '  <span class="pm-label">Corridor Avg:</span>' +
-                '  <span class="pm-val" style="color:var(--accent);">' +
-                newStats.avgVal.toFixed(2) +
-                ' ' +
-                newStats.meta.unit +
-                '</span>' +
-                '</div>' +
-                '<div class="path-mineral-metric">' +
-                '  <span class="pm-label">Peak Encounter:</span>' +
-                '  <span class="pm-val" style="color:' +
-                (newStats.depositPeaks[0]?.color || '#94a3b8') +
-                ';">' +
-                (newStats.depositPeaks.length > 0
-                  ? newStats.maxVal.toFixed(2) + ' ' + newStats.meta.unit
-                  : 'Nominal Baseline') +
-                '</span>' +
-                '</div>' +
-                '<div class="path-mineral-metric">' +
-                '  <span class="pm-label">Deposit Zone:</span>' +
-                '  <span class="pm-val" style="color:' +
-                (hasNewDeposits ? '#22c55e' : '#94a3b8') +
-                ';">' +
-                (hasNewDeposits
-                  ? Math.round(newStats.highYieldFraction * 100) + '% path'
-                  : '0% (Nominal)') +
-                '</span>' +
-                '</div>';
-            }
-          }
+        if (window.MarsNasaApi && window.MarsNasaApi.showApiKeyModal) {
+          window.MarsNasaApi.showApiKeyModal();
         }
       });
-    });
+    }
   }
 
   function notifyArrival(segment, title) {

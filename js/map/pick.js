@@ -325,12 +325,6 @@ window.MarsSegmentPick = (function () {
         const isWalk = segment.mode === "walk";
         const routeColor = segment.feasible ? (isWalk ? "#00f0ff" : "#f59e0b") : "#FF8B86";
 
-        const activeElem =
-          window.MarsGrsOverlays &&
-          window.MarsGrsOverlays.getActiveElement &&
-          window.MarsGrsOverlays.getActiveElement();
-        const chosenMineral = activeElem && activeElem !== "none" ? activeElem : "k";
-
         lineLayer = MarsRouteRenderer.createCorridorLayer(latlngs, {
           color: routeColor,
           mode: segment.mode,
@@ -338,7 +332,6 @@ window.MarsSegmentPick = (function () {
           drawIn: true,
           ticks: true,
           pathNodes: segment.path_nodes,
-          mineral: chosenMineral,
         }).addTo(map);
 
         // Zoom map to encompass the route
@@ -440,29 +433,11 @@ window.MarsSegmentPick = (function () {
       scrubberMarker.setLatLng([curLat, curLon]);
     }
 
-    let mineralInfo = "";
-    if (window.MarsGrsOverlays && window.MarsGrsOverlays.sampleSmooth) {
-      const actKey =
-        window.MarsGrsOverlays.getActiveElement &&
-        window.MarsGrsOverlays.getActiveElement();
-      const elemKey = actKey && actKey !== "none" ? actKey : "k";
-      const val = window.MarsGrsOverlays.sampleSmooth(elemKey, curLat, curLon);
-      const meta = window.MarsGrsOverlays.ELEMENTS
-        ? window.MarsGrsOverlays.ELEMENTS[elemKey]
-        : null;
-      const sym = meta ? meta.symbol : elemKey.toUpperCase();
-      const unit = meta ? meta.unit : "wt%";
-      mineralInfo =
-        " · " + sym + ": <strong>" + val.toFixed(2) + " " + unit + "</strong>";
-    }
-
     scrubberMarker
       .bindTooltip(
         '<div class="hud-tooltip font-mono text-xs"><strong>' +
           (distM / 1000).toFixed(2) +
-          " km</strong>" +
-          mineralInfo +
-          " · Elev: " +
+          " km</strong> · Elev: " +
           elev.toFixed(1) +
           "m · Risk: " +
           risk.toFixed(2) +
@@ -697,39 +672,11 @@ window.MarsSegmentPick = (function () {
         const isWalk = lastSolvedSegment && lastSolvedSegment.mode === "walk";
         const tagPrefix = isWalk ? "EVA MARSWALK" : "ROVER AUTONAV";
 
-        let mineralTag = "";
-        if (window.MarsGrsOverlays && window.MarsGrsOverlays.sampleSmooth) {
-          const actKey =
-            window.MarsGrsOverlays.getActiveElement &&
-            window.MarsGrsOverlays.getActiveElement();
-          const elemKey = actKey && actKey !== "none" ? actKey : "k";
-          const val = window.MarsGrsOverlays.sampleSmooth(elemKey, curLat, curLon);
-          const meta = window.MarsGrsOverlays.ELEMENTS
-            ? window.MarsGrsOverlays.ELEMENTS[elemKey]
-            : null;
-          const sym = meta ? meta.symbol : elemKey.toUpperCase();
-          const unit = meta ? meta.unit : "wt%";
-          const isDep =
-            window.MarsGrsOverlays.isDepositPresent &&
-            window.MarsGrsOverlays.isDepositPresent(elemKey, val);
-          mineralTag =
-            " · " +
-            (isDep ? "⚗️ " : "") +
-            sym +
-            ": " +
-            val.toFixed(2) +
-            " " +
-            unit +
-            (isDep ? " [DEPOSIT]" : "");
-        }
-
         tagTextEl.textContent =
           tagPrefix +
           " // " +
           (distM / 1000).toFixed(2) +
-          " km" +
-          mineralTag +
-          " · " +
+          " km · " +
           Math.round(curElev) +
           "m · " +
           curSlope.toFixed(1) +
