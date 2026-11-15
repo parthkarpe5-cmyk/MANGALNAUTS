@@ -469,14 +469,16 @@ window.MarsCosmicIntro = (function () {
     solarSystemGroup.add(earthGroup);
 
     // 5. Seamless Mars Model (100% matched to website Cesium model)
-    // Uses the restored seamless NASA Viking 2K map with ZERO tile seams or patches.
+    // Uses the restored seamless NASA Viking 2K map with matching Western crescent shadow.
     // Sized to radius 18.5 at distance 80, occupying exactly 52% of the viewport height.
     // Oriented to Longitude 35.0°E, Latitude 10.0°N (matching Cesium exactly).
     const marsTex = textureLoader.load("assets/textures/mars.jpg");
     marsTex.generateMipmaps = true;
     const marsGeom = new THREE.SphereGeometry(18.5, 64, 64);
-    const marsMat = new THREE.MeshBasicMaterial({
+    const marsMat = new THREE.MeshStandardMaterial({
       map: marsTex,
+      roughness: 0.88,
+      metalness: 0.05,
     });
     marsMesh = new THREE.Mesh(marsGeom, marsMat);
     marsMesh.position.set(0, 0, 80);
@@ -484,6 +486,14 @@ window.MarsCosmicIntro = (function () {
     marsMesh.rotation.y = 0.96;
     marsMesh.rotation.x = -0.175;
     solarSystemGroup.add(marsMesh);
+
+    // Oblique solar illumination: casts dramatic crescent shadow on Western (left) limb
+    const marsSunLight = new THREE.DirectionalLight(0xffeedd, 2.2);
+    marsSunLight.position.set(120, 25, 40);
+    solarSystemGroup.add(marsSunLight);
+
+    const marsAmbient = new THREE.AmbientLight(0x0a0a14, 0.28);
+    solarSystemGroup.add(marsAmbient);
 
     // Subtle atmospheric peach-orange limb glow
     const marsGlowMat = new THREE.SpriteMaterial({
@@ -516,6 +526,14 @@ window.MarsCosmicIntro = (function () {
     isRunning = true;
     lastTimestamp = 0;
     virtualElapsed = 0;
+
+    // Set initial entrance state: hide all bars during prologue
+    document.body.classList.add("cockpit-intro-active");
+    document.body.classList.remove("cockpit-ready");
+
+    if (window.MarsGlobe && window.MarsGlobe.prepareForCosmicIntro) {
+      window.MarsGlobe.prepareForCosmicIntro();
+    }
 
     if (overlayEl) {
       overlayEl.style.transition = "";
@@ -579,8 +597,8 @@ window.MarsCosmicIntro = (function () {
 
     renderer.render(scene, camera);
 
-    // At 85% progress (~6.6s), smoothly crossfade into the website's live Cesium Mars model
-    if (progress >= 0.85 && !isFadingOut) {
+    // At 72% progress (~5.6s), seamlessly initiate the Mars enlargement and cockpit bars entrance
+    if (progress >= 0.72 && !isFadingOut) {
       completeIntro();
     }
 
@@ -657,18 +675,23 @@ window.MarsCosmicIntro = (function () {
       }
     }
 
-    // Refresh Cesium frame and resume celestial starfield for seamless handshake
+    // 1. Reveal navigation and telemetry bars (slides in with 0.85s transition)
+    document.body.classList.remove("cockpit-intro-active");
+    document.body.classList.add("cockpit-ready");
+
+    // 2. Trigger smooth enlargement of Mars globe into cockpit view (26,000 km -> 11,500 km)
+    if (window.MarsGlobe && window.MarsGlobe.enlargeToCockpit) {
+      try {
+        window.MarsGlobe.enlargeToCockpit(2.2);
+      } catch (e) {
+        console.warn("MarsGlobe enlargeToCockpit error:", e);
+      }
+    }
+
+    // 3. Resume starfield backdrop
     if (window.MarsStarfield) {
       window.MarsStarfield.resume();
       window.MarsStarfield.resize();
-    }
-
-    if (window.MarsGlobe && window.MarsGlobe.requestRender) {
-      try {
-        window.MarsGlobe.requestRender();
-      } catch (e) {
-        console.warn("MarsGlobe render error:", e);
-      }
     }
 
     if (overlayEl) {
@@ -687,7 +710,7 @@ window.MarsCosmicIntro = (function () {
         if (window.MarsGlobe && window.MarsGlobe.requestRender) {
           window.MarsGlobe.requestRender();
         }
-      }, 1050);
+      }, 950);
     }
   }
 
@@ -695,13 +718,20 @@ window.MarsCosmicIntro = (function () {
     if (hasSkipped) return;
     hasSkipped = true;
 
+    document.body.classList.remove("cockpit-intro-active");
+    document.body.classList.add("cockpit-ready");
+
+    if (window.MarsGlobe && window.MarsGlobe.flyTo) {
+      try {
+        window.MarsGlobe.flyTo(10, 35, 11500000, 0.6);
+      } catch (e) {
+        console.warn("MarsGlobe flyTo error:", e);
+      }
+    }
+
     if (window.MarsStarfield) {
       window.MarsStarfield.resume();
       window.MarsStarfield.resize();
-    }
-
-    if (window.MarsGlobe && window.MarsGlobe.requestRender) {
-      window.MarsGlobe.requestRender();
     }
 
     if (overlayEl) {
@@ -731,6 +761,13 @@ window.MarsCosmicIntro = (function () {
     }
     isRunning = false;
     isFadingOut = false;
+
+    document.body.classList.add("cockpit-intro-active");
+    document.body.classList.remove("cockpit-ready");
+
+    if (window.MarsGlobe && window.MarsGlobe.prepareForCosmicIntro) {
+      window.MarsGlobe.prepareForCosmicIntro();
+    }
 
     if (overlayEl) {
       overlayEl.style.transition = "";

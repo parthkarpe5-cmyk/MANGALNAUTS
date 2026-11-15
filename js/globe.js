@@ -135,6 +135,9 @@ window.MarsGlobe = (function () {
 
     // Transparent Cesium background allows the celestial orbiting starfield backdrop to show through
     viewer.scene.backgroundColor = Cesium.Color.TRANSPARENT || new Cesium.Color(0, 0, 0, 0);
+    // Lock sun position to 2026-11-15T16:00:00Z to cast the iconic crescent terminator shadow on the Western limb
+    viewer.clock.currentTime = Cesium.JulianDate.fromIso8601("2026-11-15T16:00:00Z");
+    viewer.clock.shouldAnimate = false;
     // FXAA post-process forces alpha to 1.0 in WebGL; keep disabled for alpha pass-through
     if (viewer.scene.postProcessStages && viewer.scene.postProcessStages.fxaa) {
       viewer.scene.postProcessStages.fxaa.enabled = false;
@@ -774,8 +777,13 @@ window.MarsGlobe = (function () {
 
   function prepareForCosmicIntro() {
     if (!viewer) return;
+    // Lock sun position to cast the iconic crescent terminator shadow on the Western limb
+    viewer.clock.currentTime = Cesium.JulianDate.fromIso8601("2026-11-15T16:00:00Z");
+    viewer.clock.shouldAnimate = false;
+    viewer.scene.globe.enableLighting = true;
+
     viewer.camera.setView({
-      destination: Cesium.Cartesian3.fromDegrees(22.0, 4.0, 32000000),
+      destination: Cesium.Cartesian3.fromDegrees(35.0, 10.0, 26000000),
       orientation: {
         heading: Cesium.Math.toRadians(0),
         pitch: Cesium.Math.toRadians(-90),
@@ -785,6 +793,24 @@ window.MarsGlobe = (function () {
     if (viewer.scene) {
       viewer.scene.requestRender();
     }
+  }
+
+  function enlargeToCockpit(duration) {
+    if (!viewer) return;
+    setContinuousRender(true);
+    viewer.camera.flyTo({
+      destination: Cesium.Cartesian3.fromDegrees(35.0, 10.0, 11500000),
+      orientation: {
+        heading: Cesium.Math.toRadians(0),
+        pitch: Cesium.Math.toRadians(-90),
+        roll: 0,
+      },
+      duration: duration != null ? duration : 2.2,
+      easingFunction: Cesium.EasingFunction.QUADRATIC_OUT,
+      complete: function () {
+        setContinuousRender(false);
+      },
+    });
   }
 
   return {
@@ -807,5 +833,6 @@ window.MarsGlobe = (function () {
     requestRender,
     setContinuousRender,
     prepareForCosmicIntro,
+    enlargeToCockpit,
   };
 })();

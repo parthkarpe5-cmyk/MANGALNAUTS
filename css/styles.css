@@ -4669,6 +4669,48 @@ html .workspace-sidebar-header { border-bottom-color: var(--soft-edge); }
   .cosmic-hud-stage { display: none; }
 }
 
+/* =======================================================
+   Cockpit Cinematic Entrance & UI Bar Animation System
+   ======================================================= */
+.app-left-rail,
+.top-nav.cockpit-bar,
+.view-mode-pill,
+.app-status-bar,
+#globe-hud-cluster {
+  transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.85s ease-out !important;
+  will-change: transform, opacity;
+}
+
+body.cockpit-intro-active .app-left-rail {
+  transform: translateX(-100%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+body.cockpit-intro-active .top-nav.cockpit-bar {
+  transform: translateY(-100%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+body.cockpit-intro-active .view-mode-pill {
+  transform: translateY(-40px) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+body.cockpit-intro-active .app-status-bar {
+  transform: translateY(100%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+body.cockpit-intro-active #globe-hud-cluster {
+  transform: scale(0.8) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
 .mission-detail-values {
   display: grid;
   grid-template-columns: minmax(0, 1fr) max-content;
