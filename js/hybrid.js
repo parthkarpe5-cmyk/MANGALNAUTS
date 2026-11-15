@@ -22,9 +22,9 @@ window.MarsHybrid = (function () {
     }
 
     const viewer = MarsGlobe.getViewer();
-    if (viewer) {
-      viewer.scene.postRender.addEventListener(updateAltitude);
+    if (viewer && heightEl) {
       viewer.camera.changed.addEventListener(updateAltitude);
+      updateAltitude();
     }
 
     // Bind segmented view mode buttons
@@ -58,27 +58,20 @@ window.MarsHybrid = (function () {
       container.classList.add("mode-" + currentMode);
     }
 
-    if (currentMode === "3d") {
-      if (globePane) globePane.style.display = "block";
-      if (detailPane) detailPane.style.display = "none";
-      const viewer = MarsGlobe.getViewer();
-      if (viewer && viewer.resize) {
-        viewer.resize();
-      }
-    } else if (currentMode === "2d") {
-      if (globePane) globePane.style.display = "none";
-      if (detailPane) detailPane.style.display = "block";
-      MarsDetailMap.invalidateSize();
+    const showGlobe = currentMode !== "2d";
+    const showSurface = currentMode !== "3d";
+    if (globePane) globePane.style.display = showGlobe ? "block" : "none";
+    if (detailPane) detailPane.style.display = showSurface ? "block" : "none";
+
+    const viewer = MarsGlobe.getViewer();
+    if (viewer) viewer.useDefaultRenderLoop = showGlobe;
+    if (showGlobe) {
+      window.MarsCosmicGalaxy?.start();
+      viewer?.resize();
     } else {
-      // Split: side-by-side 50/50
-      if (globePane) globePane.style.display = "block";
-      if (detailPane) detailPane.style.display = "block";
-      const viewer = MarsGlobe.getViewer();
-      if (viewer && viewer.resize) {
-        viewer.resize();
-      }
-      MarsDetailMap.invalidateSize();
+      window.MarsCosmicGalaxy?.stop();
     }
+    if (showSurface) MarsDetailMap.invalidateSize();
 
     if (modeEl) {
       const modeLabels = {
@@ -103,7 +96,7 @@ window.MarsHybrid = (function () {
         state.heightM >= 1000
           ? (state.heightM / 1000).toFixed(0) + " km"
           : Math.round(state.heightM) + " m";
-      heightEl.textContent = km;
+      if (heightEl.textContent !== km) heightEl.textContent = km;
     }
   }
 
