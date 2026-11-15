@@ -32,6 +32,7 @@ window.MarsDetailMap = (function () {
       maxBoundsViscosity: 0.3,
       worldCopyJump: false,
       zoomControl: false,
+      attributionControl: false,
       dragging: true,
       scrollWheelZoom: true,
       touchZoom: true,

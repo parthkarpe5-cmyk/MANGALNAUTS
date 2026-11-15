@@ -48,6 +48,13 @@ window.MarsTelemetry = (function () {
     );
   }
 
+  const PAYLOAD_LOADOUTS = [
+    { id: "scout", label: "Scout", kg: 0, toolWatts: 0, icon: "🔎", desc: "Camera & Optical Recon" },
+    { id: "sample", label: "Science", kg: 15, toolWatts: 45, icon: "🔬", desc: "Sample Tubes & Spectrometer" },
+    { id: "drill", label: "Drill", kg: 25, toolWatts: 90, icon: "⚡", desc: "Percussive Rock Core Drill" },
+    { id: "survey", label: "Survey", kg: 40, toolWatts: 150, icon: "📡", desc: "GPR Ground Radar & Heavy Rig" },
+  ];
+
   function calculateConsumables(distanceMeters, modeKey, pathNodes, opts) {
     opts = opts || {};
     const mode = (window.MarsTravelMode && window.MarsTravelMode.MODES && window.MarsTravelMode.MODES[modeKey])
@@ -55,7 +62,7 @@ window.MarsTelemetry = (function () {
       : { type: modeKey === "rover" ? "rover" : "walk", speedBaseMs: modeKey === "rover" ? 0.12 : 0.65, maxSlopeDeg: modeKey === "rover" ? 20 : 15 };
 
     const isWalk = mode.type === "walk";
-    const payloadKg = Number.isFinite(opts.payloadKg) ? opts.payloadKg : 20; // Default 20 kg carried equipment
+    const payloadKg = Number.isFinite(opts.payloadKg) ? opts.payloadKg : 15; // Default 15 kg Science Loadout
     const crewCount = opts.crewCount || 2; // NASA EVA Flight Rule EVA-01 Buddy Pair
 
     let totalDurationSec = 0;
@@ -79,7 +86,7 @@ window.MarsTelemetry = (function () {
         if (isWalk) {
           // Tobler's hiking velocity model adapted for Mars 0.38g & carried payload mass
           const slopeFactor = Math.exp(-3.5 * Math.abs(Math.tan(slopeRad) + 0.05));
-          const payloadFactor = Math.max(0.75, 1.0 - (payloadKg - 10) * 0.007);
+          const payloadFactor = Math.max(0.72, 1.0 - (payloadKg - 10) * 0.007);
           segSpeed = Math.max(0.25, Math.min(0.85, segSpeed * slopeFactor * payloadFactor));
         } else {
           // Rover speed reduction on slopes > 8° due to wheel slip & visual odometry stops
@@ -98,34 +105,79 @@ window.MarsTelemetry = (function () {
     const durationHours = durationMin / 60;
     const avgSpeedMs = totalDurationSec > 0 ? distanceMeters / totalDurationSec : (mode.speedBaseMs || 0.65);
 
-    let o2Liters = 0;
-    let batteryWh = 0;
-    let waterCoolingL = 0;
+    // Physics-Based Mars EVA Consumables Model (Pandolf-Givoni-Santee adapted for Mars 0.38g)
+    const mAstronaut = 80; // kg nominal human body mass
+    const mSuitPLSS = 135; // kg NASA xEMU space suit + portable life support system
+    const mPayload = payloadKg; // kg carried equipment
+    const M = mAstronaut + mSuitPLSS + mPayload; // Total Mass M in kg
+
+    // Ambient Temperature from live environmental telemetry (REMS/MEDA)
+    const ambientTempC = (envData && Number.isFinite(envData.temp_C)) ? envData.temp_C : -52.0;
+    const targetSuitTempC = 18.0; // Interior comfortable suit temperature
+    const deltaT = Math.max(0, targetSuitTempC - ambientTempC);
+
+    let o2LitersNominal = 0;
+    let o2LitersSafeReturn = 0;
+    let batteryWhNominal = 0;
+    let batteryWhSafeReturn = 0;
+    let waterCoolingLNominal = 0;
+    let waterCoolingLSafeReturn = 0;
+    let pMetWatts = 0;
+    let pSuitWatts = 0;
 
     if (isWalk) {
-      // Bio-energetics: NASA EVA Metabolic Rate
-      // Basal: ~0.45 L/min per astronaut
-      // Incline workload: +0.035 L/min per degree of slope
-      // Payload burden: +0.012 L/min per 10 kg carried mass
-      const o2PerAstronautPerMin = 0.45 + (0.012 * (payloadKg / 10)) + (0.035 * Math.min(15, meanSlopeDeg));
-      // Total for buddy pair with 20% emergency safety margin (NASA Flight Rule EVA-01)
-      o2Liters = crewCount * o2PerAstronautPerMin * durationMin * 1.20;
+      // 1. Terrain surface roughness factor eta (1.20 for Mars fine regolith & delta sand)
+      const eta = 1.20;
 
-      // Power: NASA xEMU PLSS avionics (55W) + sublimation fan/pump (95W) + thermal suit heaters at -60°C (90W)
-      const suitWattsPerPerson = 240;
-      batteryWh = crewCount * suitWattsPerPerson * durationHours;
+      // 2. Slope percentage grade G: tan(theta) * 100
+      const slopeRad = (meanSlopeDeg * Math.PI) / 180;
+      const G = Math.abs(Math.tan(slopeRad)) * 100;
 
-      // Water sublimation for astronaut metabolic body heat rejection: ~0.35 L/hr per astronaut
-      waterCoolingL = crewCount * 0.35 * durationHours;
+      // 3. Walking speed v in m/s
+      const v = Math.max(0.2, avgSpeedMs);
+
+      // 4. Pandolf-Givoni-Santee Metabolic Power Demand adapted for Mars 0.38g:
+      // P_met = [1.5 * M + 2.0 * M * (m_payload / M)^2 + eta * M * (1.5 * v^2 + 0.35 * v * G)] * (g_mars / g_earth)
+      const loadRatio = M > 0 ? (mPayload / M) : 0;
+      const pMetEarth = 1.5 * M + 2.0 * M * (loadRatio * loadRatio) + eta * M * (1.5 * v * v + 0.35 * v * G);
+      pMetWatts = pMetEarth * 0.38; // Adjusted for Mars 0.38g gravity
+      pMetWatts = Math.max(120, Math.min(650, pMetWatts)); // Physiological human bounds
+
+      // 5. Oxygen Consumption Rate (V_dot_O2):
+      // V_dot_O2 = (P_met / 20.9 kJ/L) * 3.6 L/hr per astronaut (20.9 kJ metabolic heat per Liter of O2)
+      const vDotO2LitersPerHr = (pMetWatts * 3.6) / 20.9;
+      o2LitersNominal = vDotO2LitersPerHr * durationHours * crewCount;
+
+      // 6. Thermal & Electrical Battery Draw:
+      // P_suit = P_avionics (90 W) + P_LCG_pump (40 W) + P_heating (Delta T * 0.8 W) + P_payload_tools
+      const pAvionics = 90;
+      const pLcgPump = 40;
+      const pHeating = deltaT * 0.8; // Thermal compensation in Mars thin atmosphere
+      const pPayloadTools = mPayload >= 40 ? 150 : (mPayload >= 25 ? 90 : (mPayload >= 15 ? 45 : 0));
+      pSuitWatts = pAvionics + pLcgPump + pHeating + pPayloadTools;
+      batteryWhNominal = pSuitWatts * durationHours * crewCount;
+
+      // 7. Water sublimation for body metabolic heat rejection (~0.35 L/hr per astronaut at 300W)
+      waterCoolingLNominal = (pMetWatts / 300) * 0.35 * durationHours * crewCount;
+
+      // 8. NASA 20% Contingency Reserve Rule:
+      // Safe Return Threshold = 1.20 * Calculated Consumables
+      o2LitersSafeReturn = o2LitersNominal * 1.20;
+      batteryWhSafeReturn = batteryWhNominal * 1.20;
+      waterCoolingLSafeReturn = waterCoolingLNominal * 1.20;
     } else {
-      // Rover pressurized cabin / remote avionics
-      const o2RateCabinPerMin = 0.22 * crewCount;
-      o2Liters = o2RateCabinPerMin * durationMin * 1.15;
+      // Rover pressurized / AutoNav power model
+      const roverWatts = 420 + (meanSlopeDeg / (mode.maxSlopeDeg || 20)) * 240 + (mPayload * 2.5);
+      batteryWhNominal = roverWatts * durationHours;
+      batteryWhSafeReturn = batteryWhNominal * 1.20;
 
-      // Rover traction motors + avionics + RTG/battery draw: 420W nominal, up to 700W on slopes
-      const roverWatts = 420 + (meanSlopeDeg / (mode.maxSlopeDeg || 20)) * 220;
-      batteryWh = roverWatts * durationHours;
-      waterCoolingL = 0;
+      const cabinO2RateLitersPerHr = 0.22 * 60 * crewCount;
+      o2LitersNominal = cabinO2RateLitersPerHr * durationHours;
+      o2LitersSafeReturn = o2LitersNominal * 1.20;
+      waterCoolingLNominal = 0;
+      waterCoolingLSafeReturn = 0;
+      pMetWatts = 85;
+      pSuitWatts = roverWatts;
     }
 
     return {
@@ -133,9 +185,21 @@ window.MarsTelemetry = (function () {
       durationMin: Math.round(durationMin),
       durationHours: durationHours.toFixed(1),
       avgSpeedMs: avgSpeedMs.toFixed(2),
-      o2Liters: Math.round(o2Liters),
-      batteryWh: Math.round(batteryWh),
-      waterCoolingL: waterCoolingL.toFixed(1),
+      // Nominal values
+      o2Liters: Math.round(o2LitersNominal),
+      batteryWh: Math.round(batteryWhNominal),
+      waterCoolingL: waterCoolingLNominal.toFixed(1),
+      // Safe Return Threshold (120% NASA Flight Rule Reserve)
+      o2SafeReturnL: Math.round(o2LitersSafeReturn),
+      batterySafeReturnWh: Math.round(batteryWhSafeReturn),
+      waterCoolingSafeReturnL: waterCoolingLSafeReturn.toFixed(1),
+      // Bio-energetic telemetry details
+      pMetWatts: Math.round(pMetWatts),
+      pSuitWatts: Math.round(pSuitWatts),
+      totalMassKg: Math.round(M),
+      apparentWeightMarsKg: (M * 0.38).toFixed(1),
+      deltaT: Math.round(deltaT),
+      ambientTempC: Math.round(ambientTempC),
       payloadKg: payloadKg,
       crewCount: crewCount,
       meanSlopeDeg: meanSlopeDeg.toFixed(1),
@@ -222,5 +286,5 @@ window.MarsTelemetry = (function () {
     });
   }
 
-  return { init, calculateConsumables, getEnv };
+  return { init, calculateConsumables, getEnv, PAYLOAD_LOADOUTS };
 })();

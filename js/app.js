@@ -504,26 +504,29 @@
         }
         if (planSegment.checked) {
           const map = MarsDetailMap.getMap();
-          togglePresetRoutes.checked = false;
-          toggleTraverses.checked = false;
-          if (map) MarsPresetRoutes.setVisible(map, false);
-          MarsHistoricalTraverses.setVisible(false, map, MarsGlobe.getViewer());
+          if (togglePresetRoutes) togglePresetRoutes.checked = false;
+          if (toggleTraverses) toggleTraverses.checked = false;
+          if (map && window.MarsPresetRoutes) MarsPresetRoutes.setVisible(map, false);
+          if (window.MarsHistoricalTraverses) MarsHistoricalTraverses.setVisible(false, map, MarsGlobe.getViewer());
         }
         MarsSegmentPick.setActive(planSegment.checked);
       });
     }
-    document.getElementById("try-measured-route").addEventListener("click", async () => {
-      try {
-        const site = await MarsData.getActiveSiteMeta();
-        const example = site.example_route;
-        if (!example) return;
-        await MarsSegmentPick.planRoute(
-          example.from.lat, example.from.lon, example.to.lat, example.to.lon
-        );
-      } catch {
-        MarsSegmentDrawer.render({ error: "Could not load the example route." });
-      }
-    });
+    const tryBtn = document.getElementById("try-measured-route");
+    if (tryBtn) {
+      tryBtn.addEventListener("click", async () => {
+        try {
+          const site = await MarsData.getActiveSiteMeta();
+          const example = site.example_route;
+          if (!example) return;
+          await MarsSegmentPick.planRoute(
+            example.from.lat, example.from.lon, example.to.lat, example.to.lon
+          );
+        } catch {
+          MarsSegmentDrawer.render({ error: "Could not load the example route." });
+        }
+      });
+    }
     if (clearSegment) {
       clearSegment.addEventListener("click", function () {
         if (window.MarsAudio) MarsAudio.playClick();

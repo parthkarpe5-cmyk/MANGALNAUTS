@@ -3,7 +3,8 @@ window.MarsSegmentDrawer = (function () {
   let panel = null;
   let lastSegment = null;
   let renderId = 0;
-  let currentPayloadKg = 20;
+  let currentPayloadKg = 15;
+  let isRadialDialOpen = false;
 
   function ic(name) {
     return window.MarsIcons ? window.MarsIcons.get(name) : "";
@@ -153,91 +154,177 @@ window.MarsSegmentDrawer = (function () {
       });
 
       const isWalk = (modeObj.type || "walk") === "walk";
-      const payloadSelectorHtml = isWalk
-        ? '<div class="payload-selector-row">' +
-          '  <span class="payload-lbl">CARRIED PAYLOAD:</span>' +
-          '  <div class="payload-chips">' +
-          '    <button type="button" class="payload-chip ' + (currentPayloadKg === 5 ? "active" : "") + '" data-kg="5">5 kg (Light)</button>' +
-          '    <button type="button" class="payload-chip ' + (currentPayloadKg === 20 ? "active" : "") + '" data-kg="20">20 kg (Nominal)</button>' +
-          '    <button type="button" class="payload-chip ' + (currentPayloadKg === 40 ? "active" : "") + '" data-kg="40">40 kg (Heavy)</button>' +
+      const astronautKg = 80;
+      const suitPlssKg = 135;
+      const totalEarthKg = astronautKg + suitPlssKg + currentPayloadKg;
+      const marsApparentKg = (totalEarthKg * 0.38).toFixed(1);
+
+      const loadoutOptions = [
+        { id: "scout", label: "0kg", kg: 0, toolWatts: 0, icon: "🎒", name: "Light Recon (Zero Tools)", desc: "Optical survey only (0 kg extra tools, 0W draw)" },
+        { id: "sample", label: "+15kg", kg: 15, toolWatts: 45, icon: "🧪", name: "Science Sample Kit", desc: "Sample cache tubes & Raman spectrometer (+15 kg, 45W draw)" },
+        { id: "drill", label: "+25kg", kg: 25, toolWatts: 90, icon: "⛏️", name: "Coring Drill Kit", desc: "Subsurface rock core drill (+25 kg, 90W draw)" },
+        { id: "survey", label: "+40kg", kg: 40, toolWatts: 150, icon: "📡", name: "RIMFAX GPR Radar", desc: "Ground penetrating radar antenna (+40 kg, 150W draw)" },
+      ];
+
+      const activeOption = loadoutOptions.find(o => o.kg === currentPayloadKg) || loadoutOptions[1];
+
+      // Hexagonal / Circular Nodes Layout (Radius 78px around center hub)
+      const radialNodes = [
+        {
+          id: "astro",
+          fixed: true,
+          icon: "🧑‍🚀",
+          label: "80kg",
+          sub: "Astronaut",
+          x: 0,
+          y: -78,
+          title: "Astronaut Body Mass: 80 kg Earth (30.4 kg on Mars 0.38g)"
+        },
+        {
+          id: "suit",
+          fixed: true,
+          icon: "🛡️",
+          label: "135kg",
+          sub: "xEMU PLSS",
+          x: 68,
+          y: -39,
+          title: "NASA xEMU Suit + PLSS Life Support: 135 kg Earth (51.3 kg on Mars 0.38g)"
+        },
+        {
+          id: "scout",
+          fixed: false,
+          kg: 0,
+          icon: "🎒",
+          label: "+0kg",
+          sub: "Recon",
+          x: 68,
+          y: 39,
+          title: "Light Recon: 0 kg carried tools (0W draw)"
+        },
+        {
+          id: "sample",
+          fixed: false,
+          kg: 15,
+          icon: "🧪",
+          label: "+15kg",
+          sub: "Science",
+          x: 0,
+          y: 78,
+          title: "Science Sample Tubes & Spectrometer: +15 kg carried tools (45W draw)"
+        },
+        {
+          id: "drill",
+          fixed: false,
+          kg: 25,
+          icon: "⛏️",
+          label: "+25kg",
+          sub: "Drill",
+          x: -68,
+          y: 39,
+          title: "Rock Coring Drill Kit: +25 kg carried tools (90W draw)"
+        },
+        {
+          id: "survey",
+          fixed: false,
+          kg: 40,
+          icon: "📡",
+          label: "+40kg",
+          sub: "Radar",
+          x: -68,
+          y: -39,
+          title: "RIMFAX Subsurface Radar: +40 kg carried tools (150W draw)"
+        }
+      ];
+
+      const nodesHtml = radialNodes.map(function(n) {
+        if (n.fixed) {
+          return (
+            '<div class="radial-node radial-node-fixed font-mono" style="transform: translate(' + (n.x - 22) + 'px, ' + (n.y - 22) + 'px);" title="' + n.title + '">' +
+            '  <span class="node-icon">' + n.icon + '</span>' +
+            '  <span class="node-mass">' + n.label + '</span>' +
+            '</div>'
+          );
+        } else {
+          const isActive = currentPayloadKg === n.kg ? "active" : "";
+          return (
+            '<button type="button" class="radial-node loadout-radial-btn font-mono ' + isActive + '" data-kg="' + n.kg + '" style="transform: translate(' + (n.x - 22) + 'px, ' + (n.y - 22) + 'px);" title="' + n.title + '">' +
+            '  <span class="node-icon">' + n.icon + '</span>' +
+            '  <span class="node-mass">' + n.label + '</span>' +
+            '</button>'
+          );
+        }
+      }).join("");
+
+      const circularDialHtml = isWalk
+        ? '<div class="loadout-circular-control">' +
+          '  <div class="loadout-header-row">' +
+          '    <span class="loadout-strip-label">' +
+          '      <span>⚖️ EVA GROSS MASS</span>' +
+          '    </span>' +
+          '    <button type="button" class="btn-open-radial-loadout ' + (isRadialDialOpen ? "open" : "") + '" id="btn-toggle-radial-dial" title="Click to expand/collapse circular loadout hub">' +
+          '      <span>🧑‍🚀 80 + 🛡️ 135 + ' + activeOption.icon + ' ' + activeOption.kg + 'kg = <strong>' + totalEarthKg + ' kg</strong> (' + marsApparentKg + ' kg ♂)</span>' +
+          '      <span class="loadout-chevron">▼</span>' +
+          '    </button>' +
+          '  </div>' +
+          '  <div class="radial-loadout-stage ' + (isRadialDialOpen ? "open" : "") + '" id="radial-loadout-wheel">' +
+          '    <div class="radial-orbit-ring"></div>' +
+          '    <div class="radial-center-hub">' +
+          '      <span class="radial-hub-val">' + totalEarthKg + ' <span style="font-size:0.55rem;">kg</span></span>' +
+          '      <span class="radial-hub-mars">' + marsApparentKg + ' kg ♂</span>' +
+          '      <span class="radial-hub-sub">P<sub>met</sub> ' + c.pMetWatts + 'W</span>' +
+          '    </div>' +
+          nodesHtml +
+          '  </div>' +
+          '  <div class="radial-active-desc font-mono">' +
+          '    <span>Carried Gear: <strong>' + activeOption.icon + ' ' + activeOption.name + '</strong> (+' + activeOption.kg + ' kg · ' + activeOption.toolWatts + 'W)</span>' +
           '  </div>' +
           '</div>'
         : "";
 
       consumablesHtml =
-        '<div class="drawer-section drawer-consumables">' +
+        '<div class="drawer-section expedition-flow-card">' +
         '  <div class="section-title-row">' +
         "    <h4>" +
         ic("zap") +
-        " Consumables Projection</h4>" +
-        '    <span class="badge-mini">' +
-        (isWalk ? "EVA SUIT (2 CREW)" : "ROVER CABIN") +
+        " Expedition Consumables &amp; Safety</h4>" +
+        '    <span class="badge-mini font-mono">' +
+        (isWalk ? "2 CREW · EVA-01" : "AUTONAV ROVER") +
         "</span>" +
         "  </div>" +
-        payloadSelectorHtml +
-        '  <div class="consumables-grid">' +
-        '    <div class="consumable-item">' +
-        '      <span class="c-icon">' +
-        ic("clock") +
-        "</span>" +
-        '      <div class="c-info">' +
-        '        <span class="c-label">Est. Duration</span>' +
-        '        <span class="c-val font-mono">' +
-        (c.durationMin < 60 ? c.durationMin + " min" : c.durationHours + " hrs") +
-        "</span>" +
-        '        <span class="c-sub">Tobler 0.38g slope speed</span>' +
-        "      </div>" +
-        "    </div>" +
-        '    <div class="consumable-item">' +
-        '      <span class="c-icon">' +
-        ic("oxygen") +
-        "</span>" +
-        '      <div class="c-info">' +
-        '        <span class="c-label">O₂ Required</span>' +
-        '        <span class="c-val font-mono">' +
-        c.o2Liters +
-        " L</span>" +
-        '        <span class="c-sub">' + (isWalk ? "2 Crew · 20% margin" : "Cabin Life Support") + '</span>' +
-        "      </div>" +
-        "    </div>" +
-        '    <div class="consumable-item">' +
-        '      <span class="c-icon">' +
-        ic("battery") +
-        "</span>" +
-        '      <div class="c-info">' +
-        '        <span class="c-label">Energy Draw</span>' +
-        '        <span class="c-val font-mono">' +
-        c.batteryWh +
-        " Wh</span>" +
-        '        <span class="c-sub">' + (isWalk ? "Dual PLSS &amp; -60°C thermal" : "Drive motors &amp; sensors") + '</span>' +
-        "      </div>" +
-        "    </div>" +
-        '    <div class="consumable-item">' +
-        '      <span class="c-icon">' +
-        (isWalk ? ic("droplet") : ic("gauge")) +
-        "</span>" +
-        '      <div class="c-info">' +
-        '        <span class="c-label">' + (isWalk ? "Cooling H₂O" : "Mean Speed") + '</span>' +
-        '        <span class="c-val font-mono">' +
-        (isWalk ? c.waterCoolingL + " L" : c.avgSpeedMs + " m/s") +
-        "</span>" +
-        '        <span class="c-sub">' + (isWalk ? "Sublimator heat rejection" : "AutoNav traverse pace") + '</span>' +
-        "      </div>" +
-        "    </div>" +
-        "  </div>" +
-        '  <div class="metric-explainer-box">' +
-        '    <div class="explainer-header">' +
-        '      <strong>ℹ ' + (isWalk ? "NASA FLIGHT RULE EVA-01 &amp; TERRAIN PHYSICS" : "JPL AUTONAV WHEEL MOBILITY RULE") + '</strong>' +
-        '      <span class="badge-mini">' + (modeObj.nasaStandard || "NASA Standard") + '</span>' +
+        circularDialHtml +
+        '  <div class="expedition-telemetry-row">' +
+        '    <div class="telemetry-stat">' +
+        '      <span class="stat-hdr">' + ic("clock") + ' DURATION</span>' +
+        '      <span class="stat-val font-mono">' + (c.durationMin < 60 ? c.durationMin + "m" : c.durationHours + "h") + '</span>' +
+        '      <span class="stat-foot font-mono">' + c.avgSpeedMs + ' m/s</span>' +
         '    </div>' +
-        '    <p class="explainer-text">' + (modeObj.rationale || "Operational limit set to maintain traction safety and metabolic thermal equilibrium.") + '</p>' +
-        '    <div class="explainer-bio">' +
-        '      <span>• <strong>Crew Buddy Pair:</strong> ' + (isWalk ? "2 Astronauts mandatory under NASA EVA Flight Rules (never solo)." : "Autonomous robotic rover or 2-astronaut pressurized cabin.") + '</span>' +
-        '      <span>• <strong>Payload Effect:</strong> ' + c.payloadKg + ' kg equipment carried under 0.38g gravity (' + (c.payloadKg * 0.38).toFixed(1) + ' kg apparent weight).</span>' +
-        '      <span>• <strong>Incline Drag:</strong> Avg slope ' + c.meanSlopeDeg + '° slows pace to ' + c.avgSpeedMs + ' m/s and increases metabolic work.</span>' +
+        '    <div class="telemetry-stat">' +
+        '      <span class="stat-hdr">' + ic("oxygen") + ' O₂ REQUIRED</span>' +
+        '      <span class="stat-val font-mono">' + c.o2Liters + ' L</span>' +
+        '      <span class="stat-foot safe-pill font-mono" title="NASA 20% Contingency Safe Return Reserve">Safe: ' + c.o2SafeReturnL + 'L</span>' +
+        '    </div>' +
+        '    <div class="telemetry-stat">' +
+        '      <span class="stat-hdr">' + ic("battery") + ' BATTERY</span>' +
+        '      <span class="stat-val font-mono">' + c.batteryWh + ' Wh</span>' +
+        '      <span class="stat-foot safe-pill font-mono" title="NASA 20% Contingency Safe Return Reserve">Safe: ' + c.batterySafeReturnWh + 'Wh</span>' +
+        '    </div>' +
+        '    <div class="telemetry-stat">' +
+        '      <span class="stat-hdr">' + (isWalk ? ic("droplet") : ic("gauge")) + ' ' + (isWalk ? 'COOLING' : 'CLIMB') + '</span>' +
+        '      <span class="stat-val font-mono">' + (isWalk ? c.waterCoolingL + ' L' : c.meanSlopeDeg + '°') + '</span>' +
+        '      <span class="stat-foot font-mono">' + (isWalk ? 'Safe: ' + c.waterCoolingSafeReturnL + 'L' : '&Delta;z +' + c.elevationGainM + 'm') + '</span>' +
         '    </div>' +
         '  </div>' +
-        "</div>";
+        '  <div class="expedition-physics-bar">' +
+        '    <div class="physics-summary">' +
+        '      <span class="physics-badge font-mono">PANDOLF 0.38g</span>' +
+        '      <span class="physics-text">P<sub>met</sub>: <strong>' + c.pMetWatts + 'W</strong> · Suit Total: <strong>' + c.pSuitWatts + 'W</strong> (' + (c.ambientTempC) + '&deg;C ambient)</span>' +
+        '    </div>' +
+        '    <div class="physics-reserve-tag" title="NASA Flight Rule EVA-01: Mandatory 20% Life Support Buffer">' +
+        '      <span class="reserve-shield">🛡️</span>' +
+        '      <span>+20% Contingency Reserve</span>' +
+        '    </div>' +
+        '  </div>' +
+        '</div>';
     }
 
     let isruHtml = "";
@@ -364,6 +451,8 @@ window.MarsSegmentDrawer = (function () {
       isruHtml +
       profileHtml +
       '<div class="route-action-bar">' +
+      '  <button type="button" class="btn-ghost btn-sm" id="btn-toggle-traversal">⏸ Pause</button>' +
+      '  <button type="button" class="btn-ghost btn-sm" id="btn-replay-traversal">⏮ Replay</button>' +
       '  <button type="button" class="btn-ghost btn-sm" id="btn-reverse-route">🔄 Reverse Path</button>' +
       '  <button type="button" class="btn-ghost btn-sm btn-exit-nav-drawer" id="btn-exit-navigation" style="border-color: rgba(239, 68, 68, 0.45); color: #f87171; background: rgba(239, 68, 68, 0.08);">✕ Exit Nav (Unlock)</button>' +
       '</div>';
@@ -410,15 +499,51 @@ window.MarsSegmentDrawer = (function () {
     }
     if (segment.path_found && !segment.regional) window.MarsContingency?.attach(panel, segment);
 
-    // Payload chip listeners
-    panel.querySelectorAll(".payload-chip").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        currentPayloadKg = parseInt(btn.dataset.kg, 10);
-        render(lastSegment);
+    // Toggle circular dial hub
+    const dialToggleBtn = panel.querySelector("#btn-toggle-radial-dial");
+    if (dialToggleBtn) {
+      dialToggleBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        isRadialDialOpen = !isRadialDialOpen;
+        const wheel = panel.querySelector("#radial-loadout-wheel");
+        if (wheel) wheel.classList.toggle("open", isRadialDialOpen);
+        dialToggleBtn.classList.toggle("open", isRadialDialOpen);
+        if (window.MarsAudio && window.MarsAudio.playClick) window.MarsAudio.playClick();
+      });
+    }
+
+    // Loadout button listeners (radial nodes, pills, and chips)
+    panel.querySelectorAll(".loadout-radial-btn, .loadout-pill, .payload-chip").forEach(function (btn) {
+      btn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        const kg = parseInt(btn.dataset.kg, 10);
+        if (!isNaN(kg)) {
+          currentPayloadKg = kg;
+          if (window.MarsAudio && window.MarsAudio.playClick) window.MarsAudio.playClick();
+          render(lastSegment, lastTitle);
+        }
       });
     });
 
     // Action buttons
+    const toggleTravBtn = document.getElementById("btn-toggle-traversal");
+    if (toggleTravBtn) {
+      toggleTravBtn.onclick = function () {
+        if (window.MarsSegmentPick) {
+          const paused = window.MarsSegmentPick.togglePauseTraversal();
+          toggleTravBtn.textContent = paused ? "▶ Resume" : "⏸ Pause";
+        }
+      };
+    }
+    const replayTravBtn = document.getElementById("btn-replay-traversal");
+    if (replayTravBtn) {
+      replayTravBtn.onclick = function () {
+        if (window.MarsSegmentPick) {
+          window.MarsSegmentPick.replayAutoTraversal();
+          if (toggleTravBtn) toggleTravBtn.textContent = "⏸ Pause";
+        }
+      };
+    }
     const clearBtn = document.getElementById("btn-clear-active-route");
     if (clearBtn) {
       clearBtn.onclick = () => {
