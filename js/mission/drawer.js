@@ -295,23 +295,83 @@ window.MarsSegmentDrawer = (function () {
         const hasChlorine = Number.isFinite(isru?.chlorineWtPct);
         if (id !== renderId) return;
 
+        const rawElem =
+          window.MarsGrsOverlays && window.MarsGrsOverlays.getActiveElement
+            ? window.MarsGrsOverlays.getActiveElement()
+            : null;
+        const curElem = rawElem && rawElem !== "none" ? rawElem : "cl";
+
+        let pathMineralStats = null;
+        if (window.MarsGrsOverlays.sampleAlongPath && segment.path_nodes) {
+          pathMineralStats = window.MarsGrsOverlays.sampleAlongPath(curElem, segment.path_nodes);
+        }
+
+        const hasDeposits = pathMineralStats && pathMineralStats.highYieldFraction > 0;
+        const summaryMetricsHtml = pathMineralStats
+          ? '  <div class="isru-path-mineral-summary font-mono">' +
+            '    <div class="path-mineral-metric">' +
+            '      <span class="pm-label">CORRIDOR AVG:</span>' +
+            '      <span class="pm-val" style="color:var(--accent);">' +
+            pathMineralStats.avgVal.toFixed(2) +
+            ' ' +
+            pathMineralStats.meta.unit +
+            '</span>' +
+            '    </div>' +
+            '    <div class="path-mineral-metric">' +
+            '      <span class="pm-label">PEAK ENCOUNTER:</span>' +
+            '      <span class="pm-val" style="color:' +
+            (pathMineralStats.depositPeaks[0]?.color || '#94a3b8') +
+            ';">' +
+            pathMineralStats.maxVal.toFixed(2) +
+            ' ' +
+            pathMineralStats.meta.unit +
+            '</span>' +
+            '    </div>' +
+            '    <div class="path-mineral-metric">' +
+            '      <span class="pm-label">HIGH-YIELD ZONE:</span>' +
+            '      <span class="pm-val" style="color:' +
+            (hasDeposits ? '#22c55e' : '#94a3b8') +
+            ';">' +
+            Math.round(pathMineralStats.highYieldFraction * 100) +
+            '% path</span>' +
+            '    </div>' +
+            '  </div>'
+          : '';
+
         isruHtml =
           '<details class="drawer-section drawer-isru mission-details" open>' +
           '  <summary>' +
-          '    <span>Surface resources · In-Situ Science</span>' +
-          '    <span class="live-pulse-badge font-mono">● LIVE IN-SITU</span>' +
+          '    <span>Surface resources · Odyssey GRS</span>' +
           '  </summary>' +
-          '  <div class="isru-geology-banner">' +
-          '    <div class="geo-unit-title font-mono">' +
-          '      <span class="geo-icon">' + (isru.mineralIcon || '🔬') + '</span>' +
-          '      <span class="geo-name">' + (isru.geologyUnitName || 'Martian Regolith') + '</span>' +
-          '    </div>' +
-          '    <div class="geo-instruments font-mono">' +
-          '      <span class="instr-badge">CRISM Hyperspectral</span>' +
-          '      <span class="instr-badge">THEMIS TI: ' + (isru.themisTiAvg || 340) + '</span>' +
-          '      <span class="instr-badge">PDS Calibrated</span>' +
-          '    </div>' +
+          '  <div class="isru-track-header">' +
+          '    <span class="isru-track-title">Route Mineral Swath Track</span>' +
+          '    <span class="isru-track-active font-mono" data-elem="' +
+          curElem +
+          '">' +
+          curElem.toUpperCase() +
+          ' Active</span>' +
           '  </div>' +
+          '  <div class="isru-mineral-track-bar">' +
+          '    <button type="button" class="btn-mineral-track ' +
+          (curElem === 'k' ? 'active' : '') +
+          '" data-elem="k" title="Potassium (K) Feldspar & Sanidine">⚗️ K</button>' +
+          '    <button type="button" class="btn-mineral-track ' +
+          (curElem === 'h2o' ? 'active' : '') +
+          '" data-elem="h2o" title="Subsurface Water Ice (H₂O)">💧 H₂O</button>' +
+          '    <button type="button" class="btn-mineral-track ' +
+          (curElem === 'fe' ? 'active' : '') +
+          '" data-elem="fe" title="Hematite & Elemental Iron (Fe)">🧱 Fe</button>' +
+          '    <button type="button" class="btn-mineral-track ' +
+          (curElem === 'si' ? 'active' : '') +
+          '" data-elem="si" title="Silica & Quartz (Si)">🔬 Si</button>' +
+          '    <button type="button" class="btn-mineral-track ' +
+          (curElem === 'cl' ? 'active' : '') +
+          '" data-elem="cl" title="Chlorine & Soil Halogens (Cl)">⚠️ Cl</button>' +
+          '    <button type="button" class="btn-mineral-track ' +
+          (curElem === 'th' ? 'active' : '') +
+          '" data-elem="th" title="Thorium Geothermal Radiogenic (Th)">☢️ Th</button>' +
+          '  </div>' +
+          summaryMetricsHtml +
           (!hasChlorine
             ? '<p class="drawer-hint">Perchlorates · Data unavailable</p>'
             : isru.chlorineAlert
@@ -328,7 +388,7 @@ window.MarsSegmentDrawer = (function () {
               '    <span class="safe-icon">✓</span>' +
               '    <span>Chlorine estimate · ' +
               isru.chlorineWtPct +
-              ' wt% Cl (Nominal)</span>' +
+              ' wt% Cl</span>' +
               '  </div>'
           ) +
           '  <div class="consumables-grid isru-grid">' +
@@ -372,9 +432,29 @@ window.MarsSegmentDrawer = (function () {
           '%</span>' +
           '      </div>' +
           '    </div>' +
+          '    <div class="consumable-item">' +
+          '      <span class="c-icon">⚗️</span>' +
+          '      <div class="c-info">' +
+          '        <span class="c-label">Potassium & Thorium</span>' +
+          '        <span class="c-val font-mono">K: ' +
+          isru.potassiumWtPct +
+          ' wt% · Th: ' +
+          isru.thoriumPpm +
+          ' ppm</span>' +
+          '      </div>' +
+          '    </div>' +
+          '    <div class="consumable-item">' +
+          '      <span class="c-icon">⚠️</span>' +
+          '      <div class="c-info">' +
+          '        <span class="c-label">Soil Halogens / Perchlorates</span>' +
+          '        <span class="c-val font-mono">' +
+          isru.chlorineWtPct +
+          ' wt% Cl</span>' +
+          '      </div>' +
+          '    </div>' +
           '  </div>' +
           '  <div class="isru-citation-note font-mono">' +
-          '    <span>NASA MRO CRISM · THEMIS · PDS In-Situ Planetary Telemetry</span>' +
+          '    <span>NASA 2001 Mars Odyssey GRS (Boynton et al. 2007) · PDS Geosciences</span>' +
           '  </div>' +
           '</details>';
       } catch (e) {
@@ -561,11 +641,76 @@ window.MarsSegmentDrawer = (function () {
     const revBtn = document.getElementById("btn-reverse-route");
     if (revBtn && segment.from && segment.to) {
       revBtn.addEventListener("click", function () {
+        if (window.MarsAudio) MarsAudio.playClick();
         if (window.MarsSegmentPick) {
           MarsSegmentPick.planRoute(segment.to.lat, segment.to.lon, segment.from.lat, segment.from.lon);
         }
       });
     }
+
+    // Route Mineral Analysis Selector Buttons
+    const mineralBtns = panel.querySelectorAll(".btn-mineral-track");
+    mineralBtns.forEach(function (btn) {
+      btn.addEventListener("click", function (ev) {
+        ev.stopPropagation();
+        if (window.MarsAudio) MarsAudio.playClick();
+        const elemKey = btn.getAttribute("data-elem");
+        mineralBtns.forEach((b) =>
+          b.classList.toggle("active", b.getAttribute("data-elem") === elemKey)
+        );
+        const titleBadge = panel.querySelector(".isru-track-active");
+        if (titleBadge) {
+          titleBadge.setAttribute("data-elem", elemKey);
+          titleBadge.textContent = elemKey.toUpperCase() + " Active";
+        }
+        if (window.MarsGrsOverlays && window.MarsGrsOverlays.setActiveElement) {
+          window.MarsGrsOverlays.setActiveElement(elemKey);
+        }
+        if (
+          window.MarsGrsOverlays &&
+          window.MarsGrsOverlays.sampleAlongPath &&
+          segment.path_nodes
+        ) {
+          const newStats = window.MarsGrsOverlays.sampleAlongPath(
+            elemKey,
+            segment.path_nodes
+          );
+          if (newStats) {
+            const hasNewDeposits = newStats.highYieldFraction > 0;
+            const summaryEl = panel.querySelector(".isru-path-mineral-summary");
+            if (summaryEl) {
+              summaryEl.innerHTML =
+                '<div class="path-mineral-metric">' +
+                '  <span class="pm-label">CORRIDOR AVG:</span>' +
+                '  <span class="pm-val" style="color:var(--accent);">' +
+                newStats.avgVal.toFixed(2) +
+                ' ' +
+                newStats.meta.unit +
+                '</span>' +
+                '</div>' +
+                '<div class="path-mineral-metric">' +
+                '  <span class="pm-label">PEAK ENCOUNTER:</span>' +
+                '  <span class="pm-val" style="color:' +
+                (newStats.depositPeaks[0]?.color || '#94a3b8') +
+                ';">' +
+                newStats.maxVal.toFixed(2) +
+                ' ' +
+                newStats.meta.unit +
+                '</span>' +
+                '</div>' +
+                '<div class="path-mineral-metric">' +
+                '  <span class="pm-label">HIGH-YIELD ZONE:</span>' +
+                '  <span class="pm-val" style="color:' +
+                (hasNewDeposits ? '#22c55e' : '#94a3b8') +
+                ';">' +
+                Math.round(newStats.highYieldFraction * 100) +
+                '% path</span>' +
+                '</div>';
+            }
+          }
+        }
+      });
+    });
 
 
   }
