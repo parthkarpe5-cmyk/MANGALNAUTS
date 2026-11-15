@@ -24,35 +24,6 @@
     <link rel="stylesheet" href="css/styles.css?v=payload-option-contrast" />
   </head>
   <body>
-    <!-- 3D Cosmic Prologue: Spiral Galaxy to Mars Traversal -->
-    <div id="cosmic-intro-overlay" class="cosmic-intro-overlay" aria-label="3D Cosmic Prologue">
-      <canvas id="cosmic-intro-canvas"></canvas>
-      <div class="cosmic-intro-hud">
-        <div class="cosmic-hud-header">
-          <div class="cosmic-hud-tag">MANGALNAUTS // INTERPLANETARY PROLOGUE</div>
-          <div id="cosmic-hud-stage" class="cosmic-hud-stage">MILKY WAY GALAXY // ORION SPUR</div>
-        </div>
-
-        <div class="cosmic-hud-center">
-          <h2 id="cosmic-hud-title" class="cosmic-hud-title">INTERPLANETARY PROLOGUE</h2>
-          <p id="cosmic-hud-sub" class="cosmic-hud-sub">APPROACHING SOLAR SYSTEM COORDINATES</p>
-        </div>
-
-        <div class="cosmic-hud-footer">
-          <div class="cosmic-telemetry-pill">
-            <span class="telemetry-live-dot" style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#38bdf8;box-shadow:0 0 6px #38bdf8;animation:pulse 1.4s infinite;"></span>
-            <span id="cosmic-telemetry-text">GALACTIC LATITUDE: +12.4° · VELOCITY: 0.85c</span>
-          </div>
-          <button type="button" id="btn-skip-cosmic" class="btn-skip-cosmic" aria-label="Skip prologue and enter cockpit">
-            ENTER MARS COCKPIT ➔
-          </button>
-        </div>
-      </div>
-      <div class="cosmic-progress-bar">
-        <div id="cosmic-progress-fill" class="cosmic-progress-fill"></div>
-      </div>
-    </div>
-
     <!-- Binary Orbits Mission Loader -->
     <div id="mission-loader" class="mission-loader" aria-label="Initializing MANGALNAUTS Mission Cockpit">
       <div class="loader-content">
@@ -84,9 +55,6 @@
       <div id="telemetry-bar" class="telemetry-bar cockpit-bar" aria-label="Martian environmental telemetry"></div>
 
       <div class="nav-actions">
-        <button type="button" id="btn-replay-cosmic" class="btn-ghost" title="Replay 3D Cosmic Flyby Traverse" style="margin-right:8px;font-size:0.75rem;padding:4px 10px;border-radius:14px;border:1px solid rgba(168,85,247,0.4);color:#d8b4fe;background:rgba(168,85,247,0.12);cursor:pointer;">
-          🌌 Cosmos Flyby
-        </button>
         <span class="challenge-label">NASA SPACE APPS CHALLENGE<br>2026</span>
       </div>
     </header>
@@ -376,8 +344,6 @@
     <script src="js/map/science-stops.js"></script>
     <script src="js/map/pick.js?v=mode-physics-v5"></script>
     <script src="js/ui/workspace.js?v=centered-divider"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="js/visual/cosmic-intro.js?v=cosmic-prologue"></script>
     <script src="js/app.js?v=map-gestures"></script>
   </body>
 </html>

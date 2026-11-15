@@ -162,14 +162,6 @@
   }
 
   async function bootstrap() {
-    if (window.MarsCosmicIntro) {
-      try {
-        MarsCosmicIntro.init();
-      } catch (err) {
-        console.warn("Cosmic intro init error:", err);
-      }
-    }
-
     MarsSegmentDrawer.init("segment-drawer");
     MarsData.loadGraph().catch(console.warn);
     MarsTelemetry.init("telemetry-bar").catch(console.warn);
