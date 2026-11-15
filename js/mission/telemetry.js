@@ -160,23 +160,6 @@ window.MarsTelemetry = (function () {
 
     const ic = window.MarsIcons ? window.MarsIcons.get : function () { return ""; };
 
-    let alertHtml = "";
-    if (envData.alerts && envData.alerts.length > 0) {
-      const topAlert = envData.alerts[0];
-      const title = topAlert.title || topAlert.code || "SAFETY ADVISORY";
-      alertHtml =
-        '<div class="telemetry-alert-badge ' +
-        topAlert.severity +
-        '" title="' +
-        topAlert.message +
-        '">' +
-        '<span class="alert-icon">' + ic("alertTriangle") + '</span>' +
-        '<div class="alert-content">' +
-        '  <span class="alert-title">' + title + '</span>' +
-        '</div>' +
-        '</div>';
-    }
-
     el.innerHTML =
       '<div class="telemetry-pill-group">' +
       '  <div class="telemetry-pill highlight" title="Current Martian Mission Sol">' +
@@ -222,9 +205,6 @@ window.MarsTelemetry = (function () {
       '    </div>' +
       '  </div>' +
       '</div>';
-    const advisory = document.getElementById("telemetry-advisory");
-    if (advisory) advisory.innerHTML = alertHtml;
-    else el.insertAdjacentHTML("beforeend", alertHtml);
   }
 
   function getEnv() {

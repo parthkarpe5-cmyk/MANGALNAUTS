@@ -21,7 +21,7 @@
       href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/styles.css?v=left-brand" />
+    <link rel="stylesheet" href="css/styles.css?v=centered-divider" />
   </head>
   <body>
     <header class="top-nav cockpit-bar">
@@ -34,13 +34,9 @@
       <div id="telemetry-bar" class="telemetry-bar cockpit-bar" aria-label="Martian environmental telemetry"></div>
 
       <div class="nav-actions">
-        <button type="button" class="btn-ghost" id="about-toggle" title="Scientific Data Citations">
-          ℹ About
-        </button>
+        <span class="challenge-label">NASA SPACE APPS CHALLENGE 2026</span>
       </div>
     </header>
-
-    <div id="telemetry-advisory" class="telemetry-advisory" aria-label="Mission advisory"></div>
 
     <div id="about-panel" class="about-panel" hidden>
       <div class="about-card">
@@ -67,6 +63,7 @@
 
     <!-- Dual Viewport Engine: Supports 3D Globe, 2D Tactical, or Side-by-Side Dual Split -->
     <main id="viewport-split" class="viewport-split mode-3d">
+      <div class="map-workspace" id="map-workspace">
       <!-- 3D Planetary Globe View (CesiumJS Mars Ellipsoid) -->
       <section id="globe-pane" class="pane globe-pane" aria-label="3D Martian globe view">
         <canvas id="cosmic-canvas" class="cosmic-canvas"></canvas>
@@ -99,6 +96,8 @@
 
       </section>
 
+      <div id="map-divider" role="separator" tabindex="0" aria-label="Resize globe and surface maps" aria-orientation="vertical" aria-controls="globe-pane detail-pane" aria-valuemin="25" aria-valuemax="75" aria-valuenow="50"></div>
+
       <!-- 2D High-Resolution Tactical Surface Map View (Leaflet NASA Trek & HiRISE) -->
       <section
         id="detail-pane"
@@ -107,7 +106,7 @@
       >
         <div class="detail-body">
           <div id="detail-map-inner" class="detail-map-inner"></div>
-          <aside id="segment-drawer" class="segment-drawer" aria-label="Mission metrics and telemetry"></aside>
+          <p id="route-prompt" class="route-prompt" role="status" hidden></p>
         </div>
       </section>
       <div class="mission-dock cockpit-bar" role="region" aria-label="Mission controls">
@@ -142,11 +141,25 @@
               <span>Plan Route</span>
             </span>
           </label>
+        <button type="button" class="btn-ghost dropdown-trigger" id="workspace-route-toggle" aria-controls="workspace-sidebar" aria-expanded="false">Route</button>
         <div class="dropdown-wrapper">
-          <button type="button" class="btn-ghost dropdown-trigger" id="globe-layers-toggle" aria-expanded="false" aria-controls="globe-layers-menu">
+          <button type="button" class="btn-ghost dropdown-trigger" id="globe-layers-toggle" aria-expanded="false" aria-controls="workspace-sidebar">
             Map Controls ▾
           </button>
-          <div class="dropdown-menu" id="globe-layers-menu" hidden>
+
+        </div>
+      </div>
+      </div>
+      <aside id="workspace-sidebar" class="workspace-sidebar" aria-label="Mission sidebar" hidden>
+        <div class="workspace-sidebar-header">
+          <div role="tablist" aria-label="Sidebar panels">
+            <button type="button" class="btn-ghost" role="tab" id="workspace-route-tab" aria-controls="segment-drawer" aria-selected="true">Route</button>
+            <button type="button" class="btn-ghost" role="tab" id="workspace-controls-tab" aria-controls="globe-layers-menu" aria-selected="false" tabindex="-1">Map Controls</button>
+          </div>
+          <button type="button" class="btn-ghost" id="workspace-close" aria-label="Close sidebar">×</button>
+        </div>
+        <div id="segment-drawer" class="segment-drawer" role="tabpanel" aria-labelledby="workspace-route-tab"></div>
+          <div class="workspace-settings" id="globe-layers-menu" role="tabpanel" aria-labelledby="workspace-controls-tab" hidden>
             <div class="dropdown-title">MAP CONTROLS</div>
             <label class="dropdown-section mission-orbiter-picker">
               <span class="dropdown-section-title">MARS ORBITERS &amp; MOONS</span>
@@ -251,8 +264,7 @@
           <span id="wind-label">💨 WIND: OFF</span>
         </button></div>
           </div>
-        </div>
-      </div>
+      </aside>
     </main>
 
     <footer class="footer">
@@ -295,15 +307,16 @@
     <script src="js/ui/icons.js?v=contour-slope-v3"></script>
     <script src="js/ui/audio.js"></script>
     <script src="js/ui/theme.js?v=deep-space-default"></script>
-    <script src="js/mission/telemetry.js?v=top-telemetry"></script>
+    <script src="js/mission/telemetry.js?v=challenge-label"></script>
     <script src="js/mission/elevation-profile.js?v=contour-slope-v3"></script>
-    <script src="js/mission/drawer.js?v=contour-slope-v3"></script>
+    <script src="js/mission/drawer.js?v=split-workspace"></script>
     <script src="js/mission/contingency.js?v=raster-1"></script>
     <script src="js/map/heatmap.js?v=radiation-proxy"></script>
     <script src="js/map/route-renderer.js?v=contour-slope-v3"></script>
     <script src="js/map/preset-routes.js"></script>
     <script src="js/map/science-stops.js"></script>
     <script src="js/map/pick.js?v=mode-physics-v5"></script>
-    <script src="js/app.js?v=contour-slope-v3"></script>
+    <script src="js/ui/workspace.js?v=centered-divider"></script>
+    <script src="js/app.js?v=split-workspace"></script>
   </body>
 </html>
