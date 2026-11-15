@@ -459,92 +459,126 @@
         <!-- 5. Route Drawer (Segment Drawer) -->
         <div id="segment-drawer" class="segment-drawer" role="tabpanel" hidden></div>
 
-        <!-- 6. Layers Menu (Globe Layers Menu) -->
+        <!-- 6. Layers Menu (Globe & Surface Layers Menu) -->
         <div class="workspace-settings" id="globe-layers-menu" role="tabpanel" hidden>
-            <div class="dropdown-section map-style-presets" style="margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--border-light, rgba(255, 255, 255, 0.12));">
-              <span class="dropdown-section-title" style="color: var(--mars-orange, #FF6B00); font-weight: 700; letter-spacing: 0.8px;">MAP STYLE PRESET</span>
-              <select id="map-style-preset" class="dropdown-select">
-                <option value="clean" selected>Clean (Mars Globe Only)</option>
-                <option value="exploration">Exploration (Landmarks &amp; Traverses)</option>
-                <option value="orbital">Orbital Fleet (Moons &amp; Orbiters)</option>
-                <option value="custom">Custom (Manual Layers)</option>
-              </select>
+            <!-- Sub-Header Tabs: 3D VIEW vs 2D VIEW -->
+            <div class="layers-view-switcher" role="tablist" aria-label="Layers View Mode Switcher">
+              <button type="button" class="layers-switch-tab active" id="tab-layers-3d" data-section="section-layers-3d" role="tab" aria-selected="true">
+                🪐 3D VIEW
+              </button>
+              <button type="button" class="layers-switch-tab" id="tab-layers-2d" data-section="section-layers-2d" role="tab" aria-selected="false">
+                🗺️ 2D VIEW
+              </button>
             </div>
 
-            <div class="dropdown-title">MARS ORBITERS &amp; MOONS</div>
-            <label class="dropdown-item">
-              <input type="checkbox" id="toggle-orbiters" />
-              <span>Mars Orbiters (MRO, MAVEN, Odyssey...)</span>
-            </label>
-            <label class="dropdown-item">
-              <input type="checkbox" id="toggle-moons" />
-              <span>Martian Moons (Phobos &amp; Deimos)</span>
-            </label>
-            <label class="dropdown-item">
-              <input type="checkbox" id="toggle-orbit-paths" />
-              <span>Orbital Trajectory Lines</span>
-            </label>
-            <label class="dropdown-section mission-orbiter-picker">
-              <span class="dropdown-section-title">INSPECT ORBITER OR MOON</span>
-              <select id="orbiter-picker" class="dropdown-select"><option value="">Select an object...</option></select>
-            </label>
+            <!-- Section 1: 3D VIEW LAYERS -->
+            <div class="layers-section-container" id="section-layers-3d">
+              <div class="dropdown-section map-style-presets" style="margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--border-light, rgba(255, 255, 255, 0.12));">
+                <span class="dropdown-section-title" style="color: var(--mars-orange, #FF6B00); font-weight: 700; letter-spacing: 0.8px;">MAP STYLE PRESET</span>
+                <select id="map-style-preset" class="dropdown-select">
+                  <option value="clean" selected>Clean (Mars Globe Only)</option>
+                  <option value="exploration">Exploration (Landmarks &amp; Traverses)</option>
+                  <option value="orbital">Orbital Fleet (Moons &amp; Orbiters)</option>
+                  <option value="custom">Custom (Manual Layers)</option>
+                </select>
+              </div>
 
-            <div class="dropdown-title">PLANETARY &amp; SCIENCE OVERLAYS</div>
-            <label class="dropdown-item">
-              <input type="checkbox" id="toggle-landmarks" />
-              <span>Landing Sites &amp; Hero Landmarks</span>
-            </label>
-            <label class="dropdown-item">
-              <input type="checkbox" id="toggle-traverses" />
-              <span>NASA Rover Traverses (128.98 km)</span>
-            </label>
-            <label class="dropdown-item">
-              <input type="checkbox" id="toggle-aoi" />
-              <span>Active AOI Sector Footprint</span>
-            </label>
-            <label class="dropdown-item">
-              <input type="checkbox" id="toggle-graticule" />
-              <span>Coordinate Graticule (Lat/Lon)</span>
-            </label>
-            <label class="dropdown-item">
-              <input type="checkbox" id="toggle-lighting" checked />
-              <span>Sun Lighting &amp; Real Terminator</span>
-            </label>
+              <div class="dropdown-title">MARS ORBITERS &amp; MOONS</div>
+              <label class="dropdown-item">
+                <input type="checkbox" id="toggle-orbiters" />
+                <span>Mars Orbiters (MRO, MAVEN, Odyssey...)</span>
+              </label>
+              <label class="dropdown-item">
+                <input type="checkbox" id="toggle-moons" />
+                <span>Martian Moons (Phobos &amp; Deimos)</span>
+              </label>
+              <label class="dropdown-item">
+                <input type="checkbox" id="toggle-orbit-paths" />
+                <span>Orbital Trajectory Lines</span>
+              </label>
+              <label class="dropdown-section mission-orbiter-picker">
+                <span class="dropdown-section-title">INSPECT ORBITER OR MOON</span>
+                <select id="orbiter-picker" class="dropdown-select"><option value="">Select an object...</option></select>
+              </label>
 
-            <div class="dropdown-section">
-              <span class="dropdown-section-title">ODYSSEY GRS ISRU RESOURCES</span>
-              <select id="grs-element-select" class="dropdown-select">
-                <option value="none" selected>GRS Minerals: Off</option>
-                <option value="h2o">Subsurface Water Ice (H₂O wt%)</option>
-                <option value="fe">Elemental Iron (Fe wt%)</option>
-                <option value="si">Silicon (Si wt%)</option>
-                <option value="k">Potassium (K wt%)</option>
-                <option value="th">Thorium (Th ppm)</option>
-                <option value="cl">Chlorine &amp; Perchlorates (Cl wt%)</option>
-              </select>
-            </div>
+              <div class="dropdown-title">PLANETARY &amp; SCIENCE OVERLAYS</div>
+              <label class="dropdown-item">
+                <input type="checkbox" id="toggle-landmarks" />
+                <span>Landing Sites &amp; Hero Landmarks</span>
+              </label>
+              <label class="dropdown-item">
+                <input type="checkbox" id="toggle-traverses" />
+                <span>NASA Rover Traverses (128.98 km)</span>
+              </label>
+              <label class="dropdown-item">
+                <input type="checkbox" id="toggle-aoi" />
+                <span>Active AOI Sector Footprint</span>
+              </label>
+              <label class="dropdown-item">
+                <input type="checkbox" id="toggle-graticule" />
+                <span>Coordinate Graticule (Lat/Lon)</span>
+              </label>
+              <label class="dropdown-item">
+                <input type="checkbox" id="toggle-lighting" checked />
+                <span>Sun Lighting &amp; Real Terminator</span>
+              </label>
 
-            <div class="dropdown-section">
-              <span class="dropdown-section-title">GLOBE IMAGERY FILTER</span>
-              <select id="globe-filter" class="dropdown-select"></select>
-              <div class="filter-blend-row">
-                <label class="filter-sub-label">
-                  <input type="checkbox" id="overlay-mola" />
-                  <span>MOLA Blend</span>
-                </label>
-                <input type="range" id="overlay-opacity" min="0.1" max="1" step="0.05" value="0.45" />
+              <div class="dropdown-section">
+                <span class="dropdown-section-title">ODYSSEY GRS ISRU RESOURCES</span>
+                <select id="grs-element-select" class="dropdown-select">
+                  <option value="none" selected>GRS Minerals: Off</option>
+                  <option value="h2o">Subsurface Water Ice (H₂O wt%)</option>
+                  <option value="fe">Elemental Iron (Fe wt%)</option>
+                  <option value="si">Silicon (Si wt%)</option>
+                  <option value="k">Potassium (K wt%)</option>
+                  <option value="th">Thorium (Th ppm)</option>
+                  <option value="cl">Chlorine &amp; Perchlorates (Cl wt%)</option>
+                </select>
+              </div>
+
+              <div class="dropdown-section">
+                <span class="dropdown-section-title">GLOBE IMAGERY FILTER</span>
+                <select id="globe-filter" class="dropdown-select"></select>
+                <div class="filter-blend-row">
+                  <label class="filter-sub-label">
+                    <input type="checkbox" id="overlay-mola" />
+                    <span>MOLA Blend</span>
+                  </label>
+                  <input type="range" id="overlay-opacity" min="0.1" max="1" step="0.05" value="0.45" />
+                </div>
               </div>
             </div>
 
-            <div class="dropdown-section mission-route-actions">
-              <span class="dropdown-section-title">SURFACE ACTIONS</span>
-              <button type="button" class="dock-btn" id="clear-segment" title="Clear active route">
-                ✕ Clear
-              </button>
-              <button type="button" class="dock-btn" id="try-measured-route">Try example route</button>
-              <button type="button" class="dock-btn" id="sync-globe-btn" title="Sync 3D Globe camera to surface map center">
-                ⟲ Sync Globe
-              </button>
+            <!-- Section 2: 2D VIEW LAYERS -->
+            <div class="layers-section-container" id="section-layers-2d" hidden>
+              <div class="dropdown-section">
+                <span class="dropdown-section-title">2D TACTICAL SURFACE IMAGERY</span>
+                <div style="font-size:11px; color:#A9A9B8; line-height:1.45; margin-bottom:10px;">
+                  Composited from <strong>6-meter Esri CTX</strong>, <strong>Odyssey THEMIS Infrared</strong>, and <strong>Viking Color Mosaics</strong>.
+                </div>
+                <div class="dock-select-group" style="padding:10px 12px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:8px; margin-bottom:12px;">
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                    <span class="dock-lbl" style="font-weight:700;">ACTIVE BASEMAP:</span>
+                    <span class="badge-mini font-mono" style="color:#2DD4BF; background:rgba(45,212,191,0.12); padding:2px 6px; border-radius:4px; font-size:10px;">6M HI-RES</span>
+                  </div>
+                  <div style="font-size:12px; color:#fff; font-family:var(--font-mono, monospace);">
+                    Esri CTX + HiRISE Scientific
+                  </div>
+                </div>
+              </div>
+
+              <div class="dropdown-section mission-route-actions">
+                <span class="dropdown-section-title">2D SURFACE ACTIONS &amp; TOOLS</span>
+                <button type="button" class="dock-btn" id="try-measured-route" style="width:100%; margin-bottom:8px;">
+                  🚀 Try Example Route Corridor
+                </button>
+                <button type="button" class="dock-btn" id="clear-segment" title="Clear active route" style="width:100%; margin-bottom:8px;">
+                  ✕ Clear Active Route
+                </button>
+                <button type="button" class="dock-btn" id="sync-globe-btn" title="Sync 3D Globe camera to surface map center" style="width:100%;">
+                  ⟲ Sync Globe to Surface Center
+                </button>
+              </div>
             </div>
 
             <div class="mission-sound">
