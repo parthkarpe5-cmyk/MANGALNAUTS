@@ -5,6 +5,7 @@
  * Provides API Key management, live connection testing, and real-time planetary telemetry.
  */
 window.MarsNasaApi = (function () {
+  const DEFAULT_KEY = "DEMO_KEY";
   const STORAGE_KEY = "mangalnauts_nasa_api_key";
   // PRIMARY NASA API KEY (synced from .env)
   const NASA_API_KEY = "knm8FKN9QkHb9MFWRp6jFg9qG6qLLctGp9Nf8tcW";
