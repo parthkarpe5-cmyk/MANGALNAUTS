@@ -45,7 +45,7 @@
       "globe_camera": {
         "lat": 18.450030884932012,
         "lon": 77.42466700791792,
-        "height": 75000
+        "height": 123000
       },
       "detail_zoom": 10,
       "files": {
@@ -130,7 +130,7 @@
       "globe_camera": {
         "lat": -4.650837541141328,
         "lon": 137.39511123632226,
-        "height": 95000
+        "height": 632000
       },
       "detail_zoom": 10,
       "files": {
