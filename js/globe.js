@@ -337,15 +337,23 @@ window.MarsGlobe = (function () {
     if (compassBtn) {
       compassBtn.addEventListener("click", function () {
         if (window.MarsAudio) window.MarsAudio.playClick();
+        if (!viewer || !viewer.camera) return;
         const camera = viewer.camera;
+        const carto = camera.positionCartographic;
+        if (!carto) return;
         viewer.camera.flyTo({
-          destination: camera.positionCartographic,
+          destination: Cesium.Cartesian3.fromRadians(
+            carto.longitude,
+            carto.latitude,
+            carto.height,
+            Cesium.Ellipsoid.MARS
+          ),
           orientation: {
-            heading: 0,
+            heading: Cesium.Math.toRadians(0),
             pitch: camera.pitch,
             roll: 0,
           },
-          duration: 0.8,
+          duration: 0.6,
         });
       });
     }
@@ -354,41 +362,75 @@ window.MarsGlobe = (function () {
     if (tiltBtn) {
       tiltBtn.addEventListener("click", function () {
         if (window.MarsAudio) window.MarsAudio.playClick();
+        if (!viewer || !viewer.camera) return;
         const camera = viewer.camera;
+        const carto = camera.positionCartographic;
+        if (!carto) return;
         const currentPitchDeg = Cesium.Math.toDegrees(camera.pitch);
         const targetPitch = currentPitchDeg < -65 ? Cesium.Math.toRadians(-45) : Cesium.Math.toRadians(-90);
         viewer.camera.flyTo({
-          destination: camera.positionCartographic,
+          destination: Cesium.Cartesian3.fromRadians(
+            carto.longitude,
+            carto.latitude,
+            carto.height,
+            Cesium.Ellipsoid.MARS
+          ),
           orientation: {
             heading: camera.heading,
             pitch: targetPitch,
             roll: 0,
           },
-          duration: 0.8,
+          duration: 0.6,
         });
       });
     }
 
-    // Zoom buttons
+    // Zoom buttons (smooth animated zoom with Mars ellipsoid Cartesian3)
     if (zoomInBtn) {
       zoomInBtn.addEventListener("click", function () {
         if (window.MarsAudio) window.MarsAudio.playClick();
-        if (viewer.camera && viewer.camera.positionCartographic) {
-          const height = viewer.camera.positionCartographic.height;
-          viewer.camera.zoomIn(height * 0.35);
-          updateHud();
-        }
+        if (!viewer || !viewer.camera) return;
+        const carto = viewer.camera.positionCartographic;
+        if (!carto) return;
+        const targetHeight = Math.max(carto.height * 0.55, 500);
+        viewer.camera.flyTo({
+          destination: Cesium.Cartesian3.fromRadians(
+            carto.longitude,
+            carto.latitude,
+            targetHeight,
+            Cesium.Ellipsoid.MARS
+          ),
+          orientation: {
+            heading: viewer.camera.heading,
+            pitch: viewer.camera.pitch,
+            roll: 0,
+          },
+          duration: 0.35,
+        });
       });
     }
 
     if (zoomOutBtn) {
       zoomOutBtn.addEventListener("click", function () {
         if (window.MarsAudio) window.MarsAudio.playClick();
-        if (viewer.camera && viewer.camera.positionCartographic) {
-          const height = viewer.camera.positionCartographic.height;
-          viewer.camera.zoomOut(height * 0.45);
-          updateHud();
-        }
+        if (!viewer || !viewer.camera) return;
+        const carto = viewer.camera.positionCartographic;
+        if (!carto) return;
+        const targetHeight = Math.min(carto.height * 1.7, 45000000);
+        viewer.camera.flyTo({
+          destination: Cesium.Cartesian3.fromRadians(
+            carto.longitude,
+            carto.latitude,
+            targetHeight,
+            Cesium.Ellipsoid.MARS
+          ),
+          orientation: {
+            heading: viewer.camera.heading,
+            pitch: viewer.camera.pitch,
+            roll: 0,
+          },
+          duration: 0.35,
+        });
       });
     }
 
