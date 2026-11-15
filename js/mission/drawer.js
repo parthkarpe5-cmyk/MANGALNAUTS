@@ -190,13 +190,23 @@ window.MarsSegmentDrawer = (function () {
         '    </div>' +
         '  </div>' +
         '<details class="mission-details mission-estimate-details"' + (detailsOpen ? " open" : "") + '><summary>Details</summary>' +
-        '<p>' + (isWalk ? c.crewCount + ' crew · ' : '') + c.avgSpeedMs + ' m/s · Tool load ' + toolWatts + ' W</p>' +
-        '<p>With 20% reserve · O₂ ' + c.o2SafeReturnL + ' L · Battery ' + c.batterySafeReturnWh + ' Wh' +
-        (isWalk ? ' · Cooling ' + c.waterCoolingSafeReturnL + ' L' : ' · Climb +' + c.elevationGainM + ' m') + '</p>' +
+        '<dl class="mission-detail-values">' +
+        '<dt>Avg. speed</dt><dd>' + c.avgSpeedMs + ' m/s</dd>' +
+        '<dt>Tool load</dt><dd>' + toolWatts + ' W</dd>' +
+        (isWalk ? '<dt>Crew</dt><dd>' + c.crewCount + '</dd>' : '<dt>Climb</dt><dd>+' + c.elevationGainM + ' m</dd>') +
+        '</dl>' +
+        '<h5 class="mission-reserve-heading">With 20% reserve</h5>' +
+        '<dl class="mission-detail-values">' +
+        '<dt>O₂</dt><dd>' + c.o2SafeReturnL.toLocaleString("en-US") + ' L</dd>' +
+        '<dt>Battery</dt><dd>' + (c.batterySafeReturnWh >= 1000
+          ? (c.batterySafeReturnWh / 1000).toFixed(1) + ' kWh'
+          : c.batterySafeReturnWh + ' Wh') + '</dd>' +
+        (isWalk ? '<dt>Cooling</dt><dd>' + c.waterCoolingSafeReturnL + ' L</dd>' : '') +
+        '</dl>' +
         '</details>' +
         '<p class="mission-final-note">' +
         (feasible ? 'Within slope limit.' : 'Route exceeds slope limit.') +
-        (segment.regional ? ' Estimated from 200 m terrain. Small hazards may be missed.' : '') +
+        (segment.regional ? ' 200 m terrain may miss small hazards.' : '') +
         '</p>' +
         '</div>';
     }
