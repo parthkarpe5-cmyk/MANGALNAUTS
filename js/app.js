@@ -271,11 +271,19 @@
         e.stopPropagation();
         if (window.MarsAudio) MarsAudio.playClick();
         globeLayersMenu.hidden = !globeLayersMenu.hidden;
+        globeLayersToggle.setAttribute("aria-expanded", String(!globeLayersMenu.hidden));
       });
       document.addEventListener("click", function () {
         if (!globeLayersMenu.hidden) {
           globeLayersMenu.hidden = true;
+          globeLayersToggle.setAttribute("aria-expanded", "false");
         }
+      });
+      document.addEventListener("keydown", function (e) {
+        if (e.key !== "Escape" || globeLayersMenu.hidden) return;
+        globeLayersMenu.hidden = true;
+        globeLayersToggle.setAttribute("aria-expanded", "false");
+        globeLayersToggle.focus();
       });
       globeLayersMenu.addEventListener("click", function (e) {
         e.stopPropagation();

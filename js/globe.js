@@ -113,7 +113,8 @@ window.MarsGlobe = (function () {
     viewer.scene.backgroundColor = Cesium.Color.TRANSPARENT;
     viewer.scene.globe.ellipsoid = Cesium.Ellipsoid.MARS;
     viewer.scene.globe.baseColor = Cesium.Color.fromCssColorString("#1a0804");
-    viewer.scene.globe.enableLighting = false;
+    viewer.scene.globe.enableLighting = true;
+    viewer.scene.postProcessStages.fxaa.enabled = true;
     viewer.scene.globe.depthTestAgainstTerrain = true;
 
     // Start real-time cosmic galaxy backdrop
@@ -146,6 +147,7 @@ window.MarsGlobe = (function () {
     }
 
     initOptionalLayers();
+    window.MarsOrbiters?.init(viewer).catch(console.warn);
 
     // Init Historical Traverses on 3D globe
     if (window.MarsHistoricalTraverses) {
@@ -373,6 +375,12 @@ window.MarsGlobe = (function () {
     clearImageryLayers();
     const provider = TrekLayers.createProvider(key);
     baseLayer = viewer.imageryLayers.addImageryProvider(provider);
+    if (key === "viking") {
+      // Grade the globe presentation without altering the elevation data.
+      baseLayer.brightness = 0.82;
+      baseLayer.contrast = 1.18;
+      baseLayer.saturation = 1.10;
+    }
     if (overlayFilter) {
       applyOverlay(overlayFilter, overlayOpacity);
     }

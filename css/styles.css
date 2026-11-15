@@ -5,8 +5,8 @@
 
 :root,
 html[data-theme="perseverance"] {
-  --font-display: "Orbitron", -apple-system, sans-serif;
-  --font-body: "Plus Jakarta Sans", -apple-system, sans-serif;
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-body: "Space Grotesk", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
   /* Theme: Perseverance Recon (Electric Lime + Recon Cyan) */
@@ -31,28 +31,31 @@ html[data-theme="perseverance"] {
 }
 
 html[data-theme="ares"] {
-  /* Theme: Ares Mars Surface (Mars Rust Orange + Solar Gold) */
-  --bg: #0b090a;
-  --bg-stage: #080607;
-  --panel: rgba(22, 16, 18, 0.94);
-  --panel-solid: #161113;
-  --panel-alt: #1f171a;
-  --border-light: rgba(255, 255, 255, 0.08);
-  --border-active: rgba(255, 87, 34, 0.45);
-
-  --text: #f3e8e2;
-  --text-bright: #ffffff;
-  --muted: #a8948d;
-
-  --accent: #ff5722;
-  --accent-glow: rgba(255, 87, 34, 0.4);
-  --accent-sub: #f59e0b;
-  --accent-sub-glow: rgba(245, 158, 11, 0.3);
-  --accent-warn: #eab308;
-  --accent-danger: #ef4444;
+  color-scheme: dark;
+  --bg: #100b0d;
+  --bg-stage: #0d090b;
+  --panel: rgba(30, 18, 20, .87);
+  --map-glass: linear-gradient(140deg, rgba(39, 20, 22, .68), rgba(15, 9, 12, .74));
+  --map-glass-border: rgba(245, 176, 149, .32);
+  --panel-solid: #211416;
+  --panel-alt: #2b1b1d;
+  --border-light: rgba(245, 179, 151, .17);
+  --border-active: rgba(236, 124, 93, .55);
+  --text: #efdbd1;
+  --text-bright: #fff3eb;
+  --muted: #c3a69a;
+  --accent: #f1886b;
+  --accent-glow: rgba(241, 136, 107, .25);
+  --accent-sub: #e9ad75;
+  --accent-sub-glow: rgba(233, 173, 117, .24);
+  --accent-warn: #f4be70;
+  --accent-danger: #ff857b;
 }
 
 html[data-theme="deepspace"] {
+  color-scheme: dark;
+  --map-glass: linear-gradient(140deg, rgba(17, 35, 50, .68), rgba(6, 11, 24, .74));
+  --map-glass-border: rgba(104, 218, 237, .32);
   /* Theme: JPL Deep Space (Electric Cyan + Ultra-Violet) */
   --bg: #030712;
   --bg-stage: #02040a;
@@ -2475,3 +2478,221 @@ body {
 }
 @keyframes radar-sweep { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .radar-dial::before { animation: none; } }
+
+/* Floating mission controls shared by the globe and surface map */
+.mission-dock {
+  position: absolute;
+  z-index: 1100;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  gap: 10px;
+  width: max-content;
+  max-width: calc(100% - 24px);
+  padding: 10px 12px;
+  border: 1px solid rgba(104, 212, 235, .65);
+  border-radius: 13px;
+  background: linear-gradient(145deg, rgba(23, 30, 42, .97), rgba(8, 12, 19, .95));
+  box-shadow: 0 8px 30px #0008;
+  color: var(--text-bright);
+}
+.mission-dock .select-badge,
+.mission-view {
+  display: grid;
+  justify-items: start;
+  gap: 4px;
+  min-width: 0;
+}
+.mission-dock select { max-width: 100%; }
+.mission-dock .view-mode-group { display: flex; }
+.mission-dock .view-mode-btn { padding: 8px; white-space: nowrap; }
+.mission-dock .dock-btn-plan { position: relative; margin: 0; }
+.mission-dock .dock-btn-plan input { display: block; position: absolute; opacity: 0; }
+.mission-dock .dock-btn-plan .btn-inner {
+  min-height: 34px;
+  border-radius: 7px;
+  color: #101921;
+  background: linear-gradient(105deg, #bcf76e, #52ccef);
+}
+.mission-dock .dock-btn-plan input:focus-visible + .btn-inner {
+  outline: 2px solid white;
+  outline-offset: 3px;
+}
+.mission-dock .dock-btn-plan input:checked + .btn-inner {
+  background: #0c2630;
+  color: #b8f1ff;
+}
+.mission-dock .dropdown-menu {
+  top: auto;
+  bottom: calc(100% + 14px);
+  width: min(21rem, calc(100vw - 40px));
+  min-width: 0;
+  max-height: min(55vh, 390px);
+  overflow: auto;
+}
+.mission-surface-settings .dock-select-group,
+.mission-sound {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+@media (max-width: 850px) {
+  .mission-dock {
+    flex-wrap: wrap;
+    align-items: center;
+    width: calc(100% - 24px);
+    bottom: 10px;
+  }
+  .mission-dock .dropdown-wrapper { position: static; }
+  .mission-dock .dropdown-menu { right: 0; }
+}
+
+.mode-3d .mission-route-actions { display: none; }
+.mission-route-actions .dock-btn { text-align: left; }
+
+/* Shared Mars interface surfaces */
+html[data-theme="ares"] .top-nav {
+  background: linear-gradient(115deg, #2a1719, #130d10 70%);
+}
+html[data-theme="ares"] .telemetry-bar,
+html[data-theme="ares"] .footer {
+  background: var(--bg);
+}
+html:is([data-theme="ares"], [data-theme="deepspace"]) :is(.mission-dock, .mission-dock .dropdown-menu, .segment-drawer, .orbiter-card) {
+  background: var(--map-glass);
+  border-color: var(--map-glass-border);
+  backdrop-filter: blur(14px) saturate(.86);
+}
+html:is([data-theme="ares"], [data-theme="deepspace"]) :is(.mission-dock, .mission-dock .dropdown-menu, .orbiter-card) {
+  box-shadow: 0 8px 24px rgba(10, 4, 7, .32), inset 0 1px rgba(255, 224, 207, .07);
+}
+html[data-theme="ares"] .mission-dock .dock-btn-plan .btn-inner {
+  background: linear-gradient(105deg, #ec785d, #efaf7a);
+  color: #230f10;
+}
+html[data-theme="ares"] .mission-dock .dock-btn-plan input:checked + .btn-inner {
+  background: #492321;
+  color: var(--text-bright);
+  border-color: var(--accent);
+}
+html[data-theme="ares"] .surface-warm {
+  filter: sepia(.55) saturate(1.48) hue-rotate(-17deg) brightness(.94) contrast(1.08);
+}
+.nav-brand h1 {
+  font-size: 1.05rem;
+  letter-spacing: .045em;
+}
+.mission-dock {
+  --dock-control-height: 38px;
+  --dock-control-surface: rgba(16, 9, 11, .32);
+}
+.mission-dock .select-badge {
+  padding: 0;
+  border: 0;
+  background: none;
+}
+.mission-dock .select-badge-lbl {
+  margin: 0;
+  color: var(--muted);
+  line-height: 12px;
+}
+.mission-dock .select-badge select,
+.mission-dock .view-mode-group,
+.mission-dock .dock-btn-plan .btn-inner,
+.mission-dock .dropdown-trigger {
+  height: var(--dock-control-height);
+  min-height: var(--dock-control-height);
+  border: 1px solid var(--border-light);
+  border-radius: 7px;
+}
+.mission-dock .select-badge select,
+.mission-dock .view-mode-group,
+.mission-dock .dropdown-trigger {
+  background: var(--dock-control-surface);
+}
+.mission-dock .select-badge select {
+  width: 100%;
+  padding: 0 10px;
+}
+.mission-dock .view-mode-group {
+  align-items: stretch;
+  box-shadow: none;
+}
+.mission-dock .view-mode-btn {
+  flex: 1 0 0;
+  justify-content: center;
+  padding: 0 9px;
+  border-radius: 5px;
+}
+.mission-dock :is(.select-badge select, .view-mode-btn, .dropdown-trigger, .btn-inner) {
+  font: 700 .75rem/1 var(--font-body);
+  letter-spacing: 0;
+}
+.mission-dock .dropdown-trigger,
+.mission-dock .dock-btn-plan .btn-inner {
+  padding: 0 12px;
+}
+.mission-dock :is(button, select):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.orbiter-card {
+  position: absolute;
+  z-index: 20;
+  top: 14px;
+  right: 14px;
+  width: min(320px, calc(100% - 28px));
+  max-height: max(120px, calc(100% - 150px));
+  overflow: auto;
+  padding: 16px;
+  background: var(--panel);
+  border: 1px solid var(--border-active);
+  border-radius: 13px;
+  backdrop-filter: blur(12px);
+  color: var(--text);
+  font-size: .8rem;
+  line-height: 1.45;
+}
+.orbiter-card header { display: flex; align-items: start; justify-content: space-between; gap: 10px; }
+.orbiter-card h2 { margin: 0; font-size: 1rem; color: var(--text-bright); }
+.orbiter-card dl {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
+  gap: 7px 12px;
+  padding-block: 10px;
+  border-block: 1px solid var(--border-light);
+}
+.orbiter-card header button { flex: none; }
+.orbiter-card dt { color: var(--muted); }
+.orbiter-card dd { margin: 0; overflow-wrap: anywhere; color: var(--text-bright); }
+.orbiter-card a { color: var(--accent-sub); }
+.mode-2d .mission-orbiter-picker { display: none; }
+
+.radiation-legend {
+  padding: 9px 12px;
+  background: var(--map-glass, var(--panel));
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  color: var(--text-bright);
+  font: 500 .75rem/1.42 var(--font-body);
+}
+.radiation-legend ul { margin: 5px 0; padding: 0; list-style: none; }
+.radiation-legend li { display: flex; align-items: center; gap: 7px; }
+.radiation-legend li span { width: 10px; height: 10px; border-radius: 2px; }
+.radiation-legend small { color: var(--muted); }
+.radiation-legend a { color: var(--accent-sub); }
+
+html[data-theme="deepspace"] .mission-dock .dock-btn-plan .btn-inner {
+  background: linear-gradient(105deg, #58d8e8, #91e8ef);
+  color: #08202a;
+}
+html[data-theme="deepspace"] .mission-dock .dock-btn-plan input:checked + .btn-inner {
+  background: #103542;
+  color: var(--text-bright);
+  border-color: var(--accent);
+}

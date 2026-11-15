@@ -77,6 +77,7 @@ window.MarsData = (function () {
     getActiveSiteMeta,
     setActiveSite,
     loadGraph,
+    loadRegionalGraph: () => loadFile("regional_graph", null),
     loadScores,
     loadScienceStops,
     loadRoutes,

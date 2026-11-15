@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="deepspace">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MANGALNAUTS — Planetary Multi-Site Operations &amp; GNN Traversability</title>
+    <title>MANGALNAUTS</title>
     <!-- CesiumJS CSS -->
     <link
       rel="stylesheet"
@@ -21,118 +21,16 @@
       href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/styles.css?v=radar-pins" />
+    <link rel="stylesheet" href="css/styles.css?v=deep-space-default" />
   </head>
-  <body class="theme-perseverance">
+  <body>
     <header class="top-nav">
       <!-- Left: Mission Identity & Live Telemetry Ping -->
       <div class="nav-brand">
-        <span class="badge">ARES-OS</span>
-        <h1>MANGALNAUTS <span class="sub">// NASA SPACE APPS 2026</span></h1>
-        <span class="status-indicator"><span class="dot"></span>LIVE TELEMETRY</span>
+        <h1>MANGALNAUTS</h1>
       </div>
 
-      <!-- Center: Prominent Aerospace View Mode Segmented Switch -->
-      <div class="view-mode-group" role="group" aria-label="Cockpit View Mode">
-        <button type="button" class="view-mode-btn active" data-mode="3d" title="Full Screen 3D Planetary Mars Globe">🌐 3D GLOBE</button>
-        <button type="button" class="view-mode-btn" data-mode="2d" title="Full Screen 2D Tactical Surface Exploration">🗺️ 2D TACTICAL</button>
-        <button type="button" class="view-mode-btn" data-mode="split" title="Synchronized Side-by-Side Dual Cockpit">◫ DUAL SPLIT</button>
-      </div>
-
-      <!-- Right: Sector, Travel Limits, and Tactical Instrument Panels -->
       <div class="nav-actions">
-        <!-- Hero Exploration Sector -->
-        <div class="select-badge" title="Select Martian Exploration Sector">
-          <span class="select-badge-lbl">SECTOR</span>
-          <select id="location" aria-label="Preset location">
-            <option value="global" selected>Global Mars Orbit</option>
-            <option value="jezero">Jezero Crater (Delta)</option>
-            <option value="gale">Gale Crater (Mt Sharp)</option>
-            <option value="olympus">Olympus Mons (Caldera)</option>
-          </select>
-        </div>
-
-        <!-- Travel Mode (Slope Limits) -->
-        <div class="select-badge" title="Rover or Marswalk slope limits">
-          <span class="select-badge-lbl">MODE</span>
-          <select id="travel-mode" aria-label="Travel mode">
-            <option value="walk">Marswalk (≤15°)</option>
-            <option value="rover">Rover (≤20°)</option>
-          </select>
-        </div>
-
-        <!-- Consolidated Planetary Overlays Dropdown -->
-        <div class="dropdown-wrapper">
-          <button type="button" class="btn-ghost dropdown-trigger" id="globe-layers-toggle">
-            🛰️ Layers ▾
-          </button>
-          <div class="dropdown-menu" id="globe-layers-menu" hidden>
-            <div class="dropdown-title">PLANETARY &amp; SCIENCE OVERLAYS</div>
-            <label class="dropdown-item">
-              <input type="checkbox" id="toggle-landmarks" checked />
-              <span>Landing Sites &amp; Hero Landmarks</span>
-            </label>
-            <label class="dropdown-item">
-              <input type="checkbox" id="toggle-traverses" />
-              <span>NASA Rover Traverses (128.98 km)</span>
-            </label>
-            <label class="dropdown-item">
-              <input type="checkbox" id="toggle-aoi" checked />
-              <span>Active AOI Sector Footprint</span>
-            </label>
-            <label class="dropdown-item">
-              <input type="checkbox" id="toggle-graticule" />
-              <span>Coordinate Graticule (Lat/Lon)</span>
-            </label>
-            <label class="dropdown-item">
-              <input type="checkbox" id="toggle-lighting" />
-              <span>Sun Lighting &amp; Real Terminator</span>
-            </label>
-
-            <div class="dropdown-section">
-              <span class="dropdown-section-title">ODYSSEY GRS ISRU RESOURCES</span>
-              <select id="grs-element-select" class="dropdown-select">
-                <option value="none">GRS Minerals: Off</option>
-                <option value="h2o">Subsurface Water Ice (H₂O wt%)</option>
-                <option value="fe">Elemental Iron (Fe wt%)</option>
-                <option value="si">Silicon (Si wt%)</option>
-                <option value="k">Potassium (K wt%)</option>
-                <option value="th">Thorium (Th ppm)</option>
-                <option value="cl">Chlorine &amp; Perchlorates (Cl wt%)</option>
-              </select>
-            </div>
-
-            <div class="dropdown-section">
-              <span class="dropdown-section-title">GLOBE IMAGERY FILTER</span>
-              <select id="globe-filter" class="dropdown-select"></select>
-              <div class="filter-blend-row">
-                <label class="filter-sub-label">
-                  <input type="checkbox" id="overlay-mola" />
-                  <span>MOLA Blend</span>
-                </label>
-                <input type="range" id="overlay-opacity" min="0.1" max="1" step="0.05" value="0.45" />
-              </div>
-            </div>
-
-            <div class="dropdown-section">
-              <span class="dropdown-section-title">MISSION COCKPIT THEME</span>
-              <select id="theme-selector" class="dropdown-select">
-                <option value="perseverance">Perseverance Lime</option>
-                <option value="ares">Ares Mars Rust</option>
-                <option value="deepspace">Deep Space Cyan</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tactical Audio Feedback -->
-        <button type="button" class="btn-ghost" id="audio-toggle" title="Toggle Tactical Audio Feedback">
-          <span id="audio-label">🔊 AUDIO: ON</span>
-        </button>
-        <button type="button" class="btn-ghost" id="ambient-wind-toggle" title="Toggle Real Martian Ambient Wind (NASA Perseverance Mic)">
-          <span id="wind-label">💨 WIND: OFF</span>
-        </button>
-
         <button type="button" class="btn-ghost" id="about-toggle" title="Scientific Data Citations">
           ℹ About
         </button>
@@ -170,44 +68,13 @@
       <section id="globe-pane" class="pane globe-pane" aria-label="3D Martian globe view">
         <canvas id="cosmic-canvas" class="cosmic-canvas"></canvas>
         <div id="globe" class="cesium-container"></div>
+        <aside class="orbiter-card" id="orbiter-card" aria-label="Orbiter details" hidden>
+          <header><h2></h2><button type="button" class="btn-ghost" aria-label="Close orbiter details">×</button></header>
+          <p class="orbiter-history"></p>
+          <dl></dl>
+          <a href="https://ssd.jpl.nasa.gov/horizons/" target="_blank" rel="noopener">JPL Horizons · illustrative orbit, archived elements</a>
+        </aside>
 
-        <!-- 3D Globe Exploration Site Banner -->
-        <div id="globe-site-banner" class="globe-site-banner" hidden>
-          <div class="globe-site-info">
-            <span class="globe-site-pulse"></span>
-            <div>
-              <div class="globe-site-title" id="globe-site-name">JEZERO CRATER // PERSEVERANCE</div>
-              <div class="globe-site-sub" id="globe-site-coords">18.44°N, 77.35°E · High-Res Tactical Surface Ready</div>
-            </div>
-          </div>
-          <div class="globe-site-actions">
-            <button type="button" class="btn-enter-tactical" id="btn-enter-tactical">
-              🗺️ EXPLORE SURFACE TACTICAL RADAR ➔
-            </button>
-            <button type="button" class="btn-globe-orbit" id="btn-globe-orbit" title="Return to Planetary Space Orbit">
-              🌐 Orbit View
-            </button>
-          </div>
-        </div>
-
-        <div class="hud hud-left">
-          <div class="hud-item">
-            <span class="hud-label">COORDS</span>
-            <span class="hud-value" id="coords">--°N, --°E</span>
-          </div>
-          <div class="hud-item">
-            <span class="hud-label">ALTITUDE</span>
-            <span class="hud-value" id="camera-height">-- km</span>
-          </div>
-          <div class="hud-item">
-            <span class="hud-label">FILTER</span>
-            <span class="hud-value" id="filter-label">Viking color</span>
-          </div>
-          <div class="hud-item">
-            <span class="hud-label">MODE</span>
-            <span class="hud-value" id="mode-label">DUAL COCKPIT</span>
-          </div>
-        </div>
       </section>
 
       <!-- 2D High-Resolution Tactical Surface Map View (Leaflet NASA Trek & HiRISE) -->
@@ -216,35 +83,72 @@
         class="pane detail-pane"
         aria-label="High-resolution surface exploration view"
       >
-        <!-- Sleek Floating Glass Tactical Dock -->
-        <div class="tactical-dock">
-          <div class="dock-badge">
-            <span class="radar-dial" aria-hidden="true"><i></i></span>
-            <span>TACTICAL RADAR</span>
+        <div class="detail-body">
+          <div id="detail-map-inner" class="detail-map-inner"></div>
+          <aside id="segment-drawer" class="segment-drawer" aria-label="Mission metrics and telemetry"></aside>
+        </div>
+      </section>
+      <div class="mission-dock" role="region" aria-label="Mission controls">
+        <div class="select-badge" title="Select Martian Exploration Sector">
+          <span class="select-badge-lbl">SECTOR</span>
+          <select id="location" aria-label="Preset location">
+            <option value="global" selected>Global Mars Orbit</option>
+            <option value="jezero">Jezero Crater (Delta)</option>
+            <option value="gale">Gale Crater (Mt Sharp)</option>
+            <option value="olympus">Olympus Mons (Caldera)</option>
+          </select>
+        </div>
+        <div class="mission-view">
+          <span class="select-badge-lbl">VIEW</span>
+          <div class="view-mode-group" role="group" aria-label="Map view">
+            <button type="button" class="view-mode-btn active" data-mode="3d" aria-pressed="true">3D Globe</button>
+            <button type="button" class="view-mode-btn" data-mode="split" aria-pressed="false">Dual Split</button>
+            <button type="button" class="view-mode-btn" data-mode="2d" aria-pressed="false">2D Surface</button>
           </div>
-
-          <!-- Route Planning Trigger -->
-          <label class="dock-btn-plan" title="Click any two points on the site to compute an optimal GNN safe route">
+        </div>
+        <div class="select-badge" title="Rover or Marswalk slope limits">
+          <span class="select-badge-lbl">TRAVEL MODE</span>
+          <select id="travel-mode" aria-label="Travel mode">
+            <option value="walk">Marswalk (≤15°)</option>
+            <option value="rover">Rover (≤20°)</option>
+          </select>
+        </div>
+        <label class="dock-btn-plan" title="Click any two points on the site to compute an optimal GNN safe route">
             <input type="checkbox" id="plan-segment" />
             <span class="btn-inner">
               <span class="pulse-indicator"></span>
-              <span>🎯 Plan Route</span>
+              <span>Plan Route</span>
             </span>
           </label>
-
-          <button type="button" class="dock-btn" id="clear-segment" title="Clear active route">
+        <div class="dropdown-wrapper">
+          <button type="button" class="btn-ghost dropdown-trigger" id="globe-layers-toggle" aria-expanded="false" aria-controls="globe-layers-menu">
+            Map Controls ▾
+          </button>
+          <div class="dropdown-menu" id="globe-layers-menu" hidden>
+            <div class="dropdown-title">MAP CONTROLS</div>
+            <label class="dropdown-section mission-orbiter-picker">
+              <span class="dropdown-section-title">MARS ORBITERS &amp; MOONS</span>
+              <select id="orbiter-picker" class="dropdown-select"><option value="">Select an object</option></select>
+            </label>
+            <div class="dropdown-section mission-route-actions">
+              <span class="dropdown-section-title">SURFACE ACTIONS</span>
+              <button type="button" class="dock-btn" id="clear-segment" title="Clear active route">
             ✕ Clear
           </button>
-
-          <button type="button" class="dock-btn" id="try-measured-route">Try example route</button>
-          <div class="dock-divider"></div>
-
+              <button type="button" class="dock-btn" id="try-measured-route">Try example route</button>
+              <button type="button" class="dock-btn" id="sync-globe-btn" title="Sync 3D Globe camera to surface map center">
+            ⟲ Sync Globe
+          </button>
+            </div>
+            <div class="dropdown-section mission-surface-settings">
+              <span class="dropdown-section-title">SURFACE LAYERS</span>
           <!-- Heatmap Layer Selector -->
           <div class="dock-select-group">
             <span class="dock-lbl">HEATMAP:</span>
             <select id="heatmap-mode" aria-label="Surface heatmap layer">
               <option value="off">Off</option>
               <option value="slope">Terrain slope (8° amber · 15° orange · 20° coral)</option>
+              <option value="radiation">Radiation Exposure (modeled)</option>
             </select>
           </div>
 
@@ -260,18 +164,73 @@
             <span>Targets</span>
           </label>
 
-          <div class="dock-divider"></div>
 
-          <button type="button" class="dock-btn" id="sync-globe-btn" title="Sync 3D Globe camera to surface map center">
-            ⟲ Sync Globe
-          </button>
-        </div>
 
-        <div class="detail-body">
-          <div id="detail-map-inner" class="detail-map-inner"></div>
-          <aside id="segment-drawer" class="segment-drawer" aria-label="Mission metrics and telemetry"></aside>
+            </div>
+            <div class="dropdown-title">PLANETARY &amp; SCIENCE OVERLAYS</div>
+            <label class="dropdown-item">
+              <input type="checkbox" id="toggle-landmarks" checked />
+              <span>Landing Sites &amp; Hero Landmarks</span>
+            </label>
+            <label class="dropdown-item">
+              <input type="checkbox" id="toggle-traverses" />
+              <span>NASA Rover Traverses (128.98 km)</span>
+            </label>
+            <label class="dropdown-item">
+              <input type="checkbox" id="toggle-aoi" checked />
+              <span>Active AOI Sector Footprint</span>
+            </label>
+            <label class="dropdown-item">
+              <input type="checkbox" id="toggle-graticule" />
+              <span>Coordinate Graticule (Lat/Lon)</span>
+            </label>
+            <label class="dropdown-item">
+              <input type="checkbox" id="toggle-lighting" checked />
+              <span>Sun Lighting &amp; Real Terminator</span>
+            </label>
+
+            <div class="dropdown-section">
+              <span class="dropdown-section-title">ODYSSEY GRS ISRU RESOURCES</span>
+              <select id="grs-element-select" class="dropdown-select">
+                <option value="none">GRS Minerals: Off</option>
+                <option value="h2o">Subsurface Water Ice (H₂O wt%)</option>
+                <option value="fe">Elemental Iron (Fe wt%)</option>
+                <option value="si">Silicon (Si wt%)</option>
+                <option value="k">Potassium (K wt%)</option>
+                <option value="th">Thorium (Th ppm)</option>
+                <option value="cl">Chlorine &amp; Perchlorates (Cl wt%)</option>
+              </select>
+            </div>
+
+            <div class="dropdown-section">
+              <span class="dropdown-section-title">GLOBE IMAGERY FILTER</span>
+              <select id="globe-filter" class="dropdown-select"></select>
+              <div class="filter-blend-row">
+                <label class="filter-sub-label">
+                  <input type="checkbox" id="overlay-mola" />
+                  <span>MOLA Blend</span>
+                </label>
+                <input type="range" id="overlay-opacity" min="0.1" max="1" step="0.05" value="0.45" />
+              </div>
+            </div>
+
+            <div class="dropdown-section">
+              <span class="dropdown-section-title">MISSION COCKPIT THEME</span>
+              <select id="theme-selector" class="dropdown-select">
+                <option value="perseverance">Perseverance Lime</option>
+                <option value="ares">Martian Red</option>
+                <option value="deepspace" selected>Deep Space Cyan</option>
+              </select>
+            </div>
+            <div class="mission-sound"><button type="button" class="btn-ghost" id="audio-toggle" title="Toggle Tactical Audio Feedback">
+          <span id="audio-label">🔊 AUDIO: ON</span>
+        </button>
+        <button type="button" class="btn-ghost" id="ambient-wind-toggle" title="Toggle Real Martian Ambient Wind (NASA Perseverance Mic)">
+          <span id="wind-label">💨 WIND: OFF</span>
+        </button></div>
+          </div>
         </div>
-      </section>
+      </div>
     </main>
 
     <footer class="footer">
@@ -301,27 +260,28 @@
     <script src="js/layers/grs-overlays.js"></script>
     <script src="js/map/historical-traverses.js"></script>
     <script src="js/visual/cosmic-galaxy.js"></script>
-    <script src="js/globe.js"></script>
-    <script src="js/detail-map.js?v=coverage-feedback"></script>
+    <script src="js/visual/orbiters.js"></script>
+    <script src="js/globe.js?v=orbiters"></script>
+    <script src="js/detail-map.js?v=coverage-view"></script>
     <script src="js/hybrid.js?v=regions-1"></script>
     <script src="js/map/geodesic.js"></script>
-    <script src="js/api/manifest.js?v=regions-1"></script>
+    <script src="js/api/manifest.js?v=regional-dem"></script>
     <script src="js/routing/astar.js?v=raster-1"></script>
     <script src="js/routing/worker-client.js?v=raster-1"></script>
     <script src="js/mission/modes.js"></script>
-    <script src="js/routing/routeBetween.js?v=raster-1"></script>
+    <script src="js/routing/routeBetween.js?v=regional-dem"></script>
     <script src="js/ui/icons.js"></script>
     <script src="js/ui/audio.js"></script>
-    <script src="js/ui/theme.js?v=planner-rollback"></script>
+    <script src="js/ui/theme.js?v=deep-space-default"></script>
     <script src="js/mission/telemetry.js"></script>
     <script src="js/mission/elevation-profile.js"></script>
-    <script src="js/mission/drawer.js?v=planner-rollback"></script>
+    <script src="js/mission/drawer.js?v=regional-dem"></script>
     <script src="js/mission/contingency.js?v=raster-1"></script>
-    <script src="js/map/heatmap.js"></script>
+    <script src="js/map/heatmap.js?v=radiation-proxy"></script>
     <script src="js/map/route-renderer.js?v=radar-pins"></script>
     <script src="js/map/preset-routes.js"></script>
     <script src="js/map/science-stops.js"></script>
-    <script src="js/map/pick.js?v=coverage-feedback"></script>
-    <script src="js/app.js?v=measured-example"></script>
+    <script src="js/map/pick.js?v=regional-dem"></script>
+    <script src="js/app.js?v=mission-dock"></script>
   </body>
 </html>

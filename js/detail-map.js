@@ -3,6 +3,8 @@ window.MarsDetailMap = (function () {
   let map = null;
   let initialized = false;
   let currentSite = "jezero";
+  let coverageBounds = null;
+  let pendingCoverageFit = false;
 
   const TREK_BASE = "https://trek.nasa.gov/tiles/Mars/EQ";
   const VIKING_URL = `${TREK_BASE}/Mars_Viking_MDIM21_ClrMosaic_global_232m/1.0.0/default/default028mm/{z}/{y}/{x}.jpg`;
@@ -21,6 +23,7 @@ window.MarsDetailMap = (function () {
       crs: L.CRS.EPSG4326,
       center: [18.4447, 77.4509],
       zoom: 10,
+      zoomSnap: 0.25,
       minZoom: 2,
       maxZoom: 15,
       maxBounds: MARS_BOUNDS,
@@ -42,7 +45,9 @@ window.MarsDetailMap = (function () {
       attribution: "NASA/JPL/MSSS · CTX · USGS/Esri" }).addTo(map);
 
 
-    // Listen for site changes to update sector tiles and boundary
+    map.on("resize", fitCoverageWhenVisible);
+
+    // Listen for site changes to update the selectable terrain
     window.addEventListener("mars:site-changed", function (e) {
       if (e.detail && e.detail.siteKey) {
         setSite(e.detail.siteKey);
@@ -62,15 +67,38 @@ window.MarsDetailMap = (function () {
     map.fitBounds(bounds, options || { padding: [24, 24], maxZoom: 15 });
   }
 
+  function fitCoverageWhenVisible() {
+    const container = map.getContainer();
+    if (!coverageBounds || !container.clientWidth || !container.clientHeight) return;
+
+    map.setMinZoom(2);
+    // Use the zoom at which the viewport fits inside the data, including on wide screens.
+    const coverageZoom = map.getBoundsZoom(coverageBounds, true);
+    map.setMaxBounds(coverageBounds);
+    map.setMinZoom(coverageZoom);
+    if (pendingCoverageFit) {
+      map.setView(coverageBounds.getCenter(), coverageZoom, { animate: false });
+      pendingCoverageFit = false;
+    }
+  }
+
   async function setSite(siteKey) {
     currentSite = siteKey || "jezero";
+    const requestedSite = currentSite;
     if (!map) return;
-    return MarsData.getActiveSiteMeta().then(meta => {
-      if (meta.id !== currentSite || !meta.bbox) return;
-      const b = meta.bbox;
-      map.invalidateSize({pan: false});
-      fitBounds([[b.south,b.west],[b.north,b.east]]);
-    }).catch(console.warn);
+
+    try {
+      const graph = await MarsData.loadRegionalGraph();
+      if (requestedSite !== currentSite) return;
+      const b = graph?.bbox;
+      if (!b) return;
+      coverageBounds = L.latLngBounds([b.south, b.west], [b.north, b.east]);
+      pendingCoverageFit = true;
+      map.invalidateSize({ pan: false });
+      fitCoverageWhenVisible();
+    } catch (error) {
+      console.warn("Could not load regional terrain coverage", error);
+    }
   }
 
   function getCenter() {
@@ -82,6 +110,7 @@ window.MarsDetailMap = (function () {
   function invalidateSize() {
     if (map) {
       map.invalidateSize();
+      fitCoverageWhenVisible();
       setTimeout(function () {
         if (map) map.invalidateSize();
       }, 100);

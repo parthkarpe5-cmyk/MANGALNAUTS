@@ -283,10 +283,12 @@ window.MarsSegmentDrawer = (function () {
     if (segment.terrain_spacing_m) {
       const label = document.createElement("p");
       label.className = "drawer-hint";
-      label.textContent = "Elevation grid: " + segment.terrain_spacing_m + " m sampling";
+      label.textContent = segment.regional
+        ? "Regional estimate · 200 m elevation. Small hazards may be unresolved. Contingency drills require local terrain."
+        : "Elevation grid: " + segment.terrain_spacing_m + " m sampling";
       panel.prepend(label);
     }
-    if (segment.path_found) window.MarsContingency?.attach(panel, segment);
+    if (segment.path_found && !segment.regional) window.MarsContingency?.attach(panel, segment);
 
     // Action buttons
 

@@ -81,12 +81,11 @@ window.MarsSegmentPick = (function () {
       }
 
       if (segment.status === "out_of_coverage") {
-        const graph = await MarsData.loadGraph();
+        const endpoints = [[markerA, latA, lonA], [markerB, latB, lonB]];
+        const tiers = await Promise.all(endpoints.map(([, lat, lon]) => MarsRouteBetween.elevationTier(lat, lon)));
         if (current !== request) return;
-        for (const [marker, lat, lon] of [[markerA, latA, lonA], [markerB, latB, lonB]]) {
-          marker.bindTooltip(MarsRouteBetween.hasElevation(graph, lat, lon)
-            ? "Elevation available" : "Outside measured terrain", { direction: "top" });
-        }
+        endpoints.forEach(([marker], i) => marker.bindTooltip(tiers[i]
+          ? "Elevation available" : "Outside loaded elevation coverage", { direction: "top" }));
       }
       lastSolvedSegment = segment;
 
@@ -127,11 +126,11 @@ window.MarsSegmentPick = (function () {
       step = 1;
       MarsSegmentDrawer.render(null, "Start selected. Checking terrain coverage…");
       const selection = request;
-      MarsData.loadGraph().then(graph => {
+      MarsRouteBetween.elevationTier(lat, lon).then(tier => {
         if (request !== selection || step !== 1) return;
-        const covered = MarsRouteBetween.hasElevation(graph, lat, lon);
-        const message = covered ? "Start: elevation available. Pick a destination."
-          : "Start: outside measured terrain. Pick a destination or clear the start.";
+        const message = tier === "local" ? "Start: local elevation available. Pick a destination."
+          : tier === "regional" ? "Start: regional elevation available (200 m). Pick a destination."
+          : "Start: outside loaded elevation coverage.";
         markerA.bindTooltip(message, { direction: "top" });
         MarsSegmentDrawer.render(null, message);
       }).catch(() => {

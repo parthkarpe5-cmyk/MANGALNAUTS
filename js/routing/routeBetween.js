@@ -22,6 +22,7 @@ window.MarsRouteBetween = (function () {
   }
 
   function hasElevation(graph, lat, lon) {
+    if (!Number.isFinite(lat) || !Number.isFinite(lon)) return false;
     const b = graph.bbox;
     if (b && !(lat >= b.south && lat <= b.north && lon >= b.west && lon <= b.east)) return false;
     const node = snapNearest(graph, lat, lon);
@@ -48,33 +49,29 @@ window.MarsRouteBetween = (function () {
     return n ? sum / n : null;
   }
 
+  function coverageNode(graph, lat, lon) {
+    return graph && hasElevation(graph, lat, lon);
+  }
+
+  async function elevationTier(lat, lon) {
+    if (coverageNode(await MarsData.loadGraph(), lat, lon)) return "local";
+    return coverageNode(await MarsData.loadRegionalGraph(), lat, lon) ? "regional" : null;
+  }
+
   async function solve(latA, lonA, latB, lonB) {
-    const graph = await MarsData.loadGraph();
-    const siteMeta = window.MarsData && window.MarsData.getActiveSiteMeta
-      ? await MarsData.getActiveSiteMeta()
-      : null;
-    const manifest = await MarsData.loadManifest();
-    const bounds = graph.bbox || (siteMeta && siteMeta.bbox) || manifest.bbox;
-    function inCoverage(lat, lon) {
-      return (
-        Number.isFinite(lat) &&
-        Number.isFinite(lon) &&
-        (!bounds ||
-          (lat >= bounds.south &&
-            lat <= bounds.north &&
-            lon >= bounds.west &&
-            lon <= bounds.east))
-      );
+    let graph = await MarsData.loadGraph();
+    const local = coverageNode(graph, latA, lonA) && coverageNode(graph, latB, lonB);
+    if (!local) {
+      graph = await MarsData.loadRegionalGraph();
+      const missing = [];
+      if (!coverageNode(graph, latA, lonA)) missing.push("start");
+      if (!coverageNode(graph, latB, lonB)) missing.push("destination");
+      if (missing.length) return {
+        status: "out_of_coverage",
+        error: "Outside loaded elevation coverage: " + missing.join(" and ") + ".",
+      };
     }
-    const missing = [];
-    if (!inCoverage(latA, lonA)) missing.push("start");
-    if (!inCoverage(latB, lonB)) missing.push("destination");
-    if (missing.length) return {
-      status: "out_of_coverage",
-      error: "No measured elevation at the " + missing.join(" and ") + ". Move " +
-        (missing.length === 2 ? "both points" : "that point") + " toward the site center.",
-    };
-    const candidate = await MarsData.loadScores().catch(() => null);
+    const candidate = local ? await MarsData.loadScores().catch(() => null) : null;
     const scores =
       graph.graph_id != null && candidate?.graph_id === graph.graph_id
         ? candidate
@@ -86,12 +83,6 @@ window.MarsRouteBetween = (function () {
     const nodeB = snapNearest(graph, latB, lonB);
     if (!nodeA || !nodeB) {
       return { error: "No graph nodes in area" };
-    }
-
-    if (graph.max_snap_m != null &&
-        (MarsGeodesic.haversineMeters(latA, lonA, nodeA.lat, nodeA.lon) > graph.max_snap_m ||
-         MarsGeodesic.haversineMeters(latB, lonB, nodeB.lat, nodeB.lon) > graph.max_snap_m)) {
-      return { status: "out_of_coverage", error: "No route available. One or both points have no nearby elevation sample." };
     }
 
     const geodesic_m = MarsGeodesic.haversineMeters(latA, lonA, latB, lonB);
@@ -159,6 +150,7 @@ window.MarsRouteBetween = (function () {
       (stats.max_slope_deg == null || stats.max_slope_deg <= maxSlope);
 
     return {
+      regional: !local,
       terrain_spacing_m: graph.spacing_m,
       from: {
         lat: latA,
@@ -196,5 +188,5 @@ window.MarsRouteBetween = (function () {
     return solve(crew.lat, crew.lon, habitat.lat, habitat.lon);
   }
 
-  return { solve, solveReturn, snapNearest, hasElevation };
+  return { solve, solveReturn, snapNearest, hasElevation, elevationTier };
 })();

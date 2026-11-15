@@ -1,12 +1,15 @@
 /* global window, localStorage, document */
 window.MarsTheme = (function () {
   const THEMES = ["perseverance", "ares", "deepspace"];
-  let currentTheme = localStorage.getItem("mars_mission_theme") || "perseverance";
+  const DEFAULT_THEME = "deepspace";
+  const PREFERENCE_KEY = "mangalnauts_selected_theme";
+  const savedTheme = localStorage.getItem(PREFERENCE_KEY);
+  let currentTheme = THEMES.includes(savedTheme) ? savedTheme : DEFAULT_THEME;
 
   function apply(theme) {
-    if (!THEMES.includes(theme)) theme = "perseverance";
+    if (!THEMES.includes(theme)) theme = DEFAULT_THEME;
     currentTheme = theme;
-    localStorage.setItem("mars_mission_theme", theme);
+    localStorage.setItem(PREFERENCE_KEY, theme);
     document.documentElement.setAttribute("data-theme", theme);
   }
 
@@ -19,7 +22,7 @@ window.MarsTheme = (function () {
   }
 
   // Auto-apply on load
-  apply(currentTheme);
+  document.documentElement.setAttribute("data-theme", currentTheme);
 
   return { apply, get, list };
 })();

@@ -51,6 +51,7 @@
       "files": {
         "aoi": "data/jezero/measured/aoi.geojson",
         "terrain_graph": "data/jezero/measured/terrain_graph.json",
+        "regional_graph": "data/jezero/regional_graph.json",
         "gnn_scores": "data/jezero/measured/gnn_scores.json",
         "science_stops": "data/jezero/v1/science_stops.geojson",
         "routes": "data/jezero/measured/routes.geojson",
@@ -135,6 +136,7 @@
       "files": {
         "aoi": "data/gale/measured/aoi.geojson",
         "terrain_graph": "data/gale/measured/terrain_graph.json",
+        "regional_graph": "data/gale/regional_graph.json",
         "gnn_scores": "data/gale/measured/gnn_scores.json",
         "science_stops": "data/gale/v1/science_stops.geojson",
         "routes": "data/gale/measured/routes.geojson",
@@ -210,6 +212,7 @@
       },
       "files": {
         "terrain_graph": "data/olympus/measured/terrain_graph.json",
+        "regional_graph": "data/olympus/regional_graph.json",
         "gnn_scores": "data/olympus/measured/gnn_scores.json",
         "routes": "data/olympus/measured/routes.geojson",
         "slope": "data/olympus/measured/slope.png"
