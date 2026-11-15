@@ -158,9 +158,23 @@ window.MarsGlobe = (function () {
       window.MarsHistoricalTraverses.initCesium(viewer).catch(console.warn);
     }
 
-    // Landmark click listener on 3D globe
+    // Landmark & Route picking click listener on 3D globe
     const clickHandler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
     clickHandler.setInputAction(function (movement) {
+      if (window.MarsSegmentPick && window.MarsSegmentPick.isActive && window.MarsSegmentPick.isActive()) {
+        const ray = viewer.camera.getPickRay(movement.position);
+        const hit = ray && (viewer.scene.globe.pick(ray, viewer.scene) || viewer.camera.pickEllipsoid(movement.position, Cesium.Ellipsoid.MARS));
+        if (hit) {
+          const carto = Cesium.Cartographic.fromCartesian(hit, Cesium.Ellipsoid.MARS);
+          const lat = Cesium.Math.toDegrees(carto.latitude);
+          const lon = Cesium.Math.toDegrees(carto.longitude);
+          if (window.MarsSegmentPick.onMapClick) {
+            window.MarsSegmentPick.onMapClick({ latlng: { lat, lng: lon } });
+            return;
+          }
+        }
+      }
+
       const picked = viewer.scene.pick(movement.position);
       if (picked && picked.id && picked.id.landmarkData) {
         const lm = picked.id.landmarkData;

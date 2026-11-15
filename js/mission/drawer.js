@@ -83,11 +83,27 @@ window.MarsSegmentDrawer = (function () {
         '      <span>BOUNDARY: <strong style="color: ' + color + ';">ACTIVE</strong></span>' +
         '    </div>' +
         '  </div>' +
+        '  <div class="drawer-action-hero" style="margin: 12px 0;">' +
+        '    <button type="button" class="btn-primary-plan" id="drawer-start-plan-btn" style="width:100%; display:flex; align-items:center; justify-content:center; gap:8px; padding:12px 14px; background:linear-gradient(135deg, #FF6B00, #EA580C); border:none; border-radius:12px; color:#fff; font-family:var(--font-ui, sans-serif); font-size:13px; font-weight:700; cursor:pointer; box-shadow:0 4px 16px rgba(255,107,0,0.35);">' +
+        '      <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#fff; box-shadow:0 0 8px #fff;"></span>' +
+        '      <span>📍 PLAN ROUTE (CLICK 2 POINTS ON MAP)</span>' +
+        '    </button>' +
+        '  </div>' +
         '  <div class="drawer-hint-card">' +
-        '    <p>Choose two points to check elevation coverage and calculate a route under the selected slope limit.</p>' +
+        '    <p>Activate route planner above or choose a preset mission below to calculate safe corridors under terrain slope limits.</p>' +
         '  </div>' +
         qmHtml +
         '</div>';
+
+      const planBtn = panel.querySelector("#drawer-start-plan-btn");
+      if (planBtn) {
+        planBtn.addEventListener("click", function () {
+          if (window.MarsAudio) MarsAudio.playClick();
+          if (window.MarsSegmentPick) {
+            MarsSegmentPick.setActive(true);
+          }
+        });
+      }
 
       // Bind quick mission buttons
       panel.querySelectorAll(".btn-qm-run").forEach(function (btn) {

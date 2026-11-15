@@ -244,6 +244,9 @@ window.MarsSegmentPick = (function () {
    * Programmatic route execution for Quick Mission presets & Science Stop clicks
    */
   async function planRoute(latA, lonA, latB, lonB) {
+    if (window.MarsHybrid && !window.MarsHybrid.isInDetailMode()) {
+      window.MarsHybrid.setViewMode("split");
+    }
     ensureMap();
     clearMarkers();
     pointA = { lat: latA, lon: lonA };
@@ -724,6 +727,12 @@ window.MarsSegmentPick = (function () {
       clickHandler = onMapClick;
     }
     if (on) {
+      if (window.MarsHybrid && !window.MarsHybrid.isInDetailMode()) {
+        const loc = document.getElementById("location");
+        const key = loc && loc.value !== "global" ? loc.value : "jezero";
+        if (loc) loc.value = key;
+        window.MarsHybrid.setViewMode("split");
+      }
       m.on("click", clickHandler);
       MarsSegmentDrawer.render(null, "Route Planner Active: Click Start Point (A).");
     } else {
@@ -802,6 +811,7 @@ window.MarsSegmentPick = (function () {
     showScrubber,
     hideScrubber,
     planRoute,
+    onMapClick,
     getLastSolvedSegment,
     startAutoTraversal,
     stopAutoTraversal,

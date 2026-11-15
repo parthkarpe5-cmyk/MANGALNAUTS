@@ -211,6 +211,9 @@
       railBtnRoute.addEventListener("click", function () {
         if (window.MarsAudio) MarsAudio.playClick();
         if (window.MarsWorkspace) MarsWorkspace.show("route");
+        if (window.MarsHybrid && !window.MarsHybrid.isInDetailMode()) {
+          window.MarsHybrid.setViewMode("split");
+        }
       });
     }
 
@@ -303,9 +306,23 @@
     linkCheckbox("panel-toggle-graticule", toggleGraticule);
 
     // Sync Measure buttons
+    const panelBtnPlanCustom = document.getElementById("panel-btn-plan-custom-route");
+    if (panelBtnPlanCustom) {
+      panelBtnPlanCustom.addEventListener("click", () => {
+        if (window.MarsAudio) MarsAudio.playClick();
+        if (window.MarsSegmentPick) {
+          MarsSegmentPick.setActive(true);
+        }
+      });
+    }
+
     const panelBtnMeasure = document.getElementById("panel-btn-measured-route");
     if (panelBtnMeasure) {
       panelBtnMeasure.addEventListener("click", () => {
+        if (window.MarsAudio) MarsAudio.playClick();
+        if (window.MarsHybrid && !window.MarsHybrid.isInDetailMode()) {
+          window.MarsHybrid.setViewMode("split");
+        }
         const tryBtn = document.getElementById("try-measured-route");
         if (tryBtn) tryBtn.click();
       });
@@ -762,6 +779,9 @@
     if (tryBtn) {
       tryBtn.addEventListener("click", async () => {
         try {
+          if (window.MarsHybrid && !window.MarsHybrid.isInDetailMode()) {
+            window.MarsHybrid.setViewMode("split");
+          }
           const site = await MarsData.getActiveSiteMeta();
           const example = site.example_route;
           if (!example) return;
