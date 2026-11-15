@@ -2671,7 +2671,88 @@ body {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.65);
 }
 
-/* 4. Aerospace HUD Start & Destination Waypoint Pins */
+/* 4. Aerospace HUD Start & Destination Waypoint Pins (Photo 1 Reference) */
+.mars-photo-pin-container {
+  background: transparent !important;
+  border: none !important;
+}
+
+.mars-photo-pin-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.pin-teardrop-svg {
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.85));
+  transition: transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.mars-photo-pin-wrapper:hover .pin-teardrop-svg {
+  transform: translateY(-4px) scale(1.1);
+}
+
+.pin-ground-ring {
+  position: absolute;
+  bottom: -4px;
+  left: 14px;
+  width: 26px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #22c55e;
+  transform: translate(-50%, 0) scaleY(0.48);
+  animation: pin-ground-ring-pulse 2s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes pin-ground-ring-pulse {
+  from {
+    transform: translate(-50%, 0) scale(0.85) scaleY(0.48);
+    opacity: 0.55;
+  }
+  to {
+    transform: translate(-50%, 0) scale(1.28) scaleY(0.48);
+    opacity: 1;
+  }
+}
+
+.mars-photo-pin-tag {
+  margin-left: 8px;
+  background: rgba(8, 12, 20, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  font-family: var(--font-display, sans-serif);
+  font-size: calc(10px + .5px);
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.75);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+/* 4b. Marswalk Footstep Markers (Photo 0 Reference) */
+.mars-footstep-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+.mars-footstep-wrapper {
+  transform-origin: center center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.mars-footstep-svg {
+  filter: drop-shadow(0 0 4px rgba(0, 240, 255, 0.75));
+  transition: opacity 0.2s ease;
+}
+
+/* Legacy pin fallback compatibility */
 .mars-route-pin-content {
   position: absolute;
   top: 0;
@@ -2728,7 +2809,7 @@ body {
   }
 }
 
-/* 5b. Automated Route Traversal Rover Pointer & Beacon */
+/* 5b. Automated Route Traversal Rover / Marswalk Pointer & Beacon */
 .mars-traversal-pointer-container {
   background: transparent !important;
   border: none !important;
@@ -2769,6 +2850,26 @@ body {
   }
 }
 
+/* Rover circular ground ring halo (Photo 1 Reference) */
+.traversal-rover-ground-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 2px dashed #f59e0b;
+  background: rgba(245, 158, 11, 0.09);
+  transform: translate(-50%, -50%);
+  animation: rover-ring-spin 16s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes rover-ring-spin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
 .traversal-pointer-core {
   position: absolute;
   top: 0;
@@ -2776,9 +2877,6 @@ body {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(14, 22, 38, 0.98) 60%, rgba(0, 240, 255, 0.35));
-  border: 2px solid var(--accent-sub, #00f0ff);
-  box-shadow: 0 0 14px rgba(0, 240, 255, 0.85), inset 0 0 8px rgba(0, 240, 255, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2787,8 +2885,24 @@ body {
   z-index: 10;
 }
 
+.astronaut-core {
+  background: radial-gradient(circle, rgba(10, 24, 42, 0.98) 60%, rgba(0, 240, 255, 0.35)) !important;
+  border: 2px solid #00f0ff !important;
+  box-shadow: 0 0 14px rgba(0, 240, 255, 0.9), inset 0 0 8px rgba(0, 240, 255, 0.45) !important;
+}
+
+.rover-core {
+  background: radial-gradient(circle, rgba(28, 18, 10, 0.98) 60%, rgba(245, 158, 11, 0.35)) !important;
+  border: 2px solid #f59e0b !important;
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.9), inset 0 0 8px rgba(245, 158, 11, 0.45) !important;
+}
+
 .traversal-rover-svg {
-  filter: drop-shadow(0 0 4px #00f0ff);
+  filter: drop-shadow(0 0 4px rgba(245, 158, 11, 0.7));
+}
+
+.traversal-astronaut-svg {
+  filter: drop-shadow(0 0 4px rgba(0, 240, 255, 0.7));
 }
 
 .traversal-hud-tag {
@@ -2812,6 +2926,16 @@ body {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 240, 255, 0.3);
   pointer-events: none;
   z-index: 12;
+}
+
+.walk-tag {
+  border-color: rgba(0, 240, 255, 0.6) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 240, 255, 0.35) !important;
+}
+
+.rover-tag {
+  border-color: rgba(245, 158, 11, 0.6) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.8), 0 0 8px rgba(245, 158, 11, 0.35) !important;
 }
 
 .traversal-tag-dot {

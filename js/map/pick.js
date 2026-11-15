@@ -268,14 +268,16 @@ window.MarsSegmentPick = (function () {
     }
 
     markerA = L.marker([latA, lonA], {
-      icon: MarsRouteRenderer.createWaypointPin("start", "A", "#F4C76A"),
+      icon: MarsRouteRenderer.createWaypointPin("start", "A", "#22c55e"),
       interactive: true,
+      zIndexOffset: 1000,
     }).addTo(map);
     markerA.bindTooltip(nameA + " (Locked Origin)", { direction: "top" });
 
     markerB = L.marker([latB, lonB], {
-      icon: MarsRouteRenderer.createWaypointPin("target", "B", "#FF5722"),
+      icon: MarsRouteRenderer.createWaypointPin("target", "B", "#ef4444"),
       interactive: true,
+      zIndexOffset: 1000,
     }).addTo(map);
     markerB.bindTooltip(nameB + " (Locked Destination)", { direction: "top" });
 
@@ -322,6 +324,7 @@ window.MarsSegmentPick = (function () {
 
         lineLayer = MarsRouteRenderer.createCorridorLayer(latlngs, {
           color: routeColor,
+          mode: segment.mode,
           animated: true,
           drawIn: true,
           ticks: true,
@@ -369,7 +372,8 @@ window.MarsSegmentPick = (function () {
       clearMarkers();
       pointA = { lat, lon };
       markerA = L.marker([lat, lon], {
-        icon: MarsRouteRenderer.createWaypointPin("start", "A", "#F4C76A"),
+        icon: MarsRouteRenderer.createWaypointPin("start", "A", "#22c55e"),
+        zIndexOffset: 1000,
       }).addTo(map);
       step = 1;
       navState = NAV_STATE.PICKING_B;
@@ -527,19 +531,55 @@ window.MarsSegmentPick = (function () {
 
     const icon = L.divIcon({
       className: "mars-traversal-pointer-container",
-      html:
-        '<div class="mars-traversal-pointer" id="rover-pointer" title="' + (isWalk ? "Astronaut EVA" : "Rover AutoNav") + ' (Click to Pause/Resume)">' +
-        '  <div class="traversal-beacon-pulse" style="border-color: ' + pointerFill + '; box-shadow: 0 0 12px ' + pointerFill + ';"></div>' +
-        '  <div class="traversal-pointer-core" id="rover-pointer-core" style="border-color: ' + pointerFill + ';">' +
-        '    <svg viewBox="0 0 24 24" class="traversal-rover-svg" width="22" height="22">' +
-        '      <polygon points="12,2 22,20 12,16 2,20" fill="' + pointerFill + '" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round"/>' +
-        '    </svg>' +
-        '  </div>' +
-        '  <div class="traversal-hud-tag" id="rover-hud-tag" style="border-color: ' + pointerFill + ';">' +
-        '    <span class="traversal-tag-dot" style="background: ' + pointerFill + ';"></span>' +
-        '    <span class="traversal-tag-text" id="rover-tag-text">' + tagPrefix + ' // 0.00 km</span>' +
-        '  </div>' +
-        '</div>',
+      html: isWalk
+        ? '<div class="mars-traversal-pointer walk-mode" id="rover-pointer" title="Astronaut EVA Marswalk (Click to Pause/Resume)">' +
+          '  <div class="traversal-beacon-pulse" style="border-color: #00f0ff; box-shadow: 0 0 16px rgba(0, 240, 255, 0.7); background: rgba(0, 240, 255, 0.12);"></div>' +
+          '  <div class="traversal-pointer-core astronaut-core" id="rover-pointer-core" style="border-color: #00f0ff;">' +
+          '    <svg viewBox="0 0 32 32" class="traversal-astronaut-svg" width="28" height="28">' +
+          '      <rect x="9" y="17" width="14" height="10" rx="2.5" fill="#081b2e" stroke="#00f0ff" stroke-width="1.3"/>' +
+          '      <rect x="12" y="19" width="8" height="3" rx="1" fill="#00f0ff" opacity="0.8"/>' +
+          '      <ellipse cx="6" cy="14" rx="3.5" ry="5.5" fill="#f1f5f9" stroke="#0284c7" stroke-width="1.1"/>' +
+          '      <ellipse cx="26" cy="14" rx="3.5" ry="5.5" fill="#f1f5f9" stroke="#0284c7" stroke-width="1.1"/>' +
+          '      <ellipse cx="16" cy="15" rx="7.5" ry="6.5" fill="#ffffff" stroke="#0284c7" stroke-width="1.3"/>' +
+          '      <circle cx="16" cy="10" r="6.2" fill="#ffffff" stroke="#0284c7" stroke-width="1.4"/>' +
+          '      <ellipse cx="16" cy="8.5" rx="4.5" ry="3" fill="#fbbf24" stroke="#d97706" stroke-width="1.1"/>' +
+          '      <ellipse cx="14.8" cy="7.8" rx="2" ry="1" fill="#ffffff" opacity="0.85"/>' +
+          '    </svg>' +
+          '  </div>' +
+          '  <div class="traversal-hud-tag walk-tag" id="rover-hud-tag" style="border-color: #00f0ff;">' +
+          '    <span class="traversal-tag-dot" style="background: #00f0ff; box-shadow: 0 0 6px #00f0ff;"></span>' +
+          '    <span class="traversal-tag-text" id="rover-tag-text">EVA MARSWALK // 0.00 km</span>' +
+          '  </div>' +
+          '</div>'
+        : '<div class="mars-traversal-pointer rover-mode" id="rover-pointer" title="Mars Rover AutoNav (Click to Pause/Resume)">' +
+          '  <div class="traversal-rover-ground-ring" style="border-color: #f59e0b; box-shadow: 0 0 14px rgba(245, 158, 11, 0.75);"></div>' +
+          '  <div class="traversal-pointer-core rover-core" id="rover-pointer-core" style="border-color: #f59e0b;">' +
+          '    <svg viewBox="0 0 36 36" class="traversal-rover-svg" width="30" height="30">' +
+          '      <rect x="2" y="5" width="4.5" height="7" rx="1.5" fill="#1e293b" stroke="#f59e0b" stroke-width="1"/>' +
+          '      <rect x="2" y="15" width="4.5" height="7" rx="1.5" fill="#1e293b" stroke="#f59e0b" stroke-width="1"/>' +
+          '      <rect x="2" y="24" width="4.5" height="7" rx="1.5" fill="#1e293b" stroke="#f59e0b" stroke-width="1"/>' +
+          '      <rect x="29.5" y="5" width="4.5" height="7" rx="1.5" fill="#1e293b" stroke="#f59e0b" stroke-width="1"/>' +
+          '      <rect x="29.5" y="15" width="4.5" height="7" rx="1.5" fill="#1e293b" stroke="#f59e0b" stroke-width="1"/>' +
+          '      <rect x="29.5" y="24" width="4.5" height="7" rx="1.5" fill="#1e293b" stroke="#f59e0b" stroke-width="1"/>' +
+          '      <line x1="6.5" y1="8" x2="11" y2="12" stroke="#94a3b8" stroke-width="1.4"/>' +
+          '      <line x1="6.5" y1="18" x2="11" y2="18" stroke="#94a3b8" stroke-width="1.4"/>' +
+          '      <line x1="6.5" y1="27" x2="11" y2="24" stroke="#94a3b8" stroke-width="1.4"/>' +
+          '      <line x1="29.5" y1="8" x2="25" y2="12" stroke="#94a3b8" stroke-width="1.4"/>' +
+          '      <line x1="29.5" y1="18" x2="25" y2="18" stroke="#94a3b8" stroke-width="1.4"/>' +
+          '      <line x1="29.5" y1="27" x2="25" y2="24" stroke="#94a3b8" stroke-width="1.4"/>' +
+          '      <rect x="10" y="10" width="16" height="17" rx="2" fill="#e2e8f0" stroke="#475569" stroke-width="1.2"/>' +
+          '      <rect x="13" y="24" width="10" height="5" rx="1" fill="#334155" stroke="#f59e0b" stroke-width="1"/>' +
+          '      <rect x="12" y="12" width="12" height="10" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.8"/>' +
+          '      <circle cx="14" cy="7" r="3" fill="#0f172a" stroke="#f59e0b" stroke-width="1.2"/>' +
+          '      <circle cx="14" cy="7" r="1.2" fill="#38bdf8"/>' +
+          '      <rect x="20" y="6" width="3" height="5" rx="1" fill="#475569"/>' +
+          '    </svg>' +
+          '  </div>' +
+          '  <div class="traversal-hud-tag rover-tag" id="rover-hud-tag" style="border-color: #f59e0b;">' +
+          '    <span class="traversal-tag-dot" style="background: #f59e0b; box-shadow: 0 0 6px #f59e0b;"></span>' +
+          '    <span class="traversal-tag-text" id="rover-tag-text">ROVER AUTONAV // 0.00 km</span>' +
+          '  </div>' +
+          '</div>',
       iconSize: [0, 0],
       iconAnchor: [0, 0],
     });
@@ -627,7 +667,7 @@ window.MarsSegmentPick = (function () {
         tagTextEl.innerHTML = '<strong style="color:#22c55e">✓ OBJECTIVE REACHED</strong>';
       } else {
         const isWalk = lastSolvedSegment && lastSolvedSegment.mode === "walk";
-        const tagPrefix = isWalk ? "EVA" : "ROVER";
+        const tagPrefix = isWalk ? "EVA MARSWALK" : "ROVER AUTONAV";
         tagTextEl.textContent =
           tagPrefix + " // " +
           (distM / 1000).toFixed(2) +
@@ -716,18 +756,23 @@ window.MarsSegmentPick = (function () {
     return lastSolvedSegment;
   }
 
+  let travelModeAttached = false;
   function attachTravelModeSync() {
+    if (travelModeAttached) return;
+    travelModeAttached = true;
     function triggerReplan() {
-      if (pointA && pointB && !solving && navState !== NAV_STATE.NAVIGATING_LOCKED) {
-        planRoute(pointA.lat, pointA.lon, pointB.lat, pointB.lon);
+      if (pointA && pointB && !solving) {
+        const curA = { lat: pointA.lat, lon: pointA.lon };
+        const curB = { lat: pointB.lat, lon: pointB.lon };
+        if (navState === NAV_STATE.NAVIGATING_LOCKED) {
+          stopAutoTraversal();
+          navState = NAV_STATE.PICKING_B;
+        }
+        planRoute(curA.lat, curA.lon, curB.lat, curB.lon);
       }
     }
     if (window.MarsTravelMode && window.MarsTravelMode.onChange) {
       window.MarsTravelMode.onChange(triggerReplan);
-    }
-    const travelSelect = document.getElementById("travel-mode");
-    if (travelSelect) {
-      travelSelect.addEventListener("change", triggerReplan);
     }
   }
 
