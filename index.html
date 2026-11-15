@@ -2,7 +2,7 @@
 <html lang="en" data-theme="deepspace">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>MANGALNAUTS</title>
     <!-- CesiumJS CSS -->
     <link
@@ -21,7 +21,7 @@
       href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/styles.css?v=soft-ui-main" />
+    <link rel="stylesheet" href="css/styles.css?v=map-gestures" />
   </head>
   <body>
     <header class="top-nav cockpit-bar">
@@ -76,23 +76,6 @@
         </aside>
 
         <!-- 3D Globe Exploration Site Banner -->
-        <div id="globe-site-banner" class="globe-site-banner" hidden>
-          <div class="globe-site-info">
-            <span class="globe-site-pulse"></span>
-            <div>
-              <div class="globe-site-title" id="globe-site-name">Jezero Crater</div>
-              <div class="globe-site-sub" id="globe-site-coords">18.44°N, 77.35°E</div>
-            </div>
-          </div>
-          <div class="globe-site-actions">
-            <button type="button" class="btn-enter-tactical" id="btn-enter-tactical">
-              🗺️ Explore Surface Tactical Radar ➔
-            </button>
-            <button type="button" class="btn-globe-orbit" id="btn-globe-orbit" title="Return to Planetary Space Orbit">
-              🪐 Orbit
-            </button>
-          </div>
-        </div>
 
       </section>
 
@@ -256,6 +239,6 @@
     <script src="js/map/science-stops.js"></script>
     <script src="js/map/pick.js?v=mode-physics-v5"></script>
     <script src="js/ui/workspace.js?v=centered-divider"></script>
-    <script src="js/app.js?v=split-workspace"></script>
+    <script src="js/app.js?v=map-gestures"></script>
   </body>
 </html>
