@@ -144,9 +144,12 @@ window.MarsGlobe = (function () {
       if (window.TrekLayers) {
         const provider = TrekLayers.createProvider("viking");
         baseLayer = viewer.imageryLayers.addImageryProvider(provider);
-        baseLayer.brightness = 0.82;
-        baseLayer.contrast = 1.18;
-        baseLayer.saturation = 1.10;
+        // Color grading calibrated to match the rich warm Martian model in the intro animation
+        baseLayer.brightness = 1.25;
+        baseLayer.contrast = 1.25;
+        baseLayer.saturation = 2.10;
+        baseLayer.gamma = 0.90;
+        baseLayer.hue = -0.12;
       }
     } catch (e) {
       console.warn("[MarsGlobe] Viking tile provider init note:", e);
@@ -718,10 +721,12 @@ window.MarsGlobe = (function () {
     const provider = TrekLayers.createProvider(key);
     baseLayer = viewer.imageryLayers.addImageryProvider(provider);
     if (key === "viking") {
-      // Grade the globe presentation without altering the elevation data.
-      baseLayer.brightness = 0.82;
-      baseLayer.contrast = 1.18;
-      baseLayer.saturation = 1.10;
+      // Color grading calibrated to match the rich warm Martian model in the intro animation
+      baseLayer.brightness = 1.25;
+      baseLayer.contrast = 1.25;
+      baseLayer.saturation = 2.10;
+      baseLayer.gamma = 0.90;
+      baseLayer.hue = -0.12;
     }
     if (overlayFilter) {
       applyOverlay(overlayFilter, overlayOpacity);
