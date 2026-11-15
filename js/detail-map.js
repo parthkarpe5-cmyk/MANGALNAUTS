@@ -18,11 +18,13 @@ window.MarsDetailMap = (function () {
     initialized = true;
 
     const MARS_BOUNDS = L.latLngBounds([-90, -180], [90, 180]);
+    const activeMeta = window.MarsData?.getActiveSiteMetaSync ? window.MarsData.getActiveSiteMetaSync() : null;
+    const initialCenter = activeMeta?.center ? [activeMeta.center.lat, activeMeta.center.lon] : [18.4447, 77.4509];
 
     map = L.map("detail-map-inner", {
       crs: L.CRS.EPSG4326,
-      center: [18.4447, 77.4509],
-      zoom: 10,
+      center: initialCenter,
+      zoom: activeMeta?.detail_zoom || 10,
       zoomSnap: 0.25,
       minZoom: 2,
       maxZoom: 15,

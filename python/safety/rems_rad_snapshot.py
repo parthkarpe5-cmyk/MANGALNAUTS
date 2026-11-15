@@ -55,6 +55,30 @@ SITES = {
 
 NOAA_XRAY_URL = "https://services.swpc.noaa.gov/json/goes/primary/xrays-7-day.json"
 
+def load_manifest_sites():
+    """Dynamically sync site coordinates, names, and datum elevations from data/manifest.json."""
+    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    manifest_path = os.path.join(base_dir, "data", "manifest.json")
+    if os.path.exists(manifest_path):
+        try:
+            with open(manifest_path, "r", encoding="utf-8") as f:
+                manifest = json.load(f)
+                if "sites" in manifest:
+                    for key, s in manifest["sites"].items():
+                        if key in SITES:
+                            SITES[key]["name"] = s.get("name", SITES[key]["name"])
+                            if "center" in s:
+                                SITES[key]["lat"] = s["center"].get("lat", SITES[key]["lat"])
+                                SITES[key]["lon"] = s["center"].get("lon", SITES[key]["lon"])
+                            if "datum_elev_m" in s:
+                                SITES[key]["elev_m"] = s.get("datum_elev_m", SITES[key]["elev_m"])
+                            if "rover" in s:
+                                SITES[key]["rover"] = s.get("rover", SITES[key]["rover"])
+        except Exception:
+            pass
+
+load_manifest_sites()
+
 
 def get_nasa_api_key():
     if os.environ.get("NASA_API_KEY"):

@@ -32,6 +32,13 @@ window.MarsData = (function () {
     };
   }
 
+  function getActiveSiteMetaSync() {
+    if (manifest && manifest.sites && manifest.sites[currentSiteKey]) {
+      return manifest.sites[currentSiteKey];
+    }
+    return null;
+  }
+
   async function setActiveSite(siteKey) {
     const m = await loadManifest();
     if (!m.sites || !m.sites[siteKey]) {
@@ -71,10 +78,49 @@ window.MarsData = (function () {
   const loadRoutes = () => loadFile("routes", emptyFeatures);
   const loadEnvironment = () => loadFile("environment", {});
 
+  function formatCoordSimple(lat, lon) {
+    const ns = lat >= 0 ? "N" : "S";
+    const ew = lon >= 0 ? "E" : "W";
+    return Math.abs(lat).toFixed(3) + "°" + ns + ", " + Math.abs(lon).toFixed(3) + "°" + ew;
+  }
+
+  async function findNearestScienceStop(lat, lon, maxDistM) {
+    maxDistM = maxDistM || 500;
+    try {
+      const data = await loadScienceStops();
+      if (!data || !data.features || data.features.length === 0) return null;
+      let bestStop = null;
+      let bestDist = maxDistM;
+      for (const f of data.features) {
+        const coords = f.geometry && f.geometry.coordinates;
+        if (!coords) continue;
+        const sLat = coords[1];
+        const sLon = coords[0];
+        const d = (window.MarsGeodesic && window.MarsGeodesic.haversineMeters)
+          ? window.MarsGeodesic.haversineMeters(lat, lon, sLat, sLon)
+          : Math.hypot(lat - sLat, lon - sLon) * 59000;
+        if (d < bestDist) {
+          bestDist = d;
+          bestStop = f.properties;
+        }
+      }
+      return bestStop;
+    } catch {
+      return null;
+    }
+  }
+
+  async function getWaypointLabel(lat, lon, fallbackName) {
+    const stop = await findNearestScienceStop(lat, lon, 450);
+    if (stop && stop.name) return stop.name;
+    return fallbackName ? fallbackName + " (" + formatCoordSimple(lat, lon) + ")" : formatCoordSimple(lat, lon);
+  }
+
   return {
     loadManifest,
     getActiveSiteKey,
     getActiveSiteMeta,
+    getActiveSiteMetaSync,
     setActiveSite,
     loadGraph,
     loadRegionalGraph: () => loadFile("regional_graph", null),
@@ -82,5 +128,7 @@ window.MarsData = (function () {
     loadScienceStops,
     loadRoutes,
     loadEnvironment,
+    findNearestScienceStop,
+    getWaypointLabel,
   };
 })();

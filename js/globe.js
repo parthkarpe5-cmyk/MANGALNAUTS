@@ -146,7 +146,7 @@ window.MarsGlobe = (function () {
       console.warn("[MarsGlobe] MDEM elevation unavailable, falling back to ellipsoid:", e);
     }
 
-    initOptionalLayers();
+    await initOptionalLayers();
     window.MarsOrbiters?.init(viewer).catch(console.warn);
 
     // Init Historical Traverses on 3D globe
@@ -230,10 +230,79 @@ window.MarsGlobe = (function () {
     return viewer;
   }
 
-  function initOptionalLayers() {
-    // 1. Landmarks
+  async function resolveDynamicLandmarks() {
+    const landmarks = LANDMARKS.map(function (lm) {
+      return Object.assign({}, lm);
+    });
+
+    // 1. Enrich from manifest.json
+    try {
+      const manifest = window.MarsData && window.MarsData.loadManifest
+        ? await window.MarsData.loadManifest()
+        : null;
+      if (manifest && manifest.sites) {
+        Object.keys(manifest.sites).forEach(function (siteKey) {
+          const site = manifest.sites[siteKey];
+          const existing = landmarks.find(function (lm) {
+            return lm.siteKey === siteKey || lm.id === siteKey;
+          });
+          if (existing) {
+            if (site.center) {
+              existing.lat = site.center.lat;
+              existing.lon = site.center.lon;
+            }
+            if (site.boundary_color) {
+              existing.color = site.boundary_color;
+            }
+            if (site.globe_camera && site.globe_camera.height) {
+              existing.alt = site.globe_camera.height;
+            }
+            if (site.name) {
+              existing.name = site.rover
+                ? site.rover + " (" + site.name.split(" (")[0] + ")"
+                : site.name;
+            }
+          }
+        });
+      }
+    } catch (e) {
+      console.warn("[MarsGlobe] Could not enrich landmarks from manifest:", e);
+    }
+
+    // 2. Enrich from traverses.json
+    try {
+      const trData = window.MarsHistoricalTraverses && window.MarsHistoricalTraverses.loadData
+        ? await window.MarsHistoricalTraverses.loadData()
+        : null;
+      if (trData && trData.traverses) {
+        trData.traverses.forEach(function (tr) {
+          const match = landmarks.find(function (lm) {
+            return lm.id === tr.id || (lm.siteKey && tr.id.includes(lm.siteKey));
+          });
+          if (match) {
+            if (tr.highlights) {
+              match.description = tr.highlights;
+            }
+            if (tr.points && tr.points.length > 0) {
+              const lastPt = tr.points[tr.points.length - 1];
+              match.lat = lastPt[0];
+              match.lon = lastPt[1];
+            }
+          }
+        });
+      }
+    } catch (e) {
+      console.warn("[MarsGlobe] Could not enrich landmarks from traverses:", e);
+    }
+
+    return landmarks;
+  }
+
+  async function initOptionalLayers() {
+    // 1. Landmarks (dynamically enriched from manifest.json and traverses.json)
     landmarksCollection = [];
-    LANDMARKS.forEach(function (lm) {
+    const effectiveLandmarks = await resolveDynamicLandmarks();
+    effectiveLandmarks.forEach(function (lm) {
       const entity = viewer.entities.add({
         name: lm.name,
         position: Cesium.Cartesian3.fromDegrees(lm.lon, lm.lat, 500),
@@ -259,19 +328,24 @@ window.MarsGlobe = (function () {
       landmarksCollection.push(entity);
     });
 
-    // 2. Active Site AOI Footprint
+    // 2. Active Site AOI Footprint (dynamically resolved from active site manifest)
+    const activeMeta = window.MarsData?.getActiveSiteMetaSync ? window.MarsData.getActiveSiteMetaSync() : null;
+    const initialBbox = activeMeta?.bbox || { west: 77.355, south: 18.395, east: 77.485, north: 18.505 };
+    const initialColorHex = activeMeta?.boundary_color || "#c9f31d";
+    const initialColor = Cesium.Color.fromCssColorString(initialColorHex);
+
     aoiEntity = viewer.entities.add({
       name: "Mission Exploration AOI Footprint",
       polygon: {
         hierarchy: Cesium.Cartesian3.fromDegreesArray([
-          77.355, 18.395,
-          77.485, 18.395,
-          77.485, 18.505,
-          77.355, 18.505,
+          initialBbox.west, initialBbox.south,
+          initialBbox.east, initialBbox.south,
+          initialBbox.east, initialBbox.north,
+          initialBbox.west, initialBbox.north,
         ]),
-        material: Cesium.Color.fromCssColorString("#c9f31d").withAlpha(0.18),
+        material: initialColor.withAlpha(0.18),
         outline: true,
-        outlineColor: Cesium.Color.fromCssColorString("#c9f31d"),
+        outlineColor: initialColor,
         outlineWidth: 2,
         height: 100,
       },
@@ -426,14 +500,6 @@ window.MarsGlobe = (function () {
   }
 
   function getViewer() {
-    window.addEventListener("mars:site-changed", function (e) {
-      if (e.detail && e.detail.siteMeta) {
-        const meta = e.detail.siteMeta;
-        const color = meta.boundary_color || (meta.id === "gale" ? "#f59e0b" : "#c9f31d");
-        updateAoiFootprint(meta.bbox, color);
-      }
-    });
-
     return viewer;
   }
 
@@ -477,14 +543,6 @@ window.MarsGlobe = (function () {
     const banner = document.getElementById("globe-site-banner");
     if (banner) banner.hidden = true;
   }
-
-  // React to site changes across the application
-  window.addEventListener("mars:site-changed", function (e) {
-    const meta = e.detail ? e.detail.siteMeta : null;
-    if (meta && meta.bbox) {
-      updateAoiFootprint(meta.bbox);
-    }
-  });
 
   return {
     init,

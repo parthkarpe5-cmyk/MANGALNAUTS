@@ -1,4 +1,4 @@
-/* global L, MarsDetailMap, MarsRouteBetween, MarsSegmentDrawer, MarsData, MarsRouteRenderer, window */
+/* global L, MarsDetailMap, MarsRouteBetween, MarsSegmentDrawer, MarsData, MarsRouteRenderer, MarsGeodesic, window, performance, requestAnimationFrame, cancelAnimationFrame */
 window.MarsSegmentPick = (function () {
   let active = false;
   let step = 0;
@@ -15,6 +15,24 @@ window.MarsSegmentPick = (function () {
   let lastSolvedSegment = null;
   let map = null;
   let clickHandler = null;
+
+  // Navigation Lifecycle States (Google Maps Paradigm):
+  // 0: IDLE (no points picked, ready for Point A)
+  // 1: PICKING_B (Point A set, waiting for Point B)
+  // 2: SOLVING (Route solver running)
+  // 3: NAVIGATING_LOCKED (Route active & locked, rover traversing towards destination B)
+  // 4: ARRIVED (Rover reached Point B, arrived at destination, locked until reset or replay)
+  const NAV_STATE = {
+    IDLE: 0,
+    PICKING_B: 1,
+    SOLVING: 2,
+    NAVIGATING_LOCKED: 3,
+    ARRIVED: 4,
+  };
+  let navState = NAV_STATE.IDLE;
+  let navDockEl = null;
+  let lockToastTimer = null;
+  let currentRouteTitle = "Point A ➔ Point B";
 
   // Automated traversal state
   let traversalMarker = null;
@@ -39,7 +57,11 @@ window.MarsSegmentPick = (function () {
     request++;
     solving = false;
     stopAutoTraversal();
-    if (snapLinks) { map.removeLayer(snapLinks); snapLinks = null; }
+    removeNavDock();
+    if (snapLinks && map) {
+      map.removeLayer(snapLinks);
+      snapLinks = null;
+    }
     window.MarsContingency?.clear();
     if (markerA && map) {
       map.removeLayer(markerA);
@@ -58,6 +80,136 @@ window.MarsSegmentPick = (function () {
     pointA = null;
     pointB = null;
     step = 0;
+    navState = NAV_STATE.IDLE;
+  }
+
+  function exitNavigation() {
+    clearMarkers();
+    if (window.MarsSegmentDrawer) {
+      MarsSegmentDrawer.render(null, "Navigation ended. Map unlocked. Click anywhere to select new Start Point (A).");
+    }
+  }
+
+  function showNavLockNotice() {
+    if (!map) return;
+    let toast = document.getElementById("mars-nav-lock-toast");
+    if (!toast) {
+      toast = document.createElement("div");
+      toast.id = "mars-nav-lock-toast";
+      toast.className = "mars-nav-lock-toast";
+      const container = map.getContainer();
+      container.appendChild(toast);
+    }
+    toast.innerHTML =
+      '<span class="lock-icon" style="font-size:1.15rem;">🔒</span>' +
+      '<div>' +
+      '  <strong>NAVIGATION ACTIVE // ROUTE A ➔ B LOCKED</strong><br/>' +
+      '  <span style="opacity:0.85;">Points A &amp; B are locked during active navigation. Wait until destination is reached or tap <strong>Exit Nav</strong> to unlock.</span>' +
+      '</div>';
+    toast.classList.add("visible");
+
+    if (window.MarsAudio && window.MarsAudio.playClick) {
+      window.MarsAudio.playClick();
+    }
+
+    if (lockToastTimer) clearTimeout(lockToastTimer);
+    lockToastTimer = setTimeout(function () {
+      toast.classList.remove("visible");
+    }, 3200);
+  }
+
+  function showNavDock(segment, title) {
+    if (!map) return;
+    removeNavDock();
+    const displayTitle = title || currentRouteTitle || "Waypoint A ➔ Waypoint B";
+    const container = map.getContainer();
+    navDockEl = document.createElement("div");
+    navDockEl.className = "mars-active-nav-dock";
+    navDockEl.innerHTML =
+      '<div class="nav-dock-left">' +
+      '  <span class="nav-dock-pulse"></span>' +
+      '  <span class="nav-dock-badge font-mono">🔒 LOCKED</span>' +
+      '  <span class="nav-dock-route-title" title="' + displayTitle + '">' + displayTitle + '</span>' +
+      '</div>' +
+      '<div class="nav-dock-center font-mono">' +
+      '  <span id="nav-dock-dist" class="nav-metric-bold">' + (traversalTotalDistM / 1000).toFixed(2) + ' km</span>' +
+      '  <span class="nav-metric-sub">remaining</span>' +
+      '  <span class="nav-divider">·</span>' +
+      '  <span id="nav-dock-elev" class="nav-metric-elev">Elev: -- m</span>' +
+      '</div>' +
+      '<div class="nav-dock-right">' +
+      '  <button type="button" class="btn-dock-hud-ghost" id="btn-dock-pause" title="Pause or Resume Traversal">⏸ Pause</button>' +
+      '  <button type="button" class="btn-dock-hud-exit" id="btn-dock-exit" title="Exit Navigation and Unlock Map">✕ Exit Nav</button>' +
+      '</div>';
+    container.appendChild(navDockEl);
+
+    const pauseBtn = navDockEl.querySelector("#btn-dock-pause");
+    if (pauseBtn) {
+      pauseBtn.onclick = function (ev) {
+        ev.stopPropagation();
+        const paused = togglePauseTraversal();
+        pauseBtn.textContent = paused ? "▶ Resume" : "⏸ Pause";
+        const toggleTravBtn = document.getElementById("btn-toggle-traversal");
+        if (toggleTravBtn) toggleTravBtn.textContent = paused ? "▶ Resume Traverse" : "⏸ Pause Traverse";
+      };
+    }
+    const exitBtn = navDockEl.querySelector("#btn-dock-exit");
+    if (exitBtn) {
+      exitBtn.onclick = function (ev) {
+        ev.stopPropagation();
+        exitNavigation();
+      };
+    }
+  }
+
+  function updateNavDockProgress(distRemainingM, curElev, curSlope) {
+    if (!navDockEl) return;
+    const distEl = navDockEl.querySelector("#nav-dock-dist");
+    if (distEl) distEl.textContent = (distRemainingM / 1000).toFixed(2) + " km";
+    const elevEl = navDockEl.querySelector("#nav-dock-elev");
+    if (elevEl) elevEl.textContent = Math.round(curElev) + " m (" + curSlope.toFixed(1) + "°)";
+  }
+
+  function updateNavDockArrival(title) {
+    if (!navDockEl) return;
+    const displayTitle = title || currentRouteTitle || "Destination B";
+    navDockEl.classList.add("arrived");
+    navDockEl.innerHTML =
+      '<div class="nav-dock-left">' +
+      '  <span class="nav-dock-check">✓</span>' +
+      '  <span class="nav-dock-badge arrived font-mono">ARRIVED</span>' +
+      '  <span class="nav-dock-route-title" title="' + displayTitle + '">' + displayTitle + ' · Traverse Complete</span>' +
+      '</div>' +
+      '<div class="nav-dock-center font-mono">' +
+      '  <span class="nav-metric-bold">' + (traversalTotalDistM / 1000).toFixed(2) + ' km</span>' +
+      '  <span class="nav-metric-sub">total distance</span>' +
+      '</div>' +
+      '<div class="nav-dock-right">' +
+      '  <button type="button" class="btn-dock-hud-ghost" id="btn-dock-replay" title="Replay traverse along route">⏮ Replay</button>' +
+      '  <button type="button" class="btn-dock-hud-new" id="btn-dock-new" title="Plan New Route">➕ New Route</button>' +
+      '</div>';
+
+    const replayBtn = navDockEl.querySelector("#btn-dock-replay");
+    if (replayBtn) {
+      replayBtn.onclick = function (ev) {
+        ev.stopPropagation();
+        replayAutoTraversal();
+      };
+    }
+    const newBtn = navDockEl.querySelector("#btn-dock-new");
+    if (newBtn) {
+      newBtn.onclick = function (ev) {
+        ev.stopPropagation();
+        exitNavigation();
+      };
+    }
+  }
+
+  function removeNavDock() {
+    if (navDockEl) {
+      navDockEl.remove();
+      navDockEl = null;
+    }
   }
 
   /**
@@ -68,6 +220,17 @@ window.MarsSegmentPick = (function () {
     clearMarkers();
     pointA = { lat: latA, lon: lonA };
     pointB = { lat: latB, lon: lonB };
+    navState = NAV_STATE.SOLVING;
+    step = 2;
+
+    // Dynamically resolve real science stop names from manifest & GeoJSON data
+    let nameA = "Point A";
+    let nameB = "Point B";
+    if (window.MarsData && window.MarsData.getWaypointLabel) {
+      nameA = await MarsData.getWaypointLabel(latA, lonA, "Origin A");
+      nameB = await MarsData.getWaypointLabel(latB, lonB, "Target B");
+    }
+    currentRouteTitle = nameA + " ➔ " + nameB;
 
     // Enable planner checkbox in UI if present
     const planCheckbox = document.getElementById("plan-segment");
@@ -78,10 +241,22 @@ window.MarsSegmentPick = (function () {
 
     markerA = L.marker([latA, lonA], {
       icon: MarsRouteRenderer.createWaypointPin("start", "A", "#F4C76A"),
+      interactive: true,
     }).addTo(map);
+    markerA.bindTooltip(nameA + " (Locked Origin)", { direction: "top" });
+
     markerB = L.marker([latB, lonB], {
       icon: MarsRouteRenderer.createWaypointPin("target", "B", "#FF5722"),
+      interactive: true,
     }).addTo(map);
+    markerB.bindTooltip(nameB + " (Locked Destination)", { direction: "top" });
+
+    markerA.on("click", function () {
+      if (navState === NAV_STATE.NAVIGATING_LOCKED) showNavLockNotice();
+    });
+    markerB.on("click", function () {
+      if (navState === NAV_STATE.NAVIGATING_LOCKED) showNavLockNotice();
+    });
 
     const current = ++request;
     solving = true;
@@ -89,6 +264,10 @@ window.MarsSegmentPick = (function () {
     try {
       const segment = await MarsRouteBetween.solve(latA, lonA, latB, lonB);
       if (current !== request) return;
+      segment.routeTitle = currentRouteTitle;
+      segment.nameA = nameA;
+      segment.nameB = nameB;
+
       if (segment.path_found) {
         snapLinks = L.layerGroup([segment.from, segment.to].map(point =>
           L.polyline([[point.lat, point.lon], [point.snap_lat, point.snap_lon]],
@@ -106,6 +285,9 @@ window.MarsSegmentPick = (function () {
       lastSolvedSegment = segment;
 
       if (segment.path_found && segment.path_nodes && segment.path_nodes.length > 1) {
+        navState = NAV_STATE.NAVIGATING_LOCKED;
+        step = 3;
+
         const latlngs = segment.path_nodes.map((n) => [n.lat, n.lon]);
         const routeColor = segment.feasible ? "#66D9FF" : "#FF8B86";
 
@@ -120,13 +302,19 @@ window.MarsSegmentPick = (function () {
         // Zoom map to encompass the route
         map.fitBounds(L.latLngBounds(latlngs), { padding: [40, 40], animate: true });
 
-        // Launch automated traversal rover pointer along the path
+        // Launch automated traversal rover pointer along the path & show HUD dock
         startAutoTraversal(segment.path_nodes);
+        showNavDock(segment, currentRouteTitle);
+      } else {
+        navState = NAV_STATE.IDLE;
+        step = 0;
       }
 
       if (segment.path_found && window.MarsAudio) window.MarsAudio.playSuccess();
       MarsSegmentDrawer.render(segment);
     } catch (err) {
+      navState = NAV_STATE.IDLE;
+      step = 0;
       if (current === request) MarsSegmentDrawer.render({ error: err.message });
     } finally {
       if (current === request) solving = false;
@@ -134,22 +322,35 @@ window.MarsSegmentPick = (function () {
   }
 
   async function onMapClick(e) {
-    if (!active || solving) return;
+    if (!active || solving || navState === NAV_STATE.SOLVING) return;
+
+    // 1. Google Maps Navigation Lock: A and B are locked until arrival or exit
+    if (navState === NAV_STATE.NAVIGATING_LOCKED) {
+      showNavLockNotice();
+      return;
+    }
+
+    // 2. Arrived at Destination: clicking the map unlocks and starts a fresh mission
+    if (navState === NAV_STATE.ARRIVED) {
+      exitNavigation();
+    }
+
     const { lat, lng: lon } = e.latlng;
-    if (step === 0) {
+    if (step === 0 || navState === NAV_STATE.IDLE) {
       clearMarkers();
       pointA = { lat, lon };
       markerA = L.marker([lat, lon], {
         icon: MarsRouteRenderer.createWaypointPin("start", "A", "#F4C76A"),
       }).addTo(map);
       step = 1;
-      MarsSegmentDrawer.render(null, "Start selected. Checking terrain coverage…");
+      navState = NAV_STATE.PICKING_B;
+      MarsSegmentDrawer.render(null, "Start (Point A) selected. Checking terrain coverage…");
       const selection = request;
       MarsRouteBetween.elevationTier(lat, lon).then(tier => {
         if (request !== selection || step !== 1) return;
-        const message = tier === "local" ? "Start: local elevation available. Pick a destination."
-          : tier === "regional" ? "Start: regional elevation available (200 m). Pick a destination."
-          : "Start: outside loaded elevation coverage.";
+        const message = tier === "local" ? "Start: local elevation available. Pick Destination (Point B)."
+          : tier === "regional" ? "Start: regional elevation available (200 m). Pick Destination (Point B)."
+          : "Start: outside loaded elevation coverage. Pick Destination (Point B).";
         markerA.bindTooltip(message, { direction: "top" });
         MarsSegmentDrawer.render(null, message);
       }).catch(() => {
@@ -209,7 +410,6 @@ window.MarsSegmentPick = (function () {
       )
       .openTooltip();
 
-    // Auto-hide when mouse stops interacting
     scrubberTimeout = setTimeout(hideScrubber, 1200);
   }
 
@@ -337,24 +537,31 @@ window.MarsSegmentPick = (function () {
     const progress = elapsed / traversalDurationMs;
 
     if (progress >= 1.0) {
+      // Destination Reached! Stop looping. Lock in arrived state.
       updatePointerAtDistance(traversalTotalDistM, true);
-      if (!traversalWaitingRestart) {
-        traversalWaitingRestart = true;
-        setTimeout(function () {
-          if (traversalMarker && !traversalPaused) {
-            traversalStartTime = performance.now();
-            traversalElapsedOffset = 0;
-            traversalWaitingRestart = false;
-            traversalAnimId = requestAnimationFrame(traversalLoop);
-          }
-        }, 1800);
-      }
+      onArrivalAtDestination();
       return;
     }
 
     const currentDistM = progress * traversalTotalDistM;
     updatePointerAtDistance(currentDistM, false);
     traversalAnimId = requestAnimationFrame(traversalLoop);
+  }
+
+  function onArrivalAtDestination() {
+    navState = NAV_STATE.ARRIVED;
+    step = 4;
+    if (traversalAnimId) {
+      cancelAnimationFrame(traversalAnimId);
+      traversalAnimId = null;
+    }
+    if (window.MarsAudio && window.MarsAudio.playSuccess) {
+      window.MarsAudio.playSuccess();
+    }
+    updateNavDockArrival(currentRouteTitle);
+    if (window.MarsSegmentDrawer && window.MarsSegmentDrawer.notifyArrival) {
+      window.MarsSegmentDrawer.notifyArrival(lastSolvedSegment, currentRouteTitle);
+    }
   }
 
   function updatePointerAtDistance(distM, isFinished) {
@@ -397,6 +604,9 @@ window.MarsSegmentPick = (function () {
       }
     }
 
+    const distRemainingM = Math.max(0, traversalTotalDistM - distM);
+    updateNavDockProgress(distRemainingM, curElev, curSlope);
+
     if (window.MarsElevationProfile && window.MarsElevationProfile.updateProgress) {
       window.MarsElevationProfile.updateProgress(distM, curElev);
     }
@@ -410,15 +620,23 @@ window.MarsSegmentPick = (function () {
     } else {
       traversalStartTime = performance.now();
     }
+    const pauseBtn = navDockEl ? navDockEl.querySelector("#btn-dock-pause") : null;
+    if (pauseBtn) pauseBtn.textContent = traversalPaused ? "▶ Resume" : "⏸ Pause";
     return traversalPaused;
   }
 
   function replayAutoTraversal() {
     if (!traversalNodes) return;
+    navState = NAV_STATE.NAVIGATING_LOCKED;
+    step = 3;
     traversalStartTime = performance.now();
     traversalElapsedOffset = 0;
     traversalPaused = false;
     traversalWaitingRestart = false;
+    showNavDock(lastSolvedSegment);
+    if (window.MarsSegmentDrawer && window.MarsSegmentDrawer.render) {
+      window.MarsSegmentDrawer.render(lastSolvedSegment);
+    }
     if (!traversalAnimId) {
       traversalAnimId = requestAnimationFrame(traversalLoop);
     }
@@ -435,22 +653,28 @@ window.MarsSegmentPick = (function () {
       MarsSegmentDrawer.render(null, "Route Planner Active: Click Start Point (A).");
     } else {
       m.off("click", clickHandler);
-      clearMarkers();
-      MarsSegmentDrawer.render(null);
+      exitNavigation();
     }
   }
 
   function reset() {
-    if (map) clearMarkers();
-    if (active) {
-      MarsSegmentDrawer.render(null, "Route Planner Active: Click Start Point (A).");
-    } else {
-      MarsSegmentDrawer.render(null);
-    }
+    exitNavigation();
   }
 
   function isActive() {
     return active;
+  }
+
+  function isNavigating() {
+    return navState === NAV_STATE.NAVIGATING_LOCKED;
+  }
+
+  function isLocked() {
+    return navState === NAV_STATE.NAVIGATING_LOCKED || navState === NAV_STATE.ARRIVED;
+  }
+
+  function getNavState() {
+    return navState;
   }
 
   function getLastSolvedSegment() {
@@ -461,7 +685,7 @@ window.MarsSegmentPick = (function () {
     window.addEventListener("DOMContentLoaded", function () {
       if (window.MarsTravelMode && window.MarsTravelMode.onChange) {
         window.MarsTravelMode.onChange(function () {
-          if (pointA && pointB && !solving) {
+          if (pointA && pointB && !solving && navState !== NAV_STATE.NAVIGATING_LOCKED) {
             planRoute(pointA.lat, pointA.lon, pointB.lat, pointB.lon);
           }
         });
@@ -473,6 +697,9 @@ window.MarsSegmentPick = (function () {
     setActive,
     reset,
     isActive,
+    isNavigating,
+    isLocked,
+    getNavState,
     showScrubber,
     hideScrubber,
     planRoute,
@@ -481,5 +708,6 @@ window.MarsSegmentPick = (function () {
     stopAutoTraversal,
     togglePauseTraversal,
     replayAutoTraversal,
+    exitNavigation,
   };
 })();

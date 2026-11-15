@@ -255,10 +255,19 @@ window.MarsSegmentDrawer = (function () {
         "</div>";
     }
 
+    const displayTitle = segment.routeTitle || 'OPTIMAL SAFE TRAVERSE';
+    const isNavLocked = window.MarsSegmentPick && window.MarsSegmentPick.isNavigating && window.MarsSegmentPick.isNavigating();
+    const navBadgeHtml = isNavLocked
+      ? '<span class="nav-lock-badge font-mono">🔒 NAV LOCKED</span>'
+      : '';
+
     panel.innerHTML =
       '<div class="drawer-header-row">' +
-      '  <h3 class="drawer-title">' + ic("route") + ' OPTIMAL SAFE TRAVERSE</h3>' +
-      '  <span class="drawer-feasible ' + feasClass + '">' + feasText + '</span>' +
+      '  <h3 class="drawer-title" title="' + displayTitle + '">' + ic("route") + ' ' + displayTitle + '</h3>' +
+      '  <div style="display:flex; align-items:center; gap:8px;">' +
+      navBadgeHtml +
+      '    <span class="drawer-feasible ' + feasClass + '">' + feasText + '</span>' +
+      '  </div>' +
       '</div>' +
       '<div class="drawer-stats-grid">' +
       '  <div class="stat-card">' +
@@ -290,7 +299,7 @@ window.MarsSegmentDrawer = (function () {
       '  <button type="button" class="btn-ghost btn-sm" id="btn-toggle-traversal">⏸ Pause Traverse</button>' +
       '  <button type="button" class="btn-ghost btn-sm" id="btn-replay-traversal">⏮ Replay</button>' +
       '  <button type="button" class="btn-ghost btn-sm" id="btn-reverse-route">🔄 Reverse Path</button>' +
-      '  <button type="button" class="btn-ghost btn-sm" id="btn-clear-active-route">✕ Clear Route</button>' +
+      '  <button type="button" class="btn-ghost btn-sm btn-exit-nav-drawer" id="btn-exit-navigation" style="border-color: rgba(239, 68, 68, 0.45); color: #f87171; background: rgba(239, 68, 68, 0.08);">✕ Exit Nav (Unlock)</button>' +
       '</div>';
 
     // Hook up elevation scrubber
@@ -364,7 +373,25 @@ window.MarsSegmentDrawer = (function () {
       };
     }
     const clearBtn = document.getElementById("btn-clear-active-route");
-    if (clearBtn) clearBtn.onclick = () => MarsSegmentPick.reset();
+    if (clearBtn) {
+      clearBtn.onclick = () => {
+        if (window.MarsSegmentPick && window.MarsSegmentPick.exitNavigation) {
+          window.MarsSegmentPick.exitNavigation();
+        } else if (window.MarsSegmentPick) {
+          window.MarsSegmentPick.reset();
+        }
+      };
+    }
+    const exitBtn = document.getElementById("btn-exit-navigation");
+    if (exitBtn) {
+      exitBtn.onclick = () => {
+        if (window.MarsSegmentPick && window.MarsSegmentPick.exitNavigation) {
+          window.MarsSegmentPick.exitNavigation();
+        } else if (window.MarsSegmentPick) {
+          window.MarsSegmentPick.reset();
+        }
+      };
+    }
     const revBtn = document.getElementById("btn-reverse-route");
     if (revBtn && segment.from && segment.to) {
       revBtn.addEventListener("click", function () {
@@ -372,6 +399,27 @@ window.MarsSegmentDrawer = (function () {
           MarsSegmentPick.planRoute(segment.to.lat, segment.to.lon, segment.from.lat, segment.from.lon);
         }
       });
+    }
+  }
+
+  function notifyArrival(segment, title) {
+    if (!panel) return;
+    const headerRow = panel.querySelector(".drawer-header-row");
+    if (headerRow) {
+      let banner = panel.querySelector(".arrival-banner");
+      if (!banner) {
+        banner = document.createElement("div");
+        banner.className = "arrival-banner";
+        const displayTitle = title || segment?.routeTitle || "Target Destination";
+        banner.innerHTML =
+          '<span style="font-size:1.15rem; color:#22c55e;">✓</span>' +
+          '<div><strong>OBJECTIVE REACHED:</strong> Arrived at ' + displayTitle + '. Traversal successfully completed.</div>';
+        headerRow.after(banner);
+      }
+    }
+    const lockBadge = panel.querySelector(".nav-lock-badge");
+    if (lockBadge) {
+      lockBadge.outerHTML = '<span class="nav-lock-badge font-mono arrived" style="color:#22c55e; border-color:rgba(34,197,94,0.4); background:rgba(34,197,94,0.12);">✓ ARRIVED // UNLOCKED</span>';
     }
   }
 
@@ -436,9 +484,9 @@ window.MarsSegmentDrawer = (function () {
     const routeToStopBtn = document.getElementById("btn-route-to-stop");
     if (routeToStopBtn) {
       routeToStopBtn.onclick = function () {
-        // Base coordinates: default to landing site
-        const baseLat = siteMeta?.id === "gale" ? -4.5895 : 18.4447;
-        const baseLon = siteMeta?.id === "gale" ? 137.4417 : 77.4509;
+        // Dynamic base coordinates: use site's designated landing site or center datum
+        const baseLat = siteMeta?.center?.lat ?? siteMeta?.quick_missions?.[0]?.from?.lat ?? 18.4447;
+        const baseLon = siteMeta?.center?.lon ?? siteMeta?.quick_missions?.[0]?.from?.lon ?? 77.4509;
         const stopLat = stop.lat != null ? stop.lat : (stop.coordinates ? stop.coordinates[1] : 18.4312);
         const stopLon = stop.lon != null ? stop.lon : (stop.coordinates ? stop.coordinates[0] : 77.4128);
 
@@ -449,5 +497,5 @@ window.MarsSegmentDrawer = (function () {
     }
   }
 
-  return { init, render, renderScienceStop };
+  return { init, render, renderScienceStop, notifyArrival };
 })();

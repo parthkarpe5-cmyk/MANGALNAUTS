@@ -200,6 +200,7 @@
       "name": "Olympus Mons (Summit Caldera)",
       "rover": "Orbital survey",
       "graph_id": "olympus_measured_dem_v1",
+      "boundary_color": "#f97316",
       "center": {
         "lat": 18.640718552773496,
         "lon": -133.84877527849238

@@ -2,18 +2,18 @@
   "site": "Jezero Crater (Western Delta)",
   "site_id": "jezero",
   "coordinates": {
-    "lat": 18.445,
-    "lon": 77.42,
+    "lat": 18.450030884932012,
+    "lon": 77.42466700791792,
     "elevation_m": -2530.0
   },
   "sol": 1133,
   "terrestrial_date": "2024-04-27",
-  "local_solar_time": "23:20 MTC",
-  "ltst": "23:21:00",
+  "local_solar_time": "03:14 MTC",
+  "ltst": "03:14:24",
   "is_daylight": false,
   "sunset_in_min": 0.0,
   "sunset_in_minutes": 0,
-  "sunset_utc": "2026-11-15T05:13:36Z",
+  "sunset_utc": "2026-11-15T09:46:37Z",
   "temp_C": -52.0,
   "temp_min_C": -79.3,
   "temp_max_C": -24.7,
@@ -23,7 +23,7 @@
   "ls_deg": 244.106,
   "rad_dose_proxy": 28.5,
   "rad_dose_unit": "uSv/hr",
-  "flare_level": "B5.4",
+  "flare_level": "B7.9",
   "atmosphere": {
     "air_temp_c": {
       "current": -52.0,
@@ -46,7 +46,7 @@
     "dose_rate_uSv_hr": 28.5,
     "daily_dose_uSv": 684.0,
     "spe_event_status": "NORMAL",
-    "flare_level": "B5.4",
+    "flare_level": "B7.9",
     "cumulative_mission_mSv": 164.7,
     "suit_shielding_factor": 0.65
   },
@@ -61,7 +61,7 @@
     }
   ],
   "metadata": {
-    "generated_at_utc": "2026-11-15T05:13:41.375487+00:00",
+    "generated_at_utc": "2026-11-15T09:46:42.293862+00:00",
     "weather_source": "NASA Mars 2020 Perseverance MEDA (Live API, Jezero Crater)",
     "space_weather_source": "NOAA Space Weather Prediction Center (GOES X-ray)",
     "rover": "Perseverance (Mars 2020)"
