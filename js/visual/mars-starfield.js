@@ -15,7 +15,6 @@
   let isRunning = false;
   let resizeObserver = null;
 
-  const hue = 217;
   const stars = [];
   let count = 0;
   const maxStars = 1400;
@@ -32,9 +31,10 @@
 
     const half = canvas2.width / 2;
     const gradient2 = ctx2.createRadialGradient(half, half, 0, half, half, half);
-    gradient2.addColorStop(0.025, "#fff");
-    gradient2.addColorStop(0.1, "hsl(" + hue + ", 61%, 33%)");
-    gradient2.addColorStop(0.25, "hsl(" + hue + ", 64%, 6%)");
+    gradient2.addColorStop(0.025, "#ffffff");
+    gradient2.addColorStop(0.08, "rgba(255, 255, 255, 0.95)");
+    gradient2.addColorStop(0.22, "rgba(240, 240, 245, 0.22)");
+    gradient2.addColorStop(0.5, "rgba(200, 200, 210, 0.04)");
     gradient2.addColorStop(1, "transparent");
 
     ctx2.fillStyle = gradient2;
@@ -129,7 +129,7 @@
     if (w > 0 && h > 0) {
       ctx.globalCompositeOperation = "source-over";
       ctx.globalAlpha = 0.8;
-      ctx.fillStyle = "hsla(" + hue + ", 64%, 6%, 1)";
+      ctx.fillStyle = "#000000";
       ctx.fillRect(0, 0, w, h);
 
       ctx.globalCompositeOperation = "lighter";
@@ -175,13 +175,14 @@
       new Star();
     }
 
-    // Warm-up buffer so the celestial deep space background has rich motion-blur trails
+    // Warm-up buffer so the celestial deep space background has pure black motion-blur trails
     if (w > 0 && h > 0) {
-      ctx.fillStyle = "hsla(" + hue + ", 64%, 6%, 1)";
+      ctx.fillStyle = "#000000";
       ctx.fillRect(0, 0, w, h);
       for (let warmup = 0; warmup < 10; warmup++) {
         ctx.globalCompositeOperation = "source-over";
         ctx.globalAlpha = 0.8;
+        ctx.fillStyle = "#000000";
         ctx.fillRect(0, 0, w, h);
         ctx.globalCompositeOperation = "lighter";
         for (let i = 1, l = stars.length; i < l; i++) {
@@ -241,7 +242,7 @@
     if (changed && isRunning && ctx) {
       ctx.globalCompositeOperation = "source-over";
       ctx.globalAlpha = 0.8;
-      ctx.fillStyle = "hsla(" + hue + ", 64%, 6%, 1)";
+      ctx.fillStyle = "#000000";
       ctx.fillRect(0, 0, w, h);
     }
   }
