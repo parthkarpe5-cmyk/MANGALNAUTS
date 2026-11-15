@@ -511,8 +511,10 @@
     }
 
     MarsSegmentDrawer.init("segment-drawer");
-    MarsData.loadGraph().catch(console.warn);
-    MarsTelemetry.init("telemetry-bar").catch(console.warn);
+    setTimeout(function () {
+      MarsData.loadGraph().catch(console.warn);
+      MarsTelemetry.init("telemetry-bar").catch(console.warn);
+    }, 1500);
 
     // Init theme
     if (themeSelector && window.MarsTheme) {

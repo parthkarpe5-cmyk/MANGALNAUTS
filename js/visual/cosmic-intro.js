@@ -33,11 +33,13 @@ window.MarsCosmicIntro = (function () {
   let telemetryText = null;
   let progressBar = null;
 
-  let startTime = 0;
-  const DURATION_MS = 7800; // Majestic 7.8-second cinematic traversal
+  const DURATION_MS = 7800; // Balanced 7.8-second cinematic traversal
   let isRunning = false;
   let isFadingOut = false;
   let hasSkipped = false;
+
+  let lastTimestamp = 0;
+  let virtualElapsed = 0;
 
   const textureLoader = new THREE.TextureLoader();
 
@@ -95,12 +97,12 @@ window.MarsCosmicIntro = (function () {
 
     scene = new THREE.Scene();
 
-    camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 8000);
+    camera = new THREE.PerspectiveCamera(50, width / height, 1.0, 8000);
 
-    // 1. Build Photorealistic Dual-Layer NASA Astrometry & 3D Spiral Galaxy
+    // 1. Build Photorealistic NASA Astrometry & 3D Spiral Galaxy
     buildRealisticGalaxy();
 
-    // 2. Build Authentic Planetary System (Sun, Mercury, Venus, Earth, and Seamless Mars)
+    // 2. Build Authentic Planetary System (Sun, Mercury, Venus, Earth-Moon, and Seamless Mars)
     buildRealisticSolarSystem();
 
     window.addEventListener("resize", onWindowResize);
@@ -206,7 +208,7 @@ window.MarsCosmicIntro = (function () {
         starColors[i3] = 1.0; starColors[i3 + 1] = 1.0; starColors[i3 + 2] = 1.0;
       } else if (rVal < 0.78) {
         // Diamond Blue-White (Hot O/B stars)
-        starColors[i3] = 0.85; starColors[i3 + 1] = 0.92; starColors[i3 + 1] = 1.0;
+        starColors[i3] = 0.85; starColors[i3 + 1] = 0.92; starColors[i3 + 2] = 1.0;
       } else if (rVal < 0.93) {
         // Warm Sol-type (G-class stars, Sun/Alpha Centauri)
         starColors[i3] = 1.0; starColors[i3 + 1] = 0.96; starColors[i3 + 2] = 0.88;
@@ -233,10 +235,10 @@ window.MarsCosmicIntro = (function () {
 
     // C. TRUE 3D SPIRAL GALAXY (Matching user's purple, lilac & white sparkling galaxy)
     galaxyGroup = new THREE.Group();
-    galaxyGroup.position.set(0, 24, -820);
-    // Inclined disk orientation: ~26° forward tilt and ~10° roll, framing the galaxy elegantly
-    galaxyGroup.rotation.x = -0.45;
-    galaxyGroup.rotation.z = -0.18;
+    galaxyGroup.position.set(0, 20, -820);
+    // Tilted disk orientation: ~24° forward tilt and ~10° roll, framing the galaxy gracefully
+    galaxyGroup.rotation.x = -0.42;
+    galaxyGroup.rotation.z = -0.16;
 
     // 1. Central Bulge Particles (8,000 dense, luminous nucleus stars)
     const coreCount = 8000;
@@ -369,12 +371,12 @@ window.MarsCosmicIntro = (function () {
 
     // 1. The Sun (NASA SDO Photometric Map)
     const sunTex = textureLoader.load("assets/textures/sun.jpg");
-    const sunGeom = new THREE.SphereGeometry(40, 48, 48);
+    const sunGeom = new THREE.SphereGeometry(38, 48, 48);
     const sunMat = new THREE.MeshBasicMaterial({
       map: sunTex,
     });
     sunMesh = new THREE.Mesh(sunGeom, sunMat);
-    sunMesh.position.set(0, 12, -520);
+    sunMesh.position.set(0, 10, -520);
     solarSystemGroup.add(sunMesh);
 
     // Sun Corona & Radiant Halo
@@ -399,7 +401,7 @@ window.MarsCosmicIntro = (function () {
 
     // Directional Sunlight for crisp shadows on inner planets
     const dirLight = new THREE.DirectionalLight(0xfff5ea, 2.8);
-    dirLight.position.set(0, 12, -520);
+    dirLight.position.set(0, 10, -520);
     scene.add(dirLight);
 
     // 2. Mercury (NASA MESSENGER 2K Map)
@@ -411,7 +413,7 @@ window.MarsCosmicIntro = (function () {
       metalness: 0.05,
     });
     mercuryMesh = new THREE.Mesh(mercGeom, mercMat);
-    mercuryMesh.position.set(28, -5, -410);
+    mercuryMesh.position.set(24, -4, -410);
     solarSystemGroup.add(mercuryMesh);
 
     // 3. Venus (NASA Magellan / Atmosphere 2K Map)
@@ -423,12 +425,12 @@ window.MarsCosmicIntro = (function () {
       metalness: 0.02,
     });
     venusMesh = new THREE.Mesh(venusGeom, venusMat);
-    venusMesh.position.set(-34, 12, -300);
+    venusMesh.position.set(-28, 6, -300);
     solarSystemGroup.add(venusMesh);
 
     // 4. Earth & Moon System (NASA Blue Marble 2K Map)
     earthGroup = new THREE.Group();
-    earthGroup.position.set(38, -8, -170);
+    earthGroup.position.set(32, -5, -170);
 
     const earthTex = textureLoader.load("assets/textures/earth.jpg");
     const earthGeom = new THREE.SphereGeometry(8.0, 48, 48);
@@ -467,8 +469,8 @@ window.MarsCosmicIntro = (function () {
     solarSystemGroup.add(earthGroup);
 
     // 5. Seamless Mars Model (100% matched to website Cesium model)
-    // Uses the restored seamless NASA Viking 2K map with ZERO tile seams or patches!
-    // Sized to radius 18.5 at distance 80, filling exactly 52% of the viewport height.
+    // Uses the restored seamless NASA Viking 2K map with ZERO tile seams or patches.
+    // Sized to radius 18.5 at distance 80, occupying exactly 52% of the viewport height.
     // Oriented to Longitude 35.0°E, Latitude 10.0°N (matching Cesium exactly).
     const marsTex = textureLoader.load("assets/textures/mars.jpg");
     marsTex.generateMipmaps = true;
@@ -512,7 +514,8 @@ window.MarsCosmicIntro = (function () {
     hasSkipped = false;
     isFadingOut = false;
     isRunning = true;
-    startTime = performance.now();
+    lastTimestamp = 0;
+    virtualElapsed = 0;
 
     if (overlayEl) {
       overlayEl.style.transition = "";
@@ -520,23 +523,28 @@ window.MarsCosmicIntro = (function () {
       overlayEl.style.opacity = "1";
       overlayEl.classList.remove("fading-out");
     }
-    loop();
+    animId = requestAnimationFrame(loop);
   }
 
-  function loop() {
+  function loop(timestamp) {
     if (!isRunning) return;
-    const now = performance.now();
-    const elapsed = now - startTime;
-    const progress = Math.min(1.0, elapsed / DURATION_MS);
+
+    if (!lastTimestamp) lastTimestamp = timestamp;
+    // Delta-time smoothing: clamp delta to max 33.3ms to prevent camera jumping if GC pauses
+    const delta = Math.min(timestamp - lastTimestamp, 33.3);
+    lastTimestamp = timestamp;
+
+    virtualElapsed += delta;
+    const progress = Math.min(1.0, virtualElapsed / DURATION_MS);
 
     // 1. Slow, majestic celestial rotations
-    if (skyDome) skyDome.rotation.y += 0.00008;
-    if (starPoints) starPoints.rotation.y += 0.00012;
+    if (skyDome) skyDome.rotation.y += 0.00006;
+    if (starPoints) starPoints.rotation.y += 0.00009;
 
     // 3D Spiral Galaxy graceful rotation around galactic axis
     if (galaxyGroup) {
-      galaxyGroup.rotation.y += 0.0008;
-      galaxyGroup.rotation.z += 0.0004;
+      galaxyGroup.rotation.y += 0.0006;
+      galaxyGroup.rotation.z += 0.0003;
     }
 
     // Nebular plane fades out gracefully as camera approaches the Sun
@@ -545,25 +553,25 @@ window.MarsCosmicIntro = (function () {
       galaxyNebulaPlane.material.opacity = 0.42 * nebFade;
     }
 
-    if (sunMesh) sunMesh.rotation.y += 0.0016;
-    if (mercuryMesh) mercuryMesh.rotation.y += 0.006;
-    if (venusMesh) venusMesh.rotation.y -= 0.005;
-    if (earthMesh) earthMesh.rotation.y += 0.010;
+    if (sunMesh) sunMesh.rotation.y += 0.0012;
+    if (mercuryMesh) mercuryMesh.rotation.y += 0.005;
+    if (venusMesh) venusMesh.rotation.y -= 0.004;
+    if (earthMesh) earthMesh.rotation.y += 0.008;
     if (moonMesh && earthGroup) {
-      moonMesh.position.x = Math.cos(now * 0.0018) * 16;
-      moonMesh.position.z = Math.sin(now * 0.0018) * 16;
+      moonMesh.position.x = Math.cos(virtualElapsed * 0.0015) * 16;
+      moonMesh.position.z = Math.sin(virtualElapsed * 0.0015) * 16;
     }
 
-    // Mars orientation locks into Cesium coordinates with subtle approach stabilization
+    // Mars orientation stays locked to Cesium coordinates
     if (marsMesh) {
-      const approachDrift = Math.max(0, 1 - progress) * 0.012;
-      marsMesh.rotation.y = 0.96 + Math.sin(now * 0.0006) * approachDrift;
+      const approachDrift = Math.max(0, 1 - progress) * 0.008;
+      marsMesh.rotation.y = 0.96 + Math.sin(virtualElapsed * 0.0005) * approachDrift;
       marsMesh.rotation.x = -0.175;
     }
 
     // 2. Continuous Silky-Smooth Camera Traversal Spline
-    // Continues smooth forward momentum even during fadeout so there is zero abrupt stop!
-    const effectiveProgress = isFadingOut ? Math.min(1.22, elapsed / DURATION_MS) : progress;
+    // Continues smooth forward momentum even during fadeout so there is zero abrupt stop
+    const effectiveProgress = isFadingOut ? Math.min(1.18, virtualElapsed / DURATION_MS) : progress;
     updateCameraPath(effectiveProgress);
 
     // 3. Update HUD telemetry
@@ -582,7 +590,7 @@ window.MarsCosmicIntro = (function () {
   function updateCameraPath(p) {
     if (!camera) return;
 
-    // Continuous quintic ease curve (gentle continuous acceleration and smooth deceleration)
+    // Smooth quintic ease curve (continuous acceleration and deceleration, zero jerk)
     const normP = Math.min(1.0, p);
     const ease = normP * normP * normP * (normP * (normP * 6 - 15) + 10);
 
@@ -590,24 +598,19 @@ window.MarsCosmicIntro = (function () {
     const startZ = -1340;
     const endZ = 0;
     // For p > 1.0 during fadeout, keep drifting smoothly forward at constant speed
-    const extraDrift = p > 1.0 ? (p - 1.0) * 120 : 0;
+    const extraDrift = p > 1.0 ? (p - 1.0) * 90 : 0;
     const curZ = startZ + (endZ - startZ) * ease + extraDrift;
 
-    // Subtle cinematic curve on X and Y, centering gracefully onto Mars
-    const centering = Math.max(0, 1 - ease);
-    const curX = Math.sin(normP * Math.PI * 1.5) * 12 * centering;
-    const curY = (Math.cos(normP * Math.PI) * 7 + 4) * centering;
+    // Gentle, monotonic cinematic descent from Y = 4 to Y = 0 (NO sine oscillations)
+    const curY = 4 * (1 - ease);
+    const curX = 0;
 
     camera.position.set(curX, curY, curZ);
 
-    // Dynamic lookAt: Look forward along trajectory until Earth pass, then lock smoothly onto Mars (0, 0, 80)
-    if (p < 0.68) {
-      camera.lookAt(0, 0, curZ + 110);
-    } else {
-      const lockWeight = Math.min(1.0, (p - 0.68) / 0.22);
-      const lookZ = (curZ + 110) * (1 - lockWeight) + 80 * lockWeight;
-      camera.lookAt(0, 0, lookZ);
-    }
+    // Steady forward look target directly along Z toward Mars at (0, 0, 80)
+    // Ensures completely stable horizon with zero pitch/yaw jerking
+    const lookZ = Math.max(curZ + 120, 80);
+    camera.lookAt(0, 0, lookZ);
   }
 
   function updateHud(p) {
@@ -654,17 +657,12 @@ window.MarsCosmicIntro = (function () {
       }
     }
 
-    // Wake up Cesium for smooth operational cockpit interaction
-    if (window.MarsGlobe) {
+    // Refresh Cesium frame to ensure seamless handshake
+    if (window.MarsGlobe && window.MarsGlobe.requestRender) {
       try {
-        if (window.MarsGlobe.setContinuousRender) {
-          window.MarsGlobe.setContinuousRender(true);
-        }
-        if (window.MarsGlobe.requestRender) {
-          window.MarsGlobe.requestRender();
-        }
+        window.MarsGlobe.requestRender();
       } catch (e) {
-        console.warn("MarsGlobe synchronization error:", e);
+        console.warn("MarsGlobe render error:", e);
       }
     }
 
@@ -680,11 +678,11 @@ window.MarsCosmicIntro = (function () {
         overlayEl.style.display = "none";
         overlayEl.style.opacity = "0";
 
-        // Restore idle render budget in Cesium once cockpit is active
-        if (window.MarsGlobe && window.MarsGlobe.setContinuousRender) {
-          window.MarsGlobe.setContinuousRender(false);
+        // Request final render for interactive Cesium cockpit
+        if (window.MarsGlobe && window.MarsGlobe.requestRender) {
+          window.MarsGlobe.requestRender();
         }
-      }, 1150);
+      }, 1050);
     }
   }
 
@@ -697,7 +695,7 @@ window.MarsCosmicIntro = (function () {
     }
 
     if (overlayEl) {
-      overlayEl.style.transition = "opacity 0.4s ease-out";
+      overlayEl.style.transition = "opacity 0.35s ease-out";
       overlayEl.classList.add("fading-out");
       if (fadeTimeout) clearTimeout(fadeTimeout);
       fadeTimeout = setTimeout(() => {
@@ -708,7 +706,7 @@ window.MarsCosmicIntro = (function () {
         }
         overlayEl.style.display = "none";
         overlayEl.style.opacity = "0";
-      }, 400);
+      }, 350);
     }
   }
 

@@ -32,12 +32,28 @@ window.MarsOrbiters = (() => {
   let activeSelectedId = null;
   let cesViewer = null;
 
+  function loadModelIfNeeded(entry) {
+    if (entry.hasLoadedModel || !entry.entity) return;
+    if (modeledOrbiters.has(entry.item.id)) {
+      entry.hasLoadedModel = true;
+      entry.entity.model = new Cesium.ModelGraphics({
+        uri: "assets/spacecraft/" + entry.item.id + ".glb",
+        minimumPixelSize: 24,
+        maximumScale: 250000,
+      });
+    }
+  }
+
   function applyVisibility() {
     for (const entry of orbiterList) {
       const isSelected = activeSelectedId && entry.item.id === activeSelectedId;
       const isMoon = entry.item.type === "moon";
       const showObj = isSelected || (isMoon ? moonsVisible : orbitersVisible);
       const showPath = isSelected || trajectoriesVisible;
+
+      if (showObj && !isMoon) {
+        loadModelIfNeeded(entry);
+      }
 
       if (entry.entity) entry.entity.show = showObj;
       if (entry.polyline) entry.polyline.show = showPath;
@@ -126,11 +142,7 @@ window.MarsOrbiters = (() => {
           const elapsed = reducedMotion.matches ? 0 : (performance.now() - start) * 0.06;
           return position(elements, elapsed, result);
         }, false),
-        model: hasModel ? {
-          uri: "assets/spacecraft/" + item.id + ".glb",
-          minimumPixelSize: 24,
-          maximumScale: 250000,
-        } : undefined,
+        model: undefined, // Lazy-loaded when orbiters layer is toggled on
         point: { pixelSize: item.type === "moon" ? 8 : 9, color, outlineColor: Cesium.Color.BLACK, outlineWidth: 2 },
         label: {
           text: item.shortName, font: "600 12px sans-serif",
