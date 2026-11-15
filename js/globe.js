@@ -232,9 +232,13 @@ window.MarsGlobe = (function () {
       }
     });
 
-    // Initial camera position: Planetary Orbit floating in Deep Space Cosmic Galaxy
+    // Initial camera position: If cosmic intro is active, start in deep space (32,000 km) for smooth fly-in
+    const isIntroActive = window.MarsCosmicIntro && window.MarsCosmicIntro.isRunning && window.MarsCosmicIntro.isRunning();
+    const initAlt = isIntroActive ? 32000000 : 11500000;
+    const initLon = isIntroActive ? 22.0 : 35.0;
+    const initLat = isIntroActive ? 4.0 : 10.0;
     viewer.camera.setView({
-      destination: Cesium.Cartesian3.fromDegrees(35.0, 10.0, 11500000),
+      destination: Cesium.Cartesian3.fromDegrees(initLon, initLat, initAlt),
       orientation: {
         heading: Cesium.Math.toRadians(0),
         pitch: Cesium.Math.toRadians(-90),
@@ -767,6 +771,21 @@ window.MarsGlobe = (function () {
     if (banner) banner.hidden = true;
   }
 
+  function prepareForCosmicIntro() {
+    if (!viewer) return;
+    viewer.camera.setView({
+      destination: Cesium.Cartesian3.fromDegrees(22.0, 4.0, 32000000),
+      orientation: {
+        heading: Cesium.Math.toRadians(0),
+        pitch: Cesium.Math.toRadians(-90),
+        roll: 0,
+      },
+    });
+    if (viewer.scene) {
+      viewer.scene.requestRender();
+    }
+  }
+
   return {
     init,
     setBaseFilter,
@@ -786,5 +805,6 @@ window.MarsGlobe = (function () {
     hideSiteEntryBanner,
     requestRender,
     setContinuousRender,
+    prepareForCosmicIntro,
   };
 })();
