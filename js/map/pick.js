@@ -121,21 +121,31 @@ window.MarsSegmentPick = (function () {
   function showNavDock(segment, title) {
     if (!map) return;
     removeNavDock();
-    const displayTitle = title || currentRouteTitle || "Waypoint A ➔ Waypoint B";
+    const isWalk = segment && segment.mode === "walk";
+    const displayTitle = title || currentRouteTitle || (segment && segment.routeTitle) || "Mission Waypoint A ➔ Waypoint B";
     const container = map.getContainer();
     navDockEl = document.createElement("div");
     navDockEl.className = "mars-active-nav-dock";
+
+    const avgSpeed = isWalk ? 1.2 : 0.14; // m/s
+    const initEtaSec = traversalTotalDistM / avgSpeed;
+    const initEtaMin = Math.round(initEtaSec / 60);
+    const initEtaStr = initEtaMin >= 60 ? (Math.floor(initEtaMin / 60) + "h " + (initEtaMin % 60) + "m") : (initEtaMin + " min");
+
     navDockEl.innerHTML =
       '<div class="nav-dock-left">' +
       '  <span class="nav-dock-pulse"></span>' +
-      '  <span class="nav-dock-badge font-mono">🔒 LOCKED</span>' +
-      '  <span class="nav-dock-route-title" title="' + displayTitle + '">' + displayTitle + '</span>' +
+      '  <span class="nav-dock-badge font-mono">🔒 ACTIVE NAV</span>' +
+      '  <span class="nav-dock-route-title font-mono" title="' + displayTitle + '">' + displayTitle + '</span>' +
       '</div>' +
       '<div class="nav-dock-center font-mono">' +
       '  <span id="nav-dock-dist" class="nav-metric-bold">' + (traversalTotalDistM / 1000).toFixed(2) + ' km</span>' +
-      '  <span class="nav-metric-sub">remaining</span>' +
+      '  <span class="nav-divider">·</span>' +
+      '  <span id="nav-dock-eta" class="nav-metric-eta" title="Estimated Time of Arrival">ETA ' + initEtaStr + '</span>' +
       '  <span class="nav-divider">·</span>' +
       '  <span id="nav-dock-elev" class="nav-metric-elev">Elev: -- m</span>' +
+      '  <span class="nav-divider">·</span>' +
+      '  <span id="nav-dock-consumables" class="nav-metric-consumables" title="NASA 120% Contingency Safe Return Reserve"><span style="color:#22c55e;">O₂ 98%</span> · <span style="color:#38bdf8;">⚡ Safe</span></span>' +
       '</div>' +
       '<div class="nav-dock-right">' +
       '  <button type="button" class="btn-dock-hud-ghost" id="btn-dock-pause" title="Pause or Resume Traversal">⏸ Pause</button>' +
@@ -166,8 +176,25 @@ window.MarsSegmentPick = (function () {
     if (!navDockEl) return;
     const distEl = navDockEl.querySelector("#nav-dock-dist");
     if (distEl) distEl.textContent = (distRemainingM / 1000).toFixed(2) + " km";
+
+    const isWalk = lastSolvedSegment && lastSolvedSegment.mode === "walk";
+    const avgSpeed = isWalk ? 1.2 : 0.14;
+    const etaSec = distRemainingM / avgSpeed;
+    const etaMin = Math.round(etaSec / 60);
+    const etaStr = etaMin >= 60 ? (Math.floor(etaMin / 60) + "h " + (etaMin % 60) + "m") : (etaMin + " min");
+    const etaEl = navDockEl.querySelector("#nav-dock-eta");
+    if (etaEl) etaEl.textContent = distRemainingM > 10 ? ("ETA " + etaStr) : "Arriving";
+
     const elevEl = navDockEl.querySelector("#nav-dock-elev");
     if (elevEl) elevEl.textContent = Math.round(curElev) + " m (" + curSlope.toFixed(1) + "°)";
+
+    const consumablesEl = navDockEl.querySelector("#nav-dock-consumables");
+    if (consumablesEl && traversalTotalDistM > 0) {
+      const progressRatio = Math.max(0, Math.min(1, 1 - (distRemainingM / traversalTotalDistM)));
+      const o2Pct = Math.max(68, Math.round(100 - (progressRatio * 30)));
+      const battPct = Math.max(72, Math.round(100 - (progressRatio * 24)));
+      consumablesEl.innerHTML = '<span style="color:#22c55e;">O₂ ' + o2Pct + '%</span> · <span style="color:#38bdf8;">⚡ ' + battPct + '%</span>';
+    }
   }
 
   function updateNavDockArrival(title) {
@@ -178,16 +205,33 @@ window.MarsSegmentPick = (function () {
       '<div class="nav-dock-left">' +
       '  <span class="nav-dock-check">✓</span>' +
       '  <span class="nav-dock-badge arrived font-mono">ARRIVED</span>' +
-      '  <span class="nav-dock-route-title" title="' + displayTitle + '">' + displayTitle + ' · Traverse Complete</span>' +
+      '  <span class="nav-dock-route-title font-mono" title="' + displayTitle + '">' + displayTitle + ' · Complete</span>' +
       '</div>' +
       '<div class="nav-dock-center font-mono">' +
-      '  <span class="nav-metric-bold">' + (traversalTotalDistM / 1000).toFixed(2) + ' km</span>' +
-      '  <span class="nav-metric-sub">total distance</span>' +
+      '  <span class="nav-metric-bold">' + (traversalTotalDistM / 1000).toFixed(2) + ' km total</span>' +
+      '  <span class="nav-divider">·</span>' +
+      '  <span style="color:#22c55e; font-weight:700;">✓ 100% Safe Return Margin</span>' +
       '</div>' +
       '<div class="nav-dock-right">' +
       '  <button type="button" class="btn-dock-hud-ghost" id="btn-dock-replay" title="Replay traverse along route">⏮ Replay</button>' +
       '  <button type="button" class="btn-dock-hud-new" id="btn-dock-new" title="Plan New Route">➕ New Route</button>' +
       '</div>';
+
+    const replayBtn = navDockEl.querySelector("#btn-dock-replay");
+    if (replayBtn) {
+      replayBtn.onclick = function (ev) {
+        ev.stopPropagation();
+        replayAutoTraversal();
+      };
+    }
+    const newBtn = navDockEl.querySelector("#btn-dock-new");
+    if (newBtn) {
+      newBtn.onclick = function (ev) {
+        ev.stopPropagation();
+        exitNavigation();
+      };
+    }
+  }
 
     const replayBtn = navDockEl.querySelector("#btn-dock-replay");
     if (replayBtn) {

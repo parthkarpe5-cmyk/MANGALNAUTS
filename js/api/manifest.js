@@ -85,7 +85,7 @@ window.MarsData = (function () {
   }
 
   async function findNearestScienceStop(lat, lon, maxDistM) {
-    maxDistM = maxDistM || 500;
+    maxDistM = maxDistM || 3500;
     try {
       const data = await loadScienceStops();
       if (!data || !data.features || data.features.length === 0) return null;
@@ -101,7 +101,7 @@ window.MarsData = (function () {
           : Math.hypot(lat - sLat, lon - sLon) * 59000;
         if (d < bestDist) {
           bestDist = d;
-          bestStop = f.properties;
+          bestStop = Object.assign({ distM: d }, f.properties);
         }
       }
       return bestStop;
@@ -111,9 +111,14 @@ window.MarsData = (function () {
   }
 
   async function getWaypointLabel(lat, lon, fallbackName) {
-    const stop = await findNearestScienceStop(lat, lon, 450);
-    if (stop && stop.name) return stop.name;
-    return fallbackName ? fallbackName + " (" + formatCoordSimple(lat, lon) + ")" : formatCoordSimple(lat, lon);
+    const stop = await findNearestScienceStop(lat, lon, 3500);
+    if (stop && stop.name) {
+      if (stop.distM < 600) return stop.name;
+      return "Near " + stop.name;
+    }
+    const meta = getActiveSiteMetaSync ? getActiveSiteMetaSync() : null;
+    const sitePrefix = meta && meta.name ? meta.name : (fallbackName || "Waypoint");
+    return sitePrefix + " (" + formatCoordSimple(lat, lon) + ")";
   }
 
   return {

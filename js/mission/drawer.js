@@ -4,6 +4,7 @@ window.MarsSegmentDrawer = (function () {
   let lastSegment = null;
   let renderId = 0;
   let currentPayloadKg = 15;
+  let isRadialDialOpen = false;
 
   function ic(name) {
     return window.MarsIcons ? window.MarsIcons.get(name) : "";
@@ -153,29 +154,129 @@ window.MarsSegmentDrawer = (function () {
       });
 
       const isWalk = (modeObj.type || "walk") === "walk";
-      const loadouts = window.MarsTelemetry?.PAYLOAD_LOADOUTS || [
-        { id: "scout", label: "Scout", kg: 0, toolWatts: 0, icon: "🔎", desc: "Camera & Optical Recon" },
-        { id: "sample", label: "Science", kg: 15, toolWatts: 45, icon: "🔬", desc: "Sample Tubes & Spectrometer" },
-        { id: "drill", label: "Drill", kg: 25, toolWatts: 90, icon: "⚡", desc: "Percussive Rock Drill" },
-        { id: "survey", label: "Survey", kg: 40, toolWatts: 150, icon: "📡", desc: "GPR Ground Radar" },
+      const astronautKg = 80;
+      const suitPlssKg = 135;
+      const totalEarthKg = astronautKg + suitPlssKg + currentPayloadKg;
+      const marsApparentKg = (totalEarthKg * 0.38).toFixed(1);
+
+      const loadoutOptions = [
+        { id: "scout", label: "0kg", kg: 0, toolWatts: 0, icon: "🎒", name: "Light Recon (Zero Tools)", desc: "Optical survey only (0 kg extra tools, 0W draw)" },
+        { id: "sample", label: "+15kg", kg: 15, toolWatts: 45, icon: "🧪", name: "Science Sample Kit", desc: "Sample cache tubes & Raman spectrometer (+15 kg, 45W draw)" },
+        { id: "drill", label: "+25kg", kg: 25, toolWatts: 90, icon: "⛏️", name: "Coring Drill Kit", desc: "Subsurface rock core drill (+25 kg, 90W draw)" },
+        { id: "survey", label: "+40kg", kg: 40, toolWatts: 150, icon: "📡", name: "RIMFAX GPR Radar", desc: "Ground penetrating radar antenna (+40 kg, 150W draw)" },
       ];
 
-      const loadoutPillsHtml = isWalk
-        ? '<div class="expedition-loadout-strip">' +
-          '  <div class="loadout-strip-label">' +
-          '    <span>EQUIPMENT LOADOUT</span>' +
-          '    <span class="loadout-mass-badge font-mono">' + c.apparentWeightMarsKg + ' kg (0.38g Apparent)</span>' +
+      const activeOption = loadoutOptions.find(o => o.kg === currentPayloadKg) || loadoutOptions[1];
+
+      // Hexagonal / Circular Nodes Layout (Radius 78px around center hub)
+      const radialNodes = [
+        {
+          id: "astro",
+          fixed: true,
+          icon: "🧑‍🚀",
+          label: "80kg",
+          sub: "Astronaut",
+          x: 0,
+          y: -78,
+          title: "Astronaut Body Mass: 80 kg Earth (30.4 kg on Mars 0.38g)"
+        },
+        {
+          id: "suit",
+          fixed: true,
+          icon: "🛡️",
+          label: "135kg",
+          sub: "xEMU PLSS",
+          x: 68,
+          y: -39,
+          title: "NASA xEMU Suit + PLSS Life Support: 135 kg Earth (51.3 kg on Mars 0.38g)"
+        },
+        {
+          id: "scout",
+          fixed: false,
+          kg: 0,
+          icon: "🎒",
+          label: "+0kg",
+          sub: "Recon",
+          x: 68,
+          y: 39,
+          title: "Light Recon: 0 kg carried tools (0W draw)"
+        },
+        {
+          id: "sample",
+          fixed: false,
+          kg: 15,
+          icon: "🧪",
+          label: "+15kg",
+          sub: "Science",
+          x: 0,
+          y: 78,
+          title: "Science Sample Tubes & Spectrometer: +15 kg carried tools (45W draw)"
+        },
+        {
+          id: "drill",
+          fixed: false,
+          kg: 25,
+          icon: "⛏️",
+          label: "+25kg",
+          sub: "Drill",
+          x: -68,
+          y: 39,
+          title: "Rock Coring Drill Kit: +25 kg carried tools (90W draw)"
+        },
+        {
+          id: "survey",
+          fixed: false,
+          kg: 40,
+          icon: "📡",
+          label: "+40kg",
+          sub: "Radar",
+          x: -68,
+          y: -39,
+          title: "RIMFAX Subsurface Radar: +40 kg carried tools (150W draw)"
+        }
+      ];
+
+      const nodesHtml = radialNodes.map(function(n) {
+        if (n.fixed) {
+          return (
+            '<div class="radial-node radial-node-fixed font-mono" style="transform: translate(' + (n.x - 22) + 'px, ' + (n.y - 22) + 'px);" title="' + n.title + '">' +
+            '  <span class="node-icon">' + n.icon + '</span>' +
+            '  <span class="node-mass">' + n.label + '</span>' +
+            '</div>'
+          );
+        } else {
+          const isActive = currentPayloadKg === n.kg ? "active" : "";
+          return (
+            '<button type="button" class="radial-node loadout-radial-btn font-mono ' + isActive + '" data-kg="' + n.kg + '" style="transform: translate(' + (n.x - 22) + 'px, ' + (n.y - 22) + 'px);" title="' + n.title + '">' +
+            '  <span class="node-icon">' + n.icon + '</span>' +
+            '  <span class="node-mass">' + n.label + '</span>' +
+            '</button>'
+          );
+        }
+      }).join("");
+
+      const circularDialHtml = isWalk
+        ? '<div class="loadout-circular-control">' +
+          '  <div class="loadout-header-row">' +
+          '    <span class="loadout-strip-label">' +
+          '      <span>⚖️ EVA GROSS MASS</span>' +
+          '    </span>' +
+          '    <button type="button" class="btn-open-radial-loadout ' + (isRadialDialOpen ? "open" : "") + '" id="btn-toggle-radial-dial" title="Click to expand/collapse circular loadout hub">' +
+          '      <span>🧑‍🚀 80 + 🛡️ 135 + ' + activeOption.icon + ' ' + activeOption.kg + 'kg = <strong>' + totalEarthKg + ' kg</strong> (' + marsApparentKg + ' kg ♂)</span>' +
+          '      <span class="loadout-chevron">▼</span>' +
+          '    </button>' +
           '  </div>' +
-          '  <div class="loadout-pills" role="radiogroup" aria-label="Payload Equipment">' +
-          loadouts.map(function (ld) {
-            const active = currentPayloadKg === ld.kg ? "active" : "";
-            return (
-              '<button type="button" class="loadout-pill ' + active + '" data-kg="' + ld.kg + '" title="' + ld.desc + ' (' + ld.toolWatts + 'W tools)">' +
-              '  <span class="pill-icon">' + ld.icon + '</span>' +
-              '  <span class="pill-text"><strong>' + ld.label + '</strong> ' + ld.kg + 'kg</span>' +
-              '</button>'
-            );
-          }).join("") +
+          '  <div class="radial-loadout-stage ' + (isRadialDialOpen ? "open" : "") + '" id="radial-loadout-wheel">' +
+          '    <div class="radial-orbit-ring"></div>' +
+          '    <div class="radial-center-hub">' +
+          '      <span class="radial-hub-val">' + totalEarthKg + ' <span style="font-size:0.55rem;">kg</span></span>' +
+          '      <span class="radial-hub-mars">' + marsApparentKg + ' kg ♂</span>' +
+          '      <span class="radial-hub-sub">P<sub>met</sub> ' + c.pMetWatts + 'W</span>' +
+          '    </div>' +
+          nodesHtml +
+          '  </div>' +
+          '  <div class="radial-active-desc font-mono">' +
+          '    <span>Carried Gear: <strong>' + activeOption.icon + ' ' + activeOption.name + '</strong> (+' + activeOption.kg + ' kg · ' + activeOption.toolWatts + 'W)</span>' +
           '  </div>' +
           '</div>'
         : "";
@@ -190,7 +291,7 @@ window.MarsSegmentDrawer = (function () {
         (isWalk ? "2 CREW · EVA-01" : "AUTONAV ROVER") +
         "</span>" +
         "  </div>" +
-        loadoutPillsHtml +
+        circularDialHtml +
         '  <div class="expedition-telemetry-row">' +
         '    <div class="telemetry-stat">' +
         '      <span class="stat-hdr">' + ic("clock") + ' DURATION</span>' +
@@ -331,12 +432,29 @@ window.MarsSegmentDrawer = (function () {
     }
     if (segment.path_found && !segment.regional) window.MarsContingency?.attach(panel, segment);
 
-    // Loadout pill listeners
-    panel.querySelectorAll(".loadout-pill, .payload-chip").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        currentPayloadKg = parseInt(btn.dataset.kg, 10);
+    // Toggle circular dial hub
+    const dialToggleBtn = panel.querySelector("#btn-toggle-radial-dial");
+    if (dialToggleBtn) {
+      dialToggleBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        isRadialDialOpen = !isRadialDialOpen;
+        const wheel = panel.querySelector("#radial-loadout-wheel");
+        if (wheel) wheel.classList.toggle("open", isRadialDialOpen);
+        dialToggleBtn.classList.toggle("open", isRadialDialOpen);
         if (window.MarsAudio && window.MarsAudio.playClick) window.MarsAudio.playClick();
-        render(lastSegment, lastTitle);
+      });
+    }
+
+    // Loadout button listeners (radial nodes, pills, and chips)
+    panel.querySelectorAll(".loadout-radial-btn, .loadout-pill, .payload-chip").forEach(function (btn) {
+      btn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        const kg = parseInt(btn.dataset.kg, 10);
+        if (!isNaN(kg)) {
+          currentPayloadKg = kg;
+          if (window.MarsAudio && window.MarsAudio.playClick) window.MarsAudio.playClick();
+          render(lastSegment, lastTitle);
+        }
       });
     });
 
