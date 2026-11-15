@@ -253,7 +253,7 @@ window.MarsGlobe = (function () {
 
     // Initial camera position: Planetary Orbit floating in Deep Space Cosmic Galaxy
     viewer.camera.setView({
-      destination: Cesium.Cartesian3.fromDegrees(35.0, 10.0, 9200000),
+      destination: Cesium.Cartesian3.fromDegrees(20.0, 5.0, 8600000),
       orientation: {
         heading: Cesium.Math.toRadians(0),
         pitch: Cesium.Math.toRadians(-90),
@@ -835,9 +835,9 @@ window.MarsGlobe = (function () {
     viewer.clock.shouldAnimate = false;
     viewer.scene.globe.enableLighting = true;
 
-    // Direct alignment matching the enlarged Three.js Mars model: 35.0°E, 10.0°N at 9,200,000 m
+    // Direct alignment matching the enlarged Three.js Mars model: 20.0°E, 5.0°N at 8,600,000 m
     viewer.camera.setView({
-      destination: Cesium.Cartesian3.fromDegrees(35.0, 10.0, 9200000),
+      destination: Cesium.Cartesian3.fromDegrees(20.0, 5.0, 8600000),
       orientation: {
         heading: Cesium.Math.toRadians(0),
         pitch: Cesium.Math.toRadians(-90),
