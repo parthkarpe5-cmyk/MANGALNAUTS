@@ -559,6 +559,18 @@
     }
   }
 
+  // Chrome sends trackpad pinch as Ctrl+wheel. Cancel browser zoom while
+  // letting Leaflet and Cesium receive the original event at the pointer.
+  window.addEventListener("wheel", function (event) {
+    if (event.ctrlKey && event.cancelable) event.preventDefault();
+  }, { capture: true, passive: false });
+
+  window.addEventListener("keydown", function (event) {
+    if (event.ctrlKey && ["=", "-", "+"].includes(event.key)) {
+      event.preventDefault();
+    }
+  });
+
   bootstrap().catch(function (err) {
     console.error(err);
     const loader = document.getElementById("mission-loader");

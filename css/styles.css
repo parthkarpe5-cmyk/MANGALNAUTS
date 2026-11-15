@@ -4477,3 +4477,16 @@ html .workspace-sidebar-header { border-bottom-color: var(--soft-edge); }
   backdrop-filter: none;
   box-shadow: var(--soft-raised);
 }
+
+/* The map libraries own gestures within their interactive surfaces. */
+#detail-map-inner,
+#globe {
+  touch-action: none;
+}
+#detail-map-inner,
+#globe,
+.detail-pane,
+.globe-pane,
+.viewport-split {
+  overscroll-behavior: none;
+}
