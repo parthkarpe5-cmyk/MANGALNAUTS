@@ -263,51 +263,53 @@ window.MarsSegmentDrawer = (function () {
       });
 
       const isWalk = (modeObj.type || "walk") === "walk";
+      const detailsOpen = panel.querySelector(".mission-estimate-details")?.open;
       const circularDialHtml = buildRadialLoadoutHtml(isWalk, currentPayloadKg, c.pMetWatts);
+      const payloadOptions = MarsTelemetry.PAYLOAD_LOADOUTS.map(loadout =>
+        '<option value="' + loadout.kg + '"' + (loadout.kg === currentPayloadKg ? ' selected' : '') + '>' +
+        loadout.label + ' · ' + loadout.kg + ' kg</option>'
+      ).join("");
+      const toolWatts = MarsTelemetry.PAYLOAD_LOADOUTS.find(loadout => loadout.kg === currentPayloadKg)?.toolWatts ?? 0;
 
       consumablesHtml =
         '<div class="drawer-section expedition-flow-card">' +
         '  <div class="section-title-row">' +
         "    <h4>" +
         ic("zap") +
-        " Expedition Consumables &amp; Safety</h4>" +
+        " Mission estimates</h4>" +
         '    <span class="badge-mini font-mono">' +
         (isWalk ? "2 CREW · EVA-01" : "AUTONAV ROVER") +
         "</span>" +
-        "  </div>" + +
-        circularDialHtml +
+        "  </div>" +
+        '<label class="mission-payload">Payload <select id="mission-payload">' + payloadOptions + '</select></label>' +
         '  <div class="expedition-telemetry-row">' +
         '    <div class="telemetry-stat">' +
-        '      <span class="stat-hdr">' + ic("clock") + ' DURATION</span>' +
-        '      <span class="stat-val font-mono">' + (c.durationMin < 60 ? c.durationMin + "m" : c.durationHours + "h") + '</span>' +
-        '      <span class="stat-foot font-mono">' + c.avgSpeedMs + ' m/s</span>' +
+        '      <span class="stat-hdr">' + ic("clock") + ' TIME</span>' +
+        '      <span class="stat-val font-mono">' + (c.durationMin < 60 ? c.durationMin + " min" : c.durationHours + " h") + '</span>' +
         '    </div>' +
         '    <div class="telemetry-stat">' +
-        '      <span class="stat-hdr">' + ic("oxygen") + ' O₂ REQUIRED</span>' +
+        '      <span class="stat-hdr">' + ic("oxygen") + ' O₂</span>' +
         '      <span class="stat-val font-mono">' + c.o2Liters + ' L</span>' +
-        '      <span class="stat-foot safe-pill font-mono" title="NASA 20% Contingency Safe Return Reserve">Safe: ' + c.o2SafeReturnL + 'L</span>' +
         '    </div>' +
         '    <div class="telemetry-stat">' +
         '      <span class="stat-hdr">' + ic("battery") + ' BATTERY</span>' +
-        '      <span class="stat-val font-mono">' + c.batteryWh + ' Wh</span>' +
-        '      <span class="stat-foot safe-pill font-mono" title="NASA 20% Contingency Safe Return Reserve">Safe: ' + c.batterySafeReturnWh + 'Wh</span>' +
+        '      <span class="stat-val font-mono">' + (c.batteryWh >= 1000 ? (c.batteryWh / 1000).toFixed(1) + ' kWh' : c.batteryWh + ' Wh') + '</span>' +
         '    </div>' +
         '    <div class="telemetry-stat">' +
         '      <span class="stat-hdr">' + (isWalk ? ic("droplet") : ic("gauge")) + ' ' + (isWalk ? 'COOLING' : 'CLIMB') + '</span>' +
         '      <span class="stat-val font-mono">' + (isWalk ? c.waterCoolingL + ' L' : c.meanSlopeDeg + '°') + '</span>' +
-        '      <span class="stat-foot font-mono">' + (isWalk ? 'Safe: ' + c.waterCoolingSafeReturnL + 'L' : '&Delta;z +' + c.elevationGainM + 'm') + '</span>' +
         '    </div>' +
         '  </div>' +
-        '  <div class="expedition-physics-bar">' +
-        '    <div class="physics-summary">' +
-        '      <span class="physics-badge font-mono">PANDOLF 0.38g</span>' +
-        '      <span class="physics-text">P<sub>met</sub>: <strong>' + c.pMetWatts + 'W</strong> · Suit Total: <strong>' + c.pSuitWatts + 'W</strong> (' + (c.ambientTempC) + '&deg;C ambient)</span>' +
-        '    </div>' +
-        '    <div class="physics-reserve-tag" title="NASA Flight Rule EVA-01: Mandatory 20% Life Support Buffer">' +
-        '      <span class="reserve-shield">🛡️</span>' +
-        '      <span>+20% Contingency Reserve</span>' +
-        '    </div>' +
-        '  </div>' +
+        '<details class="mission-details mission-estimate-details"' + (detailsOpen ? " open" : "") + '><summary>Details</summary>' +
+        '<p>' + (isWalk ? c.crewCount + ' crew · ' : '') + c.avgSpeedMs + ' m/s · Tool load ' + toolWatts + ' W</p>' +
+        '<p>With 20% reserve · O₂ ' + c.o2SafeReturnL + ' L · Battery ' + c.batterySafeReturnWh + ' Wh' +
+        (isWalk ? ' · Cooling ' + c.waterCoolingSafeReturnL + ' L' : ' · Climb +' + c.elevationGainM + ' m') + '</p>' +
+        circularDialHtml +
+        '</details>' +
+        '<p class="mission-final-note">' +
+        (feasible ? 'Within slope limit.' : 'Route exceeds slope limit.') +
+        (segment.regional ? ' Estimated from 200 m terrain. Small hazards may be missed.' : '') +
+        '</p>' +
         '</div>';
     }
 
@@ -315,13 +317,13 @@ window.MarsSegmentDrawer = (function () {
     if (segment.path_found && window.MarsGrsOverlays && segment.from) {
       try {
         const isru = await MarsGrsOverlays.calculateIsruMetrics(segment.from.lat, segment.from.lon);
+        const hasChlorine = Number.isFinite(isru?.chlorineWtPct);
+        if (id !== renderId) return;
         isruHtml =
-          '<div class="drawer-section drawer-isru">' +
-          '  <div class="section-title-row">' +
-          '    <h4><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> ISRU &amp; Regolith Telemetry</h4>' +
-          '    <span class="badge-mini font-mono" style="color:var(--pl-cyan,#38bdf8); border-color:rgba(56,189,248,0.4);">ODYSSEY GRS</span>' +
-          '  </div>' +
-          (isru.chlorineAlert
+          '<details class="drawer-section drawer-isru mission-details"><summary>Surface resources · Odyssey GRS</summary>' +
+          (!hasChlorine
+            ? '<p class="drawer-hint">Perchlorates · Data unavailable</p>'
+            : isru.chlorineAlert
             ? '  <div class="isru-hazard-alert">' +
               '    <span class="hazard-icon">⚠️</span>' +
               '    <div class="hazard-text">' +
@@ -331,7 +333,7 @@ window.MarsSegmentDrawer = (function () {
               '  </div>'
             : '  <div class="isru-hazard-safe">' +
               '    <span class="safe-icon">✓</span>' +
-              '    <span>Perchlorates Nominal (' + isru.chlorineWtPct + ' wt% Cl) · Standard EVA Protocols</span>' +
+              '    <span>Chlorine estimate · ' + isru.chlorineWtPct + ' wt% Cl</span>' +
               '  </div>'
           ) +
           '  <div class="consumables-grid isru-grid">' +
@@ -339,8 +341,7 @@ window.MarsSegmentDrawer = (function () {
           '      <span class="c-icon">💧</span>' +
           '      <div class="c-info">' +
           '        <span class="c-label">Local Water Abundance</span>' +
-          '        <span class="c-val font-mono">' + isru.waterWtPct + ' wt% <span class="c-sub-inline">' + isru.waterUncertainty + '</span></span>' +
-          '        <span class="c-sub">Subsurface H₂O equivalent</span>' +
+          '        <span class="c-val font-mono">' + isru.waterWtPct + ' wt% <span class="c-sub-inline">' + (isru.waterUncertainty ?? '') + '</span></span>' +
           '      </div>' +
           '    </div>' +
           '    <div class="consumable-item">' +
@@ -348,7 +349,6 @@ window.MarsSegmentDrawer = (function () {
           '      <div class="c-info">' +
           '        <span class="c-label">Extractable Water</span>' +
           '        <span class="c-val font-mono">~' + isru.waterKgPerM3 + ' kg / m³</span>' +
-          '        <span class="c-sub">From surface regolith (1m)</span>' +
           '      </div>' +
           '    </div>' +
           '    <div class="consumable-item">' +
@@ -356,7 +356,6 @@ window.MarsSegmentDrawer = (function () {
           '      <div class="c-info">' +
           '        <span class="c-label">Sabatier CH₄ Yield</span>' +
           '        <span class="c-val font-mono">~' + isru.methaneYieldKgPerM3 + ' kg CH₄ / m³</span>' +
-          '        <span class="c-sub">Ascent rocket propellant</span>' +
           '      </div>' +
           '    </div>' +
           '    <div class="consumable-item">' +
@@ -364,14 +363,13 @@ window.MarsSegmentDrawer = (function () {
           '      <div class="c-info">' +
           '        <span class="c-label">Regolith Composition</span>' +
           '        <span class="c-val font-mono">Fe: ' + isru.ironWtPct + '% · Si: ' + isru.siliconWtPct + '%</span>' +
-          '        <span class="c-sub">Sintering &amp; solar array base</span>' +
           '      </div>' +
           '    </div>' +
           '  </div>' +
           '  <div class="isru-citation-note font-mono">' +
           '    <span>NASA 2001 Mars Odyssey GRS (Boynton et al. 2007) · PDS Geosciences</span>' +
           '  </div>' +
-          '</div>';
+          '</details>';
       } catch (e) {
         console.warn("[ISRU] Calculation error:", e);
       }
@@ -393,7 +391,13 @@ window.MarsSegmentDrawer = (function () {
         "</div>";
     }
 
-    const displayTitle = segment.routeTitle || 'OPTIMAL SAFE TRAVERSE';
+    if (id !== renderId) return;
+    const routeTitle = segment.routeTitle || "";
+    const displayTitle = routeTitle.includes("➔") ? routeTitle.split("➔")[0].split("(")[0].trim() : routeTitle || "Planned route";
+    const coordinates = point => point && Number.isFinite(point.lat) && Number.isFinite(point.lon)
+      ? Math.abs(point.lat).toFixed(3) + '°' + (point.lat < 0 ? 'S' : 'N') + ', ' +
+        Math.abs(point.lon).toFixed(3) + '°' + (point.lon < 0 ? 'W' : 'E')
+      : '—';
     const isNavLocked = window.MarsSegmentPick && window.MarsSegmentPick.isNavigating && window.MarsSegmentPick.isNavigating();
     const navBadgeHtml = isNavLocked
       ? '<span class="nav-lock-badge font-mono">🔒 NAV LOCKED</span>'
@@ -407,38 +411,36 @@ window.MarsSegmentDrawer = (function () {
       '    <span class="drawer-feasible ' + feasClass + '">' + feasText + '</span>' +
       '  </div>' +
       '</div>' +
+      '<p class="mission-endpoints">A · ' + coordinates(segment.from) + '<br>B · ' + coordinates(segment.to) + '</p>' +
       '<div class="drawer-stats-grid">' +
       '  <div class="stat-card">' +
-      '    <span class="stat-label">Straight (Geodesic)</span>' +
+      '    <span class="stat-label">Direct distance</span>' +
       '    <span class="stat-val font-mono">' + geo + '</span>' +
-      '    <span class="stat-sub">Line-of-sight distance</span>' +
       '  </div>' +
       '  <div class="stat-card">' +
-      '    <span class="stat-label">Path Trajectory</span>' +
+      '    <span class="stat-label">Route distance</span>' +
       '    <span class="stat-val font-mono highlight">' + path + '</span>' +
-      '    <span class="stat-sub">Ground safe traverse</span>' +
       '  </div>' +
       '  <div class="stat-card">' +
-      '    <span class="stat-label">Max Path Slope</span>' +
+      '    <span class="stat-label">Max slope</span>' +
       '    <span class="stat-val font-mono ' + (slopeVal > maxAllowedSlope ? 'val-danger' : '') + '">' + slopeVal.toFixed(1) + '°</span>' +
       '    <span class="stat-sub">Limit: ≤' + maxAllowedSlope + '°</span>' +
       '    <div class="meter-bar"><div class="meter-fill slope-fill" style="width:' + slopePercent + '%"></div></div>' +
       '  </div>' +
       '  <div class="stat-card">' +
-      '    <span class="stat-label">GNN Mean Risk</span>' +
+      '    <span class="stat-label">Avg. terrain risk</span>' +
       '    <span class="stat-val font-mono ' + (riskPercent > 50 ? 'val-danger' : '') + '">' + riskPercent + '%</span>' +
-      '    <span class="stat-sub">Terrain slip hazard</span>' +
       '    <div class="meter-bar"><div class="meter-fill risk-fill" style="width:' + riskPercent + '%"></div></div>' +
       '  </div>' +
       '</div>' +
+      profileHtml +
       consumablesHtml +
       isruHtml +
-      profileHtml +
       '<div class="route-action-bar">' +
       '  <button type="button" class="btn-ghost btn-sm" id="btn-toggle-traversal">⏸ Pause</button>' +
       '  <button type="button" class="btn-ghost btn-sm" id="btn-replay-traversal">⏮ Replay</button>' +
-      '  <button type="button" class="btn-ghost btn-sm" id="btn-reverse-route">🔄 Reverse Path</button>' +
-      '  <button type="button" class="btn-ghost btn-sm btn-exit-nav-drawer" id="btn-exit-navigation" style="border-color: rgba(239, 68, 68, 0.45); color: #f87171; background: rgba(239, 68, 68, 0.08);">✕ Exit Nav (Unlock)</button>' +
+      '  <button type="button" class="btn-ghost btn-sm" id="btn-reverse-route">Reverse</button>' +
+      '  <button type="button" class="btn-ghost btn-sm btn-exit-nav-drawer" id="btn-exit-navigation" style="border-color: rgba(239, 68, 68, 0.45); color: #f87171; background: rgba(239, 68, 68, 0.08);">Exit navigation</button>' +
       '</div>';
 
     // Hook up elevation scrubber
@@ -477,13 +479,19 @@ window.MarsSegmentDrawer = (function () {
       const label = document.createElement("p");
       label.className = "drawer-hint";
       label.textContent = segment.regional
-        ? "Regional estimate · 200 m elevation. Small hazards may be unresolved. Contingency drills require local terrain."
+        ? "Regional terrain · 200 m. Drills require local terrain."
         : "Elevation grid: " + segment.terrain_spacing_m + " m sampling";
       panel.prepend(label);
     }
     if (segment.path_found && !segment.regional) window.MarsContingency?.attach(panel, segment);
 
     bindRadialLoadoutListeners();
+    const payload = panel.querySelector("#mission-payload");
+    payload?.addEventListener("change", async function () {
+      currentPayloadKg = Number(payload.value);
+      await render(segment);
+      if (lastSegment === segment) panel.querySelector("#mission-payload")?.focus({ preventScroll: true });
+    });
 
     // Action buttons
     const toggleTravBtn = document.getElementById("btn-toggle-traversal");
