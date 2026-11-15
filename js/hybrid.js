@@ -74,6 +74,15 @@ window.MarsHybrid = (function () {
       }
     }
 
+    if (window.MarsStarfield) {
+      if (showGlobe) {
+        window.MarsStarfield.resume();
+        window.MarsStarfield.resize();
+      } else {
+        window.MarsStarfield.pause();
+      }
+    }
+
     if (showSurface) {
       if (!MarsDetailMap.isReady()) {
         MarsDetailMap.init();
@@ -87,6 +96,9 @@ window.MarsHybrid = (function () {
       if (showGlobe && viewer) {
         viewer.resize();
         viewer.scene?.requestRender();
+      }
+      if (showGlobe && window.MarsStarfield) {
+        window.MarsStarfield.resize();
       }
       if (showSurface) {
         MarsDetailMap.invalidateSize();

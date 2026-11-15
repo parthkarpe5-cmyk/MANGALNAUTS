@@ -125,6 +125,7 @@ window.MarsGlobe = (function () {
       contextOptions: {
         webgl: {
           alpha: true,
+          preserveDrawingBuffer: true,
         },
       },
     });
@@ -132,8 +133,12 @@ window.MarsGlobe = (function () {
     viewer.resolutionScale = Math.min(window.devicePixelRatio || 1.0, 1.25);
     viewer.camera.percentageChanged = 0.01;
 
-    viewer.scene.backgroundColor = Cesium.Color.fromCssColorString("#0B0B0F");
-    viewer.scene.postProcessStages.fxaa.enabled = true;
+    // Transparent Cesium background allows the celestial orbiting starfield backdrop to show through
+    viewer.scene.backgroundColor = Cesium.Color.TRANSPARENT || new Cesium.Color(0, 0, 0, 0);
+    // FXAA post-process forces alpha to 1.0 in WebGL; keep disabled for alpha pass-through
+    if (viewer.scene.postProcessStages && viewer.scene.postProcessStages.fxaa) {
+      viewer.scene.postProcessStages.fxaa.enabled = false;
+    }
 
     viewer.scene.screenSpaceCameraController.minimumZoomDistance = 5000;
     viewer.scene.screenSpaceCameraController.maximumZoomDistance = 30000000;

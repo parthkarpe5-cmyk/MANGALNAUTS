@@ -657,7 +657,12 @@ window.MarsCosmicIntro = (function () {
       }
     }
 
-    // Refresh Cesium frame to ensure seamless handshake
+    // Refresh Cesium frame and resume celestial starfield for seamless handshake
+    if (window.MarsStarfield) {
+      window.MarsStarfield.resume();
+      window.MarsStarfield.resize();
+    }
+
     if (window.MarsGlobe && window.MarsGlobe.requestRender) {
       try {
         window.MarsGlobe.requestRender();
@@ -689,6 +694,11 @@ window.MarsCosmicIntro = (function () {
   function skip() {
     if (hasSkipped) return;
     hasSkipped = true;
+
+    if (window.MarsStarfield) {
+      window.MarsStarfield.resume();
+      window.MarsStarfield.resize();
+    }
 
     if (window.MarsGlobe && window.MarsGlobe.requestRender) {
       window.MarsGlobe.requestRender();
