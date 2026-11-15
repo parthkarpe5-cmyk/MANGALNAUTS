@@ -4,13 +4,7 @@
 > *Challenge Track: Interplanetary Survival Guide — Martian Map*  
 > **Live Deployment:** [mangalnauts.vercel.app](https://mangalnauts.vercel.app/)
 
-[![Live Deployment](https://img.shields.io/badge/Vercel-Deployed-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://mangalnauts.vercel.app/)
-[![NASA Open Data](https://img.shields.io/badge/NASA-Open%20Data%20Network-0b3d91?style=for-the-badge&logo=nasa&logoColor=white)](https://api.nasa.gov/)
-[![CesiumJS 3D](https://img.shields.io/badge/CesiumJS-3D%20Globe-68a063?style=for-the-badge&logo=webgl&logoColor=white)](https://cesium.com/)
-[![Leaflet 2D](https://img.shields.io/badge/Leaflet-2D%20Tactical%20Map-199900?style=for-the-badge&logo=leaflet&logoColor=white)](https://leafletjs.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 
----
 
 ## 1. Project Overview
 
