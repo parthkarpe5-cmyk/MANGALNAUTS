@@ -125,14 +125,6 @@
           </svg>
           <span class="rail-label">Route</span>
         </button>
-
-        <button type="button" class="rail-btn" id="rail-btn-split" data-rail-action="split" aria-label="Split view" title="Toggle 3D Globe, Dual Split, or 2D Surface View">
-          <svg class="rail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-            <line x1="12" y1="3" x2="12" y2="21"></line>
-          </svg>
-          <span class="rail-label">Split view</span>
-        </button>
       </div>
 
       <div class="rail-bottom" role="group" aria-label="Secondary Controls">
@@ -147,31 +139,21 @@
       </div>
     </nav>
 
-    <!-- Google Earth Search Pill (400x52px, Top-Left, offset right of the rail) -->
-    <div id="search-pill" class="search-pill" role="search" aria-label="Search Martian Sites">
-      <span class="search-pill-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-      </span>
-      <input
-        type="text"
-        id="mars-search-input"
-        class="search-pill-input"
-        placeholder="Search Mars (Jezero, Gale, Olympus...)"
-        aria-label="Search Martian sites and landmarks"
-        autocomplete="off"
-        spellcheck="false"
-      />
-      <button type="button" id="search-clear-btn" class="search-clear-btn" aria-label="Clear Search" hidden>
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
+    <!-- Google Earth View Mode Tags (Replaces search bar at top-left, offset 84px right of the rail) -->
+    <nav id="view-mode-pill" class="view-mode-pill" role="group" aria-label="Martian Viewport Display Mode">
+      <button type="button" class="view-mode-tag view-mode-btn" data-mode="2d" id="view-tag-2d" aria-pressed="false" title="2D Tactical Surface (Leaflet 6m HiRISE/CTX)">
+        <span class="tag-dot"></span>
+        <span>2D VIEW</span>
       </button>
-      <div id="search-results-menu" class="search-results-menu" hidden></div>
-    </div>
+      <button type="button" class="view-mode-tag view-mode-btn" data-mode="split" id="view-tag-split" aria-pressed="false" title="Dual Mission Cockpit (Synchronized 3D Globe + 2D Surface)">
+        <span class="tag-dot"></span>
+        <span>DUAL VIEW</span>
+      </button>
+      <button type="button" class="view-mode-tag view-mode-btn active" data-mode="3d" id="view-tag-3d" aria-pressed="true" title="3D Planetary Globe (CesiumJS Mars Ellipsoid)">
+        <span class="tag-dot"></span>
+        <span>3D VIEW</span>
+      </button>
+    </nav>
 
     <header class="top-nav cockpit-bar">
       <!-- Left: Mission Identity & Live Telemetry Ping -->
@@ -321,6 +303,19 @@
         <div class="workspace-settings" id="workspace-missions-menu" role="tabpanel" hidden>
           <div class="dropdown-section">
             <span class="dropdown-section-title">MARTIAN EXPLORATION SECTORS</span>
+            <div class="sector-search-box" style="margin-bottom: 10px; position: relative;">
+              <input
+                type="text"
+                id="mars-search-input"
+                class="dropdown-select"
+                style="width: 100%; padding: 8px 10px; font-size: 12px; background: #15151C; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff;"
+                placeholder="Search Mars (Jezero, Gale, Olympus...)"
+                aria-label="Search Martian sites and landmarks"
+                autocomplete="off"
+                spellcheck="false"
+              />
+              <div id="search-results-menu" class="search-results-menu" hidden></div>
+            </div>
             <div class="mission-sector-grid">
               <button type="button" class="mission-sector-card active" data-sector="jezero" aria-label="Jezero Crater">
                 <div class="sector-card-hdr">

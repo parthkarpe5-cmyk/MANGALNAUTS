@@ -4951,13 +4951,11 @@ html .workspace-sidebar-header { border-bottom-color: var(--soft-edge); }
   height: 48px;
 }
 
-/* 4. Google Earth Search Pill (Sleek 320x42px, Top-Left) */
-.search-pill {
+/* 4. Google Earth View Mode Tags (Top-Left, offset 84px right of rail) */
+.view-mode-pill {
   position: fixed !important;
   top: 12px !important;
   left: 84px !important;
-  width: 320px !important;
-  max-width: calc(100vw - 120px) !important;
   height: 42px !important;
   background: var(--panel-bg, #1E1E26) !important;
   border: 1px solid rgba(255, 255, 255, 0.12) !important;
@@ -4965,58 +4963,64 @@ html .workspace-sidebar-header { border-bottom-color: var(--soft-edge); }
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65), 0 0 1px rgba(255, 255, 255, 0.1) !important;
   display: flex !important;
   align-items: center !important;
-  padding: 0 14px !important;
-  gap: 10px !important;
+  padding: 3px 5px !important;
+  gap: 4px !important;
   z-index: 1000 !important;
   box-sizing: border-box !important;
   backdrop-filter: blur(8px) !important;
 }
 
-.search-pill-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--muted-text, #A9A9B8);
-  flex-shrink: 0;
+.view-mode-tag {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  height: 34px !important;
+  padding: 0 14px !important;
+  border-radius: 17px !important;
+  border: 1px solid transparent !important;
+  background: transparent !important;
+  color: var(--muted-text, #A9A9B8) !important;
+  font-family: var(--font-ui, "Space Grotesk", sans-serif) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.8px !important;
+  text-transform: uppercase !important;
+  cursor: pointer !important;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  user-select: none !important;
+  white-space: nowrap !important;
 }
 
-.search-pill-input {
-  flex: 1;
-  border: none;
-  background: transparent;
-  color: #fff;
-  font-family: var(--font-ui, "Space Grotesk", sans-serif);
-  font-size: 14px;
-  font-weight: 500;
-  outline: none;
+.view-mode-tag:hover {
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.06) !important;
 }
 
-.search-pill-input::placeholder {
-  color: var(--muted-text, #A9A9B8);
-  font-size: 13px;
+.view-mode-tag:focus-visible {
+  outline: 2px solid var(--mars-orange, #FF6B00) !important;
+  outline-offset: 1px !important;
 }
 
-.search-clear-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
+.view-mode-tag .tag-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  border: none;
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--muted-text, #A9A9B8);
-  cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
+  background: rgba(255, 255, 255, 0.25);
+  transition: background 0.18s ease, box-shadow 0.18s ease;
 }
 
-.search-clear-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
+.view-mode-tag.active {
+  background: linear-gradient(135deg, rgba(255, 107, 0, 0.22), rgba(255, 107, 0, 0.12)) !important;
+  border-color: rgba(255, 107, 0, 0.5) !important;
+  color: #fff !important;
+  box-shadow: 0 2px 10px rgba(255, 107, 0, 0.25) !important;
 }
 
-.search-clear-btn:focus-visible {
-  outline: 2px solid var(--mars-orange, #FF6B00);
+.view-mode-tag.active .tag-dot {
+  background: var(--mars-orange, #FF6B00) !important;
+  box-shadow: 0 0 8px var(--mars-orange, #FF6B00) !important;
 }
 
 .search-results-menu {

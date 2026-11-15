@@ -167,8 +167,20 @@
     const railBtnLayers = document.getElementById("rail-btn-layers");
     const railBtnMeasure = document.getElementById("rail-btn-measure");
     const railBtnRoute = document.getElementById("rail-btn-route");
-    const railBtnSplit = document.getElementById("rail-btn-split");
     const railBtnAbout = document.getElementById("rail-btn-about");
+
+    // View Mode Tags (2D, DUAL, 3D)
+    ["view-tag-2d", "view-tag-split", "view-tag-3d"].forEach(id => {
+      const tagBtn = document.getElementById(id);
+      if (tagBtn) {
+        tagBtn.addEventListener("click", function () {
+          if (window.MarsAudio) MarsAudio.playClick();
+          if (window.MarsHybrid) {
+            MarsHybrid.setViewMode(tagBtn.dataset.mode);
+          }
+        });
+      }
+    });
 
     const searchInput = document.getElementById("mars-search-input");
     const searchClear = document.getElementById("search-clear-btn");
@@ -214,13 +226,6 @@
         if (window.MarsHybrid && !window.MarsHybrid.isInDetailMode()) {
           window.MarsHybrid.setViewMode("split");
         }
-      });
-    }
-
-    if (railBtnSplit) {
-      railBtnSplit.addEventListener("click", function () {
-        if (window.MarsAudio) MarsAudio.playClick();
-        if (window.MarsWorkspace) MarsWorkspace.show("split");
       });
     }
 
