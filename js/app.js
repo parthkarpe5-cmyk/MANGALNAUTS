@@ -204,48 +204,10 @@
       });
     }
 
-    // Layers Sub-Tabs (3D View vs 2D View Switcher)
-    const tabLayers3d = document.getElementById("tab-layers-3d");
-    const tabLayers2d = document.getElementById("tab-layers-2d");
-    const sectionLayers3d = document.getElementById("section-layers-3d");
-    const sectionLayers2d = document.getElementById("section-layers-2d");
-
-    function setLayersSubTab(target) {
-      const is3D = target !== "2d";
-      if (tabLayers3d) {
-        tabLayers3d.classList.toggle("active", is3D);
-        tabLayers3d.setAttribute("aria-selected", String(is3D));
-      }
-      if (tabLayers2d) {
-        tabLayers2d.classList.toggle("active", !is3D);
-        tabLayers2d.setAttribute("aria-selected", String(!is3D));
-      }
-      if (sectionLayers3d) sectionLayers3d.hidden = !is3D;
-      if (sectionLayers2d) sectionLayers2d.hidden = is3D;
-    }
-
-    if (tabLayers3d) {
-      tabLayers3d.addEventListener("click", function () {
-        if (window.MarsAudio) MarsAudio.playClick();
-        setLayersSubTab("3d");
-      });
-    }
-
-    if (tabLayers2d) {
-      tabLayers2d.addEventListener("click", function () {
-        if (window.MarsAudio) MarsAudio.playClick();
-        setLayersSubTab("2d");
-      });
-    }
-
     if (railBtnLayers) {
       railBtnLayers.addEventListener("click", function () {
         if (window.MarsAudio) MarsAudio.playClick();
         if (window.MarsWorkspace) MarsWorkspace.show("layers");
-        if (window.MarsHybrid) {
-          const currentMode = MarsHybrid.getViewMode();
-          setLayersSubTab(currentMode === "2d" ? "2d" : "3d");
-        }
       });
     }
 
