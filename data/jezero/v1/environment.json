@@ -8,12 +8,12 @@
   },
   "sol": 1133,
   "terrestrial_date": "2024-04-27",
-  "local_solar_time": "08:54 MTC",
-  "ltst": "08:54:36",
-  "is_daylight": true,
-  "sunset_in_min": 500.6,
-  "sunset_in_minutes": 500,
-  "sunset_utc": "2026-11-14T23:07:40Z",
+  "local_solar_time": "22:50 MTC",
+  "ltst": "22:50:24",
+  "is_daylight": false,
+  "sunset_in_min": 0.0,
+  "sunset_in_minutes": 0,
+  "sunset_utc": "2026-11-15T04:43:15Z",
   "temp_C": -52.0,
   "temp_min_C": -79.3,
   "temp_max_C": -24.7,
@@ -23,7 +23,7 @@
   "ls_deg": 244.106,
   "rad_dose_proxy": 28.5,
   "rad_dose_unit": "uSv/hr",
-  "flare_level": "B6.8",
+  "flare_level": "B6.4",
   "atmosphere": {
     "air_temp_c": {
       "current": -52.0,
@@ -31,7 +31,7 @@
       "max": -24.7
     },
     "ground_temp_c": {
-      "current": -46.0,
+      "current": -58.0,
       "min": -87.3,
       "max": -14.7
     },
@@ -40,28 +40,28 @@
     "wind_dir_deg": 315,
     "wind_dir_compass": "NW",
     "dust_opacity_tau": 0.45,
-    "uv_flux_index": 5.8
+    "uv_flux_index": 0.0
   },
   "radiation": {
     "dose_rate_uSv_hr": 28.5,
     "daily_dose_uSv": 684.0,
     "spe_event_status": "NORMAL",
-    "flare_level": "B6.8",
+    "flare_level": "B6.4",
     "cumulative_mission_mSv": 164.7,
     "suit_shielding_factor": 0.65
   },
   "alerts": [
     {
-      "id": "alt_cold_eva_0",
-      "code": "COLD_EVA",
-      "title": "Cold Eva",
-      "severity": "advisory",
-      "message": "Diurnal low reaches -79.3\u00b0C. Maintain suit thermal circulation.",
-      "sunset_in_min": 500
+      "id": "alt_night_restriction_0",
+      "code": "NIGHT_RESTRICTION",
+      "title": "Night Restriction",
+      "severity": "warning",
+      "message": "Nighttime conditions active. Surface EVA restricted to emergency operations.",
+      "sunset_in_min": 0
     }
   ],
   "metadata": {
-    "generated_at_utc": "2026-11-14T14:47:08.163317+00:00",
+    "generated_at_utc": "2026-11-15T04:43:21.934033+00:00",
     "weather_source": "NASA Mars 2020 Perseverance MEDA (Live API, Jezero Crater)",
     "space_weather_source": "NOAA Space Weather Prediction Center (GOES X-ray)",
     "rover": "Perseverance (Mars 2020)"

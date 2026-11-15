@@ -8,10 +8,12 @@
   },
   "sol": 4995,
   "terrestrial_date": "2026-08-25",
-  "local_solar_time": "11:57 MTC",
-  "is_daylight": true,
-  "sunset_in_min": 317.1,
-  "sunset_utc": "2026-11-14T19:07:45Z",
+  "local_solar_time": "02:11 MTC",
+  "ltst": "02:10:48",
+  "is_daylight": false,
+  "sunset_in_min": 0.0,
+  "sunset_in_minutes": 0,
+  "sunset_utc": "2026-11-15T04:43:21Z",
   "temp_C": -38.0,
   "temp_min_C": -71.0,
   "temp_max_C": -5.0,
@@ -21,17 +23,45 @@
   "ls_deg": 180.0,
   "rad_dose_proxy": 26.7,
   "rad_dose_unit": "uSv/hr",
-  "flare_level": "B6.6",
+  "flare_level": "B6.4",
+  "atmosphere": {
+    "air_temp_c": {
+      "current": -38.0,
+      "min": -71.0,
+      "max": -5.0
+    },
+    "ground_temp_c": {
+      "current": -44.0,
+      "min": -79.0,
+      "max": 5.0
+    },
+    "pressure_pa": 777.0,
+    "wind_speed_ms": 4.5,
+    "wind_dir_deg": 315,
+    "wind_dir_compass": "NW",
+    "dust_opacity_tau": 0.45,
+    "uv_flux_index": 0.0
+  },
+  "radiation": {
+    "dose_rate_uSv_hr": 26.7,
+    "daily_dose_uSv": 640.8,
+    "spe_event_status": "NORMAL",
+    "flare_level": "B6.4",
+    "cumulative_mission_mSv": 164.7,
+    "suit_shielding_factor": 0.65
+  },
   "alerts": [
     {
-      "code": "COLD_EVA",
-      "severity": "advisory",
-      "message": "Diurnal low reaches -71.0\u00b0C. Maintain suit thermal circulation.",
-      "sunset_in_min": 317
+      "id": "alt_night_restriction_0",
+      "code": "NIGHT_RESTRICTION",
+      "title": "Night Restriction",
+      "severity": "warning",
+      "message": "Nighttime conditions active. Surface EVA restricted to emergency operations.",
+      "sunset_in_min": 0
     }
   ],
   "metadata": {
-    "generated_at_utc": "2026-11-14T13:50:44.608539+00:00",
+    "generated_at_utc": "2026-11-15T04:43:27.408281+00:00",
     "weather_source": "NASA Curiosity MSL REMS (Live API, Gale Crater)",
     "space_weather_source": "NOAA Space Weather Prediction Center (GOES X-ray)",
     "rover": "Curiosity (MSL)"

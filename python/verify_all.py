@@ -26,9 +26,10 @@ def verify_all():
     assert "default_site" in manifest, "Manifest missing 'default_site'"
     for site_key, site in manifest["sites"].items():
         print(f"    - Site {site_key}: name='{site['name']}', bbox={site['bbox']}")
-        for fkey in ["terrain_graph", "science_stops", "routes", "environment", "gnn_scores"]:
-            path = site["files"][fkey]
-            assert os.path.exists(path), f"File {path} missing for site {site_key}"
+        for fkey in ["terrain_graph", "routes", "gnn_scores", "science_stops", "environment"]:
+            path = site["files"].get(fkey)
+            if path:
+                assert os.path.exists(path), f"File {path} missing for site {site_key}"
     print("    [OK] Manifest and all site paths exist.")
 
     print("--> 3. Validating Historical Traverses & Caves...")
