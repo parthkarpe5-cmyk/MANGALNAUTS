@@ -1690,6 +1690,39 @@ body {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
 }
 
+.expedition-mode-toggle {
+  display: inline-flex;
+  gap: 3px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 2px;
+}
+
+.btn-mode-chip {
+  padding: 3px 8px;
+  font-size: 0.58rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--muted, #94a3b8);
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.btn-mode-chip:hover {
+  color: #fff;
+}
+
+.btn-mode-chip.active {
+  background: rgba(56, 189, 248, 0.22);
+  border-color: rgba(56, 189, 248, 0.45);
+  color: #38bdf8;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.3);
+}
+
 /* Compact Circular Loadout Trigger Bar */
 .loadout-circular-control {
   position: relative;
