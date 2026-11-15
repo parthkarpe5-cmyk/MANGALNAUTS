@@ -60,8 +60,10 @@ window.MarsHybrid = (function () {
 
     const showGlobe = currentMode !== "2d";
     const showSurface = currentMode !== "3d";
-    if (globePane) globePane.style.display = showGlobe ? "block" : "none";
-    if (detailPane) detailPane.style.display = showSurface ? "block" : "none";
+
+    // Clear conflicting inline display styles so CSS classes (.mode-3d, .mode-2d, .mode-split) control layout
+    if (globePane) globePane.style.display = "";
+    if (detailPane) detailPane.style.display = "";
 
     const viewer = MarsGlobe.getViewer();
     if (viewer) {
@@ -71,7 +73,25 @@ window.MarsHybrid = (function () {
         viewer.scene?.requestRender();
       }
     }
-    if (showSurface) MarsDetailMap.invalidateSize();
+
+    if (showSurface) {
+      if (!MarsDetailMap.isReady()) {
+        MarsDetailMap.init();
+      }
+      MarsDetailMap.setSite(window.MarsData.getActiveSiteKey());
+      MarsDetailMap.invalidateSize();
+    }
+
+    // Two-pass resize to guarantee proper dimensions after layout reflow
+    requestAnimationFrame(() => {
+      if (showGlobe && viewer) {
+        viewer.resize();
+        viewer.scene?.requestRender();
+      }
+      if (showSurface) {
+        MarsDetailMap.invalidateSize();
+      }
+    });
 
     if (modeEl) {
       const modeLabels = {
@@ -82,7 +102,6 @@ window.MarsHybrid = (function () {
       modeEl.textContent = modeLabels[currentMode] || currentMode.toUpperCase();
     }
 
-    if (currentMode !== "3d") MarsDetailMap.setSite(window.MarsData.getActiveSiteKey());
     if (onDetailChange) {
       onDetailChange(currentMode !== "3d");
     }

@@ -4667,7 +4667,7 @@ html .workspace-sidebar-header { border-bottom-color: var(--soft-edge); }
    GOOGLE EARTH REDESIGN (Full-Bleed Globe, Left Rail, Floating Controls)
    ========================================================================== */
 
-/* 1. Full-Bleed Mars Globe Stage */
+/* 1. Full-Bleed Mars Stage & Viewport Display Modes */
 .viewport-split {
   position: fixed !important;
   inset: 0 !important;
@@ -4686,14 +4686,101 @@ html .workspace-sidebar-header { border-bottom-color: var(--soft-edge); }
   inset: 0 !important;
   width: 100% !important;
   height: 100% !important;
+  display: flex !important;
+  flex-direction: row !important;
+  overflow: hidden !important;
 }
 
-.globe-pane {
-  background: var(--obsidian, #0B0B0F) !important;
+/* 3D Mode */
+.viewport-split.mode-3d .globe-pane {
   position: absolute !important;
   inset: 0 !important;
   width: 100% !important;
   height: 100% !important;
+  display: block !important;
+  z-index: 1 !important;
+}
+.viewport-split.mode-3d .detail-pane,
+.viewport-split.mode-3d #map-divider {
+  display: none !important;
+}
+
+/* 2D Surface Mode */
+.viewport-split.mode-2d .globe-pane,
+.viewport-split.mode-2d #map-divider {
+  display: none !important;
+}
+.viewport-split.mode-2d .detail-pane {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  z-index: 1 !important;
+  background: var(--obsidian, #0B0B0F) !important;
+}
+
+/* Dual Split Mode */
+.viewport-split.mode-split #map-workspace {
+  display: flex !important;
+  flex-direction: row !important;
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+.viewport-split.mode-split .globe-pane {
+  position: relative !important;
+  inset: auto !important;
+  flex: 0 0 calc((100% - 10px) * var(--split-share, 0.5)) !important;
+  width: calc((100% - 10px) * var(--split-share, 0.5)) !important;
+  height: 100% !important;
+  display: block !important;
+  overflow: hidden !important;
+  z-index: 1 !important;
+}
+
+.viewport-split.mode-split #map-divider {
+  display: block !important;
+  flex: 0 0 10px !important;
+  width: 10px !important;
+  height: 100% !important;
+  background: #15151C !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.12) !important;
+  cursor: col-resize !important;
+  position: relative !important;
+  z-index: 20 !important;
+  touch-action: none !important;
+}
+
+.viewport-split.mode-split #map-divider::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: calc(50% - 18px) 3px !important;
+  border-radius: 2px !important;
+  background: rgba(255, 255, 255, 0.3) !important;
+}
+
+.viewport-split.mode-split #map-divider:hover::after {
+  background: var(--mars-orange, #FF6B00) !important;
+}
+
+.viewport-split.mode-split .detail-pane {
+  position: relative !important;
+  inset: auto !important;
+  flex: 1 1 0 !important;
+  width: auto !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  z-index: 2 !important;
+  background: var(--obsidian, #0B0B0F) !important;
 }
 
 .cesium-container,
@@ -4702,7 +4789,23 @@ html .workspace-sidebar-header { border-bottom-color: var(--soft-edge); }
   inset: 0 !important;
   width: 100% !important;
   height: 100% !important;
-  z-index: 1 !important;
+}
+
+.detail-pane .detail-body {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+}
+
+.detail-pane #detail-map-inner {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 /* 2. Floating Top Right Telemetry & Actions HUD Cluster */
