@@ -5023,6 +5023,11 @@ html .workspace-sidebar-header { border-bottom-color: var(--soft-edge); }
   box-shadow: 0 0 8px var(--mars-orange, #FF6B00) !important;
 }
 
+/* Suppress Cesium error panel dialog */
+.cesium-widget-errorPanel {
+  display: none !important;
+}
+
 .search-results-menu {
   position: absolute;
   top: 48px !important;

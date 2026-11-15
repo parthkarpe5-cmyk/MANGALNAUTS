@@ -92,9 +92,22 @@ window.MarsGlobe = (function () {
   async function init(containerId) {
     Cesium.Ellipsoid.default = Cesium.Ellipsoid.MARS;
 
+    const marsGlobe = new Cesium.Globe(Cesium.Ellipsoid.MARS);
+    marsGlobe.baseColor = Cesium.Color.fromCssColorString("#1a0804");
+    marsGlobe.enableLighting = true;
+    marsGlobe.depthTestAgainstTerrain = false;
+
+    const marsSkyAtmosphere = new Cesium.SkyAtmosphere(Cesium.Ellipsoid.MARS);
+    marsSkyAtmosphere.show = true;
+    marsSkyAtmosphere.hueShift = -0.55;
+    marsSkyAtmosphere.saturationShift = 0.4;
+    marsSkyAtmosphere.brightnessShift = -0.2;
+
     viewer = new Cesium.Viewer(containerId, {
-      // Idle GPU saver: render on demand when static, resume continuous render when animating
-      targetFrameRate: 30,
+      globe: marsGlobe,
+      skyAtmosphere: marsSkyAtmosphere,
+      terrainProvider: new Cesium.EllipsoidTerrainProvider({ ellipsoid: Cesium.Ellipsoid.MARS }),
+      showRenderLoopErrors: false,
       requestRenderMode: true,
       maximumRenderTimeChange: Infinity,
       skyBox: false,
@@ -109,7 +122,6 @@ window.MarsGlobe = (function () {
       fullscreenButton: false,
       infoBox: false,
       selectionIndicator: false,
-      terrain: undefined,
       contextOptions: {
         webgl: {
           alpha: true,
@@ -118,19 +130,10 @@ window.MarsGlobe = (function () {
     });
 
     viewer.resolutionScale = Math.min(window.devicePixelRatio || 1.0, 1.25);
+    viewer.camera.percentageChanged = 0.01;
 
     viewer.scene.backgroundColor = Cesium.Color.fromCssColorString("#0B0B0F");
-    viewer.scene.globe.ellipsoid = Cesium.Ellipsoid.MARS;
-    viewer.scene.globe.baseColor = Cesium.Color.fromCssColorString("#1a0804");
-    viewer.scene.globe.enableLighting = true;
     viewer.scene.postProcessStages.fxaa.enabled = true;
-    viewer.scene.globe.depthTestAgainstTerrain = true;
-    if (viewer.scene.skyAtmosphere) {
-      viewer.scene.skyAtmosphere.show = true;
-      viewer.scene.skyAtmosphere.hueShift = -0.55;
-      viewer.scene.skyAtmosphere.saturationShift = 0.4;
-      viewer.scene.skyAtmosphere.brightnessShift = -0.2;
-    }
 
     viewer.scene.screenSpaceCameraController.minimumZoomDistance = 5000;
     viewer.scene.screenSpaceCameraController.maximumZoomDistance = 30000000;
@@ -145,7 +148,9 @@ window.MarsGlobe = (function () {
           token: undefined,
         }
       );
-      viewer.terrainProvider = terrainProvider;
+      if (terrainProvider && terrainProvider.ready !== false) {
+        viewer.terrainProvider = terrainProvider;
+      }
     } catch (e) {
       console.warn("[MarsGlobe] MDEM elevation unavailable, falling back to ellipsoid:", e);
     }
