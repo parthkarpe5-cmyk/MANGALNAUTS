@@ -268,14 +268,14 @@ window.MarsSegmentPick = (function () {
     }
 
     markerA = L.marker([latA, lonA], {
-      icon: MarsRouteRenderer.createWaypointPin("start", "A", "#22c55e"),
+      icon: MarsRouteRenderer.createWaypointPin("start", "A", "#15803d"),
       interactive: true,
       zIndexOffset: 1000,
     }).addTo(map);
     markerA.bindTooltip(nameA + " (Locked Origin)", { direction: "top" });
 
     markerB = L.marker([latB, lonB], {
-      icon: MarsRouteRenderer.createWaypointPin("target", "B", "#ef4444"),
+      icon: MarsRouteRenderer.createWaypointPin("target", "B", "#b91c1c"),
       interactive: true,
       zIndexOffset: 1000,
     }).addTo(map);
@@ -372,7 +372,7 @@ window.MarsSegmentPick = (function () {
       clearMarkers();
       pointA = { lat, lon };
       markerA = L.marker([lat, lon], {
-        icon: MarsRouteRenderer.createWaypointPin("start", "A", "#22c55e"),
+        icon: MarsRouteRenderer.createWaypointPin("start", "A", "#15803d"),
         zIndexOffset: 1000,
       }).addTo(map);
       step = 1;
@@ -773,6 +773,14 @@ window.MarsSegmentPick = (function () {
     }
     if (window.MarsTravelMode && window.MarsTravelMode.onChange) {
       window.MarsTravelMode.onChange(triggerReplan);
+    }
+    const travelSelect = document.getElementById("travel-mode");
+    if (travelSelect) {
+      travelSelect.addEventListener("change", function () {
+        if (window.MarsTravelMode && window.MarsTravelMode.set) {
+          window.MarsTravelMode.set(travelSelect.value);
+        }
+      });
     }
   }
 

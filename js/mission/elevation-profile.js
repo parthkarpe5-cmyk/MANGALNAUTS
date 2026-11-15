@@ -108,11 +108,11 @@ window.MarsElevationProfile = (function () {
       '  <circle id="profile-rover-dot" cx="0" cy="0" r="4.5" fill="#00f0ff" stroke="#ffffff" stroke-width="1.5" filter="url(#neonGlow)"/>' +
       '</g>' +
       // Start Marker (A)
-      '<circle cx="' + startX + '" cy="' + startY + '" r="5" fill="#c9f31d" stroke="#0c0e12" stroke-width="2"/>' +
-      '<text x="' + startX + '" y="' + (startY - 7) + '" font-size="8.5" fill="#c9f31d" text-anchor="middle" font-weight="bold">A</text>' +
+      '<circle cx="' + startX + '" cy="' + startY + '" r="5.5" fill="#15803d" stroke="#030712" stroke-width="2"/>' +
+      '<text x="' + startX + '" y="' + (startY - 7) + '" font-size="9" fill="#15803d" text-anchor="middle" font-weight="900">A</text>' +
       // End Marker (B)
-      '<circle cx="' + endX + '" cy="' + endY + '" r="5" fill="#38bdf8" stroke="#0c0e12" stroke-width="2"/>' +
-      '<text x="' + endX + '" y="' + (endY - 7) + '" font-size="8.5" fill="#38bdf8" text-anchor="middle" font-weight="bold">B</text>' +
+      '<circle cx="' + endX + '" cy="' + endY + '" r="5.5" fill="#b91c1c" stroke="#030712" stroke-width="2"/>' +
+      '<text x="' + endX + '" y="' + (endY - 7) + '" font-size="9" fill="#b91c1c" text-anchor="middle" font-weight="900">B</text>' +
       // Elevation Labels
       '<text x="' + (padding.left - 6) + '" y="' + (padding.top + 4) + '" font-size="8.5" fill="#9ca3af" font-family="monospace" text-anchor="end">' + Math.round(maxElev) + 'm</text>' +
       '<text x="' + (padding.left - 6) + '" y="' + (padding.top + chartH + 3) + '" font-size="8.5" fill="#9ca3af" font-family="monospace" text-anchor="end">' + Math.round(minElev) + 'm</text>' +

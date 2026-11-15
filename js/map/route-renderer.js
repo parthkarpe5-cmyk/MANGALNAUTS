@@ -484,12 +484,13 @@ window.MarsRouteRenderer = (function () {
   }
 
   /**
-   * Mars Mission Waypoint Pin (Start Green Teardrop & Target Red Teardrop with ground ring, Photo 1)
+   * Mars Mission Waypoint Pin (Start Dark Green Teardrop & Stop Dark Red Teardrop with ground ring, Photo 1)
    */
   function createWaypointPin(kind, label, color) {
     const isStart = kind === "start";
-    color = color || (isStart ? "#22c55e" : "#ef4444");
+    color = color || (isStart ? "#15803d" : "#b91c1c");
     const tag = isStart ? "START · DEPARTURE" : "OBJECTIVE · TARGET";
+    const letter = label || (isStart ? "A" : "B");
 
     return L.divIcon({
       className: "mars-photo-pin-container",
@@ -499,14 +500,17 @@ window.MarsRouteRenderer = (function () {
         '">' +
         '  <div class="pin-ground-ring" style="border-color: ' +
         color +
-        "; box-shadow: 0 0 10px " +
+        "; box-shadow: 0 0 12px " +
         color +
-        ';"></div>' +
-        '  <svg class="pin-teardrop-svg" viewBox="0 0 28 38" width="28" height="38">' +
-        '    <path d="M14,1 C6.82,1 1,6.82 1,14 C1,23.5 14,37 14,37 C14,37 27,23.5 27,14 C27,6.82 21.18,1 14,1 Z" fill="' +
+        ', inset 0 0 6px rgba(0,0,0,0.85); background: rgba(0,0,0,0.5);"></div>' +
+        '  <svg class="pin-teardrop-svg" viewBox="0 0 30 40" width="30" height="40">' +
+        '    <path d="M15,1 C7.27,1 1,7.27 1,15 C1,25 15,39 15,39 C15,39 29,25 29,15 C29,7.27 22.73,1 15,1 Z" fill="' +
         color +
-        '" stroke="#ffffff" stroke-width="2"/>' +
-        '    <circle cx="14" cy="13.5" r="5.5" fill="#ffffff"/>' +
+        '" stroke="#030712" stroke-width="2.5" stroke-linejoin="round"/>' +
+        '    <circle cx="15" cy="14.5" r="6.2" fill="#ffffff" stroke="#030712" stroke-width="1.4"/>' +
+        '    <text x="15" y="18.2" text-anchor="middle" font-size="11" font-weight="900" fill="#030712" font-family="\'JetBrains Mono\', monospace">' +
+        letter +
+        "</text>" +
         "  </svg>" +
         '  <span class="mars-photo-pin-tag" style="border-color:' +
         color +
@@ -514,8 +518,8 @@ window.MarsRouteRenderer = (function () {
         tag +
         "</span>" +
         "</div>",
-      iconSize: [28, 38],
-      iconAnchor: [14, 37],
+      iconSize: [30, 40],
+      iconAnchor: [15, 39],
     });
   }
 
