@@ -93,8 +93,10 @@ window.MarsGlobe = (function () {
     Cesium.Ellipsoid.default = Cesium.Ellipsoid.MARS;
 
     viewer = new Cesium.Viewer(containerId, {
-      // Orbiters animate when visible, so cap the render rate instead of freezing the scene.
+      // Idle GPU saver: render on demand when static, resume continuous render when animating
       targetFrameRate: 30,
+      requestRenderMode: true,
+      maximumRenderTimeChange: Infinity,
       skyBox: false,
       animation: false,
       timeline: false,
@@ -114,6 +116,8 @@ window.MarsGlobe = (function () {
         },
       },
     });
+
+    viewer.resolutionScale = Math.min(window.devicePixelRatio || 1.0, 1.25);
 
     viewer.scene.backgroundColor = Cesium.Color.fromCssColorString("#0B0B0F");
     viewer.scene.globe.ellipsoid = Cesium.Ellipsoid.MARS;
@@ -268,15 +272,15 @@ window.MarsGlobe = (function () {
         tiltBtn.classList.toggle("active-tilted", pitchDeg >= -65);
       }
 
-      // Update Eye Altitude in chip
+      // Update Eye Altitude in chip: m below 10 km, km below 10,000 km, Mm above
       if (chipAlt) {
         let altStr = "";
-        if (height >= 1000000) {
-          altStr = "EYE " + (height / 1000000).toFixed(1) + "M km";
-        } else if (height >= 1000) {
+        if (height < 10000) {
+          altStr = "EYE " + Math.round(height).toLocaleString() + " m";
+        } else if (height < 10000000) {
           altStr = "EYE " + Math.round(height / 1000).toLocaleString() + " km";
         } else {
-          altStr = "EYE " + Math.round(height) + " m";
+          altStr = "EYE " + (height / 1000000).toFixed(1) + " Mm";
         }
         chipAlt.textContent = altStr;
       }
@@ -668,6 +672,24 @@ window.MarsGlobe = (function () {
       destination: Cesium.Cartesian3.fromDegrees(lon, lat, heightMeters),
       duration: duration != null ? duration : 1.5,
     });
+    if (viewer.scene) {
+      viewer.scene.requestRender();
+    }
+  }
+
+  function requestRender() {
+    if (viewer && viewer.scene) {
+      viewer.scene.requestRender();
+    }
+  }
+
+  function setContinuousRender(enable) {
+    if (viewer && viewer.scene) {
+      viewer.scene.requestRenderMode = !enable;
+      if (!enable) {
+        viewer.scene.requestRender();
+      }
+    }
   }
 
   function getCameraState() {
@@ -743,5 +765,7 @@ window.MarsGlobe = (function () {
     setLightingEnabled,
     showSiteEntryBanner,
     hideSiteEntryBanner,
+    requestRender,
+    setContinuousRender,
   };
 })();

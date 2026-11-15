@@ -64,9 +64,12 @@ window.MarsHybrid = (function () {
     if (detailPane) detailPane.style.display = showSurface ? "block" : "none";
 
     const viewer = MarsGlobe.getViewer();
-    if (viewer) viewer.useDefaultRenderLoop = showGlobe;
-    if (showGlobe) {
-      viewer?.resize();
+    if (viewer) {
+      viewer.useDefaultRenderLoop = showGlobe;
+      if (showGlobe) {
+        viewer.resize();
+        viewer.scene?.requestRender();
+      }
     }
     if (showSurface) MarsDetailMap.invalidateSize();
 
@@ -89,10 +92,14 @@ window.MarsHybrid = (function () {
     const state = MarsGlobe.getCameraState();
     if (!state) return;
     if (heightEl) {
-      const km =
-        state.heightM >= 1000
-          ? (state.heightM / 1000).toFixed(0) + " km"
-          : Math.round(state.heightM) + " m";
+      let km = "";
+      if (state.heightM < 10000) {
+        km = Math.round(state.heightM).toLocaleString() + " m";
+      } else if (state.heightM < 10000000) {
+        km = Math.round(state.heightM / 1000).toLocaleString() + " km";
+      } else {
+        km = (state.heightM / 1000000).toFixed(1) + " Mm";
+      }
       if (heightEl.textContent !== km) heightEl.textContent = km;
     }
   }

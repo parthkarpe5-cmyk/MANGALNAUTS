@@ -30,6 +30,7 @@ window.MarsOrbiters = (() => {
   let moonsVisible = false;
   let trajectoriesVisible = false;
   let activeSelectedId = null;
+  let cesViewer = null;
 
   function applyVisibility() {
     for (const entry of orbiterList) {
@@ -40,6 +41,12 @@ window.MarsOrbiters = (() => {
 
       if (entry.entity) entry.entity.show = showObj;
       if (entry.polyline) entry.polyline.show = showPath;
+    }
+
+    const hasActiveAnimation = orbitersVisible || moonsVisible || Boolean(activeSelectedId);
+    if (cesViewer && cesViewer.scene) {
+      cesViewer.scene.requestRenderMode = !hasActiveAnimation;
+      cesViewer.scene.requestRender();
     }
   }
 
@@ -59,6 +66,7 @@ window.MarsOrbiters = (() => {
   }
 
   async function init(viewer) {
+    cesViewer = viewer;
     const panel = document.getElementById("orbiter-card");
     const select = document.getElementById("orbiter-picker");
     const response = await fetch("data/mars-orbiters.json");
