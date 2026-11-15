@@ -227,18 +227,28 @@
     const viewer = MarsGlobe.getViewer();
     if (viewer && viewer.scene && viewer.scene.canvas) {
       const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+      let mouseMovePending = false;
+      let lastEndPosition = null;
+
       handler.setInputAction(function (movement) {
-        const cartesian = viewer.camera.pickEllipsoid(
-          movement.endPosition,
-          viewer.scene.globe.ellipsoid
-        );
-        if (cartesian && coordsEl) {
-          const carto = Cesium.Cartographic.fromCartesian(cartesian);
-          coordsEl.textContent = formatCoord(
-            Cesium.Math.toDegrees(carto.latitude),
-            Cesium.Math.toDegrees(carto.longitude)
+        lastEndPosition = movement.endPosition;
+        if (mouseMovePending) return;
+        mouseMovePending = true;
+
+        requestAnimationFrame(function () {
+          mouseMovePending = false;
+          if (!lastEndPosition || !coordsEl || !viewer.scene) return;
+          const cartesian = viewer.camera.pickEllipsoid(
+            lastEndPosition,
+            viewer.scene.globe.ellipsoid
           );
-        }
+          if (cartesian) {
+            const carto = Cesium.Cartographic.fromCartesian(cartesian);
+            const lat = Cesium.Math.toDegrees(carto.latitude);
+            const lon = Cesium.Math.toDegrees(carto.longitude);
+            coordsEl.textContent = formatCoord(lat, lon);
+          }
+        });
       }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
     }
 

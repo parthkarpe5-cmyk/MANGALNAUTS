@@ -22,12 +22,31 @@ window.MarsHeatmap = (function () {
     canvas.height = rows;
     const context = canvas.getContext("2d");
     const image = context.createImageData(cols, rows);
-    for (const node of nodes) {
+    const imgData = image.data;
+    const len = nodes.length;
+    for (let i = 0; i < len; i++) {
+      const node = nodes[i];
       if (!Number.isFinite(node.elev_m)) continue;
-      const [, row, col] = node.id.split("_").map(Number);
+      let offset = i * 4;
+      if (node.id) {
+        const p = node.id.split("_");
+        if (p.length === 3) {
+          const r = parseInt(p[1], 10);
+          const c = parseInt(p[2], 10);
+          offset = (r * cols + c) * 4;
+        }
+      }
       const pressure = 795 * Math.exp(-(node.elev_m + 4400) / 10800);
-      const band = radiationBands.find(entry => pressure >= entry.minimumPa);
-      image.data.set([...band.color, 136], (row * cols + col) * 4);
+      let r = 151, g = 109, b = 248;
+      if (pressure >= 750) {
+        r = 241; g = 196; b = 109;
+      } else if (pressure >= 450) {
+        r = 211; g = 126; b = 189;
+      }
+      imgData[offset] = r;
+      imgData[offset + 1] = g;
+      imgData[offset + 2] = b;
+      imgData[offset + 3] = 136;
     }
     context.putImageData(image, 0, 0);
     L.imageOverlay(canvas.toDataURL(), [[bbox.south, bbox.west], [bbox.north, bbox.east]], {
