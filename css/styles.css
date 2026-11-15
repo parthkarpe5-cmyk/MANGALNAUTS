@@ -5962,3 +5962,68 @@ body.cockpit-ready #sky {
   background: rgba(255, 255, 255, 0.12);
   color: #ffffff;
 }
+
+/* =======================================================
+   Cockpit Final Elevation & Entrance Authority (Decisive Overrides)
+   ======================================================= */
+.app-left-rail,
+.top-nav.cockpit-bar,
+.view-mode-pill,
+.app-status-bar,
+#globe-hud-cluster {
+  transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.75s ease-out !important;
+  will-change: transform, opacity;
+}
+
+body.cockpit-ready .app-left-rail,
+body.cockpit-ready .top-nav.cockpit-bar,
+body.cockpit-ready .view-mode-pill,
+body.cockpit-ready .app-status-bar,
+body.cockpit-ready #globe-hud-cluster {
+  z-index: 1000005 !important;
+  transform: translate(0, 0) scale(1) !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+body.cockpit-ready #sky {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+  pointer-events: none !important;
+}
+
+body.cockpit-intro-active .app-left-rail {
+  transform: translateX(-100%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+body.cockpit-intro-active .top-nav.cockpit-bar {
+  transform: translateY(-100%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+body.cockpit-intro-active .view-mode-pill {
+  transform: translateY(-40px) scale(0.9) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+body.cockpit-intro-active .app-status-bar {
+  transform: translateY(100%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+body.cockpit-intro-active #globe-hud-cluster {
+  transform: scale(0.75) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+body.cockpit-intro-active #sky {
+  opacity: 0 !important;
+  transform: scale(0.96) !important;
+  pointer-events: none !important;
+}

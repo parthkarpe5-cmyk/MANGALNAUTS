@@ -93,15 +93,13 @@ window.MarsGlobe = (function () {
     Cesium.Ellipsoid.default = Cesium.Ellipsoid.MARS;
 
     const marsGlobe = new Cesium.Globe(Cesium.Ellipsoid.MARS);
-    marsGlobe.baseColor = Cesium.Color.fromCssColorString("#1a0804");
+    marsGlobe.baseColor = Cesium.Color.BLACK;
     marsGlobe.enableLighting = true;
+    marsGlobe.showGroundAtmosphere = false;
     marsGlobe.depthTestAgainstTerrain = false;
 
     const marsSkyAtmosphere = new Cesium.SkyAtmosphere(Cesium.Ellipsoid.MARS);
-    marsSkyAtmosphere.show = true;
-    marsSkyAtmosphere.hueShift = -0.55;
-    marsSkyAtmosphere.saturationShift = 0.4;
-    marsSkyAtmosphere.brightnessShift = -0.2;
+    marsSkyAtmosphere.show = false;
 
     viewer = new Cesium.Viewer(containerId, {
       globe: marsGlobe,
@@ -255,7 +253,7 @@ window.MarsGlobe = (function () {
 
     // Initial camera position: Planetary Orbit floating in Deep Space Cosmic Galaxy
     viewer.camera.setView({
-      destination: Cesium.Cartesian3.fromDegrees(35.0, 10.0, 11500000),
+      destination: Cesium.Cartesian3.fromDegrees(35.0, 10.0, 9200000),
       orientation: {
         heading: Cesium.Math.toRadians(0),
         pitch: Cesium.Math.toRadians(-90),
@@ -837,9 +835,9 @@ window.MarsGlobe = (function () {
     viewer.clock.shouldAnimate = false;
     viewer.scene.globe.enableLighting = true;
 
-    // Direct alignment matching the enlarged Three.js Mars model: 35.0°E, 10.0°N at 11,500,000 m
+    // Direct alignment matching the enlarged Three.js Mars model: 35.0°E, 10.0°N at 9,200,000 m
     viewer.camera.setView({
-      destination: Cesium.Cartesian3.fromDegrees(35.0, 10.0, 11500000),
+      destination: Cesium.Cartesian3.fromDegrees(35.0, 10.0, 9200000),
       orientation: {
         heading: Cesium.Math.toRadians(0),
         pitch: Cesium.Math.toRadians(-90),

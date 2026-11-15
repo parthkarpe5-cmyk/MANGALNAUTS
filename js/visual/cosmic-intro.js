@@ -608,18 +608,19 @@ window.MarsCosmicIntro = (function () {
     }
 
     // Mars orientation stays locked to Cesium coordinates
-    // Slowly enlarges as camera enters planetary orbit (scale 1.0 -> 1.48)
+    // Smoothly and dramatically enlarges as camera enters planetary orbit (scale 1.0 -> 1.75)
     if (marsMesh) {
       const approachDrift = Math.max(0, 1 - progress) * 0.008;
       marsMesh.rotation.y = 0.96 + Math.sin(virtualElapsed * 0.0005) * approachDrift;
       marsMesh.rotation.x = -0.175;
 
-      if (progress > 0.56) {
-        // Smooth enlargement progress from 0 to 1 between 0.56 and 0.86
-        const normEnlarge = Math.min(1.0, (progress - 0.56) / 0.30);
-        // Smooth cubic ease: slow start, gentle acceleration, seamless deceleration
-        const easeEnlarge = normEnlarge * normEnlarge * (3 - 2 * normEnlarge);
-        const currentScale = 1.0 + easeEnlarge * 0.48;
+      if (progress > 0.60) {
+        // Smooth enlargement progress from 0 to 1 between 0.60 and 0.85
+        const normEnlarge = Math.min(1.0, (progress - 0.60) / 0.25);
+        // Smooth quintic ease: continuous acceleration and deceleration, zero jerk
+        const easeEnlarge = normEnlarge * normEnlarge * normEnlarge * (normEnlarge * (normEnlarge * 6 - 15) + 10);
+        // Scale smoothly enlarges from 1.0 to 1.75, filling the cockpit view
+        const currentScale = 1.0 + easeEnlarge * 0.75;
         marsMesh.scale.set(currentScale, currentScale, currentScale);
       } else {
         marsMesh.scale.set(1.0, 1.0, 1.0);
@@ -636,14 +637,14 @@ window.MarsCosmicIntro = (function () {
 
     renderer.render(scene, camera);
 
-    // At 86% progress (~7.2s), Mars has finished enlarging: navigation bars and stars POP into view!
-    if (progress >= 0.86 && !hasPoppedCockpitUI) {
+    // At 85% progress (~7.4s), Mars has finished enlarging: navigation bars and stars POP into view!
+    if (progress >= 0.85 && !hasPoppedCockpitUI) {
       hasPoppedCockpitUI = true;
       popCockpitUI();
     }
 
-    // At 94% progress (~7.9s), seamlessly dissolve the intro overlay into the live Cesium globe
-    if (progress >= 0.94 && !isFadingOut) {
+    // At 92% progress (~8.0s), seamlessly dissolve the intro overlay into the live Cesium globe
+    if (progress >= 0.92 && !isFadingOut) {
       completeIntro();
     }
 
@@ -680,6 +681,17 @@ window.MarsCosmicIntro = (function () {
     const pct = Math.round(Math.min(1.0, p) * 100);
     if (progressBar) progressBar.style.width = pct + "%";
 
+    // As Mars arrives and enlarges, gently fade out the center text so Mars is cleanly showcased
+    const hudCenter = document.querySelector(".cosmic-hud-center");
+    if (hudCenter) {
+      if (p >= 0.64) {
+        const fadeRatio = Math.max(0, 1 - (p - 0.64) / 0.14);
+        hudCenter.style.opacity = fadeRatio.toFixed(3);
+      } else {
+        hudCenter.style.opacity = "1";
+      }
+    }
+
     if (p < 0.24) {
       if (hudStage) hudStage.textContent = "DEEP COSMOS // INTERPLANETARY PROLOGUE";
       if (hudTitle) hudTitle.textContent = "MILKY WAY GALAXY";
@@ -690,26 +702,21 @@ window.MarsCosmicIntro = (function () {
       if (hudTitle) hudTitle.textContent = "PASSING THE SUN";
       if (hudSub) hudSub.textContent = "NASA SDO OPTICAL/UV · CORONAL MASS EQUILIBRIUM";
       if (telemetryText) telemetryText.textContent = "SOLAR FLUX: 1361 W/m² · GRAVITY ASSIST LOCK";
-    } else if (p < 0.62) {
+    } else if (p < 0.60) {
       if (hudStage) hudStage.textContent = "INNER PLANETS // MERCURY & VENUS";
       if (hudTitle) hudTitle.textContent = "INNER SYSTEM CRUISE";
       if (hudSub) hudSub.textContent = "NASA MESSENGER & MAGELLAN DATA LOCK";
       if (telemetryText) telemetryText.textContent = "DIST: 0.72 AU · RAD DOSIMETRY: 22.4 uSv/hr";
-    } else if (p < 0.76) {
+    } else if (p < 0.74) {
       if (hudStage) hudStage.textContent = "TERRESTRIAL TRANSIT // 1.00 AU";
       if (hudTitle) hudTitle.textContent = "EARTH-MOON SYSTEM";
       if (hudSub) hudSub.textContent = "DSN GOLDSTONE 8.4 GHz · OUTBOUND TO MARS";
       if (telemetryText) telemetryText.textContent = "TRANS-MARS INJECTION NOMINAL · TARGET ACQUIRED";
-    } else if (p < 0.86) {
-      if (hudStage) hudStage.textContent = "MARS ORBITAL APPROACH // 1.52 AU";
-      if (hudTitle) hudTitle.textContent = "APPROACHING MARS";
-      if (hudSub) hudSub.textContent = "ENLARGING PLANETARY GLOBE · SYNCHRONIZING WITH COCKPIT";
-      if (telemetryText) telemetryText.textContent = "ALTITUDE DESCENT LOCKED · EXPANDING MARTIAN DISK";
     } else {
-      if (hudStage) hudStage.textContent = "MARS ORBITAL INSERTION // 11,500 KM";
-      if (hudTitle) hudTitle.textContent = "COCKPIT SYSTEMS ONLINE";
-      if (hudSub) hudSub.textContent = "NAVIGATION, TELEMETRY & RADIAL STARFIELD ENGAGED";
-      if (telemetryText) telemetryText.textContent = "CESIUM 3D COCKPIT ACTIVE · FULL MISSION CAPABILITY";
+      if (hudStage) hudStage.textContent = "MARS ORBITAL INSERTION // 9,200 KM";
+      if (hudTitle) hudTitle.textContent = "ARRIVING AT MARS";
+      if (hudSub) hudSub.textContent = "ENLARGING PLANETARY GLOBE · SYNCHRONIZING WITH COCKPIT";
+      if (telemetryText) telemetryText.textContent = "ALTITUDE: 9,200 KM · HDG: 000° · 35.0°E, 10.0°N";
     }
   }
 
@@ -779,7 +786,7 @@ window.MarsCosmicIntro = (function () {
 
     if (window.MarsGlobe && window.MarsGlobe.flyTo) {
       try {
-        window.MarsGlobe.flyTo(10, 35, 11500000, 0.4);
+        window.MarsGlobe.flyTo(10, 35, 9200000, 0.4);
       } catch (e) {
         console.warn("MarsGlobe flyTo error:", e);
       }
