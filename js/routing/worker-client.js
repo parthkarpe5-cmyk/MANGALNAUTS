@@ -6,7 +6,7 @@ window.MarsRouteWorker = (() => {
   function solve(graph, start, goal, limit, scores, mode) {
     return new Promise((resolve, reject) => {
       if (!worker) {
-        worker = new Worker("js/routing/search-worker.js?v=mode-physics-v4");
+        worker = new Worker("js/routing/search-worker.js?v=mode-physics-v5");
         worker.onmessage = ({ data }) => {
           const job = pending.get(data.id);
           if (!job) return;

@@ -107,7 +107,8 @@ window.MarsSegmentPick = (function () {
 
       if (segment.path_found && segment.path_nodes && segment.path_nodes.length > 1) {
         const latlngs = segment.path_nodes.map((n) => [n.lat, n.lon]);
-        const routeColor = segment.feasible ? "#66D9FF" : "#FF8B86";
+        const isWalk = segment.mode === "walk";
+        const routeColor = segment.feasible ? (isWalk ? "#00f0ff" : "#f59e0b") : "#FF8B86";
 
         lineLayer = MarsRouteRenderer.createCorridorLayer(latlngs, {
           color: routeColor,
@@ -121,7 +122,7 @@ window.MarsSegmentPick = (function () {
         map.fitBounds(L.latLngBounds(latlngs), { padding: [40, 40], animate: true });
 
         // Launch automated traversal rover pointer along the path
-        startAutoTraversal(segment.path_nodes);
+        startAutoTraversal(segment.path_nodes, segment.mode);
       }
 
       if (segment.path_found && window.MarsAudio) window.MarsAudio.playSuccess();
@@ -254,9 +255,13 @@ window.MarsSegmentPick = (function () {
     }
   }
 
-  function startAutoTraversal(pathNodes) {
+  function startAutoTraversal(pathNodes, mode) {
     stopAutoTraversal();
     if (!pathNodes || pathNodes.length < 2 || !map) return;
+
+    const isWalk = mode === "walk";
+    const pointerFill = isWalk ? "#00f0ff" : "#f59e0b";
+    const tagText = isWalk ? "EVA MARSWALK // EN ROUTE" : "ROVER AUTONAV // TRAVERSING";
 
     const nodes = pathNodes.map(function (n) {
       return {
@@ -295,16 +300,16 @@ window.MarsSegmentPick = (function () {
     const icon = L.divIcon({
       className: "mars-traversal-pointer-container",
       html:
-        '<div class="mars-traversal-pointer" id="rover-pointer" title="Rover Traversal Unit (Click to Pause/Resume)">' +
-        '  <div class="traversal-beacon-pulse"></div>' +
-        '  <div class="traversal-pointer-core" id="rover-pointer-core">' +
+        '<div class="mars-traversal-pointer" id="rover-pointer" title="' + (isWalk ? "Astronaut EVA" : "Rover AutoNav") + ' (Click to Pause/Resume)">' +
+        '  <div class="traversal-beacon-pulse" style="border-color: ' + pointerFill + '; box-shadow: 0 0 12px ' + pointerFill + ';"></div>' +
+        '  <div class="traversal-pointer-core" id="rover-pointer-core" style="border-color: ' + pointerFill + ';">' +
         '    <svg viewBox="0 0 24 24" class="traversal-rover-svg" width="22" height="22">' +
-        '      <polygon points="12,2 22,20 12,16 2,20" fill="#00f0ff" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round"/>' +
+        '      <polygon points="12,2 22,20 12,16 2,20" fill="' + pointerFill + '" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round"/>' +
         '    </svg>' +
         '  </div>' +
-        '  <div class="traversal-hud-tag" id="rover-hud-tag">' +
-        '    <span class="traversal-tag-dot"></span>' +
-        '    <span class="traversal-tag-text" id="rover-tag-text">ROVER // DEPARTING</span>' +
+        '  <div class="traversal-hud-tag" id="rover-hud-tag" style="border-color: ' + pointerFill + ';">' +
+        '    <span class="traversal-tag-dot" style="background: ' + pointerFill + ';"></span>' +
+        '    <span class="traversal-tag-text" id="rover-tag-text">' + tagText + '</span>' +
         '  </div>' +
         '</div>',
       iconSize: [0, 0],
@@ -457,16 +462,30 @@ window.MarsSegmentPick = (function () {
     return lastSolvedSegment;
   }
 
+  function attachTravelModeSync() {
+    if (window.MarsTravelMode && window.MarsTravelMode.onChange) {
+      window.MarsTravelMode.onChange(function () {
+        if (pointA && pointB && !solving) {
+          planRoute(pointA.lat, pointA.lon, pointB.lat, pointB.lon);
+        }
+      });
+    }
+    const travelSelect = document.getElementById("travel-mode");
+    if (travelSelect) {
+      travelSelect.addEventListener("change", function () {
+        if (pointA && pointB && !solving) {
+          planRoute(pointA.lat, pointA.lon, pointB.lat, pointB.lon);
+        }
+      });
+    }
+  }
+
   if (typeof window !== "undefined") {
-    window.addEventListener("DOMContentLoaded", function () {
-      if (window.MarsTravelMode && window.MarsTravelMode.onChange) {
-        window.MarsTravelMode.onChange(function () {
-          if (pointA && pointB && !solving) {
-            planRoute(pointA.lat, pointA.lon, pointB.lat, pointB.lon);
-          }
-        });
-      }
-    });
+    if (document.readyState === "loading") {
+      window.addEventListener("DOMContentLoaded", attachTravelModeSync);
+    } else {
+      attachTravelModeSync();
+    }
   }
 
   return {

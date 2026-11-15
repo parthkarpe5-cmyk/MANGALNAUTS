@@ -89,6 +89,12 @@ window.MarsRouteBetween = (function () {
 
     const geodesic_m = MarsGeodesic.haversineMeters(latA, lonA, latB, lonB);
 
+    const cosLatBase = Math.cos((nodeA.lat * Math.PI) / 180);
+    const baseDx = (nodeB.lon - nodeA.lon) * cosLatBase;
+    const baseDy = nodeB.lat - nodeA.lat;
+    const baseLen = Math.hypot(baseDx, baseDy);
+
+    const nodesById = indexNodes(graph.nodes);
     const scoreNodes = scores?.nodes || {};
     const edgeCostFn = function (fromId, toId, lengthM, slopeDeg) {
       const fromRisk = nodeRisk(scoreNodes, fromId) ?? 0;
@@ -97,16 +103,41 @@ window.MarsRouteBetween = (function () {
       const toTraction = scoreNodes[toId]?.traction_risk ?? 0;
       const avgTraction = (fromTraction + toTraction) * 0.5;
 
+      const fromNode = nodesById[fromId];
+      const toNode = nodesById[toId];
+      const rise = (fromNode && toNode && Number.isFinite(fromNode.elev_m) && Number.isFinite(toNode.elev_m))
+        ? Math.abs(toNode.elev_m - fromNode.elev_m)
+        : 0;
+
       if (isRover) {
+        const climbPenalty = lengthM > 0 ? (rise / lengthM) * 10.0 : 0;
         const slopeFactor = slopeDeg != null && Number.isFinite(slopeDeg) && maxSlope > 0
           ? Math.pow(slopeDeg / maxSlope, 2) * 2.8
           : 0;
-        return lengthM * (1.0 + slopeFactor + (fromRisk + toRisk) * 1.8 + avgTraction * 5.0);
+
+        let arcPenalty = 0;
+        if (baseLen > 1e-7 && toNode && nodeA) {
+          const cosLat = Math.cos((nodeA.lat * Math.PI) / 180);
+          const px = (toNode.lon - nodeA.lon) * cosLat;
+          const py = toNode.lat - nodeA.lat;
+          const t = Math.max(0, Math.min(1, (px * baseDx + py * baseDy) / (baseLen * baseLen)));
+          const crossDist = (px * baseDy - py * baseDx) / baseLen;
+          const arcTarget = baseLen * 0.12 * Math.sin(Math.PI * t);
+          const arcDev = Math.abs(crossDist - arcTarget) / (baseLen * 0.12 + 1e-6);
+          arcPenalty = arcDev * 0.25;
+        }
+
+        const fromTI = scoreNodes[fromId]?.themis_ti_val ?? 450;
+        const toTI = scoreNodes[toId]?.themis_ti_val ?? 450;
+        const avgTI = (fromTI + toTI) * 0.5;
+        const sandHazard = Math.max(avgTraction, Math.max(0, (480 - avgTI) / 300));
+
+        return lengthM * (1.0 + slopeFactor + climbPenalty + sandHazard * 8.0 + (fromRisk + toRisk) * 1.8 + arcPenalty);
       } else {
         const slopeFactor = slopeDeg != null && Number.isFinite(slopeDeg) && maxSlope > 0
-          ? Math.pow(slopeDeg / maxSlope, 2.5) * 8.5
+          ? Math.pow(slopeDeg / maxSlope, 3.0) * 15.0
           : 0;
-        return lengthM * (1.0 + slopeFactor + (fromRisk + toRisk) * 1.0 + avgTraction * 0.2);
+        return lengthM * (1.0 + slopeFactor + (fromRisk + toRisk) * 0.6 + avgTraction * 0.2);
       }
     };
 
@@ -126,7 +157,6 @@ window.MarsRouteBetween = (function () {
       ? MarsAstar.pathStats(graph, pathResult.path)
       : { max_slope_deg: null, elev_delta_m: null };
 
-    const nodesById = indexNodes(graph.nodes);
     const coords = pathResult.found
       ? pathResult.path.map(function (id) {
           const n = nodesById[id];
