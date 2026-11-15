@@ -78,6 +78,8 @@ window.MarsRouteBetween = (function () {
         : null;
     const mode = MarsTravelMode.get();
     const maxSlope = mode.maxSlopeDeg;
+    const modeType = mode.type || mode.id || "rover";
+    const isRover = modeType !== "walk";
 
     const nodeA = snapNearest(graph, latA, lonA);
     const nodeB = snapNearest(graph, latB, lonB);
@@ -91,15 +93,26 @@ window.MarsRouteBetween = (function () {
     const edgeCostFn = function (fromId, toId, lengthM, slopeDeg) {
       const fromRisk = nodeRisk(scoreNodes, fromId) ?? 0;
       const toRisk = nodeRisk(scoreNodes, toId) ?? 0;
-      const slopeFactor = slopeDeg != null && Number.isFinite(slopeDeg) && maxSlope > 0
-        ? Math.pow(slopeDeg / maxSlope, 2) * 3.8
-        : 0;
-      return lengthM * (1 + slopeFactor + (fromRisk + toRisk) * 1.5);
+      const fromTraction = scoreNodes[fromId]?.traction_risk ?? 0;
+      const toTraction = scoreNodes[toId]?.traction_risk ?? 0;
+      const avgTraction = (fromTraction + toTraction) * 0.5;
+
+      if (isRover) {
+        const slopeFactor = slopeDeg != null && Number.isFinite(slopeDeg) && maxSlope > 0
+          ? Math.pow(slopeDeg / maxSlope, 2) * 2.8
+          : 0;
+        return lengthM * (1.0 + slopeFactor + (fromRisk + toRisk) * 1.8 + avgTraction * 5.0);
+      } else {
+        const slopeFactor = slopeDeg != null && Number.isFinite(slopeDeg) && maxSlope > 0
+          ? Math.pow(slopeDeg / maxSlope, 2.5) * 8.5
+          : 0;
+        return lengthM * (1.0 + slopeFactor + (fromRisk + toRisk) * 1.0 + avgTraction * 0.2);
+      }
     };
 
     let pathResult;
     try {
-      pathResult = await MarsRouteWorker.solve(graph, nodeA.id, nodeB.id, maxSlope, scoreNodes);
+      pathResult = await MarsRouteWorker.solve(graph, nodeA.id, nodeB.id, maxSlope, scoreNodes, modeType);
     } catch {
       pathResult = MarsAstar.findPath(graph, nodeA.id, nodeB.id, {
         maxSlopeDeg: maxSlope, edgeCostFn,

@@ -3,10 +3,10 @@ window.MarsRouteWorker = (() => {
   let loadedGraph;
   let nextId = 0;
   const pending = new Map();
-  function solve(graph, start, goal, limit, scores) {
+  function solve(graph, start, goal, limit, scores, mode) {
     return new Promise((resolve, reject) => {
       if (!worker) {
-        worker = new Worker("js/routing/search-worker.js?v=contour-slope-v3");
+        worker = new Worker("js/routing/search-worker.js?v=mode-physics-v4");
         worker.onmessage = ({ data }) => {
           const job = pending.get(data.id);
           if (!job) return;
@@ -23,7 +23,7 @@ window.MarsRouteWorker = (() => {
       }
       const id = ++nextId;
       pending.set(id, { resolve, reject });
-      worker.postMessage({ id, graph: graph === loadedGraph ? null : graph, start, goal, limit, scores });
+      worker.postMessage({ id, graph: graph === loadedGraph ? null : graph, start, goal, limit, scores, mode: mode || "rover" });
       loadedGraph = graph;
     });
   }

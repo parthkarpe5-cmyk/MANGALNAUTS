@@ -52,7 +52,7 @@ window.MarsTelemetry = (function () {
     opts = opts || {};
     const mode = (window.MarsTravelMode && window.MarsTravelMode.MODES && window.MarsTravelMode.MODES[modeKey])
       ? window.MarsTravelMode.MODES[modeKey]
-      : { type: (modeKey === "rover" || modeKey === "aggressive_rover") ? "rover" : "walk", speedBaseMs: 0.65, maxSlopeDeg: 15 };
+      : { type: modeKey === "rover" ? "rover" : "walk", speedBaseMs: modeKey === "rover" ? 0.12 : 0.65, maxSlopeDeg: modeKey === "rover" ? 20 : 15 };
 
     const isWalk = mode.type === "walk";
     const payloadKg = Number.isFinite(opts.payloadKg) ? opts.payloadKg : 20; // Default 20 kg carried equipment

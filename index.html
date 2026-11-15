@@ -131,11 +131,8 @@
         <div class="select-badge" title="Operational slope limits and traverse physics">
           <span class="select-badge-lbl">TRAVEL MODE</span>
           <select id="travel-mode" aria-label="Travel mode">
+            <option value="rover" selected>Rover AutoNav (≤20°)</option>
             <option value="walk">Marswalk (≤15°)</option>
-            <option value="conservative">Equipment Cart (≤10°)</option>
-            <option value="steep_walk">Steep Scramble (≤20°)</option>
-            <option value="rover">Rover AutoNav (≤20°)</option>
-            <option value="aggressive_rover">Rim Ascent Rover (≤26°)</option>
           </select>
         </div>
         <label class="dock-btn-plan" title="Click any two points on the site to compute an optimal GNN safe route">
@@ -287,14 +284,14 @@
     <script src="js/visual/cosmic-galaxy.js"></script>
     <script src="js/visual/orbiters.js?v=spacecraft-models"></script>
     <script src="js/globe.js?v=spacecraft-models"></script>
-    <script src="js/detail-map.js?v=coverage-view"></script>
+    <script src="js/detail-map.js?v=olympus-pan-v4"></script>
     <script src="js/hybrid.js?v=regions-1"></script>
     <script src="js/map/geodesic.js"></script>
     <script src="js/api/manifest.js?v=regional-dem"></script>
-    <script src="js/routing/astar.js?v=contour-slope-v3"></script>
-    <script src="js/routing/worker-client.js?v=contour-slope-v3"></script>
-    <script src="js/mission/modes.js?v=contour-slope-v3"></script>
-    <script src="js/routing/routeBetween.js?v=contour-slope-v3"></script>
+    <script src="js/routing/astar.js?v=mode-physics-v4"></script>
+    <script src="js/routing/worker-client.js?v=mode-physics-v4"></script>
+    <script src="js/mission/modes.js?v=mode-physics-v4"></script>
+    <script src="js/routing/routeBetween.js?v=mode-physics-v4"></script>
     <script src="js/ui/icons.js?v=contour-slope-v3"></script>
     <script src="js/ui/audio.js"></script>
     <script src="js/ui/theme.js?v=deep-space-default"></script>
