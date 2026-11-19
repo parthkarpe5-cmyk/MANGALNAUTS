@@ -2,7 +2,7 @@
 
 > **NASA International Space Apps Challenge**  
 > *Challenge Track: Interplanetary Survival Guide — Martian Map*  
-> **Live Deployment:** [mangalnauts.vercel.app](https://mangalnauts.vercel.app/)
+> **Live Deployment:** [mangalnauts.vercel.app](https://mangalnouts.vercel.app/)
 
 
 
